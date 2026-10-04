@@ -100,11 +100,15 @@ COMMAND_READ_PATHS = frozenset(
         "/api/v1-command-center/agent-fabric/watchtower",
         "/api/v1-command-center/agent-fabric/infrastructure",
         "/api/v1-command-center/agent-fabric/observability",
+        # AFCC-3 Phase 6: artifact storage readiness (read-only catalog lookup).
+        "/api/v1-command-center/agent-fabric/storage/artifacts",
     }
 )
 
 COMMAND_READ_PATH_PATTERNS = (
     re.compile(r"^/api/v1-command-center/agent-fabric/runs/[A-Za-z0-9_.:-]{1,128}(?:/(?:timeline|evidence|dependencies))?$"),
+    # AFCC-3 Phase 7: one artifact of one run (read-only, verified, sanitized).
+    re.compile(r"^/api/v1-command-center/agent-fabric/runs/[A-Za-z0-9_.:-]{1,128}/artifacts/[A-Za-z0-9_.:-]{1,128}$"),
 )
 
 

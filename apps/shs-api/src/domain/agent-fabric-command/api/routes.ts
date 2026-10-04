@@ -60,6 +60,19 @@ export function registerAgentFabricCommandRoutes(app: any, deps: { read?: typeof
   app.get(`${AGENT_FABRIC_COMMAND_PREFIX}/runs/:runId/timeline`, requirePermission(SHS_SECURITY_PERMISSIONS.AGENT_FABRIC_COMMAND_READ), liveRunRead("/timeline", "run_timeline"));
   app.get(`${AGENT_FABRIC_COMMAND_PREFIX}/runs/:runId/evidence`, requirePermission(SHS_SECURITY_PERMISSIONS.AGENT_FABRIC_COMMAND_READ), liveRunRead("/evidence", "run_evidence"));
   app.get(`${AGENT_FABRIC_COMMAND_PREFIX}/runs/:runId/dependencies`, requirePermission(SHS_SECURITY_PERMISSIONS.AGENT_FABRIC_COMMAND_READ), liveRunRead("/dependencies", "run_dependencies"));
+  // AFCC-3 Phase 7: one artifact of one run for the read-only Live Operations viewer.
+  app.get(
+    `${AGENT_FABRIC_COMMAND_PREFIX}/runs/:runId/artifacts/:artifactId`,
+    requirePermission(SHS_SECURITY_PERMISSIONS.AGENT_FABRIC_COMMAND_READ),
+    async (req: any, res: any) => {
+      const runId = String(req.params.runId || "");
+      const artifactId = String(req.params.artifactId || "");
+      if (!isRunId(runId) || !RUN_ID.test(artifactId)) return invalidRunId(res);
+      const result = await readFabricProjection("run_artifact", `${FABRIC_READ_BASE}/runs/${encodeURIComponent(runId)}/artifacts/${encodeURIComponent(artifactId)}`);
+      res.set("Cache-Control", "no-store");
+      return res.status(result.status).json(result.body);
+    },
+  );
   // Read-only bridge: every mutating method on this prefix is refused before
   // authentication or any Fabric call.
   const refuse = (_req: any, res: any) => {

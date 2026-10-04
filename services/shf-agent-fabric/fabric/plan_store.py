@@ -15,14 +15,33 @@ def _path(plan_id: str) -> Path:
     _ensure_dirs()
     return PLANS_DIR / f"{plan_id}.json"
 
+# AFCC-3 Phase 5: when the shared Postgres run authority is active
+# (fabric/run_authority.py), plans and approval decisions are read and written
+# there; the file store below is the development / legacy store.
+def _pg():
+    from fabric import run_authority
+
+    if not run_authority.is_postgres():
+        return None
+    from fabric import run_authority_pg
+
+    return run_authority_pg
+
+
 def save_plan(plan: dict) -> str:
     plan_id = plan.get("planId") or secrets.token_hex(8)
     plan["planId"] = plan_id
+    pg = _pg()
+    if pg:
+        return pg.insert_plan(plan)
     with _lock:
         _path(plan_id).write_text(json.dumps(plan, indent=2, sort_keys=True) + "\n")
     return plan_id
 
 def load_plan(plan_id: str) -> dict | None:
+    pg = _pg()
+    if pg:
+        return pg.load_plan(plan_id)
     p = _path(plan_id)
     if not p.exists():
         return None
@@ -39,6 +58,9 @@ def mark_plan_status(plan_id: str, status: str) -> bool:
         return True
 
 def list_recent_plans(limit: int = 10) -> list[dict]:
+    pg = _pg()
+    if pg:
+        return pg.list_recent_plans(limit)
     _ensure_dirs()
     files = sorted(PLANS_DIR.glob("*.json"), key=lambda p: p.stat().st_mtime, reverse=True)
     out = []
@@ -62,6 +84,9 @@ def record_approval_decision(plan_id: str, decision: dict, may_decide) -> dict:
     `may_decide(plan)` returns None or a refusal code. The decision is kept as
     `approvalDecision` (current) and appended to `approvalHistory` (all decisions).
     """
+    pg = _pg()
+    if pg:
+        return pg.decide(plan_id, decision, may_decide)
     with _lock:
         plan = load_plan(plan_id)
         if not plan:

@@ -1,0 +1,503 @@
+============================================================
+SOURCE: 08_COMMERCIAL_LOGIC.txt
+============================================================
+ui/contracts/appRegistry.contract.json:21:  "notes": "If this contract file changes, bump version. Validator requires each hook to appear within className=... strings in the component."
+contracts/registry_entity.schema.json:3:  "$id": "shf://contracts/registry_entity.schema.json",
+src/context/AccessibilityProfileContext.jsx:7:// API_CONTRACT_V1.md §17-18). This provider does not compute anything —
+src/context/AccessibilityProfileContext.jsx:115:      // CONTRACT_V1.md §18 — do not blindly map it onto
+src/contracts/registry_entity.client.ts:3:import schema from "../../contracts/registry_entity.schema.json";
+src/context/Toasts.jsx:149:                style={{ marginTop: 6, fontSize: 12, padding: "2px 6px" }}
+src/context/Toasts.jsx:159:            style={{ marginLeft: "auto" }}
+src/context/ReadingLevelProvider.jsx:13: * SHF_AIEL_PROFILE_CONTRACT_V1.md §3): where this provider is mounted
+src/_patchbak/pages-admin.20260122T145718Z/PlacementKPIs.jsx:47:      <section className="card" style={{marginTop:20}}>
+src/_patchbak/pages-admin.20260122T145718Z/PlacementKPIs.jsx:73:      <section className="card" style={{marginTop:20}}>
+src/_patchbak/pages-admin.20260122T145718Z/PlacementKPIs.jsx:82:                <div title={`${label}: ${b.applies} applies`} style={{height:hA,background:"var(--accent)",borderRadius:6,margin:"0 auto 4px",width:14}}/>
+src/_patchbak/pages-admin.20260122T145718Z/PlacementKPIs.jsx:83:                <div title={`${label}: ${b.clicks} clicks`}  style={{height:hC,background:"#334155",borderRadius:6,margin:"0 auto 6px",width:14,opacity:.8}}/>
+src/_patchbak/pages-admin.20260122T145718Z/PlacementKPIs.jsx:89:        <div style={{display:"flex",gap:16,marginTop:8,fontSize:12,opacity:.8}}>
+src/_patchbak/pages-admin.20260122T145718Z/PlacementKPIs.jsx:90:          <span><span style={{display:"inline-block",width:10,height:10,background:"var(--accent)",borderRadius:3,marginRight:6}}/>Applies</span>
+src/_patchbak/pages-admin.20260122T145718Z/PlacementKPIs.jsx:91:          <span><span style={{display:"inline-block",width:10,height:10,background:"#334155",borderRadius:3,marginRight:6}}/>Clicks</span>
+src/_patchbak/pages-admin.20260122T145718Z/PlacementKPIs.jsx:95:      <div className="toolbar" style={{marginTop:16}}>
+src/context/EffectiveAccessibilityContext.jsx:4:// SHF_AIEL_PROFILE_CONTRACT_V1.md §7): a pure, in-memory computation from
+src/_patchbak/pages-admin.20260122T145718Z/InvestorNorthstar.jsx:90:      <div className="card card--pad" style={{ marginBottom: 12 }}>
+src/_patchbak/pages-admin.20260122T145718Z/InvestorNorthstar.jsx:100:            <div style={{ fontSize: 12, opacity: 0.75, marginBottom: 6 }}>App</div>
+src/_patchbak/pages-admin.20260122T145718Z/InvestorNorthstar.jsx:117:            <div style={{ fontSize: 12, opacity: 0.75, marginBottom: 6 }}>Funding Stream</div>
+src/_patchbak/pages-admin.20260122T145718Z/InvestorNorthstar.jsx:159:                <span style={{ marginRight: 8 }}>{appRow.emoji}</span>
+src/_patchbak/pages-admin.20260122T145718Z/InvestorNorthstar.jsx:163:              <div style={{ fontSize: 12, opacity: 0.75, marginTop: 4 }}>
+src/_patchbak/pages-admin.20260122T145718Z/InvestorNorthstar.jsx:167:              <div style={{ marginTop: 8, fontSize: 11, opacity: 0.8 }}>
+src/_patchbak/pages-admin.20260122T145718Z/InvestorNorthstar.jsx:171:              <div style={{ marginTop: 10, display: "flex", justifyContent: "flex-end" }}>
+apps/shs-api/src/domain/companion/model/companion-context.ts:1:// SHF Ecosystem Phase 11 — Learning Companion Context contract.
+apps/shs-api/src/domain/companion/model/companion-context.ts:98:// the one Calendar Intelligence type this contract embeds by reference.
+src/_patchbak/pages-admin.20260122T145718Z/GrantBinder.jsx:353:      <div className="card card--pad" style={{ marginBottom: 12 }}>
+src/_patchbak/pages-admin.20260122T145718Z/GrantBinder.jsx:363:            <div style={{ fontSize: 12, opacity: 0.75, marginBottom: 6 }}>App</div>
+src/_patchbak/pages-admin.20260122T145718Z/GrantBinder.jsx:380:            <div style={{ fontSize: 12, opacity: 0.75, marginBottom: 6 }}>Site / Program</div>
+src/_patchbak/pages-admin.20260122T145718Z/GrantBinder.jsx:397:            <div style={{ fontSize: 12, opacity: 0.75, marginBottom: 6 }}>Funding Stream</div>
+src/_patchbak/pages-admin.20260122T145718Z/GrantBinder.jsx:414:            <div style={{ fontSize: 12, opacity: 0.75, marginBottom: 6 }}>Identity Mode</div>
+src/_patchbak/pages-admin.20260122T145718Z/GrantBinder.jsx:429:          <div style={{ marginTop: 10, display: "flex", gap: 6, flexWrap: "wrap" }}>
+src/_patchbak/pages-admin.20260122T145718Z/GrantBinder.jsx:449:          marginBottom: 12,
+src/_patchbak/pages-admin.20260122T145718Z/GrantBinder.jsx:455:              <span style={{ marginRight: 8 }}>{a.emoji}</span>
+src/_patchbak/pages-admin.20260122T145718Z/GrantBinder.jsx:463:                marginTop: 8,
+src/_patchbak/pages-admin.20260122T145718Z/GrantBinder.jsx:500:        <div style={{ marginTop: 10, overflowX: "auto" }}>
+src/_patchbak/pages-admin.20260122T145718Z/GrantBinder.jsx:538:            <div style={{ marginTop: 8, fontSize: 12, opacity: 0.75 }}>
+services/shf-report-engine/src/templates/institutional-minimal.html:14:    @page { margin: 0.85in; }
+services/shf-report-engine/src/templates/institutional-minimal.html:21:    .topbar{ height:10px; background:var(--accent); margin:-0.85in -0.85in 18px -0.85in; }
+services/shf-report-engine/src/templates/institutional-minimal.html:24:      margin-bottom:14px;
+services/shf-report-engine/src/templates/institutional-minimal.html:51:      font-size:22px; margin:10px 0 6px 0;
+services/shf-report-engine/src/templates/institutional-minimal.html:55:      font-size:15px; margin:18px 0 8px 0; color:var(--accent);
+services/shf-report-engine/src/templates/institutional-minimal.html:60:    .rule{ border-top:1px solid var(--rule); margin:14px 0; }
+services/shf-report-engine/src/templates/institutional-minimal.html:128:      margin-top: 36px;
+services/shf-report-engine/src/templates/institutional-minimal.html:135:      margin: 48px auto 28px auto;
+services/shf-report-engine/src/templates/institutional-minimal.html:144:      margin-bottom: 10px;
+services/shf-report-engine/src/templates/institutional-minimal.html:150:      margin: 6px 0 8px 0;
+services/shf-report-engine/src/templates/institutional-minimal.html:156:      margin-bottom: 20px;
+services/shf-report-engine/src/templates/institutional-minimal.html:161:      margin: 18px auto;
+services/shf-report-engine/src/templates/institutional-minimal.html:167:      margin: 22px auto 0 auto;
+services/shf-report-engine/src/templates/institutional-minimal.html:185:      margin-bottom: 4px;
+services/shf-report-engine/src/templates/institutional-minimal.html:250:      <div style="margin-top:18px;" class="subtle">
+services/shf-report-engine/src/templates/institutional-minimal.html:267:      <div style="margin-top:6px;">{{reportDate}}</div>
+services/shf-report-engine/src/templates/institutional-minimal.html.bak_20260222_223911:14:    @page { margin: 0.85in; }
+services/shf-report-engine/src/templates/institutional-minimal.html.bak_20260222_223911:21:    .topbar{ height:10px; background:var(--accent); margin:-0.85in -0.85in 18px -0.85in; }
+services/shf-report-engine/src/templates/institutional-minimal.html.bak_20260222_223911:24:      margin-bottom:14px;
+services/shf-report-engine/src/templates/institutional-minimal.html.bak_20260222_223911:51:      font-size:22px; margin:10px 0 6px 0;
+services/shf-report-engine/src/templates/institutional-minimal.html.bak_20260222_223911:55:      font-size:15px; margin:18px 0 8px 0; color:var(--accent);
+services/shf-report-engine/src/templates/institutional-minimal.html.bak_20260222_223911:60:    .rule{ border-top:1px solid var(--rule); margin:14px 0; }
+services/shf-report-engine/src/templates/institutional-minimal.html.bak_20260222_223911:111:      <div style="margin-top:6px;">{{reportDate}}</div>
+services/shf-report-engine/src/templates/institutional-minimal.html.bak_20260222_222621:14:    @page { margin: 0.85in; }
+services/shf-report-engine/src/templates/institutional-minimal.html.bak_20260222_222621:21:    .topbar{ height:10px; background:var(--accent); margin:-0.85in -0.85in 18px -0.85in; }
+services/shf-report-engine/src/templates/institutional-minimal.html.bak_20260222_222621:24:      margin-bottom:14px;
+services/shf-report-engine/src/templates/institutional-minimal.html.bak_20260222_222621:48:      font-size:22px; margin:10px 0 6px 0;
+services/shf-report-engine/src/templates/institutional-minimal.html.bak_20260222_222621:52:      font-size:15px; margin:18px 0 8px 0; color:var(--accent);
+services/shf-report-engine/src/templates/institutional-minimal.html.bak_20260222_222621:57:    .rule{ border-top:1px solid var(--rule); margin:14px 0; }
+services/shf-report-engine/src/templates/institutional-minimal.html.bak_20260222_222621:108:      <div style="margin-top:6px;">{{reportDate}}</div>
+src/_patchbak/pages-admin.20260122T145718Z/AppRegistry.jsx:95:      <ControlPlaneStrip contractVersion={String(document?.documentElement?.dataset?.contractVersion || "?")} />
+src/_patchbak/pages-admin.20260122T145718Z/AppRegistry.jsx:116:                  <span className="ar-metaKey">contract:</span>{" "}
+src/_patchbak/pages-admin.20260122T145718Z/AppRegistry.jsx:117:                  <span className="ar-mono">{String(m?.contractVersion ?? "?")}</span>
+src/_patchbak/pages-admin.20260122T145718Z/AppRegistry.jsx:250:        .ar-wrap{ padding: 22px; max-width: 1280px; margin: 0 auto; }
+src/_patchbak/pages-admin.20260122T145718Z/AppRegistry.jsx:253:        .ar-title{ margin:4px 0 6px; font-size:28px; line-height:1.1; }
+src/_patchbak/pages-admin.20260122T145718Z/AppRegistry.jsx:318:        .ar-logHead{ display:flex; align-items:flex-end; justify-content:space-between; gap:12px; padding: 14px 0 10px; border-top: 1px solid rgba(255,255,255,.08); margin-top: 16px; }
+src/_patchbak/pages-admin.20260122T145718Z/AppRegistry.jsx:319:        .ar-logTitle{ margin:4px 0 6px; font-size:18px; line-height:1.1; }
+src/_patchbak/pages-admin.20260122T145718Z/AppRegistry.jsx:329:        .ar-logMsg{ margin-top: 6px; font-size:12px; opacity:.8; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+services/shf-agent-fabric/services/outcome_efficiency_service.py:23:    contract_cols = _table_columns(cur, "outcome_contracts")
+services/shf-agent-fabric/services/outcome_efficiency_service.py:63:    # fallback: outcome_payments joins to outcome_contracts by contract_id
+services/shf-agent-fabric/services/outcome_efficiency_service.py:64:    elif {"contract_id", "payment_amount"}.issubset(payment_cols) and {"contract_id", "program_id"}.issubset(contract_cols):
+services/shf-agent-fabric/services/outcome_efficiency_service.py:68:        JOIN outcome_contracts oc
+services/shf-agent-fabric/services/outcome_efficiency_service.py:69:          ON oc.contract_id = op.contract_id
+services/shf-agent-fabric/services/operator_contracts_service.py:17:DATA_FILE = Path(__file__).resolve().parent.parent / "data" / "contracts.json"
+services/shf-agent-fabric/services/operator_contracts_service.py:19:def _load_contracts():
+services/shf-agent-fabric/services/operator_contracts_service.py:28:def _save_contracts():
+services/shf-agent-fabric/services/operator_contracts_service.py:30:        json.dump(CONTRACTS, f, indent=2)
+services/shf-agent-fabric/services/operator_contracts_service.py:32:CONTRACTS = _load_contracts()
+services/shf-agent-fabric/services/operator_contracts_service.py:34:def create_contract(body: dict):
+services/shf-agent-fabric/services/operator_contracts_service.py:35:    contract_id = _id("ctr")
+services/shf-agent-fabric/services/operator_contracts_service.py:38:    contract = {
+services/shf-agent-fabric/services/operator_contracts_service.py:39:        "id": contract_id,
+services/shf-agent-fabric/services/operator_contracts_service.py:40:        "contract_code": body["contract_code"],
+services/shf-agent-fabric/services/operator_contracts_service.py:58:    for existing in CONTRACTS.values():
+services/shf-agent-fabric/services/operator_contracts_service.py:59:        if existing["contract_code"] == contract["contract_code"]:
+services/shf-agent-fabric/services/operator_contracts_service.py:60:            return {"ok": False, "error": "contract_code already exists"}
+services/shf-agent-fabric/services/operator_contracts_service.py:62:    if contract["payout_amount"] <= 0:
+services/shf-agent-fabric/services/operator_contracts_service.py:65:    CONTRACTS[contract_id] = contract
+services/shf-agent-fabric/services/operator_contracts_service.py:66:    _save_contracts()
+services/shf-agent-fabric/services/operator_contracts_service.py:68:    if contract.get("pool_id"):
+services/shf-agent-fabric/services/operator_contracts_service.py:69:        seed_pool_balance(contract["pool_id"], float(contract["max_supply"] or 0) * float(contract["payout_amount"]))
+services/shf-agent-fabric/services/operator_contracts_service.py:72:        "contract_created",
+services/shf-agent-fabric/services/operator_contracts_service.py:73:        "contract",
+services/shf-agent-fabric/services/operator_contracts_service.py:74:        contract_id,
+services/shf-agent-fabric/services/operator_contracts_service.py:76:        contract,
+services/shf-agent-fabric/services/operator_contracts_service.py:79:    return {"ok": True, "contract": contract, "event_id": evt["id"]}
+services/shf-agent-fabric/services/operator_contracts_service.py:81:def list_contracts(status=None, pool_id=None, outcome_type=None):
+services/shf-agent-fabric/services/operator_contracts_service.py:82:    items = list(CONTRACTS.values())
+services/shf-agent-fabric/services/operator_contracts_service.py:94:def get_contract(contract_id: str):
+services/shf-agent-fabric/services/operator_contracts_service.py:95:    contract = CONTRACTS.get(contract_id)
+services/shf-agent-fabric/services/operator_contracts_service.py:96:    if not contract:
+services/shf-agent-fabric/services/operator_contracts_service.py:97:        return {"ok": False, "error": "contract not found"}
+services/shf-agent-fabric/services/operator_contracts_service.py:98:    return {"ok": True, "contract": contract}
+services/shf-agent-fabric/services/operator_contracts_service.py:100:def activate_contract(contract_id: str, actor_id: str):
+services/shf-agent-fabric/services/operator_contracts_service.py:101:    contract = CONTRACTS.get(contract_id)
+services/shf-agent-fabric/services/operator_contracts_service.py:102:    if not contract:
+services/shf-agent-fabric/services/operator_contracts_service.py:103:        return {"ok": False, "error": "contract not found"}
+services/shf-agent-fabric/services/operator_contracts_service.py:105:    if not contract.get("pool_id"):
+services/shf-agent-fabric/services/operator_contracts_service.py:106:        return {"ok": False, "error": "active contracts require pool_id"}
+services/shf-agent-fabric/services/operator_contracts_service.py:108:    contract["status"] = "active"
+services/shf-agent-fabric/services/operator_contracts_service.py:109:    _save_contracts()
+services/shf-agent-fabric/services/operator_contracts_service.py:110:    contract["updated_at"] = _now()
+services/shf-agent-fabric/services/operator_contracts_service.py:113:        "contract_activated",
+services/shf-agent-fabric/services/operator_contracts_service.py:114:        "contract",
+services/shf-agent-fabric/services/operator_contracts_service.py:115:        contract_id,
+services/shf-agent-fabric/services/operator_contracts_service.py:117:        contract,
+services/shf-agent-fabric/services/operator_contracts_service.py:120:    return {"ok": True, "contract": contract, "event_id": evt["id"]}
+services/shf-agent-fabric/services/operator_contracts_service.py:122:def pause_contract(contract_id: str, actor_id: str):
+services/shf-agent-fabric/services/operator_contracts_service.py:123:    contract = CONTRACTS.get(contract_id)
+services/shf-agent-fabric/services/operator_contracts_service.py:124:    if not contract:
+services/shf-agent-fabric/services/operator_contracts_service.py:125:        return {"ok": False, "error": "contract not found"}
+services/shf-agent-fabric/services/operator_contracts_service.py:127:    contract["status"] = "paused"
+services/shf-agent-fabric/services/operator_contracts_service.py:128:    _save_contracts()
+services/shf-agent-fabric/services/operator_contracts_service.py:129:    contract["updated_at"] = _now()
+services/shf-agent-fabric/services/operator_contracts_service.py:132:        "contract_paused",
+services/shf-agent-fabric/services/operator_contracts_service.py:133:        "contract",
+services/shf-agent-fabric/services/operator_contracts_service.py:134:        contract_id,
+services/shf-agent-fabric/services/operator_contracts_service.py:136:        contract,
+services/shf-agent-fabric/services/operator_contracts_service.py:139:    return {"ok": True, "contract": contract, "event_id": evt["id"]}
+services/shf-agent-fabric/services/operator_contracts_service.py:141:def close_contract(contract_id: str, actor_id: str):
+services/shf-agent-fabric/services/operator_contracts_service.py:142:    contract = CONTRACTS.get(contract_id)
+services/shf-agent-fabric/services/operator_contracts_service.py:143:    if not contract:
+services/shf-agent-fabric/services/operator_contracts_service.py:144:        return {"ok": False, "error": "contract not found"}
+services/shf-agent-fabric/services/operator_contracts_service.py:146:    contract["status"] = "closed"
+services/shf-agent-fabric/services/operator_contracts_service.py:147:    _save_contracts()
+services/shf-agent-fabric/services/operator_contracts_service.py:148:    contract["updated_at"] = _now()
+services/shf-agent-fabric/services/operator_contracts_service.py:151:        "contract_closed",
+services/shf-agent-fabric/services/operator_contracts_service.py:152:        "contract",
+services/shf-agent-fabric/services/operator_contracts_service.py:153:        contract_id,
+services/shf-agent-fabric/services/operator_contracts_service.py:155:        contract,
+services/shf-agent-fabric/services/operator_contracts_service.py:158:    return {"ok": True, "contract": contract, "event_id": evt["id"]}
+apps/shs-api/src/domain/credentials/service/certificate-renderer.ts:31:  @page{size:Letter landscape;margin:.45in}*{box-sizing:border-box}body{margin:0;background:#f5f7f7;color:#19262c;font-family:Arial,Helvetica,sans-serif}.certificate{min-height:7.6in;border:10px solid #1e5d63;background:#fff;padding:.56in .7in;position:relative;display:flex;flex-direction:column;align-items:center;text-align:center}.certificate:before{content:"";position:absolute;inset:18px;border:1px solid #d3a84b;pointer-events:none}.eyebrow{font-size:10pt;letter-spacing:.18em;text-transform:uppercase;color:#1e5d63;font-weight:700}.certificate h1{font-family:Georgia,serif;color:#1e5d63;font-size:28pt;margin:20px 0 8px}.learner{font-family:Georgia,serif;font-size:26pt;color:#142b31;border-bottom:2px solid #d3a84b;padding:0 24px 8px;margin:14px 0}.accomplishment{font-size:13pt;max-width:7.4in;line-height:1.5}.competencies{display:flex;gap:18px;list-style:none;padding:0;margin:10px 0}.competencies li{border:1px solid #d3a84b;padding:7px 12px;font-size:9pt}.meta{margin-top:auto;display:grid;grid-template-columns:1fr 1fr 1fr;gap:22px;width:80%;font-size:8.5pt;color:#53656a}.meta strong{display:block;color:#19262c;font-size:9pt}.verification{position:absolute;right:28px;bottom:25px;text-align:right;font-size:7.5pt;color:#53656a}.verification strong{display:block;color:#1e5d63}.issuer{margin-top:8px;font-weight:700;color:#1e5d63}@media print{body{background:#fff}.certificate{min-height:7.6in}}
+apps/shs-api/src/domain/credentials/service/certificate-renderer.ts:36:  const qrSvg = presentation.qrSvg || await QRCode.toString(presentation.verificationUrl || presentation.verificationReference, { type: "svg", margin: 1, width: 96, errorCorrectionLevel: "M" });
+apps/shs-api/src/domain/credentials/service/certificate-renderer.ts:49:    const bytes = Buffer.from(await page.pdf({ format: "Letter", landscape: true, printBackground: true, margin: { top: "0.45in", right: "0.45in", bottom: "0.45in", left: "0.45in" } }));
+src/_patchbak/pages-admin.20260122T145718Z/ToolDashboard.jsx:146:        "Have students log missions in Elections, Proposals, Treasury Sim, and Debt Clock using the mission log box.",
+src/_patchbak/pages-admin.20260122T145718Z/ToolDashboard.jsx:313:        <div style={{ marginTop: 4, fontSize: 11, opacity: 0.8 }}>
+src/_patchbak/pages-admin.20260122T145718Z/ToolDashboard.jsx:363:          <p style={{ margin: 0, fontSize: 13, opacity: 0.8 }}>
+src/_patchbak/pages-admin.20260122T145718Z/ToolDashboard.jsx:370:          <div style={{ marginTop: 4 }}>
+src/_patchbak/pages-admin.20260122T145718Z/ToolDashboard.jsx:375:                marginBottom: 4,
+src/_patchbak/pages-admin.20260122T145718Z/ToolDashboard.jsx:400:                    <span style={{ marginRight: 4 }}>{opt.emoji}</span>
+src/_patchbak/pages-admin.20260122T145718Z/ToolDashboard.jsx:415:                  marginBottom: 4,
+src/_patchbak/pages-admin.20260122T145718Z/ToolDashboard.jsx:456:                  marginBottom: 4,
+src/_patchbak/pages-admin.20260122T145718Z/ToolDashboard.jsx:466:                    marginBottom: 6,
+src/_patchbak/pages-admin.20260122T145718Z/ToolDashboard.jsx:492:                  marginBottom: 8,
+src/_patchbak/pages-admin.20260122T145718Z/ToolDashboard.jsx:507:              <ol style={{ paddingLeft: 18, fontSize: 13, margin: 0 }}>
+src/_patchbak/pages-admin.20260122T145718Z/ToolDashboard.jsx:509:                  <li key={idx} style={{ marginBottom: 4 }}>
+src/_patchbak/pages-admin.20260122T145718Z/ToolDashboard.jsx:520:                marginTop: 6,
+src/_patchbak/pages-admin.20260122T145718Z/ToolDashboard.jsx:560:            <div style={{ marginTop: 4 }}>
+src/_patchbak/pages-admin.20260122T145718Z/ToolDashboard.jsx:565:                  marginBottom: 4,
+src/_patchbak/pages-admin.20260122T145718Z/ToolDashboard.jsx:588:            <ul style={{ paddingLeft: 16, marginTop: 4, marginBottom: 4 }}>
+src/_patchbak/pages-admin.20260122T145718Z/ToolDashboard.jsx:591:                Civic Mission logs (student missions in Elections, Proposals,
+src/_patchbak/pages-admin.20260122T145718Z/ToolDashboard.jsx:606:                marginBottom: 4,
+src/entries/admin.main.jsx.bak_20260423_220308:20:      <h1 style={{ margin: 0 }}>Admin crashed</h1>
+src/entries/admin.main.jsx.bak_20260423_220308:21:      <pre style={{ marginTop: 12, whiteSpace: "pre-wrap" }}>
+src/_patchbak/pages-admin.20260122T145718Z/PartnerJobs.jsx:34:      <div className="toolbar" style={{marginBottom:12}}>
+src/_patchbak/pages-admin.20260122T145718Z/MasterNarrativeViewer.jsx:93:      `Students and community members completed **${civicMissionCount} civic missions**, each linked to real issues like proposals, debt analysis, or treasury trade-offs — very strong for SEL and civics reporting.`
+src/_patchbak/pages-admin.20260122T145718Z/MasterNarrativeViewer.jsx:174:          <h1 style={{ margin: 0, fontSize: 22 }}>Master Grant Narrative</h1>
+src/_patchbak/pages-admin.20260122T145718Z/MasterNarrativeViewer.jsx:175:          <p style={{ margin: "4px 0", opacity: 0.8, maxWidth: 680 }}>
+src/_patchbak/pages-admin.20260122T145718Z/MasterNarrativeViewer.jsx:246:          <strong style={{ display: "block", marginBottom: 4 }}>AI Summary</strong>
+src/_patchbak/pages-admin.20260122T145718Z/MasterNarrativeViewer.jsx:247:          <ul style={{ margin: 0, paddingLeft: 18 }}>
+src/_patchbak/pages-admin.20260122T145718Z/MasterNarrativeViewer.jsx:249:              <li key={idx} style={{ fontSize: 14, marginBottom: 4 }}>
+src/_patchbak/pages-admin.20260122T145718Z/MasterNarrativeViewer.jsx:259:        <strong style={{ display: "block", marginBottom: 8 }}>Narrative (Markdown)</strong>
+src/_patchbak/pages-admin.20260122T145718Z/AlignmentSwitchboard.jsx:191:  .shf-wrap{max-width:1200px;margin:0 auto;padding:18px 14px;color:rgba(255,255,255,0.92)}
+src/_patchbak/pages-admin.20260122T145718Z/AlignmentSwitchboard.jsx:194:  .shf-sub{font-size:12px;opacity:.75;margin-top:2px}
+src/_patchbak/pages-admin.20260122T145718Z/AlignmentSwitchboard.jsx:202:  .shf-card{margin-top:14px;padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,0.10);background:rgba(0,0,0,0.12)}
+src/_patchbak/pages-admin.20260122T145718Z/AlignmentSwitchboard.jsx:203:  .shf-err{margin-top:10px;padding:10px 12px;border-radius:14px;border:1px solid rgba(255,90,90,0.25);background:rgba(255,70,70,0.08);font-size:13px;white-space:pre-wrap}
+src/_patchbak/pages-admin.20260122T145718Z/AlignmentSwitchboard.jsx:246:        <div style={{ marginTop: 12, overflowX: "auto" }}>
+src/_patchbak/pages-admin.20260122T145718Z/AlignmentSwitchboard.jsx:310:        <div style={{ marginTop: 12, overflowX: "auto" }}>
+src/_patchbak/pages-admin.20260122T145718Z/AlignmentSwitchboard.jsx:349:        <div style={{ marginTop: 12 }}>
+src/_patchbak/pages-admin.20260122T145718Z/AlignmentSwitchboard.jsx:350:          <div style={{ fontSize: 12, opacity: 0.75, marginBottom: 8 }}>Plan action output</div>
+src/_patchbak/pages-admin.20260122T145718Z/AlignmentSwitchboard.jsx:365:        <div style={{ marginTop: 10, fontSize: 13, opacity: 0.85 }}>
+src/_patchbak/pages-admin.20260122T145718Z/AlignmentSwitchboard.jsx:368:        <div style={{ marginTop: 10 }}>
+src/_patchbak/pages-admin.20260122T145718Z/AlignmentSwitchboard.jsx:371:        <div style={{ marginTop: 12, display: "flex", gap: 10, flexWrap: "wrap" }}>
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:38:        "contract_version": "v1",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:106:        "contract_version": "v1",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:192:      "contract_id": "CONTRACT-V1-003",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:204:        "contract_id": "CONTRACT-V1-003",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:240:      "contract_id": "CONTRACT-V1-008",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:262:        "contract_id": "CONTRACT-V1-008",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:313:        "contract_version": "v1",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:333:      "contract_id": "CONTRACT-V1-003",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:353:      "contract_id": "CONTRACT-V1-003",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:365:        "contract_id": "CONTRACT-V1-003",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:396:      "contract_id": "CONTRACT-V1-009",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:427:      "contract_id": "CONTRACT-V1-005",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:453:      "contract_id": "CONTRACT-V1-006",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:479:      "contract_id": "CONTRACT-V1-007",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:500:      "contract_id": "CONTRACT-V1-010",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:530:      "contract_id": "CONTRACT-V1-008",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:552:        "contract_id": "CONTRACT-V1-008",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:619:        "contract_version": "v1",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:723:        "contract_version": "v1",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:757:          "contract_version": "v1",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:775:        "contract_version": "v1",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:809:          "contract_version": "v1",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:835:      "contract_id": "CONTRACT-V1-003",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:853:      "contract_id": "CONTRACT-V1-004",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:871:      "contract_id": "CONTRACT-V1-005",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:889:      "contract_id": "CONTRACT-V1-006",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:907:      "contract_id": "CONTRACT-V1-007",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:925:      "contract_id": "CONTRACT-V1-008",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:943:      "contract_id": "CONTRACT-V1-009",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:961:      "contract_id": "CONTRACT-V1-010",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:979:      "contract_id": "CONTRACT-V1-028",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:995:      "contract_version": "v1",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:1029:        "contract_version": "v1",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:1047:      "contract_version": "v1",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:1081:        "contract_version": "v1",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:1093:      "contract_id": "CONTRACT-V1-003",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:1104:      "contract_id": "CONTRACT-V1-003",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:1115:      "contract_id": "CONTRACT-V1-004",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:1126:      "contract_id": "CONTRACT-V1-005",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:1137:      "contract_id": "CONTRACT-V1-006",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:1148:      "contract_id": "CONTRACT-V1-010",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:1159:      "contract_id": "CONTRACT-V1-008",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:1170:      "contract_id": "CONTRACT-V1-028",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:1184:      "contract_id": "CONTRACT-V1-003",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:1195:      "contract_id": "CONTRACT-V1-003",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:1206:      "contract_id": "CONTRACT-V1-004",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:1217:      "contract_id": "CONTRACT-V1-005",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:1228:      "contract_id": "CONTRACT-V1-006",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:1239:      "contract_id": "CONTRACT-V1-007",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:1250:      "contract_id": "CONTRACT-V1-009",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:1261:      "contract_id": "CONTRACT-V1-010",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:1272:      "contract_id": "CONTRACT-V1-010",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:1283:      "contract_id": "CONTRACT-V1-008",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:1294:      "contract_id": "CONTRACT-V1-028",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:1452:            "contract_version": "v1",
+services/shf-agent-fabric/services/truth_pipeline/runtime_state/state.json:1531:        "contract_version": "v1",
+src/entries/_archive/sales.smoke2.jsx:11:      <nav style={{display:"flex", gap:12, margin:"12px 0"}}>
+services/shf-agent-fabric/services/operator_allocations_service.py:35:    max_contracts = int(body["max_contracts"])
+services/shf-agent-fabric/services/operator_allocations_service.py:37:    allocated_capital = float(body.get("allocated_capital", max_contracts * payout_amount))
+services/shf-agent-fabric/services/operator_allocations_service.py:39:    if max_contracts <= 0:
+services/shf-agent-fabric/services/operator_allocations_service.py:40:        return {"ok": False, "error": "max_contracts must be positive"}
+services/shf-agent-fabric/services/operator_allocations_service.py:46:        if existing["pool_id"] == body["pool_id"] and existing["contract_id"] == body["contract_id"]:
+services/shf-agent-fabric/services/operator_allocations_service.py:47:            return {"ok": False, "error": "allocation already exists for pool_id + contract_id"}
+services/shf-agent-fabric/services/operator_allocations_service.py:52:        "contract_id": body["contract_id"],
+services/shf-agent-fabric/services/operator_allocations_service.py:53:        "contract_code": body.get("contract_code"),
+services/shf-agent-fabric/services/operator_allocations_service.py:54:        "max_contracts": max_contracts,
+services/shf-agent-fabric/services/operator_allocations_service.py:58:        "remaining_capacity": max_contracts,
+services/shf-agent-fabric/services/operator_allocations_service.py:78:def list_allocations(pool_id=None, contract_id=None, status=None):
+services/shf-agent-fabric/services/operator_allocations_service.py:82:    if contract_id:
+services/shf-agent-fabric/services/operator_allocations_service.py:83:        items = [x for x in items if x.get("contract_id") == contract_id]
+services/shf-agent-fabric/services/operator_allocations_service.py:95:def find_active_allocation(pool_id: str, contract_id: str):
+services/shf-agent-fabric/services/operator_allocations_service.py:97:        if item.get("pool_id") == pool_id and item.get("contract_id") == contract_id and item.get("status") == "active":
+services/shf-agent-fabric/services/operator_allocations_service.py:101:def consume_allocation_capacity(pool_id: str, contract_id: str, actor_id: str, issuance_id: str):
+services/shf-agent-fabric/services/operator_allocations_service.py:102:    item = find_active_allocation(pool_id, contract_id)
+services/shf-agent-fabric/services/operator_allocations_service.py:104:        return {"ok": False, "error": "no active allocation for pool_id + contract_id"}
+services/shf-agent-fabric/services/operator_allocations_service.py:122:            "contract_id": contract_id,
+services/shf-agent-fabric/services/operator_allocations_service.py:130:def settle_allocation_capacity(pool_id: str, contract_id: str, actor_id: str, issuance_id: str):
+services/shf-agent-fabric/services/operator_allocations_service.py:131:    item = find_active_allocation(pool_id, contract_id)
+services/shf-agent-fabric/services/operator_allocations_service.py:133:        return {"ok": False, "error": "no active allocation for pool_id + contract_id"}
+services/shf-agent-fabric/services/operator_allocations_service.py:147:            "contract_id": contract_id,
+services/shf-agent-fabric/services/truth_pipeline/models.py:18:PIPELINE_CONTRACT_IDS = [
+services/shf-agent-fabric/services/truth_pipeline/models.py:19:    "CONTRACT-V1-003",
+services/shf-agent-fabric/services/truth_pipeline/models.py:20:    "CONTRACT-V1-004",
+services/shf-agent-fabric/services/truth_pipeline/models.py:21:    "CONTRACT-V1-005",
+services/shf-agent-fabric/services/truth_pipeline/models.py:22:    "CONTRACT-V1-006",
+services/shf-agent-fabric/services/truth_pipeline/models.py:23:    "CONTRACT-V1-007",
+services/shf-agent-fabric/services/truth_pipeline/models.py:24:    "CONTRACT-V1-008",
+services/shf-agent-fabric/services/truth_pipeline/models.py:25:    "CONTRACT-V1-009",
+services/shf-agent-fabric/services/truth_pipeline/models.py:26:    "CONTRACT-V1-010",
+services/shf-agent-fabric/services/truth_pipeline/models.py:27:    "CONTRACT-V1-028",
+services/shf-agent-fabric/services/truth_pipeline/models.py:52:        "contract_version": "v1",
+services/shf-agent-fabric/services/truth_pipeline/models.py:87:        "contract_version": "v1",
+apps/shs-api/src/domain/credentials/model/certificate-profile.ts:1:import type { ProductKey } from "../../reporting/product-report-contract.js";
+src/router/paths.js:51:export const CAREER_ROUTE_CONTRACT = {
+src/_patchbak/admin.20260122T145718Z/ControlPlaneStrip.jsx:14:export default function ControlPlaneStrip({ contractVersion }) {
+src/_patchbak/admin.20260122T145718Z/ControlPlaneStrip.jsx:47:          Contract: <b>{contractVersion ?? "?"}</b>
+src/_patchbak/admin.20260122T145718Z/ControlPlaneStrip.jsx:59:          margin: 10px 0 14px;
+services/shf-agent-fabric/services/truth_pipeline/service.py:7:from services.contract_runtime.core import ContractEnvelope, failure_record, validate_envelope
+services/shf-agent-fabric/services/truth_pipeline/service.py:9:    PIPELINE_CONTRACT_IDS,
+services/shf-agent-fabric/services/truth_pipeline/service.py:30:    ("source_intake", "Source Intake", "SHS-LAYER-013", "CONTRACT-V1-003"),
+services/shf-agent-fabric/services/truth_pipeline/service.py:31:    ("aggregation", "Aggregation", "SHS-LAYER-015", "CONTRACT-V1-003"),
+services/shf-agent-fabric/services/truth_pipeline/service.py:32:    ("canonical_entity", "Canonical Entity", "SHS-LAYER-016", "CONTRACT-V1-004"),
+services/shf-agent-fabric/services/truth_pipeline/service.py:33:    ("verification", "Verification", "SHS-LAYER-018", "CONTRACT-V1-005"),
+services/shf-agent-fabric/services/truth_pipeline/service.py:34:    ("reconciliation", "Reconciliation", "SHS-LAYER-021", "CONTRACT-V1-006"),
+services/shf-agent-fabric/services/truth_pipeline/service.py:35:    ("oracle", "Oracle", "SHS-LAYER-022", "CONTRACT-V1-007"),
+services/shf-agent-fabric/services/truth_pipeline/service.py:36:    ("truth_persistence", "Truth Package Persistence", "SHS-LAYER-021", "CONTRACT-V1-009"),
+services/shf-agent-fabric/services/truth_pipeline/service.py:37:    ("reporting", "Reporting", "SHS-LAYER-028", "CONTRACT-V1-010"),
+services/shf-agent-fabric/services/truth_pipeline/service.py:38:    ("action", "Action Event", "SHS-LAYER-007", "CONTRACT-V1-010"),
+services/shf-agent-fabric/services/truth_pipeline/service.py:39:    ("recompute", "Oracle Recompute", "SHS-LAYER-022", "CONTRACT-V1-008"),
+services/shf-agent-fabric/services/truth_pipeline/service.py:40:    ("tracking", "Tracking and Audit", "SHS-LAYER-042", "CONTRACT-V1-028"),
+services/shf-agent-fabric/services/truth_pipeline/service.py:65:def _tracking(stage: str, status: str, entity_id: str, contract_id: str, event_id: str) -> dict[str, Any]:
+services/shf-agent-fabric/services/truth_pipeline/service.py:72:        "contract_id": contract_id,
+services/shf-agent-fabric/services/truth_pipeline/service.py:79:def _transition(stage: str, owner: str, contract_id: str, status: str, evidence: str, blocker: str = "") -> dict[str, Any]:
+services/shf-agent-fabric/services/truth_pipeline/service.py:83:        "contract_id": contract_id,
+services/shf-agent-fabric/services/truth_pipeline/service.py:93:def _envelope(contract_id: str, producer: str, consumer: str, actor_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+services/shf-agent-fabric/services/truth_pipeline/service.py:94:    return ContractEnvelope(
+services/shf-agent-fabric/services/truth_pipeline/service.py:95:        contract_id=contract_id,
+services/shf-agent-fabric/services/truth_pipeline/service.py:96:        contract_version="v1",
+services/shf-agent-fabric/services/truth_pipeline/service.py:107:        idempotency_key=stable_id("idem", {"contract_id": contract_id, "payload": payload}, 18),
+services/shf-agent-fabric/services/truth_pipeline/service.py:126:        validation = validate_envelope(_envelope("CONTRACT-V1-003", "SHS-LAYER-013", "SHS-LAYER-015", actor_id, claim))
+services/shf-agent-fabric/services/truth_pipeline/service.py:128:            failure_records.append(failure_record("invalid_contract_version", retryable=False, reason="source intake envelope invalid", trace_id=REPRESENTATIVE_TRACE_ID))
+services/shf-agent-fabric/services/truth_pipeline/service.py:130:    tracking_events.append(_tracking("source_intake", "complete", REPRESENTATIVE_ENTITY_ID, "CONTRACT-V1-003", "evt_batch02_source_intake"))
+services/shf-agent-fabric/services/truth_pipeline/service.py:156:    tracking_events.append(_tracking("aggregation", "complete", REPRESENTATIVE_ENTITY_ID, "CONTRACT-V1-003", "evt_batch02_tracking_aggregation"))
+services/shf-agent-fabric/services/truth_pipeline/service.py:170:    tracking_events.append(_tracking("canonical_entity", "complete", REPRESENTATIVE_ENTITY_ID, "CONTRACT-V1-004", "evt_batch02_tracking_entity"))
+services/shf-agent-fabric/services/truth_pipeline/service.py:187:    tracking_events.append(_tracking("verification", "complete", REPRESENTATIVE_ENTITY_ID, "CONTRACT-V1-005", "evt_batch02_tracking_verification"))
+services/shf-agent-fabric/services/truth_pipeline/service.py:202:    tracking_events.append(_tracking("reconciliation", "complete", REPRESENTATIVE_ENTITY_ID, "CONTRACT-V1-006", "evt_batch02_tracking_reconciliation"))
+services/shf-agent-fabric/services/truth_pipeline/service.py:230:    tracking_events.append(_tracking("action", "complete", REPRESENTATIVE_ENTITY_ID, "CONTRACT-V1-010", "evt_batch02_tracking_action"))
+services/shf-agent-fabric/services/truth_pipeline/service.py:256:    tracking_events.append(_tracking("recompute", "complete", REPRESENTATIVE_ENTITY_ID, "CONTRACT-V1-008", "evt_batch02_tracking_recompute"))
+services/shf-agent-fabric/services/truth_pipeline/service.py:258:    for stage, name, owner, contract_id in TRANSITIONS:
+services/shf-agent-fabric/services/truth_pipeline/service.py:259:        transition_results.append(_transition(stage, owner, contract_id, "runtime_wired", f"{name} persisted and traced for representative entity."))
+services/shf-agent-fabric/services/truth_pipeline/service.py:260:    for contract_id in PIPELINE_CONTRACT_IDS:
+services/shf-agent-fabric/services/truth_pipeline/service.py:262:            "contract_id": contract_id,
+services/shf-agent-fabric/services/truth_pipeline/service.py:281:    tracking_events.append(_tracking("tracking", "complete", REPRESENTATIVE_ENTITY_ID, "CONTRACT-V1-028", "evt_batch02_tracking_final"))
+services/shf-agent-fabric/services/truth_pipeline/service.py:386:        failure.setdefault("contract_id", _contract_for_transition(failure["transition"]))
+services/shf-agent-fabric/services/truth_pipeline/service.py:397:                "contract_id": failure["contract_id"],
+services/shf-agent-fabric/services/truth_pipeline/service.py:409:def _contract_for_transition(transition: str) -> str:
+services/shf-agent-fabric/services/truth_pipeline/service.py:410:    for stage, _name, _owner, contract_id in TRANSITIONS:
+services/shf-agent-fabric/services/truth_pipeline/service.py:412:            return contract_id
+services/shf-agent-fabric/services/truth_pipeline/service.py:413:    return "CONTRACT-V1-003"
+services/shf-agent-fabric/services/truth_pipeline/service.py:436:            "contract_count": len(PIPELINE_CONTRACT_IDS),
+services/shf-agent-fabric/services/truth_pipeline/service.py:437:            "runtime_wired_contracts": len([item for item in state.get("runtime_gate_results", []) if item.get("runtime_wired")]),
+services/shf-agent-fabric/services/truth_pipeline/service.py:438:            "blocked_contracts": 0,
+services/shf-agent-fabric/services/metric_registry_service.py:14:METRIC_REGISTRY_PATH = SERVICE_ROOT / "contracts" / "reporting" / "metric_registry.v1.json"
+services/shf-agent-fabric/services/contract_runtime/core.py:12:CONTRACT_ENVELOPE_VERSION = "shs.contract.envelope.v1"
+services/shf-agent-fabric/services/contract_runtime/core.py:13:FOUNDATION_VERSION = "SHS_BOS_BATCH_01_CONTRACT_FOUNDATION_V1"
+services/shf-agent-fabric/services/contract_runtime/core.py:53:class ContractPrincipal:
+services/shf-agent-fabric/services/contract_runtime/core.py:62:    def from_session(cls, session: Any) -> "ContractPrincipal":
+services/shf-agent-fabric/services/contract_runtime/core.py:94:class ContractEnvelope:
+services/shf-agent-fabric/services/contract_runtime/core.py:95:    contract_id: str
+services/shf-agent-fabric/services/contract_runtime/core.py:96:    contract_version: str
+services/shf-agent-fabric/services/contract_runtime/core.py:103:    envelope_version: str = CONTRACT_ENVELOPE_VERSION
+services/shf-agent-fabric/services/contract_runtime/core.py:120:            "contract_id": self.contract_id,
+services/shf-agent-fabric/services/contract_runtime/core.py:121:            "contract_version": self.contract_version,
+services/shf-agent-fabric/services/contract_runtime/core.py:147:        "contract_id",
+services/shf-agent-fabric/services/contract_runtime/core.py:148:        "contract_version",
+services/shf-agent-fabric/services/contract_runtime/core.py:158:    if envelope.get("envelope_version") != CONTRACT_ENVELOPE_VERSION:
+services/shf-agent-fabric/fabric/funding/partner_docs.py:37:        "contracts": {
+services/shf-agent-fabric/fabric/funding/partner_docs.py:58:        "contracts": {
+services/shf-agent-fabric/fabric/funding/partner_docs.py:119:    Lightweight JSON-Schema-style contracts.
+services/shf-agent-fabric/fabric/funding/partner_docs.py:330:                "name": "Contracts",
+services/shf-agent-fabric/fabric/funding/partner_docs.py:407:    Partner-stable version contract.
+services/shf-agent-fabric/services/contract_runtime/__init__.py:1:"""SHS BOS contract runtime foundation helpers.
+services/shf-agent-fabric/services/contract_runtime/__init__.py:4:It provides the shared envelope, gate, and evidence contracts those existing
+services/shf-agent-fabric/services/contract_runtime/__init__.py:5:authorities must satisfy before a V1 layer contract can be called runtime-wired.
+services/shf-agent-fabric/services/contract_runtime/registry.py:9:from services.contract_runtime.core import FOUNDATION_VERSION
+services/shf-agent-fabric/services/contract_runtime/registry.py:13:    "foundation": "SHS_BOS_BATCH_01_CONTRACT_RUNTIME_FOUNDATION_V1.json",
+services/shf-agent-fabric/services/contract_runtime/registry.py:18:    "contract_registry": "SHS_BOS_LAYER_CONTRACT_REGISTRY_V1.json",
+services/shf-agent-fabric/services/contract_runtime/registry.py:48:    architecture = _read_artifact("contract_registry")
+services/shf-agent-fabric/services/contract_runtime/registry.py:49:    contract_gate_map = {
+services/shf-agent-fabric/services/contract_runtime/registry.py:50:        item["contract_id"]: item
+services/shf-agent-fabric/services/contract_runtime/registry.py:51:        for item in gate_results.get("contract_gate_results", [])
+services/shf-agent-fabric/services/contract_runtime/registry.py:52:        if item.get("contract_id")
+services/shf-agent-fabric/services/contract_runtime/registry.py:54:    contracts = []
+services/shf-agent-fabric/services/contract_runtime/registry.py:55:    for contract in architecture.get("contracts", []):
+services/shf-agent-fabric/services/contract_runtime/registry.py:56:        enriched = dict(contract)
+services/shf-agent-fabric/services/contract_runtime/registry.py:57:        enriched["batch_01_gate"] = contract_gate_map.get(contract.get("contract_id"), {})
+services/shf-agent-fabric/services/contract_runtime/registry.py:58:        contracts.append(enriched)
+services/shf-agent-fabric/services/contract_runtime/registry.py:64:            "api_family": "/api/v1-command-center/contract-foundation",
+services/shf-agent-fabric/services/contract_runtime/registry.py:71:        "contracts": contracts,
+services/shf-agent-fabric/services/contract_runtime/registry.py:72:        "representative_contracts": gate_results.get("representative_contracts", []),
+services/shf-agent-fabric/services/contract_runtime/registry.py:79:        "audit_contract": foundation.get("audit_contract", {}),
+services/shf-agent-fabric/services/contract_runtime/registry.py:80:        "observability": foundation.get("observability_contract", {}),
+services/shf-agent-fabric/services/contract_runtime/registry.py:84:def contract_foundation_record(contract_id: str) -> dict[str, Any] | None:
+services/shf-agent-fabric/services/contract_runtime/registry.py:85:    for contract in foundation_payload().get("contracts", []):
+services/shf-agent-fabric/services/contract_runtime/registry.py:86:        if contract.get("contract_id") == contract_id:
+services/shf-agent-fabric/services/contract_runtime/registry.py:87:            return contract
+services/shf-agent-fabric/fabric/funding/capabilities.py:13:    No secrets, no auth assumptions, and stable schema_version for contract binding.
+services/shf-agent-fabric/fabric/funding/capabilities.py:51:            "description": "This document (stable discovery contract).",
+services/shf-agent-fabric/fabric/funding/capabilities.py:69:        "contracts": {
+src/router/FoundationAdminOnly.jsx:12:          <h1 style={{margin:0}}>Admin</h1>
+src/router/FoundationAdminOnly.jsx:13:          <nav style={{display:"flex",gap:10,marginBottom:12}}>
+src/router/SalesRoutes.jsx:17:const Proposals = lazy(() => import("@/pages/sales/Proposals.jsx"));
+src/router/SalesRoutes.jsx:18:const Quotes = lazy(() => import("@/pages/sales/Quotes.jsx"));
+src/router/SalesRoutes.jsx:27:const DemoProposal = lazy(() => import("@/pages/sales/DemoProposal.jsx"));
+src/router/SalesRoutes.jsx:48:          <Route path="proposals" element={<Proposals />} />
+src/router/SalesRoutes.jsx:49:          <Route path="quotes" element={<Quotes />} />
+src/router/SalesRoutes.jsx:57:          <Route path="demo/proposal" element={<DemoProposal />} />
+services/shf-agent-fabric/fabric/funding/partner.py:316:            "These docs are stable partner contracts; the full truth remains OpenAPI at /openapi.json.",
+src/router/CivicRoutes.jsx:13:const CivicProposals    = lazy(() => import("@/pages/civic/Proposals.jsx"));
+src/router/CivicRoutes.jsx:69:          <Route path="proposals"     element={<CivicProposals />} />
+services/shf-agent-fabric/fabric/funding/rulesets.py:5:# Contract classification (clean separation)
+services/shf-agent-fabric/fabric/funding/rulesets.py:138:def _contracts_dir() -> Path:
+services/shf-agent-fabric/fabric/funding/rulesets.py:140:    return Path(__file__).resolve().parents[2] / "contracts" / "aim_rulesets"
+services/shf-agent-fabric/fabric/funding/rulesets.py:152:    base = _contracts_dir()
+services/shf-agent-fabric/fabric/funding/rulesets.py:187:    base = _contracts_dir()
+services/shf-agent-fabric/fabric/funding/rulesets.py:209:def _contracts_dir() -> Path:
+services/shf-agent-fabric/fabric/funding/rulesets.py:210:    return Path(__file__).resolve().parents[2] / "contracts" / "aim_rulesets"
+services/shf-agent-fabric/fabric/funding/rulesets.py:212:def _load_all_contracts() -> list[tuple[str, dict]]:
+services/shf-agent-fabric/fabric/funding/rulesets.py:213:    d = _contracts_dir()
+services/shf-agent-fabric/fabric/funding/rulesets.py:223:            # ignore unreadable contract; discovery remains best-effort
+services/shf-agent-fabric/fabric/funding/rulesets.py:230:    Clean separation: ONLY AIM_RULESET_V1 contracts.
+services/shf-agent-fabric/fabric/funding/rulesets.py:233:    for filename, obj in _load_all_contracts():
+services/shf-agent-fabric/fabric/funding/rulesets.py:252:    Clean separation: ONLY AIM_RULESET_V1 contracts.
+services/shf-agent-fabric/fabric/funding/rulesets.py:254:    for filename, obj in _load_all_contracts():
+services/shf-agent-fabric/fabric/funding/rulesets.py:258:            # return full contract plus filename
+services/shf-agent-fabric/fabric/funding/rulesets.py:267:    Clean separation: ONLY AIM_LOCK_TRIGGERS_V1 contracts.
+services/shf-agent-fabric/fabric/funding/rulesets.py:270:    for filename, obj in _load_all_contracts():
+services/shf-agent-fabric/fabric/funding/rulesets.py:279:    Clean separation: ONLY AIM_LOCK_TRIGGERS_V1 contracts.
+services/shf-agent-fabric/fabric/funding/rulesets.py:281:    for filename, obj in _load_all_contracts():
+services/shf-agent-fabric/fabric/funding/rulesets.py:296:    for filename, obj in _load_all_contracts():
+services/shf-agent-fabric/services/reporting_service.py:10:REPORT_REGISTRY_PATH = SERVICE_ROOT / "contracts" / "reporting" / "report_registry.v1.json"
+src/router/AdminRoutes.jsx:111:        <h1 style={{ margin: "0 0 8px" }}>Access restricted</h1>
+src/router/AdminRoutes.jsx:112:        <p style={{ margin: 0 }}>
+src/router/CareerRoutes.jsx:9:  CAREER_ROUTE_CONTRACT,
+src/router/CareerRoutes.jsx:48:export const PUBLIC_CAREER_ROUTES = Object.values(CAREER_ROUTE_CONTRACT.public);
+src/router/CareerRoutes.jsx:49:export const PERSONAL_CAREER_ROUTES = Object.values(CAREER_ROUTE_CONTRACT.personal);
+apps/shs-api/src/domain/notifications/service/notification-service.ts:2:import { classifyNotificationType, notificationTypesByCategory } from "../contracts/notification-classification.js";
+apps/shs-api/src/domain/notifications/service/notification-service.ts:540:    : "ACTION_REQUIRED"; // ACTION_COMPLETED/EXPIRED are reserved — see communication-contracts.ts; never derived from read state.
+apps/shs-api/src/domain/notifications/service/delivery-service.ts:37:import { classifyNotificationType } from "../contracts/notification-classification.js";
+apps/shs-api/src/domain/notifications/service/delivery-service.ts:38:import { isSuppressibleCategory } from "../contracts/notification-classification.js";
+apps/shs-api/src/domain/notifications/service/delivery-service.ts:39:import { isSafeInternalPath } from "../contracts/safe-links.js";
+src/companion/CompanionProvider.jsx:46:  // (docs/SHF_AIEL_PERSISTENCE_API_CONTRACT_V1.md — two writable sources
+apps/shs-api/src/domain/notifications/service/preference-service.ts:13:import { isSuppressibleCategory, SUPPRESSIBLE_CATEGORIES, type NotificationCategory } from "../contracts/notification-classification.js";
+services/shf-agent-fabric/fabric/reports/funder_report.py:452:    Output contract is intentionally richer than the old stub and matches
+services/shf-agent-fabric/fabric/reports/pdf_report.py:23:MARGIN_X = 60
+services/shf-agent-fabric/fabric/reports/pdf_report.py:24:CONTENT_W = PAGE_W - (MARGIN_X * 2)
+services/shf-agent-fabric/fabric/reports/pdf_report.py:181:    _line(c, MARGIN_X, y + 10, PAGE_W - MARGIN_X, y + 10)
+services/shf-agent-fabric/fabric/reports/pdf_report.py:182:    _txt(c, MARGIN_X, y - 2, "Silicon Heartland Foundation • Funder-Grade Pilot Report", 9, MUTED)
+services/shf-agent-fabric/fabric/reports/pdf_report.py:185:        _txt_r(c, PAGE_W - MARGIN_X, y - 2, page_label, 9, MUTED)
+services/shf-agent-fabric/fabric/reports/pdf_report.py:190:    logo_x = MARGIN_X
+services/shf-agent-fabric/fabric/reports/pdf_report.py:198:    _line(c, MARGIN_X, PAGE_H - 94, PAGE_W - MARGIN_X, PAGE_H - 94)
+services/shf-agent-fabric/fabric/reports/pdf_report.py:213:    _line(c, MARGIN_X, PAGE_H - 436, PAGE_W - MARGIN_X, PAGE_H - 436)
+services/shf-agent-fabric/fabric/reports/pdf_report.py:347:    chip_w = _chip(c, MARGIN_X, y, decision, dec_color)
+services/shf-agent-fabric/fabric/reports/pdf_report.py:348:    _txt(c, MARGIN_X + chip_w + 18, y - 12, f"Score: {score}", 16, INK, "Helvetica-Bold")
+services/shf-agent-fabric/fabric/reports/pdf_report.py:350:    _txt(c, MARGIN_X, y, dec_text, 11, SUB)
+services/shf-agent-fabric/fabric/reports/pdf_report.py:355:        MARGIN_X,
+services/shf-agent-fabric/fabric/reports/pdf_report.py:370:        MARGIN_X,
+services/shf-agent-fabric/fabric/reports/pdf_report.py:384:        MARGIN_X,
+services/shf-agent-fabric/services/agent_contract_bridge_service.py:65:def _contracts_path() -> Path:
+services/shf-agent-fabric/services/agent_contract_bridge_service.py:66:    return Path(__file__).resolve().parent.parent / "contracts" / "agents" / "agents.json"
+services/shf-agent-fabric/services/agent_contract_bridge_service.py:69:def load_backend_agent_contracts() -> Dict[str, Dict[str, Any]]:
+services/shf-agent-fabric/services/agent_contract_bridge_service.py:70:    path = _contracts_path()
+services/shf-agent-fabric/services/agent_contract_bridge_service.py:118:def build_agent_contract_bridge_summary() -> Dict[str, Any]:
+services/shf-agent-fabric/services/agent_contract_bridge_service.py:122:        backend_agents = load_backend_agent_contracts()
+services/shf-agent-fabric/services/agent_contract_bridge_service.py:123:        contracts_readable = True
+services/shf-agent-fabric/services/agent_contract_bridge_service.py:126:        contracts_readable = False
+services/shf-agent-fabric/services/agent_contract_bridge_service.py:127:        warnings.append(f"backend_contract_unreadable:{type(exc).__name__}")
+services/shf-agent-fabric/services/agent_contract_bridge_service.py:163:    if not contracts_readable:
+services/shf-agent-fabric/services/agent_contract_bridge_service.py:164:        warnings.append("contracts_not_readable")
+services/shf-agent-fabric/services/agent_contract_bridge_service.py:175:        "layer": "agent_contract_bridge",
+services/shf-agent-fabric/services/agent_contract_bridge_service.py:183:        "contracts_readable": contracts_readable,
+services/shf-agent-fabric/services/agent_contract_bridge_service.py:190:        "backend_contract_source": "services/shf-agent-fabric/contracts/agents/agents.json",
+services/shf-agent-fabric/services/agent_contract_bridge_service.py:194:def agent_contract_bridge_health() -> Dict[str, Any]:
+services/shf-agent-fabric/services/agent_contract_bridge_service.py:195:    summary = build_agent_contract_bridge_summary()
+services/shf-agent-fabric/services/agent_contract_bridge_service.py:197:        "ok": summary["contracts_readable"],
+services/shf-agent-fabric/services/agent_contract_bridge_service.py:198:        "service": "agent_contract_bridge",
+services/shf-agent-fabric/services/agent_contract_bridge_service.py:205:def agent_contract_bridge_agents() -> Dict[str, Any]:
+services/shf-agent-fabric/services/agent_contract_bridge_service.py:206:    agents = load_backend_agent_contracts()
+services/shf-agent-fabric/services/agent_contract_bridge_service.py:209:        "layer": "agent_contract_bridge",
+services/shf-agent-fabric/services/agent_contract_bridge_service.py:210:        "source": "services/shf-agent-fabric/contracts/agents/agents.json",
+src/index 2.css:26:  margin: 0;
+apps/shs-api/src/domain/notifications/contracts/communication-contracts.ts:1:// NCA-1 — Canonical Notification Contracts, Consolidation & Policy.
+apps/shs-api/src/domain/notifications/contracts/communication-contracts.ts:3:// Type-only contracts. Formalizes the shapes already implied by the real,
+apps/shs-api/src/domain/notifications/contracts/communication-contracts.ts:8:// Governing law (do not violate anywhere this contract is used):
+apps/shs-api/src/domain/notifications/contracts/communication-contracts.ts:59: * The canonical communication event contract. Field-for-field mapping onto
+apps/shs-api/src/domain/notifications/contracts/communication-contracts.ts:65:export interface CommunicationEventContract {
+apps/shs-api/src/domain/notifications/contracts/communication-contracts.ts:107: * The canonical notification projection contract. Field-for-field mapping
+apps/shs-api/src/domain/notifications/contracts/communication-contracts.ts:114:export interface NotificationProjectionContract {
+apps/shs-api/src/domain/notifications/contracts/communication-contracts.ts:154: * subset of NotificationProjectionContract, meant to feed the existing
+apps/shs-api/src/domain/notifications/contracts/communication-contracts.ts:157: * (NCA-0 §33, decision lock §11). This is NCA's data contract to EXR's UI
+apps/shs-api/src/domain/notifications/contracts/communication-contracts.ts:160:export interface AttentionItemContract {
+apps/shs-api/src/domain/notifications/contracts/communication-contracts.ts:173: * The recipient-resolution contract. Matches the real, working
+apps/shs-api/src/domain/notifications/contracts/communication-contracts.ts:180: * now without every future policy needing a breaking contract change
+apps/shs-api/src/domain/notifications/contracts/communication-contracts.ts:183:export interface RecipientResolutionContract<TEvent = Record<string, unknown>> {
+services/shf-agent-fabric/fabric/reports/institutional/platypus_preview.py:235:        leftMargin=52,
+services/shf-agent-fabric/fabric/reports/institutional/platypus_preview.py:236:        rightMargin=52,
+services/shf-agent-fabric/fabric/reports/institutional/platypus_preview.py:237:        topMargin=52,
+services/shf-agent-fabric/fabric/reports/institutional/platypus_preview.py:238:        bottomMargin=42,
+apps/shs-api/src/domain/notifications/contracts/notification-classification.ts:1:// NCA-1 — Canonical Notification Contracts, Consolidation & Policy.
+apps/shs-api/src/domain/notifications/contracts/notification-classification.ts:16:import type { NotificationCategory, NotificationChannel, NotificationUrgency } from "./communication-contracts.js";
+apps/shs-api/src/domain/notifications/contracts/notification-classification.ts:17:export type { NotificationCategory } from "./communication-contracts.js";
+apps/shs-api/src/domain/notifications/contracts/notification-classification.ts:38:  // Classified now so the projection contract is correct the moment DGAL's
+src/_patchbak/admin.20260122T145718Z/MiniRelayerStats.jsx:62:  head: { display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 },
+src/_patchbak/admin.20260122T145718Z/MiniRelayerStats.jsx:63:  title: { margin: 0, fontSize: 13, fontWeight: 800, color: "#0f172a" },
+src/_patchbak/admin.20260122T145718Z/MiniRelayerStats.jsx:69:  footer: { marginTop: 8, fontSize: 12, color: "#6b7280", display: "flex", alignItems: "center", gap: 6 },
+src/entries/RootProviders.jsx:36:// reads (docs/SHF_AIEL_PERSISTENCE_API_CONTRACT_V1.md; see
+src/auth/auth-context.jsx:133:    routeValidityContract: state.routeValidityContract,
+services/shf-agent-fabric/services/operator_contract_issuances_service.py:7:from services.operator_contracts_service import CONTRACTS, _save_contracts
+services/shf-agent-fabric/services/operator_contract_issuances_service.py:17:DATA_FILE = Path(__file__).resolve().parent.parent / "data" / "contract_issuances.json"
+services/shf-agent-fabric/services/operator_contract_issuances_service.py:34:def issue_contract(contract_id: str, body: dict):
+services/shf-agent-fabric/services/operator_contract_issuances_service.py:35:    contract = CONTRACTS.get(contract_id)
+services/shf-agent-fabric/services/operator_contract_issuances_service.py:36:    if not contract:
+services/shf-agent-fabric/services/operator_contract_issuances_service.py:37:        return {"ok": False, "error": "contract not found"}
+services/shf-agent-fabric/services/operator_contract_issuances_service.py:39:    if contract.get("status") != "active":
+services/shf-agent-fabric/services/operator_contract_issuances_service.py:40:        return {"ok": False, "error": "contract must be active before issuance"}
+services/shf-agent-fabric/services/operator_contract_issuances_service.py:42:    max_supply = contract.get("max_supply")
+services/shf-agent-fabric/services/operator_contract_issuances_service.py:43:    active_count = int(contract.get("active_count", 0))
+services/shf-agent-fabric/services/operator_contract_issuances_service.py:45:        return {"ok": False, "error": "contract max_supply reached"}
+services/shf-agent-fabric/services/operator_contract_issuances_service.py:52:        "contract_id": contract_id,
+services/shf-agent-fabric/services/operator_contract_issuances_service.py:53:        "contract_code": contract.get("contract_code"),

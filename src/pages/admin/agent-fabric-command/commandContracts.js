@@ -324,6 +324,8 @@ export const KNOWN_DATA_GAPS = Object.freeze([
 //   NOT_AVAILABLE — shown disabled with the phase that would deliver it
 export const COMMAND_SECTIONS = Object.freeze([
   { id: "command", label: "Command Center", status: "CURRENT", route: "/agent-fabric/command" },
+  // AFCC-3 Phase 7: read-only runs, timeline and evidence.
+  { id: "live", label: "Live Operations", status: "ROUTE", route: "/agent-fabric/command/operations", note: "Runs, timeline, evidence" },
   { id: "priority", label: "Priority & Alerts", status: "IN_PAGE", target: "afcc-priority" },
   { id: "map", label: "Ecosystem Map", status: "IN_PAGE", target: "afcc-map" },
   { id: "fleet", label: "Agent Fleet", status: "IN_PAGE", target: "afcc-lane-agents" },

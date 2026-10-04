@@ -161,6 +161,7 @@ export default function MetaverseMiniMap({
   activeRoomParticipants = null,
   reducedMotion = false,
   onSelectDistrict,
+  presentation,
 }) {
   const youAreHereAnchorId = youAreHereDistrictId || currentDistrictId;
   const [mapState, setMapState] = useState(() => readStoredMapState());
@@ -189,6 +190,8 @@ export default function MetaverseMiniMap({
   // wins, so the fixture can never mask or override real presence.
   const usingFaceFixture = !activeRoomParticipants && faceFixtureMode;
   const effectiveRoomParticipants = activeRoomParticipants || (faceFixtureMode ? DEV_FIXTURE_ROOM : null);
+  const operationsPresentation = presentation === "operations";
+  const effectiveMapState = operationsPresentation ? "expanded" : mapState;
 
   const setMapStateAndPersist = (value) => {
     setMapState(value);
@@ -543,7 +546,11 @@ export default function MetaverseMiniMap({
   }
 
   return (
-    <section className={`met-minimap met-citymap met-citymap--${mapState}`} aria-labelledby="met-minimap-title">
+    <section
+      className={`met-minimap met-citymap met-citymap--${effectiveMapState}${operationsPresentation ? " met-citymap--operations" : ""}`}
+      data-presentation={operationsPresentation ? "operations" : undefined}
+      aria-labelledby="met-minimap-title"
+    >
       <div
         className="met-minimap__head"
         // FINAL RECONCILIATION V3.1 — PART 7: when collapsed, the
@@ -552,7 +559,7 @@ export default function MetaverseMiniMap({
         // exists for keyboard/screen-reader users, but a pointer click
         // anywhere on the pill now reliably re-expands it even if the
         // exact button geometry is ever partially covered.
-        onClick={mapState === "collapsed" ? () => setMapStateAndPersist("expanded") : undefined}
+        onClick={!operationsPresentation && effectiveMapState === "collapsed" ? () => setMapStateAndPersist("expanded") : undefined}
       >
         <span className="met-citymap__head-icon" aria-hidden="true">🗺️</span>
         <h2 id="met-minimap-title">City Map</h2>
@@ -560,7 +567,7 @@ export default function MetaverseMiniMap({
             header row as the title (matching the approved mock's
             header layout), not a separate row below. Only shown once
             expanded; compact/collapsed keep the plain header. */}
-        {mapState === "expanded" ? (
+        {effectiveMapState === "expanded" ? (
           <div className="met-citymap__tabs" role="tablist" aria-label="City Map views">
             {MAP_TABS.map((tab) => (
               <button
@@ -576,18 +583,20 @@ export default function MetaverseMiniMap({
             ))}
           </div>
         ) : null}
-        {mapState === "collapsed" ? (
-          <button type="button" className="met-minimap__toggle" onClick={() => setMapStateAndPersist("expanded")} aria-expanded={false} aria-label="Expand City Map">
-            {"^"}
-          </button>
-        ) : (
-          <button type="button" className="met-minimap__toggle" onClick={() => setMapStateAndPersist("collapsed")} aria-expanded={true} aria-label="Collapse City Map">
-            {"–"}
-          </button>
-        )}
+        {!operationsPresentation ? (
+          effectiveMapState === "collapsed" ? (
+            <button type="button" className="met-minimap__toggle" onClick={() => setMapStateAndPersist("expanded")} aria-expanded={false} aria-label="Expand City Map">
+              {"^"}
+            </button>
+          ) : (
+            <button type="button" className="met-minimap__toggle" onClick={() => setMapStateAndPersist("collapsed")} aria-expanded={true} aria-label="Collapse City Map">
+              {"–"}
+            </button>
+          )
+        ) : null}
       </div>
 
-      {mapState !== "collapsed" ? (
+      {effectiveMapState !== "collapsed" ? (
         <>
           {/* PIXEL-FAITHFUL MOCK MATCH — PHASE 3: "Current district: X"
               is not present anywhere in the approved reference — removed.
@@ -616,7 +625,7 @@ export default function MetaverseMiniMap({
             </div>
           ) : null}
 
-          {mapState === "compact" ? (districts.length ? renderMapLayers("compact") : null) : null}
+          {effectiveMapState === "compact" ? (districts.length ? renderMapLayers("compact") : null) : null}
 
           {/* VISUAL RECONCILIATION PHASE B / PIXEL-FAITHFUL MOCK MATCH —
               expanded District Map is a two-column layout (large map
@@ -629,7 +638,7 @@ export default function MetaverseMiniMap({
               online" line are gone — that navigation capability already
               lives in the sidebar, and the reference has no equivalent
               block inside the City Map panel. */}
-          {mapState === "expanded" && activeTab === "DISTRICT_MAP" ? (
+          {effectiveMapState === "expanded" && activeTab === "DISTRICT_MAP" ? (
             <div className="met-citymap__district-body">
               <div className="met-citymap__map-col">
                 {districts.length ? renderMapLayers("compact") : null}
@@ -679,8 +688,8 @@ export default function MetaverseMiniMap({
             </div>
           ) : null}
 
-          {mapState === "expanded" && activeTab === "STUDENTS_NEARBY" ? renderStudentsNearby() : null}
-          {mapState === "expanded" && activeTab === "LAYERS" ? renderLayers() : null}
+          {effectiveMapState === "expanded" && activeTab === "STUDENTS_NEARBY" ? renderStudentsNearby() : null}
+          {effectiveMapState === "expanded" && activeTab === "LAYERS" ? renderLayers() : null}
         </>
       ) : null}
 

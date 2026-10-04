@@ -1,0 +1,503 @@
+============================================================
+SOURCE: 07_FUNDING.txt
+============================================================
+db/apps.json:16:      "capabilities": ["ledger", "grants", "payouts"],
+ui/contracts/appRegistry.contract.json:15:    "ar-cardGated",
+ui/contracts/appRegistry.contract.json:19:    "ar-gate"
+services/shf-audit-service/main.py:4:from datetime import datetime, timezone
+services/shf-audit-service/main.py:81:                CREATE TABLE IF NOT EXISTS audit_events (
+services/shf-audit-service/main.py:108:def create_event(event: AuditEventIn):
+services/shf-audit-service/main.py:109:    ts = datetime.now(timezone.utc)
+apps/shs-api/src/server.ts:10:import { assertProductionRateLimitConfigured, rateLimitMiddleware } from "./security/rate-limit.js";
+apps/shs-api/src/server.ts:24:assertProductionRateLimitConfigured();
+apps/shs-api/src/server.ts:59:app.use(rateLimitMiddleware());
+services/shf-audit-service/exports_signing.py:7:from datetime import datetime, timezone
+services/shf-audit-service/exports_signing.py:10:from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey, Ed25519PublicKey
+services/shf-audit-service/exports_signing.py:15:    return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+services/shf-audit-service/exports_signing.py:42:def _get_private_key() -> Ed25519PrivateKey:
+services/shf-audit-service/exports_signing.py:43:    priv_b64 = _require_env("SHF_EXPORT_SIGNING_PRIVATE_KEY_B64")
+services/shf-audit-service/exports_signing.py:46:        raise RuntimeError("SHF_EXPORT_SIGNING_PRIVATE_KEY_B64 must be raw 32-byte Ed25519 private key (base64).")
+services/shf-audit-service/exports_signing.py:47:    return Ed25519PrivateKey.from_private_bytes(raw)
+services/shf-audit-service/exports_signing.py:66:    priv = _get_private_key()
+services/shf-audit-service/exports_signing.py:90:def generate_keypair_b64() -> Dict[str, str]:
+services/shf-audit-service/exports_signing.py:91:    priv = Ed25519PrivateKey.generate()
+services/shf-audit-service/exports_signing.py:92:    if hasattr(priv, "private_bytes_raw"):
+services/shf-audit-service/exports_signing.py:93:        priv_raw = priv.private_bytes_raw()
+services/shf-audit-service/exports_signing.py:96:        priv_raw = priv.private_bytes(
+services/shf-audit-service/exports_signing.py:98:            format=serialization.PrivateFormat.Raw,
+services/shf-audit-service/exports_signing.py:107:        "private_b64": b64e(priv_raw),
+src/router/merged.js:80:      const candidates = [
+src/router/merged.js:84:      const file = candidates.find(exists);
+src/utils/useValidCurriculum.js:11:  const [list, setList]   = React.useState([]);
+src/utils/useValidCurriculum.js:12:  const [error, setError] = React.useState("");
+src/utils/useValidCurriculum.js:13:  const [ready, setReady] = React.useState(false);
+src/router/LordOutcomesRoutes.jsx:6:import { Routes, Route, Navigate } from "react-router-dom";
+src/router/LordOutcomesRoutes.jsx:11:import StateOutcomesPage from "@/pages/lordOutcomes/StateOutcomesPage.jsx";
+src/router/LordOutcomesRoutes.jsx:14:import FundingImpactPage from "@/pages/lordOutcomes/FundingImpactPage.jsx";
+src/router/LordOutcomesRoutes.jsx:19:import PilotTemplatesPage from "@/pages/lordOutcomes/pilots/PilotTemplates.jsx";
+src/router/LordOutcomesRoutes.jsx:31:        <Route path="states" element={<StateOutcomesPage />} />
+src/router/LordOutcomesRoutes.jsx:34:        <Route path="funding" element={<FundingImpactPage />} />
+src/router/LordOutcomesRoutes.jsx:38:          <Route index element={<Navigate to="launch" replace />} />
+src/router/LordOutcomesRoutes.jsx:41:          <Route path="templates" element={<PilotTemplatesPage />} />
+src/router/LordOutcomesRoutes.jsx:45:        <Route path="*" element={<Navigate to="/" replace />} />
+src/utils/storage.js:46:  /** migrate legacy -> ns (idempotent) */
+src/utils/storage.js:47:  migrate(key, app) {
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:6:import { Routes, Route, Navigate } from "react-router-dom";
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:11:import StateOutcomesPage from "@/pages/lordOutcomes/StateOutcomesPage.jsx";
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:14:import FundingImpactPage from "@/pages/lordOutcomes/FundingImpactPage.jsx";
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:19:import PilotTemplatesPage from "@/pages/lordOutcomes/pilots/PilotTemplates.jsx";
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:33:        <Route path="states" element={<StateOutcomesPage />} />
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:36:        <Route path="funding" element={<FundingImpactPage />} />
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:40:          <Route index element={<Navigate to="launch" replace />} />
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:43:          <Route path="templates" element={<PilotTemplatesPage />} />
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:47:        <Route path="*" element={<Navigate to="/" replace />} />
+docs/career/CAREER_CENTER_PHASE_0_GOVERNANCE_CORRECTIONS.md:21:honest, dynamic count (`"N pathways shown"`) with an honest empty state
+docs/career/CAREER_CENTER_PHASE_0_GOVERNANCE_CORRECTIONS.md:24:active product surfaces today.** No fake pathway records were created. If
+docs/career/CAREER_CENTER_PHASE_0_GOVERNANCE_CORRECTIONS.md:26:planning or marketing material outside this repository, that material
+docs/career/CAREER_CENTER_PHASE_0_GOVERNANCE_CORRECTIONS.md:27:should be corrected or labeled as a target, separately from this repo.
+docs/career/CAREER_CENTER_PHASE_0_GOVERNANCE_CORRECTIONS.md:41:`tests/fe8FinalIntegratedAcceptance.test.mjs` passing unmodified). A new
+docs/career/CAREER_CENTER_PHASE_0_GOVERNANCE_CORRECTIONS.md:51:(`src/system/orientation/orientationRegistry.js`) cross-validate 1:1 against
+docs/career/CAREER_CENTER_PHASE_0_GOVERNANCE_CORRECTIONS.md:52:Universe destination ids; both were updated in the same way (the existing
+docs/career/CAREER_CENTER_PHASE_0_GOVERNANCE_CORRECTIONS.md:62:`tests/fe8FinalIntegratedAcceptance.test.mjs`, and
+docs/career/CAREER_CENTER_PHASE_0_GOVERNANCE_CORRECTIONS.md:80:cost-after-aid, or 90-day employment rate). Per "govern facts, not
+docs/career/CAREER_CENTER_PHASE_0_GOVERNANCE_CORRECTIONS.md:84:now renders a bounded, honest state — "Verified outcome data is not
+docs/career/CAREER_CENTER_PHASE_0_GOVERNANCE_CORRECTIONS.md:85:currently available." — with no fabricated numbers. No new Truth or
+docs/career/CAREER_CENTER_PHASE_0_GOVERNANCE_CORRECTIONS.md:86:Reporting authority was created; the surface simply stopped presenting
+docs/career/CAREER_CENTER_PHASE_0_GOVERNANCE_CORRECTIONS.md:90:override mechanism, its storage keys, and the fabricated default figures are
+docs/career/CAREER_CENTER_PHASE_0_GOVERNANCE_CORRECTIONS.md:91:absent from the live component, and that the bounded unavailable state is
+docs/career/CAREER_CENTER_PHASE_0_GOVERNANCE_CORRECTIONS.md:92:present. `tests/ui/career-pathways-dark-mode.spec.mjs` was updated to
+docs/career/CAREER_CENTER_PHASE_0_GOVERNANCE_CORRECTIONS.md:93:verify the replacement state (not the removed admin modal) renders correctly
+docs/career/CAREER_CENTER_PHASE_0_GOVERNANCE_CORRECTIONS.md:113:  is a real route and that it does not show fabricated portfolio counts.
+docs/career/CAREER_CENTER_PHASE_0_GOVERNANCE_CORRECTIONS.md:116:duplicate or legacy leftover — it is Career's instance of a deliberate,
+docs/career/CAREER_CENTER_PHASE_0_GOVERNANCE_CORRECTIONS.md:128:than an accidental duplicate, no redirect was added and no route was
+docs/career/CAREER_CENTER_PHASE_0_GOVERNANCE_CORRECTIONS.md:133:of blindly merging when repository evidence shows the "duplicate" was
+docs/career/CAREER_CENTER_PHASE_0_GOVERNANCE_CORRECTIONS.md:153:tests/fe8FinalIntegratedAcceptance.test.mjs tests/ogl5RolloutCoverage.test.mjs
+docs/career/CAREER_CENTER_PHASE_0_GOVERNANCE_CORRECTIONS.md:159:database state, and no canonical domain schema changed in this phase.
+src/utils/creditEngine.js:20:const now   = () => Date.now();
+src/utils/creditEngine.js:39:  const k = 0.0045; // growth rate (diminishing returns)
+src/utils/creditEngine.js:67:    // evaluate weight
+src/utils/creditEngine.js:83:          delta = ev.meta.onTime ? rule.weights.onTime : rule.weights.late;
+src/utils/creditEngine.js:89:          delta = ev.meta.onTime ? rule.weights.onTime : rule.weights.late;
+src/router/SolutionsRoutes.jsx.bak_team_shell_fix_20260429_094405.bak_layers_route_20260429_172742:2:import { Routes, Route, Navigate } from "react-router-dom";
+src/router/SolutionsRoutes.jsx.bak_team_shell_fix_20260429_094405.bak_layers_route_20260429_172742:12:        <Route index element={<Navigate to="home" replace />} />
+src/router/SolutionsRoutes.jsx.bak_team_shell_fix_20260429_094405.bak_layers_route_20260429_172742:16:        <Route path="*" element={<Navigate to="home" replace />} />
+src/design-system/primitives.css:97:.ds-state { padding: var(--ds-space-8); text-align: center; }
+src/design-system/primitives.css:99:.ds-state__title { margin: 0; font-size: var(--ds-text-lg); }
+src/design-system/primitives.css:101:.ds-state__description { max-width: 48ch; margin: var(--ds-space-2) auto 0; color: var(--ds-color-ink-muted); line-height: var(--ds-leading-normal); }
+src/router/AdminRoutes.jsx.bak_20260423_220933:2:import { Routes, Route, Navigate } from "react-router-dom";
+src/router/AdminRoutes.jsx.bak_20260423_220933:8:import GrantBinder from "@/pages/admin/GrantBinder.jsx";
+src/router/AdminRoutes.jsx.bak_20260423_220933:30:      <Route path="/builder/grant-binder" element={<GrantBinder />} />
+src/router/AdminRoutes.jsx.bak_20260423_220933:45:      <Route path="*" element={<Navigate to="/builder" replace />} />
+src/utils/creditMath.js:3:// Exports: usd, rateTable, toSHF, computeScore, tierForScore, marketBreakdown
+src/utils/creditMath.js:16:  (CFG && (CFG.exchangeRates || CFG.tokenExchange || CFG.tokens)) || {
+src/utils/creditMath.js:23:export const rateTable = {
+src/utils/creditMath.js:31:  return Math.max(0, Math.ceil(u / (rateTable.usdPerSHFc || 0.01)));
+src/utils/creditMath.js:47:  const k = 0.0045; // growth rate for diminishing returns
+src/utils/creditMath.js:75:  const discRate = DISCOUNT[tier?.band] ?? 0;
+src/utils/creditMath.js:76:  const tierDiscountUSD = +(usd * discRate).toFixed(2);
+src/utils/creditMath.js:79:  const per = rateTable.usdPerSHFc || 0.01;
+src/router/AdminRoutes.jsx.bak_force_identity_redirect_20260513_080502:2:import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+src/router/AdminRoutes.jsx.bak_force_identity_redirect_20260513_080502:10:import GrantBinder from "@/pages/admin/GrantBinder.jsx";
+src/router/AdminRoutes.jsx.bak_force_identity_redirect_20260513_080502:47:  if (!identity.isAuthenticated) {
+src/router/AdminRoutes.jsx.bak_force_identity_redirect_20260513_080502:48:    return <Navigate to="/login" replace />;
+src/router/AdminRoutes.jsx.bak_force_identity_redirect_20260513_080502:67:          time: new Date().toISOString(),
+src/router/AdminRoutes.jsx.bak_force_identity_redirect_20260513_080502:72:    return <Navigate to="/hub" replace />;
+src/router/AdminRoutes.jsx.bak_force_identity_redirect_20260513_080502:92:        <Route path="/" element={<Navigate to="/hub" replace />} />
+src/router/AdminRoutes.jsx.bak_force_identity_redirect_20260513_080502:128:        <Route path="/grant-binder" element={protect("/grant-binder", <GrantBinder />)} />
+src/router/AdminRoutes.jsx.bak_force_identity_redirect_20260513_080502:135:        <Route path="/solutions" element={protect("/solutions", <SolutionsInfrastructurePage />)} />\n        <Route path="/solutions/infrastructure" element={protect("/solutions/infrastructure", <SolutionsInfrastructurePage />)} />\n\n        <Route path="*" element={<Navigate to="/hub" replace />} />
+src/utils/rewards.js:8:    arr.push({ at: Date.now(), delta: Number(delta||0), note: note || "" });
+src/utils/rewards.js:18:    arr.push({ at: Date.now(), delta: 0, note: note || `Badge earned: ${id}` });
+src/router/CurriculumRoutes.jsx:4:import { Routes, Route, Navigate, useParams } from "react-router-dom";
+src/router/CurriculumRoutes.jsx:69:const StudioTemplates = lazy(() => import("@/pages/studio/StudioTemplates.jsx"));
+src/router/CurriculumRoutes.jsx:81:/** Phase 2A Secure Live Learning — real session create/list/cancel,
+src/router/CurriculumRoutes.jsx:88:const Grade12EntryGate = lazy(() => import("@/pages/curriculum/Grade12EntryGate.jsx"));
+src/router/CurriculumRoutes.jsx:93: * all generate their own internal links as bare `/${curriculum}/...` paths
+src/router/CurriculumRoutes.jsx:106:  return <Navigate to={`/curriculum/${target}`} replace />;
+src/router/CurriculumRoutes.jsx:119:          <Route index element={<Navigate to="asl/dashboard" replace />} />
+src/router/CurriculumRoutes.jsx:154:          <Route path="grade12-entry" element={<Grade12EntryGate />} />
+src/router/CurriculumRoutes.jsx:167:          <Route path="lessons" element={<Navigate to="/curriculum/learning" replace />} />
+src/router/CurriculumRoutes.jsx:184:              Deliberately "lessons/:slug" (plural), matching the shape
+src/router/CurriculumRoutes.jsx:186:              builder already generate, distinct from the singular
+src/router/CurriculumRoutes.jsx:200:          <Route path="*" element={<Navigate to="asl/dashboard" replace />} />
+src/router/CurriculumRoutes.jsx:218:          <Route path="templates" element={<StudioTemplates />} />
+src/router/CurriculumRoutes.jsx:219:          <Route path="*" element={<Navigate to="/studio" replace />} />
+src/router/CurriculumRoutes.jsx:224:            links already generate (see CurriculumParamRedirect above) into
+src/router/CurriculumRoutes.jsx:239:        <Route path="/" element={<Navigate to="/curriculum" replace />} />
+src/router/CurriculumRoutes.jsx:240:        <Route path="*" element={<Navigate to="/curriculum" replace />} />
+src/utils/setAppScope.js:31:  // Remember state we may want to restore
+src/apps/allocation/AllocationApp.jsx:1:import React, { useMemo, useState, useEffect } from "react";
+src/apps/allocation/AllocationApp.jsx:3:import { DEFAULTS, clamp, round, simulate } from "./model.js";
+src/apps/allocation/AllocationApp.jsx:122:  const [tab, setTab] = useState("dashboard");
+src/apps/allocation/AllocationApp.jsx:123:  const [shiftPct, setShiftPct] = useState(0.10);
+src/apps/allocation/AllocationApp.jsx:125:  // ✅ Power move: editable funding
+src/apps/allocation/AllocationApp.jsx:126:  const [totalFunding, setTotalFunding] = useState(DEFAULTS.totalFunding);
+src/apps/allocation/AllocationApp.jsx:129:  const [adminUnlocked, setAdminUnlocked] = useState(false);
+src/apps/allocation/AllocationApp.jsx:132:  const [exportHistory, setExportHistory] = useState([]);
+src/apps/allocation/AllocationApp.jsx:139:    baseline?.wioa?.area7?.demographics?.totals?.participants_served?.adult ?? 0;
+src/apps/allocation/AllocationApp.jsx:141:  const sourceYear = baseline?.wioa?.source_year ?? "PY2024";
+src/apps/allocation/AllocationApp.jsx:144:    baseline?.wioa?.area7?.performance?.adult?.median_earnings_2nd_qtr_after_exit?.usd ?? null;
+src/apps/allocation/AllocationApp.jsx:147:    const base = { ...DEFAULTS, totalFunding };
+src/apps/allocation/AllocationApp.jsx:148:    return simulate(base, shiftPct);
+src/apps/allocation/AllocationApp.jsx:149:  }, [shiftPct, totalFunding]);
+src/apps/allocation/AllocationApp.jsx:159:      generated_local: new Date().toISOString(),
+src/apps/allocation/AllocationApp.jsx:162:        source_year: baseline?.wioa?.source_year,
+src/apps/allocation/AllocationApp.jsx:163:        source_label: baseline?.wioa?.source_label,
+src/apps/allocation/AllocationApp.jsx:166:        pdf_path: baseline?.wioa?.area7?.sources?.pdf_path ?? null,
+src/apps/allocation/AllocationApp.jsx:167:        demographics_pages: baseline?.wioa?.area7?.sources?.demographics_pages ?? null,
+src/apps/allocation/AllocationApp.jsx:168:        performance_pages: baseline?.wioa?.area7?.sources?.performance_pages ?? null,
+src/apps/allocation/AllocationApp.jsx:171:        totalFunding,
+src/apps/allocation/AllocationApp.jsx:206:      id: `${sourceYear}_${new Date().toISOString()}`,
+src/apps/allocation/AllocationApp.jsx:207:      ts: new Date().toISOString(),
+src/apps/allocation/AllocationApp.jsx:210:      totalFunding,
+src/apps/allocation/AllocationApp.jsx:213:      filename: `allocation_report_area7_adult_${sourceYear}_${new Date().toISOString().slice(0, 10)}.json`,
+src/apps/allocation/AllocationApp.jsx:222:    const url = URL.createObjectURL(blob);
+src/apps/allocation/AllocationApp.jsx:223:    const a = document.createElement("a");
+src/apps/allocation/AllocationApp.jsx:303:          <div style={{ fontWeight: 900 }}>VALIDATED MODE: ADMIN UNLOCKED</div>
+src/apps/allocation/AllocationApp.jsx:320:            You’re viewing modeled outcomes. Unlock Admin for “validated/audit” banner + stronger export audit proof.
+src/apps/allocation/AllocationApp.jsx:325:      <div style={{ display: "grid", gridTemplateColumns: "260px 1fr", gap: 18, alignItems: "start" }}>
+src/apps/allocation/AllocationApp.jsx:331:          <NavItem label="Funding Sources" />
+src/apps/allocation/AllocationApp.jsx:342:            <div style={subtle}>Funding Shift</div>
+src/apps/allocation/AllocationApp.jsx:345:            {/* Power move: editable funding + cost per participant */}
+src/apps/allocation/AllocationApp.jsx:347:              <div style={subtle}>Total Funding (editable)</div>
+src/apps/allocation/AllocationApp.jsx:349:                value={String(totalFunding)}
+src/apps/allocation/AllocationApp.jsx:352:                  setTotalFunding(Number.isFinite(n) && n > 0 ? n : 0);
+src/apps/allocation/AllocationApp.jsx:369:                {adultServed > 0 ? money(totalFunding / adultServed) : "—"}
+src/apps/allocation/AllocationApp.jsx:393:                        {money(x.totalFunding || 0)}
+src/apps/allocation/AllocationApp.jsx:411:          <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 12 }}>
+src/apps/allocation/AllocationApp.jsx:422:          <div style={{ display: "grid", gridTemplateColumns: "1.1fr 0.9fr", gap: 12 }}>
+src/apps/allocation/AllocationApp.jsx:427:                  <div style={subtle}>Reallocate funding</div>
+src/apps/allocation/AllocationApp.jsx:453:                Proxy model until all policy baselines are fully validated end-to-end (WIOA + DRC + BLS).
+docs/MANUAL_BROWSER_SMOKE_LAUNCH_HANDOFF_V1.json:3:  "date": "2026-06-23",
+docs/MANUAL_BROWSER_SMOKE_LAUNCH_HANDOFF_V1.json:4:  "repository": "/Users/mikeslate/Desktop/shrv1",
+docs/MANUAL_BROWSER_SMOKE_LAUNCH_HANDOFF_V1.json:29:      "route": "admin.html#/ops/reports/create",
+docs/MANUAL_BROWSER_SMOKE_LAUNCH_HANDOFF_V1.json:30:      "component": "ShsCreateReportPage",
+docs/MANUAL_BROWSER_SMOKE_LAUNCH_HANDOFF_V1.json:76:      "visible_intent": ["Create Report", "Premium Preview", "Report Registry", "Connected SHS Infrastructure"],
+docs/MANUAL_BROWSER_SMOKE_LAUNCH_HANDOFF_V1.json:82:      "route": "admin.html#/ops/reports/create",
+docs/MANUAL_BROWSER_SMOKE_LAUNCH_HANDOFF_V1.json:84:      "visible_header": "Create Report",
+docs/MANUAL_BROWSER_SMOKE_LAUNCH_HANDOFF_V1.json:85:      "visible_intent": ["Select Report Subject", "Select Report Type", "Select Visibility", "Generate Draft Report"],
+docs/MANUAL_BROWSER_SMOKE_LAUNCH_HANDOFF_V1.json:149:      "Admin selects or creates a report",
+docs/MANUAL_BROWSER_SMOKE_LAUNCH_HANDOFF_V1.json:167:    "shs_reports_mutate_shfImpactData": false,
+docs/MANUAL_BROWSER_SMOKE_LAUNCH_HANDOFF_V1.json:170:    "data_approval_gateway_separate": true,
+docs/MANUAL_BROWSER_SMOKE_LAUNCH_HANDOFF_V1.json:178:    "Daily and paid-launch scripts print expected manual-check reminders for governance/boundary categories."
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:3:// NON-NEGOTIABLE: reads only. This service aggregates four already-
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:42:  return Math.floor((new Date(iso).getTime() - from) / 86_400_000);
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:59:    relatedSourceIds: [e.id],
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:73:    id: `calendar:${rec.reasonCode}:${index}:${rec.relatedEventIds.join(",")}`,
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:77:    relatedSourceIds: rec.relatedEventIds,
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:91:  now: Date = new Date(),
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:117:    // reads; isolated the same way as the /calendar/intelligence/me route
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:121:      { from: now.toISOString(), to: new Date(now.getTime() + 14 * 86_400_000).toISOString() },
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:126:      weeklyLoadCategory: intelligence.weeklyLoad.category,
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:164:  // credential renewal dates projected onto the Calendar) — this summary
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:191:    generatedAt: new Date().toISOString(),
+services/shf-agent-fabric/services/aal_repository.py:6:from datetime import datetime
+services/shf-agent-fabric/services/aal_repository.py:71:                    ORDER BY snapshot_date DESC
+services/shf-agent-fabric/services/aal_repository.py:80:                    ORDER BY snapshot_date DESC, program_id
+services/shf-agent-fabric/services/aal_repository.py:101:                    ORDER BY snapshot_date DESC
+services/shf-agent-fabric/services/aal_repository.py:110:                    ORDER BY snapshot_date DESC, participant_id
+services/shf-agent-fabric/services/aal_repository.py:126:            SELECT event_type, weight, updated_at
+services/shf-agent-fabric/services/aal_repository.py:179:                created_at
+services/shf-agent-fabric/services/aal_repository.py:189:                _to_iso(feedback["created_at"]),
+services/shf-agent-fabric/services/aal_repository.py:206:                updated_at
+services/shf-agent-fabric/services/aal_repository.py:209:            (job_name, status, processed_count, _to_iso(datetime.utcnow())),
+services/shf-agent-fabric/services/aal_repository.py:261:                _to_iso(datetime.utcnow()),
+services/shf-agent-fabric/services/aal_repository.py:276:    if isinstance(value, datetime):
+src/utils/storeTheme.js:8:// Store is a separate Vite HTML entrypoint/bundle with no shared runtime
+src/utils/storeTheme.js:51:// Shared hook — the single source of theme state for the Store Catalog
+src/utils/storeTheme.js:54:import { useCallback, useEffect, useState } from "react";
+src/utils/storeTheme.js:57:  const [pref, setPref] = useState(getStoredPreference);
+src/utils/storeTheme.js:58:  const [resolved, setResolved] = useState(() => resolveTheme(getStoredPreference()));
+docs/career/CAREER_CENTER_PHASE_3_PUBLIC_CAREER_DETAIL.md:10:slug lookup. Unknown slugs render an accessible public not-found state instead
+docs/career/CAREER_CENTER_PHASE_3_PUBLIC_CAREER_DETAIL.md:20:## Public/private boundary
+docs/career/CAREER_CENTER_PHASE_3_PUBLIC_CAREER_DETAIL.md:37:## Honest unavailable states
+docs/career/CAREER_CENTER_PHASE_3_PUBLIC_CAREER_DETAIL.md:47:  unavailable-state language, and no fabricated workforce fields.
+docs/career/CAREER_CENTER_PHASE_3_PUBLIC_CAREER_DETAIL.md:56:workforce data, and authenticated save/add-to-plan behavior remain later-phase
+src/router/SolutionsRoutes.jsx.bak_request_demo_20260429_155700:2:import { Routes, Route, Navigate } from "react-router-dom";
+src/router/SolutionsRoutes.jsx.bak_request_demo_20260429_155700:21:        <Route index element={<Navigate to="home" replace />} />
+src/router/SolutionsRoutes.jsx.bak_request_demo_20260429_155700:23:<Route path="*" element={<Navigate to="home" replace />} />
+src/apps/allocation/model.js:4: * Replace placeholder baselines with Ohio WIOA + Ohio DRC + BLS (Columbus) benchmarks.
+src/apps/allocation/model.js:11:  baseline?.wioa?.area7?.demographics?.totals?.participants_served?.adult ??
+src/apps/allocation/model.js:12:  baseline?.wioa?.area7?.demographics?.totals?.participants_served?.Adult ??
+src/apps/allocation/model.js:17:  totalFunding: 10_000_000,
+src/apps/allocation/model.js:23:      placementRate: 0.63,
+src/apps/allocation/model.js:24:      retention90Rate: 0.68,
+src/apps/allocation/model.js:29:      name: "Program B (Cert + Recovery Integrated)",
+src/apps/allocation/model.js:30:      placementRate: 0.67,
+src/apps/allocation/model.js:31:      retention90Rate: 0.74,
+src/apps/allocation/model.js:44:export function retainedPlacements(participants, placementRate, retention90Rate) {
+src/apps/allocation/model.js:45:  return participants * placementRate * retention90Rate;
+src/apps/allocation/model.js:48:export function costPerRetained(totalFunding, retained) {
+src/apps/allocation/model.js:49:  return retained > 0 ? totalFunding / retained : Infinity;
+src/apps/allocation/model.js:64:  // Transparent scoring (0-100), tweak later once real baselines are in.
+src/apps/allocation/model.js:74:export function simulate(base = DEFAULTS, shiftPct = 0.10) {
+src/apps/allocation/model.js:76:  const { totalFunding, assumedParticipants, programs } = base;
+src/apps/allocation/model.js:81:  const baseRet = retainedPlacements(assumedParticipants, A.placementRate, A.retention90Rate);
+src/apps/allocation/model.js:82:  const baseCost = costPerRetained(totalFunding, baseRet);
+src/apps/allocation/model.js:87:  // Adjusted: participant split as proxy for funding split (demo)
+src/apps/allocation/model.js:91:  const retA = retainedPlacements(pA, A.placementRate, A.retention90Rate);
+src/apps/allocation/model.js:92:  const retB = retainedPlacements(pB, B.placementRate, B.retention90Rate);
+src/apps/allocation/model.js:95:  const adjCost = costPerRetained(totalFunding, adjRet);
+docs/DATA_VERIFICATION_LAYER_V1.md:5:Data Verification Layer V1 formalizes the checkpoint between Evidence Package and Truth Spine. It evaluates whether an Evidence Package is ready for Truth Spine review by inspecting package completeness, source/provenance quality, evidence references, warnings, blockers, and recommended next action.
+docs/DATA_VERIFICATION_LAYER_V1.md:7:Data Verification does not become Truth Spine. It does not verify truth as final authority, create Truth Spine claims, create verified claims, approve public data, mark records public-approved, override Truth Spine, override Oracle, mutate SHF Impact Data Spine, publish reports, or create production persistence.
+docs/DATA_VERIFICATION_LAYER_V1.md:13:Data Verification receives Evidence Package-style records and evaluates review readiness.
+docs/DATA_VERIFICATION_LAYER_V1.md:29:Source -> Data Aggregator -> Data Normalization -> Evidence Package -> Data Verification -> Truth Spine -> Oracle -> Reports / Watchtower / LOO -> Data Approval Gateway -> SHF Impact Data Spine.
+docs/DATA_VERIFICATION_LAYER_V1.md:85:- Data Approval Gateway.
+docs/DATA_VERIFICATION_LAYER_V1.md:92:- Evaluate Evidence Package readiness.
+docs/DATA_VERIFICATION_LAYER_V1.md:95:- Calculate readiness score.
+docs/DATA_VERIFICATION_LAYER_V1.md:103:- Create Truth Spine claims.
+docs/DATA_VERIFICATION_LAYER_V1.md:104:- Create verified claims.
+docs/DATA_VERIFICATION_LAYER_V1.md:110:- Mutate SHF Impact Data Spine.
+docs/DATA_VERIFICATION_LAYER_V1.md:114:- Create production persistence.
+docs/DATA_VERIFICATION_LAYER_V1.md:118:Evidence Package builds the review package. Data Verification evaluates whether that package is ready to move to Truth Spine review. It does not replace Evidence Package.
+docs/DATA_VERIFICATION_LAYER_V1.md:126:Data Verification does not import, mutate, or replace SHF Impact Data Spine. Any public impact use still flows through Data Approval Gateway and SHF Impact data rules.
+docs/DATA_VERIFICATION_LAYER_V1.md:139:- `POST /data-verification/evaluate`
+docs/DATA_VERIFICATION_LAYER_V1.md:140:- `POST /data-verification/batch-evaluate`
+services/_graveyard/shf-agent-fabric-backups-manual/run_report_routes.py.20260116T200843Z:24:    b = re.sub(br"/CreationDate\s*\(D:[^)]+\)", b"", b)
+services/_graveyard/shf-agent-fabric-backups-manual/run_report_routes.py.20260116T200843Z:25:    b = re.sub(br"/ModDate\s*\(D:[^)]+\)", b"", b)
+src/utils/getWashClass.js:12:   *   breakpoints?: { danger?: number, warn?: number, ok?: number, celebrate?: number },
+src/utils/getWashClass.js:31:    const { danger, warn, ok, celebrate } = breakpoints;
+src/utils/getWashClass.js:34:      if (celebrate != null && v >= celebrate) return `wash--celebrate-${suf}`;
+src/utils/getWashClass.js:42:    if (celebrate != null && v <= celebrate) return `wash--celebrate-${suf}`;
+src/utils/getWashClass.js:70:        celebrate: good + 50,
+src/utils/getWashClass.js:85:      breakpoints: { danger: 60, warn: 75, ok: 90, celebrate: 98 },
+src/utils/getWashClass.js:90:   * Metrics where lower is better (e.g., days-late, debt-to-income).
+src/utils/getWashClass.js:99:      breakpoints: { celebrate: 10, ok: 20, warn: 35, danger: 50 },
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:19:- `docs/career/records/DATA_CENTER_AI_INFRASTRUCTURE.pathway-record.json` — the first populated record (the Data Center & AI Infrastructure pilot).
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:24:CPAS-1 exists to stop SHF completion of a career-preparation course from ever being represented, implicitly or explicitly, as occupational qualification, state licensure, external certification, apprenticeship completion, employment, or guaranteed placement — while still letting SHF describe real, substantive preparation work honestly and confidently. It gives every SHF career-preparation/launch pathway one canonical, evidence-based status, tracked separately from marketing language, and requires that status to be re-derived from repository/program evidence rather than asserted.
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:30:- **(A) a verified state-recognized training/testing/licensure/registry pathway**, or
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:31:- **(B) an employer/industry-validated pathway**.
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:33:SHF must keep these concepts visibly distinct in every learner- and public-facing surface: exploration, preparation, state-recognized pathway, employer validation, Career Launch, external credential, and employment/apprenticeship placement. SHF completion alone must never be represented as automatically conferring any of those things.
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:38:EXPLORE → PREPARE → STATE-PATHWAY and/or EMPLOYER-VALIDATED → CAREER LAUNCH
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:41:Every pathway has exactly one primary `current_status` at a time (see the record schema). `validation_status` is tracked as a separate field, because a pathway can be in PREPARE while validation work is already underway or already complete for a later stage.
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:46:Purpose: help a learner understand a career or career family. Minimum requirements: accurate career definition, target occupation/family, basic skills overview, work environment, typical tasks, education/training overview, clear next-step guidance. Must NOT imply job readiness.
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:49:Purpose: build foundational knowledge and skills toward a recognized next step. Requirements: defined target occupation or family, meaningful curriculum, competency map, hands-on practice, assessment, evidence requirements, portfolio output where appropriate, safety/professionalism where applicable, clear external next step, accessibility review, SEL/readiness support, and no unsupported claim of occupational qualification.
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:51:### STATE-PATHWAY
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:52:Purpose: connect SHF preparation to a verified state-defined route (training, testing, licensure, certification, registry, or other statutory/regulatory requirement). Requires PREPARE plus: verified state authority, an authoritative source, documented training requirements, testing/competency requirements, license/registry requirement where applicable, age/prerequisite rules, provider requirements, and an explicit distinction between SHF preparation and official state qualification. **A pathway must not be classified STATE-PATHWAY unless repository evidence clearly supports it** — absence of evidence means the classification is not made, regardless of how plausible it seems.
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:54:### EMPLOYER-VALIDATED
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:61:- `EMPLOYER VALIDATED`
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:62:- `MULTIPLE-EMPLOYER VALIDATED`
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:65:Highest SHF designation. Requires: PREPARE complete, external validation, a clear credential strategy, a real work-based-learning route, defined learner eligibility, evidence requirements, employer/industry relevance, and outcome/next-step tracking. Accepted work-based-learning routes: Registered Apprenticeship, youth apprenticeship, pre-apprenticeship, paid internship, structured internship, cooperative education, employer project, job shadow, interview pathway, hiring pathway. Career Launch does **not** mean every student is guaranteed placement.
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:69:Every pathway is evaluated across exactly these 12 domains. Each domain is classified `COMPLETE`, `PARTIAL`, `MISSING`, or `NOT APPLICABLE`, with cited repository evidence — never asserted without evidence.
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:71:1. **Career Definition** — is the target occupation/family accurately, non-fabricated, and specifically defined?
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:72:2. **Labor Relevance** — is the target occupation a real, existing occupation, and is SHF's description of it plausible/accurate (independent of whether an employer has yet confirmed it)?
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:73:3. **Curriculum** — does meaningful, real curriculum content exist, and is it connected (not just co-located) to the pathway's canonical career record?
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:78:8. **Credential Strategy** — is there a documented, honest credential strategy, whether or not it is operational yet?
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:79:9. **External Recognition** — has any state authority, industry standard, or employer engaged with this pathway, beyond internal planning language?
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:84:## Acceptance Gates
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:88:- **STATE-PATHWAY**: PREPARE plus verified state pathway requirements (Domain 9's state-authority evidence).
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:89:- **EMPLOYER-VALIDATED**: PREPARE plus documented employer/industry validation (Domain 9's employer evidence).
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:92:No marketing copy may override these gates. A gate is met only when the cited evidence supports it — not when copy asserts it.
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:98:Broader learning workflow: `Assign → Prepare → Learn → Practice → Play → Apply → Reflect → Demonstrate → Verify → Report`.
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:104:CPAS-1 and its pathway acceptance record are a cross-domain **index and status projection**, not a new authority. They must never duplicate:
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:112:| Credential definitions, issuance, revocation, verification | `credentials` domain | References a credential/certificate-profile id by id only |
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:114:| Internships, apprenticeships, jobs, other opportunity types | `opportunities` domain | References `opportunity_id` by id only |
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:117:| Economic ledger | Treasury | Does not exist canonically yet; CPAS-1 does not create one and records nothing there |
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:123:`approval_state`, `reviewer`, `review_date`, and `next_review_date` are tracked per record (see schema). No pathway may claim a status higher than what its record's cited evidence supports, regardless of `approval_state`. Re-review is required whenever curriculum, competency, evidence, credential, or external-recognition facts materially change.
+src/router/AdminRoutes.jsx.bak_final_verify_20260513_104716:2:import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+src/router/AdminRoutes.jsx.bak_final_verify_20260513_104716:10:import GrantBinder from "@/pages/admin/GrantBinder.jsx";
+src/router/AdminRoutes.jsx.bak_final_verify_20260513_104716:46:  const isAllowed = identity.isAuthenticated && canAccessHubRoute(identity.role, routePath);
+src/router/AdminRoutes.jsx.bak_final_verify_20260513_104716:49:    if (!identity.isAuthenticated) return;
+src/router/AdminRoutes.jsx.bak_final_verify_20260513_104716:66:          time: new Date().toISOString(),
+src/router/AdminRoutes.jsx.bak_final_verify_20260513_104716:70:  }, [identity.isAuthenticated, identity.role, identity.email, routePath]);
+src/router/AdminRoutes.jsx.bak_final_verify_20260513_104716:72:  if (!identity.isAuthenticated) {
+src/router/AdminRoutes.jsx.bak_final_verify_20260513_104716:73:    return <Navigate to="/login" replace />;
+src/router/AdminRoutes.jsx.bak_final_verify_20260513_104716:77:    return <Navigate to="/hub" replace />;
+src/router/AdminRoutes.jsx.bak_final_verify_20260513_104716:97:        <Route path="/" element={<Navigate to="/hub" replace />} />
+src/router/AdminRoutes.jsx.bak_final_verify_20260513_104716:133:        <Route path="/grant-binder" element={protect("/grant-binder", <GrantBinder />)} />
+src/router/AdminRoutes.jsx.bak_final_verify_20260513_104716:140:        <Route path="/solutions" element={protect("/solutions", <SolutionsInfrastructurePage />)} />\n        <Route path="/solutions/infrastructure" element={protect("/solutions/infrastructure", <SolutionsInfrastructurePage />)} />\n\n        <Route path="*" element={<Navigate to="/hub" replace />} />
+apps/shs-api/src/domain/companion/api/routes.ts:24:  // Gated by the same broadly-held "enrollment.view" permission those
+services/shf-agent-fabric/services/notification_alert_service.py:16:    "clientops_update",
+services/shf-agent-fabric/services/notification_alert_service.py:34:    "Notification / Alert Layer does not send notifications, send email, send SMS, send messages, send webhooks, call external systems, write production records, verify truth, approve public data, mutate SHF Impact Data Spine, publish reports, replace Event / Webhook, replace Production Automation, replace Policy Engine, replace Watchtower, or replace Reports.",
+services/shf-agent-fabric/services/notification_alert_service.py:72:def evaluate_notification_alert(payload: Dict[str, Any] | None) -> Dict[str, Any]:
+services/shf-agent-fabric/services/notification_alert_service.py:198:        recommended_action = "prepare_notification_candidate_without_sending"
+services/shf-agent-fabric/services/notification_alert_service.py:239:        "mutated_public_data": False,
+services/shf-agent-fabric/services/notification_alert_service.py:266:        "mutated_public_data": False,
+services/shf-agent-fabric/services/notification_alert_service.py:271:def batch_evaluate_notification_alert(records: Any) -> Dict[str, Any]:
+services/shf-agent-fabric/services/notification_alert_service.py:273:    evaluations = [evaluate_notification_alert(item if isinstance(item, dict) else {}) for item in items]
+services/shf-agent-fabric/services/notification_alert_service.py:300:        "mutated_public_data_count": 0,
+services/shf-agent-fabric/services/notification_alert_service.py:347:            "mutated_public_data",
+services/shf-agent-fabric/services/notification_alert_service.py:355:    return batch_evaluate_notification_alert(
+services/shf-agent-fabric/services/notification_alert_service.py:379:                    "source_layer": "readiness_gate",
+services/shf-agent-fabric/services/notification_alert_service.py:419:        "mutated_public_data_count": 0,
+services/shf-agent-fabric/services/notification_alert_service.py:434:        "mutates_shf_impact_data": False,
+services/shf-agent-fabric/services/notification_alert_service.py:462:        "mutated_public_data_count": 0,
+services/_graveyard/shf-agent-fabric-backups-manual/run_report_verify_routes.py.20260116T200843Z:22:            "generated_ts","generated_at","computed_ts","computed_at","verified_ts","verified_at",
+services/_graveyard/shf-agent-fabric-backups-manual/run_report_verify_routes.py.20260116T200843Z:23:            "rendered_ts","rendered_at","created_ts","created_at","updated_ts","updated_at",
+services/_graveyard/shf-agent-fabric-backups-manual/run_report_verify_routes.py.20260116T200843Z:38:    b = re.sub(br"/CreationDate\s*\(D:[^)]+\)", br"/CreationDate(D:00000000000000Z)", b)
+services/_graveyard/shf-agent-fabric-backups-manual/run_report_verify_routes.py.20260116T200843Z:39:    b = re.sub(br"/ModDate\s*\(D:[^)]+\)", br"/ModDate(D:00000000000000Z)", b)
+services/_graveyard/shf-agent-fabric-backups-manual/run_report_verify_routes.py.20260116T200843Z:147:        'PDF_HASH="$( "$PYTHON_BIN" -c "import hashlib,re,sys; b=open(sys.argv[1],\'rb\').read(); ix=b.rfind(b\'\\nxref\'); b=b[:ix] if ix!=-1 else b; b=re.sub(br\'/CreationDate\\s*\\(D:[^)]+\\)\', br\'/CreationDate(D:00000000000000Z)\', b); b=re.sub(br\'/ModDate\\s*\\(D:[^)]+\\)\', br\'/ModDate(D:00000000000000Z)\', b); b=re.sub(br\'/ID\\s*\\[\\s*<[^>]*>\\s*<[^>]*>\\s*\\]\', br\'/ID[<00000000000000000000000000000000><00000000000000000000000000000000>]\', b); b=re.sub(br\'\\s+\', b\' \', b); print(hashlib.sha256(b).hexdigest())" "$TMPDIR/report.pdf" )"',
+src/utils/logAggregator.js:1:/* Unified analytics spine for AdminAnalytics / GrantBinder / InvestorNorthstar */
+src/utils/logAggregator.js:13:export const FUNDING_STREAM_LABELS = {
+src/utils/logAggregator.js:14:  perkins: "Perkins V",
+src/utils/logAggregator.js:15:  wioa: "WIOA",
+src/utils/logAggregator.js:20:  philanthropy: "Philanthropy",
+src/utils/logAggregator.js:45:function normalizeFundingTag(tag) {
+src/utils/logAggregator.js:49:  if (v.startsWith("perkins")) return "perkins";
+src/utils/logAggregator.js:50:  if (v.startsWith("wioa")) return "wioa";
+src/utils/logAggregator.js:56:  if (v.includes("philanth")) return "philanthropy";
+src/utils/logAggregator.js:75:    log.fundingStreams ||
+src/utils/logAggregator.js:76:    log.fundingTags ||
+src/utils/logAggregator.js:77:    log.fundingStream ||
+src/utils/logAggregator.js:83:function applyFilters(allLogs, { app, site, funding } = {}) {
+src/utils/logAggregator.js:96:  if (funding) {
+src/utils/logAggregator.js:97:    const f = String(funding).toLowerCase().trim();
+src/utils/logAggregator.js:100:      return tags.some((t) => normalizeFundingTag(t) === f || String(t).toLowerCase().includes(f));
+src/utils/logAggregator.js:120:      fundingTop: [],
+src/utils/logAggregator.js:124:  const fundingTotals = {};
+src/utils/logAggregator.js:137:        const norm = normalizeFundingTag(t);
+src/utils/logAggregator.js:140:        if (!s._funding) s._funding = {};
+src/utils/logAggregator.js:141:        s._funding[norm] = (s._funding[norm] || 0) + duration;
+src/utils/logAggregator.js:143:        fundingTotals[norm] = (fundingTotals[norm] || 0) + duration;
+src/utils/logAggregator.js:150:    const ft = s._funding || {};
+src/utils/logAggregator.js:151:    s.fundingTop = Object.entries(ft)
+src/utils/logAggregator.js:154:      .map(([id, minutes]) => ({ id, label: FUNDING_STREAM_LABELS[id] || id, minutes }));
+src/utils/logAggregator.js:155:    delete s._funding;
+src/utils/logAggregator.js:158:  return { totalMinutes, totalEntries, appSummaries, fundingTotals };
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_RECORD_SCHEMA_V1.json:7:  "description": "Defines the fields every SHF Career Pathway Acceptance Record must carry. This is a cross-domain INDEX/PROJECTION document, not a new canonical authority. Every *_ref/*_id field below references an existing canonical domain's own identifier; it never restates or duplicates that domain's content.",
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_RECORD_SCHEMA_V1.json:14:      "current_status": { "type": "enum", "values": ["EXPLORE", "PREPARE", "STATE-PATHWAY", "EMPLOYER-VALIDATED", "CAREER LAUNCH"], "required": true },
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_RECORD_SCHEMA_V1.json:15:      "validation_status": { "type": "enum", "values": ["NOT REVIEWED", "INDUSTRY REVIEW IN PROGRESS", "EMPLOYER REVIEWED", "EMPLOYER VALIDATED", "MULTIPLE-EMPLOYER VALIDATED"], "required": true },
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_RECORD_SCHEMA_V1.json:17:      "target_occupations": { "type": "array", "items": { "type": "object", "properties": { "career_ref": "careers domain career_id, or null if not yet a canonical Career record", "title": "string", "status": "enum: EXISTING CANONICAL | NEEDS SEPARATE CAREER PHASE" } } },
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_RECORD_SCHEMA_V1.json:20:      "age_requirements": { "type": "string", "description": "Only populated where a real requirement exists; null otherwise." }
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_RECORD_SCHEMA_V1.json:25:      "lesson_refs": { "type": "array", "items": "string", "description": "May be summarized as a count + directory reference rather than enumerated when large." },
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_RECORD_SCHEMA_V1.json:58:      "state_authority": { "type": "string|null" },
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_RECORD_SCHEMA_V1.json:61:      "education_training_partners": { "type": "array", "items": "string", "description": "Category references are not commitments and must be labeled as such." }
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_RECORD_SCHEMA_V1.json:74:      "alternate_formats": { "type": "array", "items": "string" }
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_RECORD_SCHEMA_V1.json:91:      "approval_state": { "type": "enum", "values": ["DRAFT", "UNDER_REVIEW", "APPROVED", "SUPERSEDED"] },
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_RECORD_SCHEMA_V1.json:93:      "review_date": { "type": "string|null" },
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_RECORD_SCHEMA_V1.json:94:      "next_review_date": { "type": "string|null" },
+src/router/FoundationRoutes.jsx:3:import { Routes, Route, Navigate } from "react-router-dom";
+src/router/FoundationRoutes.jsx:36:          <Route index element={<Navigate to="/top" replace />} />
+src/router/FoundationRoutes.jsx:104:        <Route path="*" element={<Navigate to="/top" replace />} />
+docs/STUDIO_V1_PLUS_PHASE_2_DURABLE_PORTFOLIO_BACKEND_V1.md:5:Phase 2 adds the first durable Portfolio authority on top of the Phase 1 contract. It stores a learner Portfolio and Evidence-backed Portfolio Artifacts in PostgreSQL, with authenticated scoped reads, bounded presentation edits, non-destructive lifecycle transitions, and transactional outbox events.
+docs/STUDIO_V1_PLUS_PHASE_2_DURABLE_PORTFOLIO_BACKEND_V1.md:11:Evidence remains the institutional authority for verification and eligibility. Portfolio owns learner presentation state only. Completion, credentials, Truth, deployment, Registry, and ClientOps remain separate authorities.
+docs/STUDIO_V1_PLUS_PHASE_2_DURABLE_PORTFOLIO_BACKEND_V1.md:15:Migration `075_portfolio_authority.sql` creates `portfolio_profiles` and `portfolio_artifacts`. A profile is scoped to one learner, organization, and tenant. An artifact stores one Evidence reference plus Studio delivery/project/revision provenance and bounded presentation fields. No collections, credential, deployment, or public-sharing tables are added.
+docs/STUDIO_V1_PLUS_PHASE_2_DURABLE_PORTFOLIO_BACKEND_V1.md:19:The authenticated learner owns their Portfolio presentation. The service derives learner, organization, and tenant from the authenticated actor and enforces the `tenant:${organizationId}` convention.
+docs/STUDIO_V1_PLUS_PHASE_2_DURABLE_PORTFOLIO_BACKEND_V1.md:23:Artifacts are created only from eligible Evidence belonging to the authenticated learner and matching the active scope. Teachers and administrators may read organization-visible artifacts through existing Studio view permission; they do not edit learner presentation.
+docs/STUDIO_V1_PLUS_PHASE_2_DURABLE_PORTFOLIO_BACKEND_V1.md:35:Phase 2 supports only `PRIVATE` and `ORGANIZATION`; new artifacts default to `PRIVATE`. `PUBLIC`, `UNLISTED`, and unknown values are rejected. Organization visibility still requires authenticated matching organization/tenant scope and the existing Studio view permission. Anonymous access does not exist.
+docs/STUDIO_V1_PLUS_PHASE_2_DURABLE_PORTFOLIO_BACKEND_V1.md:43:`source_type`, `evidence_id`, `studio_project_id`, `studio_delivery_id`, `workspace_revision`, `project_type`, learner, organization, tenant, finalization timestamp, assignment, release, and competency references are persisted as source-derived provenance. Later workspace revisions do not retarget an existing artifact.
+docs/STUDIO_V1_PLUS_PHASE_2_DURABLE_PORTFOLIO_BACKEND_V1.md:47:Routes use existing authenticated organization context and Studio permissions. The owner may create and edit their own artifacts. Private artifacts are owner-only. Organization artifacts are readable only in the same organization/tenant by an actor with Studio project view permission. Cross-organization, cross-tenant, and cross-learner source access fails closed.
+docs/STUDIO_V1_PLUS_PHASE_2_DURABLE_PORTFOLIO_BACKEND_V1.md:59:The database enforces one non-removed artifact per `(portfolio_id, source_type, evidence_id)`. Repeated creation requests return the existing artifact with `idempotent=true`. A profile is created with an insert conflict guard, so concurrent first-add requests converge on one active profile.
+docs/STUDIO_V1_PLUS_PHASE_2_DURABLE_PORTFOLIO_BACKEND_V1.md:63:Profile and artifact creation run in one transaction, use database uniqueness, and re-read after conflicts. The artifact source is locked/revalidated in the same transaction. Outbox writes are transactional with successful mutations.
+docs/STUDIO_V1_PLUS_PHASE_2_DURABLE_PORTFOLIO_BACKEND_V1.md:67:Successful mutations emit through `integration_outbox` using existing conventions: `portfolio.created`, `portfolio.artifact.created`, `portfolio.artifact.updated`, `portfolio.artifact.archived`, and `portfolio.artifact.visibility_changed`. Event idempotency keys are scoped to the Portfolio subject. Portfolio never emits Evidence, Completion, Credential, Truth, Registry, Deployment, or ClientOps events.
+docs/STUDIO_V1_PLUS_PHASE_2_DURABLE_PORTFOLIO_BACKEND_V1.md:71:Evidence owns supersession. Artifact provenance remains historical and is not deleted or retargeted. The current read path excludes superseded Evidence when creating a new artifact; an existing artifact remains a durable historical presentation record until a later policy defines display restrictions.
+docs/STUDIO_V1_PLUS_PHASE_2_DURABLE_PORTFOLIO_BACKEND_V1.md:75:Existing `portfolio:items`, `civic:portfolio:artifacts`, and other local/demo Portfolio surfaces remain disconnected. They are not migrated, read by the service, or treated as institutional truth.
+docs/STUDIO_V1_PLUS_PHASE_2_DURABLE_PORTFOLIO_BACKEND_V1.md:79:The contract and backend test plan covers scope mismatch, cross-learner Evidence, cross-org/tenant access, foreign Portfolio/artifact identifiers, forbidden visibility, authority-field injection, bounded fields, stale source revisions, duplicate requests, and unauthenticated access. Database-backed tests use disposable PostgreSQL when `SHS_TEST_DATABASE_URL` is available.
+docs/STUDIO_V1_PLUS_PHASE_2_DURABLE_PORTFOLIO_BACKEND_V1.md:87:Phase 3 may build the student Portfolio experience over these authenticated APIs: Portfolio read, artifact list/detail, create from eligible Evidence, bounded presentation edit, supported visibility, and non-destructive lifecycle. It must not add public sharing, deployment, Registry, credentials, or completion shortcuts.
+docs/STUDIO_V1_PLUS_PHASE_2_DURABLE_PORTFOLIO_BACKEND_V1.md:91:Acceptance was run against an isolated PostgreSQL 16 cluster created under `/private/tmp` on port `55439`; no persistent owner database was used. A fresh replay applied migrations `001` through `075` with no pending, drift, or unknown migrations. Strict schema integrity checked 75 migrations and 2,512 migration objects with zero failures; the standard integrity check also passed.
+docs/STUDIO_V1_PLUS_PHASE_2_DURABLE_PORTFOLIO_BACKEND_V1.md:93:The database-backed acceptance test verified one active scoped Portfolio under concurrent first-add requests, one artifact for the same Evidence source, deterministic retry behavior, cross-learner and cross-organization denial, private and organization visibility, authority-field rejection, unsupported visibility rejection, unsafe thumbnail rejection, immutable revision provenance, superseded Evidence denial, and non-destructive removal. It also verified only the expected Portfolio outbox events were created and that Studio project, Delivery, and Evidence rows were unchanged by artifact removal.
+services/shf-agent-fabric/services/data_approval_service.py:8:APPROVAL_STATES = ["blocked", "needs_review", "gateway_ready", "public_ready_candidate"]
+services/shf-agent-fabric/services/data_approval_service.py:14:    "Data Approval evaluates approval readiness only.",
+services/shf-agent-fabric/services/data_approval_service.py:15:    "Data Approval does not verify truth, override Truth Spine, override Oracle, directly publish public-approved records, or mutate SHF Impact Data Spine.",
+services/shf-agent-fabric/services/data_approval_service.py:32:def _candidate(payload: Dict[str, Any]) -> Dict[str, Any]:
+services/shf-agent-fabric/services/data_approval_service.py:33:    candidate = payload.get("candidate") if isinstance(payload.get("candidate"), dict) else payload
+services/shf-agent-fabric/services/data_approval_service.py:34:    return dict(candidate or {})
+services/shf-agent-fabric/services/data_approval_service.py:37:def _truth_status(candidate: Dict[str, Any]) -> str:
+services/shf-agent-fabric/services/data_approval_service.py:38:    truth = candidate.get("truth_spine") if isinstance(candidate.get("truth_spine"), dict) else {}
+services/shf-agent-fabric/services/data_approval_service.py:40:        candidate.get("truth_spine_status")
+services/shf-agent-fabric/services/data_approval_service.py:41:        or candidate.get("truth_status")
+services/shf-agent-fabric/services/data_approval_service.py:48:def _oracle_supportability(candidate: Dict[str, Any]) -> str:
+services/shf-agent-fabric/services/data_approval_service.py:49:    oracle = candidate.get("oracle") if isinstance(candidate.get("oracle"), dict) else {}
+services/shf-agent-fabric/services/data_approval_service.py:51:        candidate.get("oracle_supportability")
+services/shf-agent-fabric/services/data_approval_service.py:52:        or candidate.get("oracle_status")
+services/shf-agent-fabric/services/data_approval_service.py:59:def _data_verification_status(candidate: Dict[str, Any]) -> str:
+services/shf-agent-fabric/services/data_approval_service.py:60:    verification = candidate.get("data_verification") if isinstance(candidate.get("data_verification"), dict) else {}
+services/shf-agent-fabric/services/data_approval_service.py:62:        candidate.get("data_verification_status")
+services/shf-agent-fabric/services/data_approval_service.py:80:def _has_evidence(candidate: Dict[str, Any]) -> bool:
+services/shf-agent-fabric/services/data_approval_service.py:81:    evidence_refs = candidate.get("evidence_refs")
+services/shf-agent-fabric/services/data_approval_service.py:82:    evidence = candidate.get("evidence")
+services/shf-agent-fabric/services/data_approval_service.py:86:def _has_provenance(candidate: Dict[str, Any]) -> bool:
+services/shf-agent-fabric/services/data_approval_service.py:87:    provenance = candidate.get("provenance")
+services/shf-agent-fabric/services/data_approval_service.py:94:    candidate_id: str,
+services/shf-agent-fabric/services/data_approval_service.py:102:    if candidate_id:
+services/shf-agent-fabric/services/data_approval_service.py:123:def evaluate_approval(payload: Dict[str, Any] | None) -> Dict[str, Any]:
+services/shf-agent-fabric/services/data_approval_service.py:125:    candidate = _candidate(source)
+services/shf-agent-fabric/services/data_approval_service.py:126:    candidate_id = _clean_str(candidate.get("candidate_id") or candidate.get("id"))
+services/shf-agent-fabric/services/data_approval_service.py:127:    canonical_type = _clean_str(candidate.get("canonical_type") or "unknown")
+services/shf-agent-fabric/services/data_approval_service.py:128:    truth_status = _truth_status(candidate)
+services/shf-agent-fabric/services/data_approval_service.py:129:    oracle_supportability = _oracle_supportability(candidate)
+services/shf-agent-fabric/services/data_approval_service.py:130:    data_verification_status = _data_verification_status(candidate)
+services/shf-agent-fabric/services/data_approval_service.py:131:    has_evidence = _has_evidence(candidate)
+services/shf-agent-fabric/services/data_approval_service.py:132:    has_provenance = _has_provenance(candidate)
+services/shf-agent-fabric/services/data_approval_service.py:136:    if not candidate_id:
+services/shf-agent-fabric/services/data_approval_service.py:137:        warnings.append("missing_candidate_id")
+services/shf-agent-fabric/services/data_approval_service.py:138:        blockers.append("missing_candidate_id")
+services/shf-agent-fabric/services/data_approval_service.py:165:        candidate_id,
+services/shf-agent-fabric/services/data_approval_service.py:174:        approval_state = "blocked"
+services/shf-agent-fabric/services/data_approval_service.py:175:        recommended_action = "resolve_blockers_before_data_approval_gateway_review"
+services/shf-agent-fabric/services/data_approval_service.py:183:        approval_state = "gateway_ready"
+services/shf-agent-fabric/services/data_approval_service.py:184:        recommended_action = "send_to_data_approval_gateway_for_human_review"
+services/shf-agent-fabric/services/data_approval_service.py:186:        approval_state = "needs_review"
+services/shf-agent-fabric/services/data_approval_service.py:187:        recommended_action = "complete_truth_oracle_evidence_review_before_gateway"
+services/shf-agent-fabric/services/data_approval_service.py:189:    ready_for_gateway = approval_state == "gateway_ready"
+services/shf-agent-fabric/services/data_approval_service.py:190:    ready_for_public_approval = approval_state == "public_ready_candidate"
+services/shf-agent-fabric/services/data_approval_service.py:194:                "candidate_id": candidate_id,
+services/shf-agent-fabric/services/data_approval_service.py:197:                "approval_state": approval_state,
+services/shf-agent-fabric/services/data_approval_service.py:200:        "candidate_id": candidate_id,
+services/shf-agent-fabric/services/data_approval_service.py:202:        "approval_state": approval_state,
+services/shf-agent-fabric/services/data_approval_service.py:210:        "ready_for_data_approval_gateway": ready_for_gateway,
+services/shf-agent-fabric/services/data_approval_service.py:213:        "mutated_public_data": False,
+services/shf-agent-fabric/services/data_approval_service.py:222:        "ready_for_data_approval_gateway": ready_for_gateway,
+services/shf-agent-fabric/services/data_approval_service.py:225:        "mutated_public_data": False,
+services/shf-agent-fabric/services/data_approval_service.py:229:def batch_evaluate_approval(records: Any) -> Dict[str, Any]:
+services/shf-agent-fabric/services/data_approval_service.py:231:    evaluations = [evaluate_approval(item if isinstance(item, dict) else {}) for item in items]
+services/shf-agent-fabric/services/data_approval_service.py:232:    states = [item["approval"]["approval_state"] for item in evaluations]
+services/shf-agent-fabric/services/data_approval_service.py:237:        "blocked": states.count("blocked"),
+services/shf-agent-fabric/services/data_approval_service.py:238:        "needs_review": states.count("needs_review"),
+services/shf-agent-fabric/services/data_approval_service.py:239:        "gateway_ready": states.count("gateway_ready"),
+services/shf-agent-fabric/services/data_approval_service.py:240:        "public_ready_candidates": states.count("public_ready_candidate"),
+services/shf-agent-fabric/services/data_approval_service.py:242:        "mutated_public_data_count": 0,
+services/shf-agent-fabric/services/data_approval_service.py:251:        "approval_states": list(APPROVAL_STATES),
+services/shf-agent-fabric/services/data_approval_service.py:254:            "candidate_id",
+services/shf-agent-fabric/services/data_approval_service.py:256:            "approval_state",
+services/shf-agent-fabric/services/data_approval_service.py:264:            "ready_for_data_approval_gateway",
+services/shf-agent-fabric/services/data_approval_service.py:267:            "mutated_public_data",
+services/shf-agent-fabric/services/data_approval_service.py:274:    sample = batch_evaluate_approval(
+services/shf-agent-fabric/services/data_approval_service.py:277:                "candidate": {
+services/shf-agent-fabric/services/data_approval_service.py:278:                    "candidate_id": "approval_candidate_gateway_ready",
+services/shf-agent-fabric/services/data_approval_service.py:288:                "candidate": {
+services/shf-agent-fabric/services/data_approval_service.py:289:                    "candidate_id": "approval_candidate_review",
+services/shf-agent-fabric/services/data_approval_service.py:298:                "candidate": {
+services/shf-agent-fabric/services/data_approval_service.py:299:                    "candidate_id": "approval_candidate_blocked",
+services/shf-agent-fabric/services/data_approval_service.py:310:        "total_candidates": sample["total"],
+services/shf-agent-fabric/services/data_approval_service.py:313:        "gateway_ready": sample["gateway_ready"],
+services/shf-agent-fabric/services/data_approval_service.py:314:        "public_ready_candidates": sample["public_ready_candidates"],
+services/shf-agent-fabric/services/data_approval_service.py:316:        "mutated_public_data_count": 0,
+services/shf-agent-fabric/services/data_approval_service.py:318:        "mutates_shf_impact_data": False,
+services/shf-agent-fabric/services/data_approval_service.py:319:        "requires_gateway_review": True,
+services/shf-agent-fabric/services/data_approval_service.py:331:        "gateway_ready": summary["gateway_ready"],
+services/shf-agent-fabric/services/data_approval_service.py:332:        "public_ready_candidates": summary["public_ready_candidates"],
+services/shf-agent-fabric/services/data_approval_service.py:334:        "mutated_public_data_count": 0,
+services/shf-agent-fabric/services/data_approval_service.py:335:        "requires_gateway_review": True,
+src/router/SolutionsRoutes.jsx.bak_fix_layers_correct_router_20260429_173840:2:import { Routes, Route, Navigate } from "react-router-dom";
+src/router/SolutionsRoutes.jsx.bak_fix_layers_correct_router_20260429_173840:26:        <Route index element={<Navigate to="home" replace />} />
+src/router/SolutionsRoutes.jsx.bak_fix_layers_correct_router_20260429_173840:28:<Route path="*" element={<Navigate to="home" replace />} />
+services/_graveyard/shf-agent-fabric-backups-manual/main.py.20260116T200843Z:5:from routers.alignment.routes_gateway import router as alignment_gateway_router
+services/_graveyard/shf-agent-fabric-backups-manual/main.py.20260116T200843Z:44:app.include_router(alignment_gateway_router)
+apps/shs-api/src/domain/companion/model/companion-context.ts:9:// never fabricates career qualification, free time, or completion.
+apps/shs-api/src/domain/companion/model/companion-context.ts:15:import { CalendarRecommendation, LoadCategory } from "../../calendar/service/calendar-intelligence-service.js";
+apps/shs-api/src/domain/companion/model/companion-context.ts:18:  weeklyLoadCategory: LoadCategory;
+apps/shs-api/src/domain/companion/model/companion-context.ts:56:// populated below (1, 4, 6) — the full 8-rank scale is documented in
+apps/shs-api/src/domain/companion/model/companion-context.ts:78:  relatedSourceIds: string[];
+apps/shs-api/src/domain/companion/model/companion-context.ts:91:  generatedAt: string;
+src/utils/recommendPlans.js:22: *   state?: string,
+src/utils/recommendPlans.js:32:    now: new Date(),
+src/utils/recommendPlans.js:42:  // Ranked lists by strategy
+src/utils/recommendPlans.js:50:      { strategy: "fastest",            list: rankedFast },
+src/utils/recommendPlans.js:51:      { strategy: "least_cost",         list: rankedCost },
+src/utils/recommendPlans.js:52:      { strategy: "highest_placement",  list: rankedPlace },
+src/utils/recommendPlans.js:58:  const plans = picks.map(({ strategy, item }) => buildPlan(item, strategy, cfg));
+src/utils/recommendPlans.js:63:      "pathway_plan_generated",
+src/utils/recommendPlans.js:65:        strategies: plans.map((p) => p.strategy),
+src/utils/recommendPlans.js:97:  const netCostAfterAid = Math.max(0, costAdj - estimateAid(p, inputs, { baseCost: costAdj }));
+src/utils/recommendPlans.js:159: * Ranking strategies
+src/utils/recommendPlans.js:189:function pickDistinct(strategyLists, distinct) {
+src/utils/recommendPlans.js:193:  for (const { strategy, list } of strategyLists) {
+src/utils/recommendPlans.js:205:    // If nothing unique available, allow the top duplicate as fallback
+src/utils/recommendPlans.js:207:    if (chosen) picks.push({ strategy, item: chosen });
+src/utils/recommendPlans.js:216:function buildPlan(d, strategy, cfg) {
+src/utils/recommendPlans.js:219:  const id = `plan_${strategy}_${String(pid).replace(/\W+/g, "_")}`;
+src/utils/recommendPlans.js:223:    strategy, // "fastest" | "least_cost" | "highest_placement"
+src/utils/recommendPlans.js:229:    nextCohortDate: p.nextCohortDate || computeNextCohortDate(cfg.now),
+src/utils/recommendPlans.js:266: * Funding estimator (heuristic only; replace with API in Phase 2)
+src/utils/recommendPlans.js:268:export function estimateAid(pathway, inputs = {}, ctx = {}) {
+src/utils/recommendPlans.js:273:  if (inputs.unemployed) aid += baseCost * 0.35;                       // WIOA

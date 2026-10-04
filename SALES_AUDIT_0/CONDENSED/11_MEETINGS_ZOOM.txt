@@ -1,0 +1,503 @@
+============================================================
+SOURCE: 11_MEETINGS_ZOOM.txt
+============================================================
+src/router/CurriculumRoutes.jsx:41:const Calendar = lazy(() => import("@/pages/curriculum/CurriculumCalendar.jsx"));
+src/router/CurriculumRoutes.jsx:75:/** Phase 1 Zoom/live-learning restoration — real components, previously
+src/router/CurriculumRoutes.jsx:76: * unrouted anywhere (see audit §28-30). AdminZoom.jsx is real, existing
+src/router/CurriculumRoutes.jsx:78: * existing zoomAccess.js/ZoomCard.jsx behavior to a route. */
+src/router/CurriculumRoutes.jsx:80:const AdminZoom = lazy(() => import("@/pages/AdminZoom.jsx"));
+src/router/CurriculumRoutes.jsx:125:          <Route path="asl/calendar" element={<Calendar />} />
+src/router/CurriculumRoutes.jsx:149:          {/* Live Sessions (Zoom) — see LiveSessions.jsx header comment */}
+src/router/CurriculumRoutes.jsx:151:          <Route path="live-sessions/admin" element={<AdminZoom />} />
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:4:// canonical, already-entitled read services — Calendar Projection/
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:10:// Journey Milestones and Calendar Projection already both independently
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:12:import { getCalendarProjectionForActor } from "../../calendar/service/calendar-projection-service.js";
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:13:import { computeCalendarIntelligence } from "../../calendar/service/calendar-intelligence-service.js";
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:15:import { getExternalCalendarProvider } from "../../external-accounts/providers/provider-registry.js";
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:33:// silently-empty partial success — mirrors CalendarHardFailureError.
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:49:// the Calendar Projection Service before this item ever reached here).
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:66:// Maps the Calendar Intelligence Engine's own deterministic recommendations
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:67:// (calendar-intelligence-service.ts) into Companion guidance descriptors.
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:71:function guidanceFromCalendarRecommendations(recommendations: any[]): CompanionGuidance[] {
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:73:    id: `calendar:${rec.reasonCode}:${index}:${rec.relatedEventIds.join(",")}`,
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:85:// MockExternalCalendarProvider (mirroring calendar-projection-service.ts's
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:94:  const [calendarResult, journeyResult, pathwayResult, credentialsResult] = await Promise.allSettled([
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:95:    getCalendarProjectionForActor(actor, null),
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:102:  if (calendarResult.status === "rejected") unavailableSources.push("calendar");
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:108:    throw new CompanionContextHardFailureError([calendarResult, journeyResult, pathwayResult, credentialsResult]);
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:111:  let calendarSummary = null;
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:113:  if (calendarResult.status === "fulfilled") {
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:114:    const projection = calendarResult.value;
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:117:    // reads; isolated the same way as the /calendar/intelligence/me route
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:122:      externalProviderLookup || getExternalCalendarProvider,
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:124:    const intelligence = computeCalendarIntelligence(projection, null, now, externalAvailability);
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:125:    calendarSummary = {
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:133:      ...guidanceFromCalendarRecommendations(intelligence.recommendations),
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:136:    // Calendar Intelligence's own partial-source signal folds into
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:141:        const label = `calendar:${s}`;
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:162:  // guidanceFromCalendarRecommendations() above (Calendar Intelligence's
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:164:  // credential renewal dates projected onto the Calendar) — this summary
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:186:    calendar: calendarSummary,
+apps/shs-api/src/domain/companion/api/routes.ts:23:  // /calendar/events/me, /journey/milestones/me, and /careers/pathway/me.
+src/utils/zoomAccess.js:1:// src/utils/zoomAccess.js
+src/utils/zoomAccess.js:2:// Zoom access + approvals + meeting links (localStorage-backed)
+src/utils/zoomAccess.js:5:// - zoom:reqs         -> [{ userId, name, ts, note? }]
+src/utils/zoomAccess.js:6:// - zoom:approvals    -> [{ userId, approved, approver?, note?, expiresAt? }]
+src/utils/zoomAccess.js:7:// - zoom:approved     -> ["userId", ...]            (legacy allow-list; kept for compat)
+src/utils/zoomAccess.js:8:// - zoom:allow:<id>   -> "1" when approved          (legacy per-user flag; kept for compat)
+src/utils/zoomAccess.js:9:// - zoom:ops          -> meeting url
+src/utils/zoomAccess.js:10:// - zoom:incident     -> meeting url
+src/utils/zoomAccess.js:11:// - zoom:lockdown     -> "1" blocks non-admin joins
+src/utils/zoomAccess.js:13:const PENDING_KEY   = "zoom:reqs";
+src/utils/zoomAccess.js:14:const APPROVALS_KEY = "zoom:approvals";
+src/utils/zoomAccess.js:15:const APPROVED_KEY  = "zoom:approved";
+src/utils/zoomAccess.js:16:const ALLOW_PREFIX  = "zoom:allow:";
+src/utils/zoomAccess.js:17:const LOCKDOWN_KEY  = "zoom:lockdown";
+src/utils/zoomAccess.js:20:export function canJoinZoom({ userId = "", role = "student" } = {}) {
+src/utils/zoomAccess.js:24:  return hasZoomAccess(userId);
+src/utils/zoomAccess.js:26:export function hasZoomAccess(userId = "") {
+src/utils/zoomAccess.js:29:  const a = listZoomApprovals().find(x => x.userId === userId);
+src/utils/zoomAccess.js:37:export function requestZoomAccess({ userId, name, note } = {}) {
+src/utils/zoomAccess.js:40:  if (hasZoomAccess(userId)) return snapshot();
+src/utils/zoomAccess.js:52:export function listZoomRequests() {
+src/utils/zoomAccess.js:61:export function listZoomApprovals() {
+src/utils/zoomAccess.js:73:export function approveZoomAccess(userId = "", { approver, hours = 4, note } = {}) {
+src/utils/zoomAccess.js:99:export function revokeZoomAccess(userId = "", note) {
+src/utils/zoomAccess.js:126:/* ---------------- Meeting links ---------------- */
+src/utils/zoomAccess.js:127:export function getOpsLink()            { return localStorage.getItem("zoom:ops") || ""; }
+src/utils/zoomAccess.js:128:export function setOpsLink(url = "")    { try { localStorage.setItem("zoom:ops", url); } catch {} touch("zoom:ops"); }
+src/utils/zoomAccess.js:129:export function getIncidentLink()       { return localStorage.getItem("zoom:incident") || ""; }
+src/utils/zoomAccess.js:130:export function setIncidentLink(url="") { try { localStorage.setItem("zoom:incident", url); } catch {} touch("zoom:incident"); }
+src/utils/zoomAccess.js:143:export const approveZoom = (...args) => approveZoomAccess(...args);
+src/utils/zoomAccess.js:144:export const denyZoom    = (userId, note) => revokeZoomAccess(userId, note);
+src/utils/zoomAccess.js:145:export const getPending  = () => listZoomRequests();
+src/utils/zoomAccess.js:148:  const active = listZoomApprovals()
+src/utils/zoomAccess.js:163:export const listRequests      = () => listZoomRequests();
+src/utils/zoomAccess.js:164:export const listZoomApprovalsRaw = () => readJSON(APPROVALS_KEY, []);
+src/utils/zoomAccess.js:165:export const approveZoomAccessRaw = approveZoomAccess;
+src/utils/zoomAccess.js:166:export const revokeZoomAccessRaw  = revokeZoomAccess;
+src/utils/zoomAccess.js:176:function snapshot() { return { pending: listZoomRequests(), approved: getApproved() }; }
+apps/shs-api/src/domain/companion/model/companion-context.ts:5:// entitled facts from Calendar Projection/Intelligence, Journey
+apps/shs-api/src/domain/companion/model/companion-context.ts:15:import { CalendarRecommendation, LoadCategory } from "../../calendar/service/calendar-intelligence-service.js";
+apps/shs-api/src/domain/companion/model/companion-context.ts:17:export interface CompanionCalendarSummary {
+apps/shs-api/src/domain/companion/model/companion-context.ts:60:// boundary note reserved for exactly this) — an external-calendar
+apps/shs-api/src/domain/companion/model/companion-context.ts:86:  calendar: CompanionCalendarSummary | null;
+apps/shs-api/src/domain/companion/model/companion-context.ts:94:export const COMPANION_SOURCES = ["calendar", "journey", "pathway", "credentials"] as const;
+apps/shs-api/src/domain/companion/model/companion-context.ts:98:// the one Calendar Intelligence type this contract embeds by reference.
+apps/shs-api/src/domain/companion/model/companion-context.ts:99:export type { CalendarRecommendation };
+src/router/paths.js:32:export const CALENDAR    = (cur)       => `/${normCur(cur)}/calendar`;
+src/router/paths.js:66:    calendar: "/calendar",
+src/router/paths.js:109:    calendar:    () => "/calendar",
+src/router/paths.js:126:    calendar:    () => `/${normCur(cur)}/calendar`,
+src/content/lessons/asl-student/student.asl-78.json:27:      "heading": "Role-Play: Community Meeting",
+src/content/lessons/asl-student/student.asl-39.json:21:      "media": { "src": "/media/asl/unit-5/vv-moves.png", "alt": "Eyes-zoom, head pan, cut jump", "caption": "Cinematic feel: zoom/pan/cut with face & torso" },
+src/content/lessons/asl-student/student.asl-39.json:22:      "body": "Practice 3 VV tools: **ZOOM (eyes/chin lean)**, **PAN (head/eyes sweep)**, **CUT (tiny pause + snap to next pose)**. Keep hands minimal; let the **face/torso** carry the effect.",
+src/content/lessons/asl-student/student.asl-39.json:49:      "body": "Create a **10s VV**: one **ZOOM**, one **PAN**, one **CUT**, and **1 RS** line. Theme prompt (choose one): **PRIDE**, **ACCESS**, **COMMUNITY**. Swap roles and coach rhythm.",
+src/content/lessons/asl-student/student.asl-39.json:69:      { "type": "reflection", "prompt": "Which VV tool (zoom, pan, cut) felt most natural? How will you practice its timing?" }
+src/utils/validateLessonAccessibility.js:30:        if (m.type === "video" && !m.captionsTrack && !m.transcript) {
+src/utils/validateLessonAccessibility.js:33:            message: `Section "${s.heading || i + 1}" has instructional video with no captions or transcript metadata.`,
+src/content/curriculum/data-center-pathway-map.json:674:        "requirements": ["text alternatives for diagrams", "keyboard and screen-reader support", "asynchronous collaboration option", "captions and transcripts", "non-color status", "accessible telemetry and CLI output", "presentation alternatives"]
+src/utils/normalizeLessonMedia.js:31://     transcript: string | null,
+src/utils/normalizeLessonMedia.js:41://                                          transcript, or audio
+src/utils/normalizeLessonMedia.js:64:    const transcript = media.transcript || null;
+src/utils/normalizeLessonMedia.js:71:      transcript,
+src/utils/normalizeLessonMedia.js:75:      hasAccessibleAlternative: !!(transcript || media.audioDescription),
+src/utils/normalizeLessonMedia.js:84:  const transcript = media.transcript || null;
+src/utils/normalizeLessonMedia.js:99:    transcript,
+src/utils/normalizeLessonMedia.js:102:    hasAccessibleAlternative: !!(captionsTrack || transcript || audioDescription || (type === "image" && (media.alt || decorative))),
+src/content/lessons/asl-student/student.asl-59.json:13:    { "term": "CLASS / WORK / MEETING", "def": "Common routine activities." },
+src/content/lessons/asl-student/student.asl-59.json:23:      "heading": "Warm-Up: Calendar Anchors",
+src/content/lessons/asl-student/student.asl-59.json:24:      "media": { "src": "/media/asl/unit-8/calendar-anchors.png", "alt": "Week grid with days anchored in space", "caption": "Anchor M–F left→right; weekend to the side" },
+src/content/lessons/asl-student/student.asl-59.json:35:      "body": "Examples (3–5 signs each):\n• **MONDAY MORNING CLASS. AFTERNOON WORK.**\n• **TUESDAY NIGHT MEETING.**\n• **WEDNESDAY HOMEWORK DUE.**\nAdd **FINISH** after a completed item: **EMAIL SEND FINISH.**",
+src/content/lessons/asl-student/student.asl-59.json:44:      "body": "RS→Requester: **PLEASE HELP PROJECT?** (eyebrows neutral/kind)  \nNeutral.  \nRS→Responder: **CAN TODAY AFTERNOON.** / **SORRY CAN'T, MEETING.**  \nUse **MUST/SHOULD** for obligations/suggestions: **MUST EMAIL TODAY. SHOULD START EARLY.**",
+src/content/lessons/asl-student/student.asl-59.json:71:      { "type": "short", "q": "Write a 3-line gloss: MONDAY MORNING CLASS. TUESDAY NIGHT MEETING. WEDNESDAY HOMEWORK DUE." },
+src/content/lessons/asl-student/student.asl-63.json:3:  "title": "ASL 8.5 — Team Meetings (Agenda • Updates • Action Items) 📋",
+src/content/lessons/asl-student/student.asl-63.json:6:    "Run a short team meeting using clear signposting (AGENDA → UPDATES → ACTION)",
+src/content/lessons/asl-student/student.asl-63.json:15:    { "term": "FOLLOW-UP / CHECK", "def": "Future review or meeting touchpoint." },
+src/content/lessons/asl-student/student.asl-63.json:40:      "heading": "Partner Drill: Mini-Meeting (3 Topics)",
+src/content/lessons/asl-student/student.asl-63.json:41:      "media": { "src": "/media/asl/unit-8/mini-meeting.gif", "alt": "Two signers assigning and confirming tasks", "caption": "Agenda → Updates → Action → Confirm" },
+src/content/lessons/asl-student/student.asl-63.json:56:    "title": "ASL 8.5 — Team Meetings Quiz",
+src/content/lessons/asl-student/student.asl-63.json:58:      { "type": "mcq", "q": "Most readable meeting flow is…", "options": ["Random order", "AGENDA → UPDATES → ACTION", "ACTION → UPDATES → AGENDA", "UPDATES only"], "answerIndex": 1 },
+src/content/lessons/asl-student/student.asl-63.json:62:      { "type": "reflection", "prompt": "Which needs work—signposting, time-first DUE lines, or RS confirmations? Name one cue you’ll use next meeting." }
+src/content/lessons/asl-student/student.asl-63.json:67:  "summary": "You led a concise team meeting with clear signposting, time-first deadlines, and confirmed action items using repeat-back.",
+src/content/lessons/asl-student/student.asl-14.json:35:      "media": { "src": "/media/asl/unit-2/record-icon.png", "alt": "Recording icon", "caption": "Quiet background, chest-level framing" },
+src/content/lessons/asl-student/student.asl-43.json:29:      "media": { "src": "/media/asl/unit-5/record-solo-duo.png", "alt": "Recording setup", "caption": "Chest-up framing; quiet background" },
+src/context/AccessibilityProfileContext.jsx:23:  media: { captionPreference: "AUTO", transcriptPreference: "AUTO" },
+src/context/AccessibilityProfileContext.jsx:70:      transcriptPreferred: preferences.media?.transcriptPreference === "PREFER",
+src/context/AccessibilityProfileContext.jsx:106:      if (typeof legacy.transcriptPreferred === "boolean") patch.media.transcriptPreference = legacy.transcriptPreferred ? "PREFER" : "AUTO";
+src/content/lessons/asl-student/student.asl-80.json:36:      "body": "Upload final recording (45–60s). Include a brief caption: title, anchors used, RS/CTA included."
+src/router/AdminRoutes.jsx.bak_tools_20260408_151846:15:import AdminZoom from "@/pages/AdminZoom.jsx";
+src/router/AdminRoutes.jsx.bak_tools_20260408_151846:28:      <Route path="/admin-zoom" element={<AdminZoom />} />
+src/context/EffectiveAccessibilityContext.jsx:21:  transcriptPreference: "AUTO",
+src/context/EffectiveAccessibilityContext.jsx:59:      transcriptPreference: preferences?.media?.transcriptPreference || "AUTO",
+src/content/lessons/asl-student/student.asl-33.json:13:    { "term": "WORK • JOB • MEETING • PROJECT", "def": "Basic workplace set." },
+src/content/lessons/asl-student/student.asl-33.json:35:      "body": "Frames:\n• **THIS-SEMESTER I TAKE MATH.**\n• **I LIKE MATH BECAUSE FUN.**\n• **TODAY AFTERNOON I WORK MEETING.** Keep each clause 3–5 signs; pause briefly after the time chunk.",
+src/content/lessons/asl-student/student.asl-33.json:62:      "body": "A: **THIS-SEMESTER YOU TAKE WHAT-SUBJECT?**  B: **MATH, ENGLISH.**\nA: **YOU LIKE WHICH MORE?**  B: **MATH BECAUSE EASY.**\nAdd one work line: **AFTER WORK I MEETING PROJECT.** Switch roles.",
+src/context/AccessibilityPreferences.jsx:25:  transcriptPreferred: false,
+src/context/AccessibilityPreferences.jsx:39:    transcriptPreferred: p.media?.transcriptPreference === "PREFER",
+src/context/AccessibilityPreferences.jsx:65:      transcriptPreferred: { media: { transcriptPreference: value ? "PREFER" : "AUTO" } },
+src/router/CareerRoutes.jsx:28:// calendar view primitives through its own domain adapter.
+src/router/CareerRoutes.jsx:29:const Calendar = lazy(() => import("@/pages/career/CareerCalendar.jsx"));
+src/router/CareerRoutes.jsx:62:          <Route path="calendar" element={<Calendar />} />
+apps/shs-api/src/domain/calendar-feed/repo/calendar-feed-token-repo.ts:2:// Stores only a SHA-256 hash of the token (see 053_calendar_feed_tokens.sql
+apps/shs-api/src/domain/calendar-feed/repo/calendar-feed-token-repo.ts:6:export interface CalendarFeedTokenRow {
+apps/shs-api/src/domain/calendar-feed/repo/calendar-feed-token-repo.ts:14:function fromRow(row: any): CalendarFeedTokenRow {
+apps/shs-api/src/domain/calendar-feed/repo/calendar-feed-token-repo.ts:24:export class CalendarFeedTokenRepo {
+apps/shs-api/src/domain/calendar-feed/repo/calendar-feed-token-repo.ts:27:  async upsert(organizationId: string, userId: string, tokenHash: string): Promise<CalendarFeedTokenRow> {
+apps/shs-api/src/domain/calendar-feed/repo/calendar-feed-token-repo.ts:29:      `INSERT INTO calendar_feed_tokens (organization_id, user_id, token_hash, created_at, revoked_at)
+apps/shs-api/src/domain/calendar-feed/repo/calendar-feed-token-repo.ts:39:  async findActiveByTokenHash(tokenHash: string): Promise<CalendarFeedTokenRow | null> {
+apps/shs-api/src/domain/calendar-feed/repo/calendar-feed-token-repo.ts:41:      `SELECT * FROM calendar_feed_tokens WHERE token_hash = $1 AND revoked_at IS NULL`,
+apps/shs-api/src/domain/calendar-feed/repo/calendar-feed-token-repo.ts:47:  async findForLearner(organizationId: string, userId: string): Promise<CalendarFeedTokenRow | null> {
+apps/shs-api/src/domain/calendar-feed/repo/calendar-feed-token-repo.ts:49:      `SELECT * FROM calendar_feed_tokens WHERE organization_id = $1 AND user_id = $2`,
+apps/shs-api/src/domain/calendar-feed/repo/calendar-feed-token-repo.ts:57:      `UPDATE calendar_feed_tokens SET revoked_at = NOW() WHERE organization_id = $1 AND user_id = $2 AND revoked_at IS NULL`,
+src/companion/CompanionProvider.jsx:71:  // reload is the refresh mechanism, matching Calendar Intelligence's own
+apps/shs-api/src/domain/calendar-feed/service/calendar-feed-token-service.ts:10:import { CalendarFeedTokenRepo } from "../repo/calendar-feed-token-repo.js";
+apps/shs-api/src/domain/calendar-feed/service/calendar-feed-token-service.ts:12:const repo = new CalendarFeedTokenRepo();
+apps/shs-api/src/domain/calendar-feed/service/ics-builder.ts:1:// SHF Ecosystem Phase 12 — RFC 5545 (iCalendar) builder.
+apps/shs-api/src/domain/calendar-feed/service/ics-builder.ts:4:// CalendarEventProjection[] (Phase 9's Calendar Projection Service — the
+apps/shs-api/src/domain/calendar-feed/service/ics-builder.ts:5:// same array GET /calendar/events/me returns) into standards-compliant
+apps/shs-api/src/domain/calendar-feed/service/ics-builder.ts:7:// format, exactly like the frontend's own calendar views. No recurrence
+apps/shs-api/src/domain/calendar-feed/service/ics-builder.ts:12:import { CalendarEventProjection } from "../../calendar/model/calendar-event.js";
+apps/shs-api/src/domain/calendar-feed/service/ics-builder.ts:57:// calendar client updates this same event on re-sync rather than
+apps/shs-api/src/domain/calendar-feed/service/ics-builder.ts:59:function uidFor(projection: CalendarEventProjection): string {
+apps/shs-api/src/domain/calendar-feed/service/ics-builder.ts:60:  return `${projection.id}@calendar.siliconheartland.org`;
+apps/shs-api/src/domain/calendar-feed/service/ics-builder.ts:63:const STATUS_MAP: Record<CalendarEventProjection["status"], string> = {
+apps/shs-api/src/domain/calendar-feed/service/ics-builder.ts:69:function buildEvent(projection: CalendarEventProjection, dtstamp: string): string[] {
+apps/shs-api/src/domain/calendar-feed/service/ics-builder.ts:90:  // intended for calendar-level public/shared visibility once subscribed.
+apps/shs-api/src/domain/calendar-feed/service/ics-builder.ts:96:export function buildIcsFeed(projections: CalendarEventProjection[], now: Date = new Date()): string {
+apps/shs-api/src/domain/calendar-feed/service/ics-builder.ts:99:    "BEGIN:VCALENDAR",
+apps/shs-api/src/domain/calendar-feed/service/ics-builder.ts:101:    "PRODID:-//Silicon Heartland Foundation//SHF Learning Calendar//EN",
+apps/shs-api/src/domain/calendar-feed/service/ics-builder.ts:104:    "X-WR-CALNAME:SHF Learning Calendar",
+apps/shs-api/src/domain/calendar-feed/service/ics-builder.ts:109:  lines.push("END:VCALENDAR");
+src/content/lessons/asl-student/student.asl-70.json:13:    { "term": "MEETING", "def": "Two hands come together, representing people gathering." },
+src/content/lessons/asl-student/student.asl-70.json:20:      "heading": "Context: Deaf Club Meeting",
+src/content/lessons/asl-student/student.asl-70.json:30:      "body": "Use **TIME → TOPIC → COMMENT** order. Example: **TOMORROW NIGHT → MEETING → DISCUSS NEW EVENT.**",
+src/content/lessons/asl-student/student.asl-70.json:39:      "body": "Take turns announcing simple items (party, game, meeting). Partner gives feedback on clarity + audience gaze.",
+src/content/lessons/asl-student/student.asl-70.json:53:      { "type": "mcq", "q": "What sign is used to draw group focus?", "options": ["ANNOUNCE", "ATTENTION", "MEETING", "LOOK-AT"], "answerIndex": 1 },
+src/content/lessons/asl-student/student.asl-70.json:60:  "reflectionPrompt": "Record yourself giving a 20–30s announcement (meeting, class, or event).",
+src/content/lessons/asl-student/student.asl-50.json:30:      "media": { "src": "/media/asl/unit-6/record-setup.png", "alt": "Recording setup", "caption": "Chest-up framing, quiet background" },
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:1:// SHF Ecosystem Phase 12 — External Calendar Integration (ICS/webcal).
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:4:// already-entitled projection GET /calendar/events/me returns. It never
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:5:// accepts a write from an external calendar client, never creates an SHF
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:13:import { getCalendarProjectionForActor, CalendarHardFailureError } from "../../calendar/service/calendar-projection-service.js";
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:15:import { rotateFeedToken, revokeFeedToken, getFeedTokenStatus, resolveActorForFeedToken } from "../service/calendar-feed-token-service.js";
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:31:// Independently resolves a full, entitled Calendar actor for a token-
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:34:// (an external calendar client cannot send this app's session/dev-token
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:55:export function registerCalendarFeedRoutes(app: any) {
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:56:  // Authenticated, self-service, mirrors /calendar/events/me's own
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:58:  app.get("/calendar/feed-token/me", requirePermission("enrollment.view"), async (req: any, res: any, next: any) => {
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:72:  app.post("/calendar/feed-token/rotate", requirePermission("enrollment.view"), async (req: any, res: any, next: any) => {
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:81:  app.delete("/calendar/feed-token/me", requirePermission("enrollment.view"), async (req: any, res: any, next: any) => {
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:91:  // parameter (the standard "secret address" pattern every major calendar
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:94:  // identity. GET, not POST, because every external calendar client
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:95:  // (Google Calendar, Outlook, Apple Calendar) fetches subscribed feed
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:97:  app.get("/calendar/feed.ics", async (req: any, res: any, next: any) => {
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:102:      const projection = await getCalendarProjectionForActor(actor as any, null);
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:105:      return res.type("text/calendar; charset=utf-8").send(ics);
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:107:      if (error instanceof CalendarHardFailureError) return res.status(503).type("text/plain").send("Temporarily unavailable.");
+src/content/lessons/asl-student/student.asl-51.json:11:    { "term": "APPOINTMENT (APPT)", "def": "A-hands link/lock (schedule/meeting)." },
+src/content/lessons/asl-student/student.asl-71.json:59:      { "type": "short", "q": "Gloss: 'Tomorrow 6PM → Club meeting → Room 120. From entrance: straight, turn-left, upstairs.'" },
+src/content/lessons/asl-student/student.asl-3-capstone.json:47:      "media": { "src": "/media/asl/unit-3/record-duo.png", "alt": "Two signers recording", "caption": "Chest-up framing • quiet background" },
+src/apps/allocation/sources/raw/bls-columbus-occupational-wages.html:307:<div id="bls-banner-links"><a href="/schedule/news_release/">Release Calendar</a> | <a href="javascript:window.open('https://public.govdelivery.com/accounts/USDOLBLS/subscriber/new ','Popup','width=800,height=500,toolbar=no,scrollbars=yes,resizable=yes'); void('');" onclick="window.status='Subscribe'; return true" onmouseover="window.status='Subscribe'; return true" onmouseout="window.status=''; return true" id="social-email-1" title="Subscribe to BLS E-mail Updates" aria-label="Subscribe to BLS E-mail Updates">Subscribe</a></div> 
+src/apps/allocation/sources/raw/bls-columbus-occupational-wages.html:352:	  <div class="bls-banner-links-mob"><a href="/schedule/news_release/">Release Calendar</a> | <a href="javascript:window.open('https://public.govdelivery.com/accounts/USDOLBLS/subscriber/new ','Popup','width=800,height=500,toolbar=no,scrollbars=yes,resizable=yes'); void('');" onclick="window.status='Subscribe'; return true" onmouseover="window.status='Subscribe'; return true" onmouseout="window.status=''; return true" id="social-email-2" title="Subscribe to BLS E-mail Updates" aria-label="Subscribe to BLS E-mail Updates">Subscribe</a></div>
+src/apps/allocation/sources/raw/bls-columbus-occupational-wages.html:555:		<li><a href="/schedule/" aria-label="Release Calendar By Month">By Month</a></li>
+src/apps/allocation/sources/raw/bls-columbus-occupational-wages.html:556:		<li><a href="/schedule/schedule/by_prog/all_sched.htm" aria-label="Release Calendar By News Release">By News Release</a></li>
+src/apps/allocation/sources/raw/bls-columbus-occupational-wages.html:557:		<li><a href="/schedule/news_release/current_year.asp" aria-label="Release Calendar Current Year">Current Year</a></li>
+src/content/lessons/asl-student/student.asl-4-capstone.json:34:      "media": { "src": "/media/asl/unit-4/record-duo-or-solo.png", "alt": "Recording setup", "caption": "Solo narration with brief RS" },
+src/content/lessons/asl-student/student.asl-36.json:46:      "media": { "src": "/media/asl/unit-4/record-icon.png", "alt": "Recording icon", "caption": "Chest-up framing; quiet background" },
+src/content/lessons/asl-instructor/instructor.asl-4-capstone.json:18:    "✅ Encourage planning with anchor maps before recording.",
+src/content/lessons/asl-instructor/instructor.asl-4-capstone.json:35:    "1. Observe live or review recording",
+src/content/lessons/asl-student/student.asl-57.json:30:      "media": { "src": "/media/asl/unit-7/record-health.png", "alt": "Recording setup", "caption": "Chest-up framing; quiet background" },
+src/content/lessons/asl-instructor/asl-instructor-3-capstone.json:12:    "activity": "25–30 min – Paired recordings",
+src/apps/allocation/sources/extracts/WIOA_AREA7_DEMOGRAPHICS_BLOCK.txt:135:secondary school diploma or its recognized equivalent shall be included in the percentage counted as meeting the criterion if such participants,
+src/apps/allocation/sources/extracts/WIOA_AREA7_DEMOGRAPHICS_BLOCK.txt:144:secondary transcript/report card showing that the participant is achieving the state unit’s policies for academic standards; 4) satisfactory or
+src/content/lessons/asl-instructor/instructor.asl-14.json:10:    { "segment": "Recording", "min": 10, "notes": "Ensure environment is clear, framing is chest-level, background quiet." },
+src/content/lessons/asl-instructor/instructor.asl-14.json:37:    "When reviewing recordings, pause and ask: ‘What improved readability here?’"
+src/apps/allocation/sources/extracts/ohio-drc-fact-sheet.txt:52:Executions Calendar Year to Date 0            Miscellaneous Releases                              38
+src/content/lessons/asl-instructor/instructor.asl-12.json:47:    "Allow recording in a quiet hallway if noise distracts.",
+src/apps/allocation/sources/extracts/_tmp_area7_demo_hits/hit_83.txt:135:secondary school diploma or its recognized equivalent shall be included in the percentage counted as meeting the criterion if such participants,
+src/apps/allocation/sources/extracts/_tmp_area7_demo_hits/hit_83.txt:144:secondary transcript/report card showing that the participant is achieving the state unit’s policies for academic standards; 4) satisfactory or
+apps/shs-api/src/domain/career-events/model/career-event.ts:7:// two separate domains despite both projecting into the same Calendar.
+src/content/lessons/data-center-technical-foundations-9-student/data-center-technical-foundations-9-technical-documentation.json:9:  "summary": "Practice recording technical observations so another person can understand what happened.",
+src/content/lessons/asl-instructor/instructor.asl-13.json:46:    "roomSetup": ["Pairs facing each other with clear sightlines; quiet side wall for quick recording"]
+src/apps/allocation/sources/extracts/ohio-wioa-py2024.txt:187:secondary school diploma or its recognized equivalent shall be included in the percentage counted as meeting the criterion if such participants,
+src/apps/allocation/sources/extracts/ohio-wioa-py2024.txt:196:secondary transcript/report card showing that the participant is achieving the state unit’s policies for academic standards; 4) satisfactory or
+src/apps/allocation/sources/extracts/ohio-wioa-py2024.txt:5708:calendar days and is not scheduled for future services, except follow-up       who is attending school under state law); (3) A low-income individual (see
+src/apps/allocation/sources/extracts/ohio-wioa-py2024.txt:5736:         https://www.transportation.ohio.gov/programs/transit/transit-             transcript/report card showing that the participant is achieving the state
+src/apps/allocation/sources/extracts/ohio-wioa-py2024.txt:5780:attended school for at least the most recent complete school year calendar         cohort.
+src/content/lessons/asl-master/asl-3-descriptions-space.json:16:"iepAccommodations": {"processingSupport": ["Provide printed spatial diagrams"], "extendedTime": "Extra recording time", "alternativeAssessments": ["Photo storyboard with pointing captions"]},
+src/content/lessons/data-center-design-8-student/data-center-design-8-reliability-redundancy.json:18:  "quiz": { "question": "What is a single point of failure?", "options": ["One part whose failure can stop the larger system", "A backup that always works", "A type of community meeting", "A measure of land area"], "answer": "One part whose failure can stop the larger system" },
+src/experience/celebrations/celebrationPolicy.js:24:  "calendar.click",
+src/experience/celebrations/celebrationPolicy.js:25:  "calendar.open",
+src/experience/celebrations/celebrationPolicy.js:26:  "calendar.view",
+src/content/lessons/data-center-specialization-11-student/data-center-specialization-11-security-documentation.json:1:{"id":"data-center-specialization-11-security-documentation","slug":"data-center-specialization-11-security-documentation","nextSlug":"data-center-specialization-11-security-incident-reasoning","title":"Security Documentation and Evidence Handling","curriculum":"data-center-specialization-11","gradeBand":{"minGrade":11,"maxGrade":11,"stage":"PREPARE_PROVE"},"estMinutes":45,"summary":"Document security observations while preserving source and uncertainty.","objectives":["Record factual security observations and sources.","Explain why evidence should not be altered unnecessarily."],"vocab":[{"term":"EVIDENCE PRESERVATION","def":"Protecting source information and avoiding unnecessary changes to it."},{"term":"PROVENANCE","def":"Information about where a record came from and how it was handled."}],"sections":[{"heading":"Write what is known","body":"A useful record includes time, identity or system, event, resource, source, action, uncertainty, escalation, and follow-up. Avoid unsupported accusations."},{"heading":"Protect the record","body":"Do not delete logs, alter source records, or perform unapproved containment. Preserve timestamps and escalate through authorized roles."}],"practice":[{"prompt":"What should a report say when intent is unknown?","answer":"State the observed event, source, and uncertainty without claiming an unconfirmed motive."}],"quiz":{"question":"What protects evidence quality?","options":["Recording provenance and avoiding unnecessary changes","Deleting suspicious logs","Changing timestamps","Guessing the actor"],"answer":"Recording provenance and avoiding unnecessary changes"},"lab":{"safetyClassification":"SIMULATION ONLY","objective":"Create a factual synthetic security note."},"futureCompetencyCandidates":["document security evidence with provenance"],"reflectionPrompt":"Which uncertainty should remain in your report?"}
+src/data/civic/issues.v1.json:1:{ "version": 1, "scale": { "min": -2, "max": 2, "labels": ["Strongly Disagree","Disagree","Neutral","Agree","Strongly Agree"] }, "axes": [ { "id": "fiscal", "label": "Fiscal Policy" }, { "id": "social", "label": "Social Policy" }, { "id": "govern", "label": "Governance & Institutions" }, { "id": "civic", "label": "Civic Participation" } ], "questions": [ { "id": "q1", "text": "Public investment in education and job training should increase even if it raises near-term taxes.", "axis": "fiscal", "weight": 1.0 }, { "id": "q2", "text": "Balanced budgets should be prioritized even when the economy slows.", "axis": "fiscal", "weight": 1.0, "invert": true }, { "id": "q3", "text": "Individual rights on social issues should be broadly protected from government interference.", "axis": "social", "weight": 1.0 }, { "id": "q4", "text": "Community standards should take precedence over individual preferences on key social issues.", "axis": "social", "weight": 1.0, "invert": true }, { "id": "q5", "text": "Government transparency and anti-corruption rules should expand, even if compliance adds cost.", "axis": "govern", "weight": 1.0 }, { "id": "q6", "text": "Independent institutions (courts, auditors) should have stronger powers to check leaders.", "axis": "govern", "weight": 1.0 }, { "id": "q7", "text": "Civic participation (voting, meetings, volunteering) should be expected of all residents.", "axis": "civic", "weight": 1.0 }, { "id": "q8", "text": "Youth should have structured opportunities to deliberate and propose local policy ideas.", "axis": "civic", "weight": 1.0 } ] }
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:39:  ["Calendar", "▦", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:57:  ["Calendar", "📅", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:501:  if (["/hub/calendar", "/hub/conference", "/hub/journal"].includes(path)) return true;
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:971:        <button>Open Calendar →</button>
+src/pages/hub/HubSalesPipelinePage.jsx:28:    nextAction: "Schedule employer placement meeting",
+src/pages/hub/HubSalesPipelinePage.jsx:47:    stage: "Meeting Scheduled",
+src/pages/hub/HubSalesPipelinePage.jsx:114:  "Meeting Scheduled",
+src/pages/hub/HubSalesPipelinePage.jsx:230:              Track introductions, meetings, follow-ups, proposals, negotiations,
+src/pages/hub/HubSalesPipelinePage.jsx:362:                <button onClick={() => recordEvent("meeting_scheduled", topMove?.id)}>Meeting Scheduled</button>
+src/pages/hub/HubSalesPipelinePage.jsx:503:                  <p>No sales events yet. Start review, log an intro, schedule a meeting, or create a proposal.</p>
+src/pages/hub/HubSalesPipelinePage.jsx:513:            <span>Sales Pipeline · Introductions · Meetings · Proposals · Deals Influenced</span>
+src/data/civic/missions/issues.v1.json:51:      "text": "Civic participation (voting, meetings, volunteering) should be expected of all residents.",
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-guided-workflow-launcher:39:  ["Calendar", "▦", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-guided-workflow-launcher:57:  ["Calendar", "📅", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-guided-workflow-launcher:496:  if (["/hub/calendar", "/hub/conference", "/hub/journal"].includes(path)) return true;
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-guided-workflow-launcher:966:        <button>Open Calendar →</button>
+src/pages/hub/HubGrowthNetwork.jsx:178:    nextAction: "Schedule employer placement meeting",
+src/pages/hub/HubGrowthNetwork.jsx:194:    stage: "Meeting Scheduled",
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-workflow-intelligence-20260525_093138:39:  ["Calendar", "▦", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-workflow-intelligence-20260525_093138:57:  ["Calendar", "📅", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-workflow-intelligence-20260525_093138:501:  if (["/hub/calendar", "/hub/conference", "/hub/journal"].includes(path)) return true;
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-workflow-intelligence-20260525_093138:971:        <button>Open Calendar →</button>
+src/pages/hub/HubWorkspaceDashboard.jsx:31:  ["Calendar", "▦", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard.jsx:49:  ["Calendar", "📅", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard.jsx:504:  if (["/hub/calendar", "/hub/conference", "/hub/journal"].includes(path)) return true;
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_identity_nav_tiles_20260512_215346:37:  ["Calendar", "▦", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_identity_nav_tiles_20260512_215346:55:  ["Calendar", "📅", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_identity_nav_tiles_20260512_215346:743:        <button>Open Calendar →</button>
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_identity_nav_tiles_20260512_220012:37:  ["Calendar", "▦", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_identity_nav_tiles_20260512_220012:55:  ["Calendar", "📅", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_identity_nav_tiles_20260512_220012:357:  if (["/hub/calendar", "/hub/conference", "/hub/journal"].includes(path)) return true;
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_identity_nav_tiles_20260512_220012:770:        <button>Open Calendar →</button>
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_role_tier_fix_20260512_220850:37:  ["Calendar", "▦", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_role_tier_fix_20260512_220850:55:  ["Calendar", "📅", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_role_tier_fix_20260512_220850:357:  if (["/hub/calendar", "/hub/conference", "/hub/journal"].includes(path)) return true;
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_role_tier_fix_20260512_220850:770:        <button>Open Calendar →</button>
+src/pages/hub/HubWorkspaceDashboard 2.jsx:35:  ["Calendar", "▦", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard 2.jsx:53:  ["Calendar", "📅", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard 2.jsx:485:        <button>Open Calendar →</button>
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_hide_role_switcher_20260513_081315:38:  ["Calendar", "▦", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_hide_role_switcher_20260513_081315:56:  ["Calendar", "📅", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_hide_role_switcher_20260513_081315:391:  if (["/hub/calendar", "/hub/conference", "/hub/journal"].includes(path)) return true;
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_hide_role_switcher_20260513_081315:861:        <button>Open Calendar →</button>
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:39:  ["Calendar", "▦", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:57:  ["Calendar", "📅", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:685:  if (["/hub/calendar", "/hub/conference", "/hub/journal"].includes(path)) return true;
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:1160:        <button>Open Calendar →</button>
+src/pages/hub/HubGrowthNetwork.jsx.bak_shared_nav_20260510_100708:157:    nextAction: "Schedule employer placement meeting",
+src/pages/hub/HubGrowthNetwork.jsx.bak_shared_nav_20260510_100708:173:    stage: "Meeting Scheduled",
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_access_redirect_notice_20260513_080116:37:  ["Calendar", "▦", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_access_redirect_notice_20260513_080116:55:  ["Calendar", "📅", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_access_redirect_notice_20260513_080116:390:  if (["/hub/calendar", "/hub/conference", "/hub/journal"].includes(path)) return true;
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_access_redirect_notice_20260513_080116:803:        <button>Open Calendar →</button>
+src/pages/hub/shared/hubTourSteps.js:1002:          "Operations Workspace gives direct access to major Hub tools like Partner Registry, Referral Exchange, Intake Flow, Action Queue, Reports, Files, Conference, Calendar, and Journal.",
+src/pages/hub/shared/hubTourSteps.js:1051:      title: "Step 12 — Connect Daily Work to Meetings",
+src/pages/hub/shared/hubTourSteps.js:1054:          "Today's Agenda shows meetings, huddles, and review sessions connected to the Hub workflow.",
+src/pages/hub/shared/hubTourSteps.js:1285:          "Review the name, fit score, explanation, and risk level before accepting, scheduling a meeting, creating a proposal, or rejecting it.",
+src/pages/hub/shared/hubTourSteps.js:1320:          "The decision buttons let the user accept the recommendation, schedule a meeting, mark proposal created, or reject it.",
+src/pages/hub/shared/hubTourSteps.js:1324:          "Use Accept when the recommendation is strong, Meeting Scheduled when follow-up begins, Proposal Created when it moves forward, and Reject when the recommendation is not right.",
+src/pages/hub/shared/hubTourSteps.js:1745:          "The stage filter lets the user focus on Identified, Introduced, Meeting Scheduled, Proposal Building, Negotiation, Won, Lost, or Follow-Up Later.",
+src/pages/hub/shared/hubTourSteps.js:1771:          "The action buttons let the user record Intro Made, Meeting Scheduled, Proposal Created, or Mark Won.",
+src/pages/hub/shared/hubTourSteps.js:1775:          "Click Intro Made after a warm introduction, Meeting Scheduled after a meeting is booked, Proposal Created after a packet is prepared, and Mark Won only after the deal is truly accepted.",
+src/pages/hub/shared/hubTourSteps.js:1801:          "Start with high-priority due-soon items. Confirm the meeting, proposal packet, partner contact, pricing review, or buyer follow-up before working lower-priority items.",
+src/pages/hub/shared/hubTourSteps.js:1823:          "Sales Events records actions like sales review started, intro made, meeting scheduled, proposal created, item advanced, marked won, or archived.",
+src/pages/hub/shared/hubBusinessNetworkData.js:237:    nextAction: "Schedule employer placement meeting",
+src/pages/hub/shared/hubBusinessNetworkData.js:256:    stage: "Meeting Scheduled",
+src/pages/hub/shared/hubBusinessNetworkData.js:332:  "Meeting Scheduled",
+src/pages/hub/HubSalesPipelinePage.jsx.bak_shared_nav_20260510_100708:15:    nextAction: "Schedule employer placement meeting",
+src/pages/hub/HubSalesPipelinePage.jsx.bak_shared_nav_20260510_100708:34:    stage: "Meeting Scheduled",
+src/pages/hub/HubSalesPipelinePage.jsx.bak_shared_nav_20260510_100708:101:  "Meeting Scheduled",
+src/pages/hub/HubSalesPipelinePage.jsx.bak_shared_nav_20260510_100708:235:              Track introductions, meetings, follow-ups, proposals, negotiations,
+src/pages/hub/HubSalesPipelinePage.jsx.bak_shared_nav_20260510_100708:367:                <button onClick={() => recordEvent("meeting_scheduled", topMove?.id)}>Meeting Scheduled</button>
+src/pages/hub/HubSalesPipelinePage.jsx.bak_shared_nav_20260510_100708:508:                  <p>No sales events yet. Start review, log an intro, schedule a meeting, or create a proposal.</p>
+src/pages/hub/HubSalesPipelinePage.jsx.bak_shared_nav_20260510_100708:518:            <span>Sales Pipeline · Introductions · Meetings · Proposals · Deals Influenced</span>
+src/pages/hub/HubIntelligencePage.jsx.bak_shared_nav_20260510_100708:513:                <button onClick={() => recordFeedback("meeting_scheduled", topBundle.id)}>
+src/pages/hub/HubIntelligencePage.jsx.bak_shared_nav_20260510_100708:514:                  Mark Meeting Scheduled
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-polish-existing-guided-workflow:39:  ["Calendar", "▦", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-polish-existing-guided-workflow:57:  ["Calendar", "📅", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-polish-existing-guided-workflow:496:  if (["/hub/calendar", "/hub/conference", "/hub/journal"].includes(path)) return true;
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-polish-existing-guided-workflow:966:        <button>Open Calendar →</button>
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_dev_role_switcher_20260513_071018:37:  ["Calendar", "▦", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_dev_role_switcher_20260513_071018:55:  ["Calendar", "📅", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_dev_role_switcher_20260513_071018:357:  if (["/hub/calendar", "/hub/conference", "/hub/journal"].includes(path)) return true;
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_dev_role_switcher_20260513_071018:770:        <button>Open Calendar →</button>
+src/lib/companion/api.js:5:// Calendar Intelligence, Journey Milestones, Career Pathway, and
+services/shf-agent-fabric/fabric/arena/rollup.py:46:    y, w, _ = dt.isocalendar()
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-fix-guided-open-page-20260525_144156:39:  ["Calendar", "▦", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-fix-guided-open-page-20260525_144156:57:  ["Calendar", "📅", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-fix-guided-open-page-20260525_144156:663:  if (["/hub/calendar", "/hub/conference", "/hub/journal"].includes(path)) return true;
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-fix-guided-open-page-20260525_144156:1133:        <button>Open Calendar →</button>
+apps/shs-api/src/domain/external-integrations/integration-readiness.ts:17:  { integration: "Google/Microsoft Calendar", owner: "External Accounts", adapter: true, realProviderNeeded: true, sandbox: false, production: false },
+apps/shs-api/src/domain/external-integrations/integration-readiness.ts:18:  { integration: "Zoom/Live Learning", owner: "Live Learning", adapter: true, realProviderNeeded: true, sandbox: true, production: false },
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_identity_guided_launcher_20260512_211709:36:  ["Calendar", "▦", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_identity_guided_launcher_20260512_211709:54:  ["Calendar", "📅", "/hub/calendar"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_identity_guided_launcher_20260512_211709:703:        <button>Open Calendar →</button>
+src/pages/hub/HubIntelligencePage.jsx:366:                <button onClick={() => recordFeedback("meeting_scheduled", topBundle.id)}>
+src/pages/hub/HubIntelligencePage.jsx:367:                  Mark Meeting Scheduled
+src/pages/AdminAlerts.jsx:3:  listZoomRequests, listZoomApprovals,
+src/pages/AdminAlerts.jsx:4:  approveZoomAccess, revokeZoomAccess
+src/pages/AdminAlerts.jsx:5:} from "@/utils/zoomAccess.js";
+src/pages/AdminAlerts.jsx:44:  // ---- Zoom approvals state ----
+src/pages/AdminAlerts.jsx:45:  const [requests, setRequests] = React.useState(() => listZoomRequests());
+src/pages/AdminAlerts.jsx:46:  const [approvals, setApprovals] = React.useState(() => listZoomApprovals());
+src/pages/AdminAlerts.jsx:75:  // refresh Zoom lists periodically
+src/pages/AdminAlerts.jsx:78:      setRequests(listZoomRequests());
+src/pages/AdminAlerts.jsx:79:      setApprovals(listZoomApprovals());
+src/pages/AdminAlerts.jsx:123:  // ---- Zoom approvals actions ----
+src/pages/AdminAlerts.jsx:125:    approveZoomAccess(userId, { approver: "admin", hours });
+src/pages/AdminAlerts.jsx:126:    setRequests(listZoomRequests());
+src/pages/AdminAlerts.jsx:127:    setApprovals(listZoomApprovals());
+src/pages/AdminAlerts.jsx:130:    revokeZoomAccess(userId, "policy");
+src/pages/AdminAlerts.jsx:131:    setRequests(listZoomRequests());
+src/pages/AdminAlerts.jsx:132:    setApprovals(listZoomApprovals());
+src/pages/AdminAlerts.jsx:331:      {/* Zoom approvals */}
+src/pages/AdminAlerts.jsx:334:          <h3 style={sx.cardTitle}>Zoom Access Requests</h3>
+src/lib/externalAccounts/api.js:4:// Security + Native External Calendar Integration API. Mirrors
+src/lib/externalAccounts/api.js:5:// src/lib/calendar/api.js's own conventions exactly (dev-token bearer
+src/lib/externalAccounts/api.js:8:// externalCalendarConnectUrl() builds a real browser-navigation URL, not
+src/lib/externalAccounts/api.js:18:// docs/SHF_EXTERNAL_CALENDAR_INTEGRATION.md), so there is no live
+src/lib/externalAccounts/api.js:56:export function externalCalendarConnectUrl(provider, returnPath) {
+src/lib/calendarFeed/api.js:1:// src/lib/calendarFeed/api.js
+src/lib/calendarFeed/api.js:4:// feed (see apps/shs-api/src/domain/calendar-feed/). This module never
+src/lib/calendarFeed/api.js:13:const CALENDAR_FEED_API_BASE = SHS_API_BASE;
+src/lib/calendarFeed/api.js:25:    const err = new Error(data?.error?.message || `Calendar feed request failed: ${res.status}`);
+src/lib/calendarFeed/api.js:34:  const res = await fetch(`${CALENDAR_FEED_API_BASE}/calendar/feed-token/me`, { headers: authHeaders(role) });
+src/lib/calendarFeed/api.js:39:  const res = await fetch(`${CALENDAR_FEED_API_BASE}/calendar/feed-token/rotate`, { method: "POST", headers: authHeaders(role) });
+src/lib/calendarFeed/api.js:44:  const res = await fetch(`${CALENDAR_FEED_API_BASE}/calendar/feed-token/me`, { method: "DELETE", headers: authHeaders(role) });
+src/lib/calendarFeed/api.js:49:  return `${CALENDAR_FEED_API_BASE}/calendar/feed.ics?token=${encodeURIComponent(token)}`;
+src/hooks/useDashboardData.js:39:  calendarEvents: [
+src/hooks/useDashboardData.js:40:    { date: "2025-09-12", type: "zoom",       title: "Live Class — Module 1" },
+src/hooks/useDashboardData.js:42:    { date: "2025-09-18", type: "zoom",       title: "Workshop: Resume Polishing" },
+src/components/store/StoreSidebar.jsx:18:// (Dashboard/Calendar/Portfolio/Lessons/Assignments/Live Sessions/
+src/components/store/StoreSidebar.jsx:46:const CalendarIcon = () => <Icon><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M8 3v4M16 3v4M3 10h18" /></Icon>;
+src/components/store/StoreSidebar.jsx:60:  { key: "calendar", label: "Calendar", Icon: CalendarIcon, href: `${CURRICULUM_HOME}/asl/calendar` },
+src/components/store/StoreSidebar.jsx:64:  { key: "live-sessions", label: "Live Sessions", Icon: CalendarIcon, href: `${CURRICULUM_HOME}/live-sessions` },
+src/lib/projects/api.js:4:// /projects/schedule route. Calendar consumers must use this client
+src/hooks/useMockDashboardData.js:20:          { date: "2025-09-12", type: "zoom",       title: "Live Class — Module 1" },
+src/hooks/useMockDashboardData.js:22:          { date: "2025-09-18", type: "zoom",       title: "Workshop: Resume Polishing" },
+src/pages/Assignments.jsx:22:import { ClipboardIcon, HeadsetIcon, CalendarIcon, ChevronRightIcon } from "@/components/curriculum/icons.jsx";
+src/pages/Assignments.jsx:112:                      <span><CalendarIcon size={15} /> Due {new Date(a.dueAt).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" })}</span>
+src/pages/Assignments.jsx:159:            <CalendarIcon size={20} className="ld-sectionIcon" />
+src/hooks/metaverse/useOceanMotionEditor.js:59:  const [view, setView] = useState({ zoom: 1, panX: 0, panY: 0 });
+src/lib/calendar/api.js:1:// src/lib/calendar/api.js
+src/lib/calendar/api.js:3:// SHF Ecosystem Phase 9 — client for the canonical backend Calendar
+src/lib/calendar/api.js:7:// entitlement, deduping, and ordering) that useLearningCalendarEvents.js
+src/lib/calendar/api.js:14:const CALENDAR_API_BASE = SHS_API_BASE;
+src/lib/calendar/api.js:26:    const err = new Error(data?.error?.message || `Calendar request failed: ${res.status}`);
+src/lib/calendar/api.js:34:export async function listCalendarEvents(role) {
+src/lib/calendar/api.js:35:  const res = await fetch(`${CALENDAR_API_BASE}/calendar/events/me`, { headers: authHeaders(role) });
+src/lib/calendar/api.js:39:// SHF Ecosystem Phase 10 — Calendar Intelligence client. Derived advice
+src/lib/calendar/api.js:41:// see apps/shs-api/src/domain/calendar/service/calendar-intelligence-service.ts's
+src/lib/calendar/api.js:43:export async function getCalendarIntelligence(role) {
+src/lib/calendar/api.js:44:  const res = await fetch(`${CALENDAR_API_BASE}/calendar/intelligence/me`, { headers: authHeaders(role) });
+src/lib/calendar/api.js:48:export default { listCalendarEvents, getCalendarIntelligence };
+src/lib/assignments/api.js:3:// SHF Calendar Wave 2A — real backend client for apps/shs-api's
+src/lib/assignments/api.js:7:// that talks to the Assignment backend — the Calendar adapter must go
+src/_archive/pages.sales.20251107-000126/DemoQuiz.jsx:14:    a: ["Long email", "Slack/Teams DM", "Calendar invite", "Printed memo"],
+src/_archive/pages.sales.20251107-000126/DemoQuiz.jsx:28:    q: "After a meeting, send…",
+src/pages/ResumeBuilder.jsx:98:  const [zoom, setZoom] = useState(100);
+src/pages/ResumeBuilder.jsx:343:              zoom={zoom}
+src/pages/ResumeBuilder.jsx:344:              setZoom={(z) => setZoom(Math.max(40, Math.min(150, safeNumber(z, 100))))}
+src/pages/ResumeBuilder.jsx:359:                zoom={zoom}
+src/pages/ResumeBuilder.jsx:360:                setZoom={(z) => setZoom(Math.max(40, Math.min(150, safeNumber(z, 100))))}
+src/pages/Settings.jsx:3:import ExternalCalendarConnections from "@/pages/career/settings/ExternalCalendarConnections.jsx";
+src/pages/Settings.jsx:12:      <ExternalCalendarConnections />
+src/components/treasury/LessonBody.jsx:557:              {/* Transcript */}
+src/components/treasury/LessonBody.jsx:559:                <summary className="sh-collapseSummary">📜 Transcript</summary>
+src/pages/Arcade.jsx:31:    { to: "/calendar",      label: "Calendar" },
+src/pages/Arcade.jsx:76:    { to: "/admin/zoom",            label: "Admin Zoom" },
+src/pages/resume-builder/ResumePreview.jsx:228:   Main preview panel (template swatches + zoom + document + controls)
+src/pages/resume-builder/ResumePreview.jsx:230:export default function ResumePreview({ data, onChangeSettings, zoom, setZoom, highlightTerms, showDesignControls = true }) {
+src/pages/resume-builder/ResumePreview.jsx:243:    setZoom(pct);
+src/pages/resume-builder/ResumePreview.jsx:255:        <div className="rb2-zoomBar">
+src/pages/resume-builder/ResumePreview.jsx:256:          <button type="button" className="rb2-iconBtn" onClick={() => setZoom(safeNumber(zoom, 100) - 10)} aria-label="Zoom out">−</button>
+src/pages/resume-builder/ResumePreview.jsx:257:          <span className="rb2-zoomPct" aria-live="polite">{zoom}%</span>
+src/pages/resume-builder/ResumePreview.jsx:258:          <button type="button" className="rb2-iconBtn" onClick={() => setZoom(safeNumber(zoom, 100) + 10)} aria-label="Zoom in">+</button>
+src/pages/resume-builder/ResumePreview.jsx:292:        <div className="resume" style={{ transform: `scale(${safeNumber(zoom, 100) / 100})`, transformOrigin: "top left" }}>
+src/layouts/CurriculumLayout.jsx:46:  { test: /\/curriculum\/asl\/calendar\/?$/, title: "Calendar" },
+src/pages/resume-builder/resumeBuilder.css:321:.rb2-zoomBar { display: flex; align-items: center; gap: 2px; }
+src/pages/resume-builder/resumeBuilder.css:322:.rb2-zoomPct { font-size: 12px; font-weight: 700; width: 42px; text-align: center; font-variant-numeric: tabular-nums; }
+src/pages/resume-builder/resumeBuilder.css:445:   preview keeps its true 210mm box (needed for accurate print/zoom); it's
+src/components/RecentActivityCard.jsx:147:    case "zoom":
+src/components/RecentActivityCard.jsx:148:    case "meeting":
+src/_archive/components.sales.20251107-000126/LessonBody.jsx:556:              {/* Transcript */}
+src/_archive/components.sales.20251107-000126/LessonBody.jsx:558:                <summary className="sh-collapseSummary">📜 Transcript</summary>
+src/components/CurriculumSidebar.jsx:7:  CalendarIcon,
+src/components/CurriculumSidebar.jsx:27:  { key: "calendar", label: "Calendar", Icon: CalendarIcon, path: "asl/calendar" },
+src/components/CurriculumSidebar.jsx:34:  { key: "live-sessions", label: "Live Sessions", Icon: CalendarIcon, path: "live-sessions" },
+src/pages/curriculum/LiveSessionManage.jsx:6:// a redesign of src/pages/AdminZoom.jsx (Phase 1's real access-approval
+src/pages/curriculum/LiveSessionManage.jsx:111:              <option value="zoom">zoom (requires configured credentials)</option>
+src/pages/oas/oas-control-domains.css:191:   under the body copy/CTA — confirmed by a zoomed screenshot crop
+src/pages/oas/oas-control-domains.css:1051:     with object-fit:cover across that whole new height would zoom in
+src/pages/curriculum/LiveSessions.jsx:4:// real, existing request/approval flow (src/utils/zoomAccess.js) and
+src/pages/curriculum/LiveSessions.jsx:5:// ZoomCard.jsx to a reachable route, with no real meeting provider
+src/pages/curriculum/LiveSessions.jsx:14:// recording details beyond what StudentFacingLiveSession actually
+src/pages/curriculum/LiveSessions.jsx:21:import ZoomCard from "@/components/ZoomCard.jsx";
+src/pages/curriculum/LiveSessions.jsx:22:import { requestZoomAccess, hasZoomAccess } from "@/utils/zoomAccess.js";
+src/pages/curriculum/LiveSessions.jsx:26:import { CalendarIcon, HeadsetIcon, ClipboardIcon, BookIcon, VideoIcon } from "@/components/curriculum/icons.jsx";
+src/pages/curriculum/LiveSessions.jsx:45:  const [approved, setApproved] = React.useState(() => hasZoomAccess(userId));
+src/pages/curriculum/LiveSessions.jsx:53:      if (!e || !e.key || e.key.includes("zoom:")) setApproved(hasZoomAccess(userId));
+src/pages/curriculum/LiveSessions.jsx:70:    requestZoomAccess({ userId, name: userId });
+src/pages/curriculum/LiveSessions.jsx:98:                  <CalendarIcon size={22} className="ld-sectionIcon" />
+src/pages/curriculum/LiveSessions.jsx:115:                    <p className="ld-sessionTime"><CalendarIcon size={16} /> {fmtDateTime(next.startsAt)} - {fmtDateTime(next.endsAt)}</p>
+src/pages/curriculum/LiveSessions.jsx:138:              <div className="ld-sectionTitleRow"><CalendarIcon size={20} className="ld-sectionIcon" /><h2 className="ld-sectionTitle">This Week</h2></div>
+src/pages/curriculum/LiveSessions.jsx:163:          <div style={{ marginTop: 14 }}><ZoomCard /></div>
+src/pages/curriculum/LiveSessions.jsx:169:          <div className="ld-sectionTitleRow"><CalendarIcon size={20} className="ld-sectionIcon" /><h2 className="ld-sectionTitle">This Week's Schedule</h2></div>
+src/pages/curriculum/LiveSessions.jsx:174:                  <CalendarIcon size={18} className="ld-scheduleIcon" />
+src/pages/curriculum/LiveSessions.jsx:197:          <p className="ld-mutedLine">Check lesson resources or watch the recording when it is available.</p>
+src/shared/growth/mockSignals.js:3:    title: "Partner outreach → 2 qualified meetings booked (14 days)",
+src/shared/growth/mockSignals.js:4:    thesis: "If we run a structured outreach sprint (20 targets, 2 follow-ups), we should book at least 2 qualified meetings.",
+src/shared/growth/mockSignals.js:7:    evidence: ["Pipeline targets list", "Outreach cadence plan", "Calendar booking proof"],
+src/pages/curriculum/Learning.jsx:18:import { BookIcon, ClipboardIcon, CalendarIcon, ChevronRightIcon, ArrowRightIcon, LayersIcon } from "@/components/curriculum/icons.jsx";
+src/pages/curriculum/Learning.jsx:112:                  {upNext.nextLive && <span><CalendarIcon size={15} /> Live support {fmtDateTime(upNext.nextLive.startsAt)}</span>}
+src/pages/curriculum/Learning.jsx:160:                      {liveForCourse[0] && <span><CalendarIcon size={14} /> Live {fmtDate(liveForCourse[0].startsAt)}</span>}
+src/pages/curriculum/Learning.jsx:207:                  <CalendarIcon size={18} className="ld-scheduleIcon" />
+src/pages/curriculum/Learning.jsx:216:          <Link className="ld-viewLink" style={{ marginTop: 14 }} to="/curriculum/asl/calendar">
+src/pages/curriculum/Learning.jsx:217:            View Full Calendar <ChevronRightIcon size={14} />
+src/pages/oas/oas-risk-classification.css:185:     into the white section below instead of meeting it in one hard
+src/pages/curriculum/CurriculumCalendar.jsx:1:// src/pages/curriculum/CurriculumCalendar.jsx
+src/pages/curriculum/CurriculumCalendar.jsx:3:// SHF Learning Calendar — rebuild. Reuses the existing approved SHF shell
+src/pages/curriculum/CurriculumCalendar.jsx:6:// real shared calendar engine already shipping in
+src/pages/curriculum/CurriculumCalendar.jsx:7:// src/pages/career/calendar/* (event contract, date utils, Month/Week/
+src/pages/curriculum/CurriculumCalendar.jsx:10:// event source (see useLearningCalendarEvents.js). See that file and
+src/pages/curriculum/CurriculumCalendar.jsx:11:// career/calendar/adapters.js for exactly which sources are real vs.
+src/pages/curriculum/CurriculumCalendar.jsx:12:// clearly-labeled demo data, and src/pages/curriculum/calendar/*.jsx for
+src/pages/curriculum/CurriculumCalendar.jsx:17:// read-only calendar view. It never marks a lesson/assignment/assessment
+src/pages/curriculum/CurriculumCalendar.jsx:23:import { EVENT_TYPE_META } from "@/pages/career/calendar/eventContract.js";
+src/pages/curriculum/CurriculumCalendar.jsx:24:import { addDays, addMonths, buildEventsByDay, eventDateKey, formatMonthYear, formatWeekRange } from "@/pages/career/calendar/dateUtils.js";
+src/pages/curriculum/CurriculumCalendar.jsx:25:import CalendarMonthView from "@/pages/career/calendar/CalendarMonthView.jsx";
+src/pages/curriculum/CurriculumCalendar.jsx:26:import CalendarWeekView from "@/pages/career/calendar/CalendarWeekView.jsx";
+src/pages/curriculum/CurriculumCalendar.jsx:27:import CalendarAgendaView from "@/pages/career/calendar/CalendarAgendaView.jsx";
+src/pages/curriculum/CurriculumCalendar.jsx:28:import CalendarFilters from "@/pages/career/calendar/CalendarFilters.jsx";
+src/pages/curriculum/CurriculumCalendar.jsx:29:import CalendarEventDetail from "@/pages/career/calendar/CalendarEventDetail.jsx";
+src/pages/curriculum/CurriculumCalendar.jsx:30:import { useLearningCalendarEvents } from "./calendar/useLearningCalendarEvents.js";
+src/pages/curriculum/CurriculumCalendar.jsx:31:import { useCalendarIntelligence } from "./calendar/useCalendarIntelligence.js";
+src/pages/curriculum/CurriculumCalendar.jsx:32:import SummaryRow from "./calendar/SummaryRow.jsx";
+src/pages/curriculum/CurriculumCalendar.jsx:33:import TodayPanel from "./calendar/TodayPanel.jsx";
+src/pages/curriculum/CurriculumCalendar.jsx:34:import UpcomingDeadlinesCard from "./calendar/UpcomingDeadlinesCard.jsx";
+src/pages/curriculum/CurriculumCalendar.jsx:35:import OpportunityRadarCard from "./calendar/OpportunityRadarCard.jsx";
+src/pages/curriculum/CurriculumCalendar.jsx:36:import PlanMyWeekCard from "./calendar/PlanMyWeekCard.jsx";
+src/pages/curriculum/CurriculumCalendar.jsx:37:import CalendarFeedSubscribe from "./calendar/CalendarFeedSubscribe.jsx";
+src/pages/curriculum/CurriculumCalendar.jsx:38:import JourneyMilestones from "./calendar/JourneyMilestones.jsx";
+src/pages/curriculum/CurriculumCalendar.jsx:39:import { unavailableSourcesMessage } from "@/pages/career/calendar/projectionAdapter.js";
+src/pages/curriculum/CurriculumCalendar.jsx:40:import "@/styles/career-calendar.css";
+src/pages/curriculum/CurriculumCalendar.jsx:41:import "@/styles/curriculum-calendar.css";
+src/pages/curriculum/CurriculumCalendar.jsx:42:import "@/styles/curriculum-learning-calendar.css";
+src/pages/curriculum/CurriculumCalendar.jsx:51:// it's built from) is now shared with every Calendar surface via
+src/pages/curriculum/CurriculumCalendar.jsx:60:// guidance. Their events still render on the calendar under "All".
+src/pages/curriculum/CurriculumCalendar.jsx:61:const LEARNING_CALENDAR_FILTERS = [
+src/pages/curriculum/CurriculumCalendar.jsx:84:export default function CurriculumCalendar() {
+src/pages/curriculum/CurriculumCalendar.jsx:86:  const { loading, error, events, partial, unavailableSources, refresh } = useLearningCalendarEvents(role);
+src/pages/curriculum/CurriculumCalendar.jsx:88:  // useCalendarIntelligence.js. A null intelligence (still loading, or the
+src/pages/curriculum/CurriculumCalendar.jsx:91:  // or blanks the Calendar page itself.
+src/pages/curriculum/CurriculumCalendar.jsx:92:  const { intelligence } = useCalendarIntelligence(role);
+src/pages/curriculum/CurriculumCalendar.jsx:115:    <main className="app-main cal-page curriculum-calendar-page lc-page" aria-labelledby="curriculum-cal-title">
+src/pages/curriculum/CurriculumCalendar.jsx:120:          (intro, summary row, calendar layout, milestones), so left
+src/pages/curriculum/CurriculumCalendar.jsx:127:          curriculum-learning-calendar.css), not left to chance. */}
+src/pages/curriculum/CurriculumCalendar.jsx:132:          <h1 id="curriculum-cal-title" className="cal-pageTitle">Learning Calendar</h1>
+src/pages/curriculum/CurriculumCalendar.jsx:139:      {/* Summary cards render even when the main calendar fails to load,
+src/pages/curriculum/CurriculumCalendar.jsx:141:          useLearningCalendarEvents.js's `partial` state) — Phase I: a
+src/pages/curriculum/CurriculumCalendar.jsx:147:          standalone full-width cards above the calendar, pushing the
+src/pages/curriculum/CurriculumCalendar.jsx:149:          header of the single Calendar workspace card (.cal-mainRegion)
+src/pages/curriculum/CurriculumCalendar.jsx:150:          below, matching the approved mock's "one integrated calendar"
+src/pages/curriculum/CurriculumCalendar.jsx:153:        <div className="cal-mainRegion lc-calendarCard">
+src/pages/curriculum/CurriculumCalendar.jsx:162:              <div className="cal-viewSwitch" role="group" aria-label="Calendar view">
+src/pages/curriculum/CurriculumCalendar.jsx:177:            <CalendarFilters groups={LEARNING_CALENDAR_FILTERS} activeFilter={filter} onFilterChange={setFilter} hideSearch />
+src/pages/curriculum/CurriculumCalendar.jsx:189:            <div className="cal-loadingState" role="status">Loading your learning calendar…</div>
+src/pages/curriculum/CurriculumCalendar.jsx:198:                <p className="lc-compactErrorTitle">Your learning calendar couldn't be fully loaded.</p>
+src/pages/curriculum/CurriculumCalendar.jsx:211:            <CalendarMonthView anchorDate={anchorDate} selectedDate={selectedDate} eventsByDay={eventsByDay} today={today} onSelectDate={setSelectedDate} onOpenEvent={setOpenEvent} />

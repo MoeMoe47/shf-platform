@@ -104,6 +104,10 @@ export const SHS_SECURITY_PERMISSIONS = {
   FUNDING_GRANT_VIEW: "funding.grant.view",
   FUNDING_GRANT_MANAGE: "funding.grant.manage",
 
+  SALES_READ: "sales.read",
+  SALES_WRITE: "sales.write",
+  SALES_ADMIN: "sales.admin",
+
   WORKFORCE_OUTCOMES_VIEW: "workforce.outcomes.view",
   WORKFORCE_OUTCOMES_SUBMIT: "workforce.outcomes.submit",
   WORKFORCE_OUTCOMES_VERIFY: "workforce.outcomes.verify",

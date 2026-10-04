@@ -1,0 +1,503 @@
+============================================================
+SOURCE: 10_RETENTION_EXPANSION.txt
+============================================================
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:161:  // Credential renewal *guidance* already flows through
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:163:  // own CREDENTIAL_RENEWAL_SOON recommendation, sourced from the same
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:164:  // credential renewal dates projected onto the Calendar) — this summary
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:172:      upcomingRenewalCount: creds.filter((c: any) => {
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:173:        if (!c.renewalDueAt) return false;
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:174:        const days = daysUntil(c.renewalDueAt, now.getTime());
+src/router/AdminRoutes.jsx.bak_20260423_220933:18:import ReferralLifecycleView from "@/pages/hub/ReferralLifecycleView.jsx";
+src/router/AdminRoutes.jsx.bak_20260423_220933:42:      <Route path="/hub/lifecycle" element={<ReferralLifecycleView />} />
+src/router/AdminRoutes.jsx.bak_force_identity_redirect_20260513_080502:23:import ReferralLifecycleView from "@/pages/hub/ReferralLifecycleView.jsx";
+src/router/AdminRoutes.jsx.bak_force_identity_redirect_20260513_080502:101:        <Route path="/hub/lifecycle" element={protect("/hub/lifecycle", <ReferralLifecycleView />)} />
+src/router/AdminRoutes.jsx.bak_force_identity_redirect_20260513_080502:102:        <Route path="/hub/referrals" element={protect("/hub/referrals", <ReferralLifecycleView />)} />
+src/router/AdminRoutes.jsx.bak_final_verify_20260513_104716:23:import ReferralLifecycleView from "@/pages/hub/ReferralLifecycleView.jsx";
+src/router/AdminRoutes.jsx.bak_final_verify_20260513_104716:106:        <Route path="/hub/lifecycle" element={protect("/hub/lifecycle", <ReferralLifecycleView />)} />
+src/router/AdminRoutes.jsx.bak_final_verify_20260513_104716:107:        <Route path="/hub/referrals" element={protect("/hub/referrals", <ReferralLifecycleView />)} />
+src/router/AdminRoutes.jsx.bak_final_routes_clean_20260513_105727:23:import ReferralLifecycleView from "@/pages/hub/ReferralLifecycleView.jsx";
+src/router/AdminRoutes.jsx.bak_final_routes_clean_20260513_105727:106:        <Route path="/hub/lifecycle" element={protect("/hub/lifecycle", <ReferralLifecycleView />)} />
+src/router/AdminRoutes.jsx.bak_final_routes_clean_20260513_105727:107:        <Route path="/hub/referrals" element={protect("/hub/referrals", <ReferralLifecycleView />)} />
+src/router/AdminRoutes.jsx.bak_hub_growth_v1c_20260509_202239:20:import ReferralLifecycleView from "@/pages/hub/ReferralLifecycleView.jsx";
+src/router/AdminRoutes.jsx.bak_hub_growth_v1c_20260509_202239:48:        <Route path="/hub/lifecycle" element={<ReferralLifecycleView />} />
+src/router/AdminRoutes.jsx.bak_hub_growth_v1c_20260509_202239:49:        <Route path="/hub/referrals" element={<ReferralLifecycleView />} />
+src/router/AdminRoutes.jsx.bak_cleanup_20260513_103643:23:import ReferralLifecycleView from "@/pages/hub/ReferralLifecycleView.jsx";
+src/router/AdminRoutes.jsx.bak_cleanup_20260513_103643:106:        <Route path="/hub/lifecycle" element={protect("/hub/lifecycle", <ReferralLifecycleView />)} />
+src/router/AdminRoutes.jsx.bak_cleanup_20260513_103643:107:        <Route path="/hub/referrals" element={protect("/hub/referrals", <ReferralLifecycleView />)} />
+src/router/AdminRoutes.jsx.bak_hub_growth_network_20260509_200058:20:import ReferralLifecycleView from "@/pages/hub/ReferralLifecycleView.jsx";
+src/router/AdminRoutes.jsx.bak_hub_growth_network_20260509_200058:47:        <Route path="/hub/lifecycle" element={<ReferralLifecycleView />} />
+src/router/AdminRoutes.jsx.bak_hub_growth_network_20260509_200058:48:        <Route path="/hub/referrals" element={<ReferralLifecycleView />} />
+src/router/AdminRoutes.jsx.bak_route_protection_20260513_072505:20:import ReferralLifecycleView from "@/pages/hub/ReferralLifecycleView.jsx";
+src/router/AdminRoutes.jsx.bak_route_protection_20260513_072505:52:        <Route path="/hub/lifecycle" element={<ReferralLifecycleView />} />
+src/router/AdminRoutes.jsx.bak_route_protection_20260513_072505:53:        <Route path="/hub/referrals" element={<ReferralLifecycleView />} />
+src/router/AdminRoutes.jsx.bak_access_redirect_notice_20260513_080116:23:import ReferralLifecycleView from "@/pages/hub/ReferralLifecycleView.jsx";
+src/router/AdminRoutes.jsx.bak_access_redirect_notice_20260513_080116:87:        <Route path="/hub/lifecycle" element={protect("/hub/lifecycle", <ReferralLifecycleView />)} />
+src/router/AdminRoutes.jsx.bak_access_redirect_notice_20260513_080116:88:        <Route path="/hub/referrals" element={protect("/hub/referrals", <ReferralLifecycleView />)} />
+services/shf-agent-fabric/fabric/registry_parity.py.bak_add_business:17:    "retention",
+services/shf-agent-fabric/fabric/registry_parity.py.bak_add_business:21:REQUIRED_RETENTION_KEYS = ("artifactsDays", "auditLogsDays", "deletionPolicy")
+services/shf-agent-fabric/fabric/registry_parity.py.bak_add_business:68:    retention = legal.get("retention")
+services/shf-agent-fabric/fabric/registry_parity.py.bak_add_business:69:    if not isinstance(retention, dict):
+services/shf-agent-fabric/fabric/registry_parity.py.bak_add_business:70:        raise ValueError("registry parity: legal.retention must be an object")
+services/shf-agent-fabric/fabric/registry_parity.py.bak_add_business:71:    missing_r = [k for k in REQUIRED_RETENTION_KEYS if k not in retention]
+services/shf-agent-fabric/fabric/registry_parity.py.bak_add_business:73:        raise ValueError(f"registry parity: legal.retention missing keys: {missing_r}")
+apps/shs-api/src/domain/companion/model/companion-context.ts:27:  upcomingRenewalCount: number;
+apps/shs-api/src/domain/companion/model/companion-context.ts:50:  | "CREDENTIAL_RENEWAL_SOON"
+apps/shs-api/src/domain/companion/model/companion-context.ts:63:// time-sensitive CREDENTIAL_RENEWAL_SOON/PATHWAY_RELEVANT_OPPORTUNITY.
+apps/shs-api/src/domain/companion/model/companion-context.ts:69:  CREDENTIAL_RENEWAL_SOON: 4,
+src/router/AdminRoutes.jsx.bak_20260423_220308:18:import ReferralLifecycleView from "@/pages/hub/ReferralLifecycleView.jsx";
+src/router/AdminRoutes.jsx.bak_20260423_220308:39:      <Route path="/hub/lifecycle" element={<ReferralLifecycleView />} />
+src/router/AdminRoutes.jsx.bak_safe_redirect_20260513_084112:23:import ReferralLifecycleView from "@/pages/hub/ReferralLifecycleView.jsx";
+src/router/AdminRoutes.jsx.bak_safe_redirect_20260513_084112:117:        <Route path="/hub/lifecycle" element={protect("/hub/lifecycle", <ReferralLifecycleView />)} />
+src/router/AdminRoutes.jsx.bak_safe_redirect_20260513_084112:118:        <Route path="/hub/referrals" element={protect("/hub/referrals", <ReferralLifecycleView />)} />
+apps/shs-api/src/domain/credentials/repo/credential-definition-repo.ts:6:  career_id, requires_accepted_capstone, validity_period_months, renewal_window_days,
+apps/shs-api/src/domain/credentials/repo/credential-definition-repo.ts:24:    renewalWindowDays: row.renewal_window_days === null ? null : Number(row.renewal_window_days),
+apps/shs-api/src/domain/credentials/repo/credential-definition-repo.ts:36:    validityPeriodMonths: number | null; renewalWindowDays: number | null; createdByUserId: string;
+apps/shs-api/src/domain/credentials/repo/credential-definition-repo.ts:42:        career_id, requires_accepted_capstone, validity_period_months, renewal_window_days,
+apps/shs-api/src/domain/credentials/repo/credential-definition-repo.ts:48:        input.careerId, input.requiresAcceptedCapstone, input.validityPeriodMonths, input.renewalWindowDays,
+apps/shf-web/src/pages/civicsure/explorer/fundingDetailMockData.js:459:        covers: "Employer-confirmed hire and retention status",
+apps/shf-web/src/pages/civicsure/explorer/fundingDetailMockData.js:518:        key: "employment-retention",
+apps/shf-web/src/pages/civicsure/explorer/fundingDetailMockData.js:519:        name: "Employment Retention (6 months)",
+services/shf-agent-fabric/fabric/funding/partner_docs.py:86:            "retention_3m_rate": 0.62,
+services/shf-agent-fabric/fabric/funding/partner_docs.py:87:            "retention_6m_rate": 0.48,
+services/shf-agent-fabric/fabric/funding/partner_docs.py:138:                    "retention_3m_rate": {"type": "number", "examples": [0.62]},
+services/shf-agent-fabric/fabric/funding/partner_docs.py:139:                    "retention_6m_rate": {"type": "number", "examples": [0.48]},
+services/shf-agent-fabric/fabric/funding/partner_docs.py:367:    "retention_3m_rate": 0.62,
+services/shf-agent-fabric/fabric/funding/partner_docs.py:368:    "retention_6m_rate": 0.48,
+src/router/AdminRoutes 2.jsx:20:import ReferralLifecycleView from "@/pages/hub/ReferralLifecycleView.jsx";
+src/router/AdminRoutes 2.jsx:46:        <Route path="/hub/lifecycle" element={<ReferralLifecycleView />} />
+src/router/AdminRoutes 2.jsx:47:        <Route path="/hub/referrals" element={<ReferralLifecycleView />} />
+services/shf-agent-fabric/fabric/funding/simulator.py:147:                    # fallback: estimate from placement_count * retention_3m_rate
+services/shf-agent-fabric/fabric/funding/simulator.py:148:                    units = float(metrics.get("job_placement_count", 0.0)) * float(metrics.get("retention_3m_rate", 0.0))
+services/shf-agent-fabric/fabric/funding/simulator.py:152:                    units = float(metrics.get("job_placement_count", 0.0)) * float(metrics.get("retention_6m_rate", 0.0))
+apps/shs-api/src/domain/credentials/service/credential-service.ts:56:  careerId?: string; requiresAcceptedCapstone?: boolean; validityPeriodMonths?: number; renewalWindowDays?: number;
+apps/shs-api/src/domain/credentials/service/credential-service.ts:73:  if (input.renewalWindowDays && !input.validityPeriodMonths) {
+apps/shs-api/src/domain/credentials/service/credential-service.ts:74:    throw new CredentialError("RENEWAL_REQUIRES_VALIDITY_PERIOD", "renewalWindowDays requires a validityPeriodMonths — a lifetime credential cannot have a renewal date.", 400);
+apps/shs-api/src/domain/credentials/service/credential-service.ts:88:    renewalWindowDays: input.renewalWindowDays ?? null,
+apps/shs-api/src/domain/credentials/service/credential-service.ts:214:  // Computed once, server-side, from expiresAt - renewalWindowDays — the
+apps/shs-api/src/domain/credentials/service/credential-service.ts:217:  // renewal window exist; a lifetime credential's renewalDueAt is always
+apps/shs-api/src/domain/credentials/service/credential-service.ts:219:  renewalDueAt: string | null;
+apps/shs-api/src/domain/credentials/service/credential-service.ts:227:  const renewalDueAt = credential.expiresAt && definition.renewalWindowDays
+apps/shs-api/src/domain/credentials/service/credential-service.ts:228:    ? new Date(new Date(credential.expiresAt).getTime() - definition.renewalWindowDays * 86_400_000).toISOString()
+apps/shs-api/src/domain/credentials/service/credential-service.ts:233:    renewalDueAt,
+services/shf-agent-fabric/fabric/funding/partner.py:116:                "    \"retention_3m_rate\": 0.62,",
+services/shf-agent-fabric/fabric/funding/partner.py:117:                "    \"retention_6m_rate\": 0.48,",
+services/shf-agent-fabric/fabric/funding/partner.py:155:                    "retention_3m_rate": 0.62,
+services/shf-agent-fabric/fabric/funding/partner.py:156:                    "retention_6m_rate": 0.48,
+services/shf-agent-fabric/fabric/funding/partner.py:294:                "retention_3m_rate": 0.62,
+services/shf-agent-fabric/fabric/funding/partner.py:295:                "retention_6m_rate": 0.48,
+services/shf-agent-fabric/fabric/funding/partner.py:304:            "  -d '{\"ruleset_id\":\"rs_2026Q2_workforce_v1_0\",\"cohort\":{\"participants_enrolled\":24,\"participants_completed\":19,\"attendance_rate\":0.87,\"job_placement_count\":11,\"verified_placement_rate\":0.73,\"certification_earned_count\":8,\"retention_3m_rate\":0.62,\"retention_6m_rate\":0.48,\"participant_opportunity_index\":0.60},\"benchmarks\":{\"cost_per_job_placement_percentile\":0.44},\"watchtower\":{\"signals\":[]}}' \\",
+apps/shs-api/src/domain/credentials/model/credential.ts:20:  renewalWindowDays: number | null;
+apps/shs-api/src/domain/credentials/model/credential.ts:33:// "RENEWAL_DUE" are computed at read time from expires_at/renewal_window
+apps/shs-api/src/domain/credentials/model/credential.ts:36:export type LearnerCredentialLifecycle = "ISSUED" | "RENEWAL_DUE" | "EXPIRED" | "REVOKED";
+apps/shs-api/src/domain/credentials/model/credential.ts:60:  definition: Pick<CredentialDefinition, "renewalWindowDays">,
+apps/shs-api/src/domain/credentials/model/credential.ts:67:  if (definition.renewalWindowDays) {
+apps/shs-api/src/domain/credentials/model/credential.ts:68:    const renewalDueAt = new Date(expiresAt.getTime() - definition.renewalWindowDays * 86_400_000);
+apps/shs-api/src/domain/credentials/model/credential.ts:69:    if (renewalDueAt <= now) return "RENEWAL_DUE";
+services/shf-agent-fabric/services/game_theory_service.py:33:    "client_churn_risk",
+services/shf-agent-fabric/services/game_theory_service.py:34:    "upsell_opportunity",
+services/shf-agent-fabric/services/game_theory_service.py:35:    "program_expansion",
+services/shf-agent-fabric/services/game_theory_service.py:49:    "client_churn_risk",
+services/shf-agent-fabric/services/game_theory_service.py:61:    "upsell_opportunity",
+services/shf-agent-fabric/services/game_theory_service.py:62:    "program_expansion",
+services/shf-agent-fabric/services/game_theory_service.py:249:    if scenario_type in {"funding_loss", "client_churn_risk"}:
+services/shf-agent-fabric/services/game_theory_service.py:250:        return "stabilize_relationship_and_prepare_retention_path"
+services/shf-agent-fabric/services/game_theory_service.py:251:    if scenario_type in {"funding_gain", "upsell_opportunity", "program_expansion"}:
+services/shf-agent-fabric/services/game_theory_service.py:265:    if scenario_type in {"funding_gain", "upsell_opportunity"}:
+services/shf-agent-fabric/services/game_theory_service.py:318:    if scenario_type in {"funding_gain", "upsell_opportunity", "program_expansion"}:
+services/shf-agent-fabric/services/game_theory_service.py:320:    if scenario_type in {"adoption_resistance", "client_churn_risk"}:
+services/shf-agent-fabric/services/game_theory_service.py:439:                "use_when": "Funding gain, partner gain, upsell, or expansion scenario with supporting metadata.",
+services/shf-agent-fabric/services/game_theory_service.py:443:                "strategy_id": "stabilize_relationship_and_prepare_retention_path",
+services/shf-agent-fabric/services/game_theory_service.py:445:                "use_when": "Funding loss or client churn risk appears.",
+services/shf-agent-fabric/services/operational_event_service.py:23:    "production deployment requires an owner-approved durable database boundary, backup/restore policy, retention controls, and monitoring."
+services/shf-agent-fabric/services/operational_event_service.py:36:    "referral.created",
+services/shf-agent-fabric/services/operational_event_service.py:44:SUPPORTED_SUBJECT_TYPES = {"student", "lesson", "assessment", "course", "credential", "portfolio_artifact", "referral", "report", "grant_binder", "funding_commitment", "workforce_employment_outcome", "gpa_truth_determination"}
+services/shf-agent-fabric/services/operational_event_service.py:140:        "retention_policy": _retention_policy_for(producer_id, event_type),
+services/shf-agent-fabric/services/operational_event_service.py:366:def _retention_policy_for(producer_id: str, event_type: str) -> str:
+services/shf-agent-fabric/services/operational_event_service.py:371:        find_lineage_entry("lineage.hub.referral.created.v1"),
+services/shf-agent-fabric/services/operational_event_service.py:381:            return str(entry["retention_policy"])
+services/shf-agent-fabric/services/operational_event_service.py:382:    return "operational_event_retention_required"
+src/router/AdminRoutes.jsx.bak_login_identity_20260513_071933:20:import ReferralLifecycleView from "@/pages/hub/ReferralLifecycleView.jsx";
+src/router/AdminRoutes.jsx.bak_login_identity_20260513_071933:52:        <Route path="/hub/lifecycle" element={<ReferralLifecycleView />} />
+src/router/AdminRoutes.jsx.bak_login_identity_20260513_071933:53:        <Route path="/hub/referrals" element={<ReferralLifecycleView />} />
+apps/shs-api/src/domain/notifications/service/notification-service.ts:47:// assignee (e.g. a newly created, not-yet-assigned CivicSure referral) but
+apps/shs-api/src/domain/notifications/service/notification-service.ts:138:  // `referral.created` is the ONLY real, currently-emitted outbox event in
+apps/shs-api/src/domain/notifications/service/notification-service.ts:143:  // newly created referral has no assigned reviewer yet, so recipient
+apps/shs-api/src/domain/notifications/service/notification-service.ts:145:  // organization who holds `referrals.manage`, the same permission that
+apps/shs-api/src/domain/notifications/service/notification-service.ts:146:  // gates acting on a referral — apps/shs-api/src/domain/cases/api/routes.ts)
+apps/shs-api/src/domain/notifications/service/notification-service.ts:149:  // referral's own record. Verification/case-state authority remains
+apps/shs-api/src/domain/notifications/service/notification-service.ts:151:  "referral.created": {
+apps/shs-api/src/domain/notifications/service/notification-service.ts:152:    type: "CASE_REFERRAL_RECEIVED", title: "New referral received", message: "A new referral was created for your organization to review.",
+apps/shs-api/src/domain/notifications/service/notification-service.ts:154:      const details = await db.query("SELECT receiving_organization_id FROM referral_details WHERE case_id=$1", [event.subject_id]);
+apps/shs-api/src/domain/notifications/service/notification-service.ts:157:      return usersWithPermissionInOrganization(receivingOrganizationId, "referrals.manage", db);
+apps/shs-api/src/domain/notifications/service/notification-service.ts:168:  // extend to a permission-scoped audience the same way referral.created
+apps/shs-api/src/domain/notifications/service/notification-service.ts:354:  // recipient() itself resolves an array (currently just referral.created)
+services/shf-agent-fabric/registry/runs/pilot_test_001.json:15:    "retentionTarget": 0.78,
+services/shf-agent-fabric/registry/runs/pilot_test_001.json:60:      "retention_rate": 0.75,
+src/router/AdminRoutes.jsx.bak_remove_literal_n_20260513_105135:23:import ReferralLifecycleView from "@/pages/hub/ReferralLifecycleView.jsx";
+src/router/AdminRoutes.jsx.bak_remove_literal_n_20260513_105135:106:        <Route path="/hub/lifecycle" element={protect("/hub/lifecycle", <ReferralLifecycleView />)} />
+src/router/AdminRoutes.jsx.bak_remove_literal_n_20260513_105135:107:        <Route path="/hub/referrals" element={protect("/hub/referrals", <ReferralLifecycleView />)} />
+src/router/AdminRoutes.jsx.bak_20260424_105521:18:import ReferralLifecycleView from "@/pages/hub/ReferralLifecycleView.jsx";
+src/router/AdminRoutes.jsx.bak_20260424_105521:42:      <Route path="/hub/lifecycle" element={<ReferralLifecycleView />} />
+apps/shs-api/src/domain/notifications/contracts/notification-classification.ts:71:  // produced by EVENT_POLICIES since NCA-4 (CivicSure referrals, ARAG
+apps/shs-api/src/domain/notifications/contracts/notification-classification.ts:76:  // meant a referral or a failed release could be user-suppressed and
+apps/shs-api/src/domain/notifications/contracts/notification-classification.ts:80:  CASE_REFERRAL_RECEIVED: { category: "REQUIRED_ACTION", actionRequired: true, urgency: "notice", channelEligibility: IN_APP_ONLY },
+services/shf-agent-fabric/services/evidence_projection_service.py:25:    "PostgreSQL Truth Spine persistence is selected; production deployment still requires retention controls, backup/restore, and monitoring."
+services/shf-agent-fabric/services/evidence_projection_service.py:29:    "production deployment requires an owner-approved durable evidence store, retention controls, backup/restore, and monitoring."
+services/shf-agent-fabric/services/evidence_projection_service.py:488:            "outcome_fact_scope": "employment_started_only_not_retention_wage_or_impact",
+src/router/AdminRoutes.jsx:67:import ReferralLifecycleView from "@/pages/hub/ReferralLifecycleView.jsx";
+src/router/AdminRoutes.jsx:151:        <Route path="/hub/lifecycle" element={protect("/hub/lifecycle", <ReferralLifecycleView />)} />
+src/router/AdminRoutes.jsx:152:        <Route path="/hub/referrals" element={protect("/hub/referrals", <ReferralLifecycleView />)} />
+services/shf-agent-fabric/registry/published/pilot_gladden_001/report.json:15:    "retentionTarget": 0.7,
+services/shf-agent-fabric/registry/published/pilot_gladden_001/report.json:31:    "retention_rate": 0.72,
+services/shf-agent-fabric/registry/published/pilot_gladden_001/report.json:93:          "target_key": "retentionTarget",
+services/shf-agent-fabric/registry/published/pilot_gladden_001/report.json:168:      "retentionRate": {
+services/shf-agent-fabric/registry/published/pilot_gladden_001/report.json:203:      "retentionTarget": 0.7,
+services/shf-agent-fabric/registry/published/pilot_gladden_001/report.json:254:        "retentionTarget": 0.7,
+services/shf-agent-fabric/registry/published/pilot_gladden_001/report.json:269:      "retentionTarget": 0.7,
+services/shf-agent-fabric/registry/published/pilot_gladden_001/report.json:310:          "target_key": "retentionTarget",
+services/shf-agent-fabric/services/internal_service_identity.py:19:    ("hub.referral", "referral.created"),
+services/shf-agent-fabric/services/aal_service.py:142:                    program_health_score,
+services/shf-agent-fabric/services/aal_service.py:322:        health = float(pr.get("program_health_score",0))
+services/shf-agent-fabric/scripts/chain_check_all.sh:84:# Cross-check: ensure all API eventIds appear in file (within retention window)
+services/shf-agent-fabric/services/truth_public_population_service.py:25:    ("hub_referral_created", "referral_created"),
+services/shf-agent-fabric/services/reporting_service.py:84:def generate_hub_referral_created_count_report(actor: Any, period_start: str, period_end: str, public: bool = False, correlation_id: str | None = None) -> Dict[str, Any]:
+services/shf-agent-fabric/services/reporting_service.py:85:    return _generate_report("hub.referral.created_count", actor, period_start, period_end, public=public, correlation_id=correlation_id)
+src/apps/allocation/model.js:24:      retention90Rate: 0.68,
+src/apps/allocation/model.js:31:      retention90Rate: 0.74,
+src/apps/allocation/model.js:44:export function retainedPlacements(participants, placementRate, retention90Rate) {
+src/apps/allocation/model.js:45:  return participants * placementRate * retention90Rate;
+src/apps/allocation/model.js:81:  const baseRet = retainedPlacements(assumedParticipants, A.placementRate, A.retention90Rate);
+src/apps/allocation/model.js:91:  const retA = retainedPlacements(pA, A.placementRate, A.retention90Rate);
+src/apps/allocation/model.js:92:  const retB = retainedPlacements(pB, B.placementRate, B.retention90Rate);
+services/shf-agent-fabric/complianceProfiles/globalCompliancePolicy.json:58:  "maxRetentionDays": 365,
+services/shf-agent-fabric/complianceProfiles/globalCompliancePolicy.json:63:    "retentionPolicyRef": "retention-global-365d-v1"
+services/shf-agent-fabric/complianceProfiles/business_nonprofit_SHF.json:56:  "maxRetentionDays": 365,
+services/shf-agent-fabric/complianceProfiles/business_nonprofit_SHF.json:61:    "retentionPolicyRef": "retention-global-365d-v1"
+services/shf-agent-fabric/complianceProfiles/app_kermit.json:46:  "maxRetentionDays": 365,
+services/shf-agent-fabric/complianceProfiles/app_kermit.json:51:    "retentionPolicyRef": "retention-global-365d-v1"
+services/shf-agent-fabric/fabric/reports/funder_report.py:119:            "retention_rate": outcomes.get("retention_rate") or 0,
+services/shf-agent-fabric/fabric/reports/funder_report.py:145:    retention_rate = _safe_float(
+services/shf-agent-fabric/fabric/reports/funder_report.py:146:        (metrics.get("retentionRate") or {}).get("actual"),
+services/shf-agent-fabric/fabric/reports/funder_report.py:147:        _safe_float(outcomes.get("retention_rate"), 0.0),
+services/shf-agent-fabric/fabric/reports/funder_report.py:183:        "retention_rate": retention_rate,
+services/shf-agent-fabric/fabric/reports/funder_report.py:235:def _risk_band_from_program_health(score01: float) -> str:
+services/shf-agent-fabric/fabric/reports/funder_report.py:244:    score01 = _safe_float(program_health_row.get("program_health_score"), 0.0)
+services/shf-agent-fabric/fabric/reports/funder_report.py:254:        "program_health_score": round(score01, 4),
+services/shf-agent-fabric/fabric/reports/funder_report.py:255:        "program_health_band": _risk_band_from_program_health(score01),
+services/shf-agent-fabric/fabric/reports/funder_report.py:281:    program_health_score = _safe_float(loe_summary.get("program_health_score"), 0.0)
+services/shf-agent-fabric/fabric/reports/funder_report.py:301:    if "retentionRate" in failed:
+services/shf-agent-fabric/fabric/reports/funder_report.py:302:        forecast_message = "Retention pressure may lower near-term outcome confidence and weaken scale readiness."
+services/shf-agent-fabric/fabric/reports/funder_report.py:307:                "message": "Add retention intervention checkpoints for at-risk participants and monitor weekly exit reasons."
+services/shf-agent-fabric/fabric/reports/funder_report.py:312:        forecast_message = "Behavior incident levels may create operational drag and weaken readiness for expansion."
+services/shf-agent-fabric/fabric/reports/funder_report.py:337:    if program_health_score < 0.70:
+services/shf-agent-fabric/fabric/reports/funder_report.py:340:                "priority": "high" if program_health_score < 0.40 else "medium",
+services/shf-agent-fabric/fabric/reports/funder_report.py:341:                "message": "Stabilize program operations before expansion; current health score suggests execution risk."
+services/shf-agent-fabric/fabric/reports/funder_report.py:380:            "program_health_score": round(program_health_score, 4),
+services/shf-agent-fabric/fabric/reports/funder_report.py:396:    ph = _safe_float(loe_summary.get("program_health_score"), 0.0)
+services/shf-agent-fabric/fabric/reports/funder_report.py:411:        recommendation = "Proceed with controlled expansion while maintaining routine monitoring."
+services/shf-agent-fabric/fabric/reports/funder_report.py:416:        risk = f"Operational risk is elevated ({health_band}) and should be addressed before expansion."
+services/shf-agent-fabric/fabric/reports/funder_report.py:430:            else "Stabilize delivery and close the major target gaps before further funding expansion."
+apps/shf-web/src/pages/civicsure/explorer/compareViewMockData.js:108:      methodology: { name: "Access Timeliness Methodology", version: "1.0", effectiveDate: "Mar 1, 2025", measurementWindow: "14-day window", numeratorRule: "Clients seen within 14 days of referral", denominatorRule: "Clients referred during the reporting period", evidenceThreshold: "80%" },
+apps/shf-web/src/pages/civicsure/explorer/compareViewMockData.js:126:      outcome: { name: "Housing Retention (12-month)", target: "75%", actual: "79%", numerator: "169", denominator: "214", reportingPeriod: "FY2025", methodologyName: "Housing Retention Methodology", methodologyVersion: "1.2", evidenceCoverage: "88%", verificationStatus: "verified" },
+apps/shf-web/src/pages/civicsure/explorer/compareViewMockData.js:129:      methodology: { name: "Housing Retention Methodology", version: "1.2", effectiveDate: "Jul 1, 2024", measurementWindow: "12-month window", numeratorRule: "Households retaining housing at 12 months", denominatorRule: "Households placed during the reporting period", evidenceThreshold: "85%" },
+services/shf-agent-fabric/complianceProfiles/business_kermit_operator.json:50:  "maxRetentionDays": 365,
+services/shf-agent-fabric/complianceProfiles/business_kermit_operator.json:55:    "retentionPolicyRef": "retention-global-365d-v1"
+apps/shf-web/src/pages/civicsure/explorer/outcomeDetailMockData.js:269:      "Employment placement does not measure job quality, wage growth, or long-term retention unless those are separately defined outcomes.",
+services/shf-agent-fabric/fabric/reports/pdf_report.py:72:    if "attendance" in n or "retention" in n or "completion" in n:
+services/shf-agent-fabric/fabric/reports/pdf_report.py:375:            ("Retention", snap.get("retention_rate"), targets.get("retentionTarget")),
+services/shf-agent-fabric/fabric/reports/pdf_report.py:420:        f"Program health score: {_fmt_num(loe.get('program_health_score'), 2)}",
+services/shf-agent-fabric/complianceProfiles/app_shf_core.json:10:  "maxRetentionDays": 365,
+services/shf-agent-fabric/services/reporting_lineage_service.py:32:    "retention_policy",
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:52:    return {"x-csrf-token": identity["csrf_token"], "x-correlation-id": "corr-wave2-referral-001", "Origin": ORIGIN}
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:57:        "event_type": "referral.created",
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:59:        "producer_id": "hub.referral",
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:60:        "subject_type": "referral",
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:61:        "subject_id": "case_referral_001",
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:64:        "evidence_references": ["case://case_referral_001"],
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:65:        "idempotency_key": "hub-referral-case-001-created",
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:76:def test_referral_event_projects_to_scoped_unapproved_truth(isolated_wave2_storage):
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:91:    assert result["lineage_id"] == "lineage.hub.referral.created.v1"
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:104:    assert claim["claim_type"] == "hub_referral_created"
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:106:    assert claim["predicate"] == "referral_created"
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:110:    assert claim["lineage_id"] == "lineage.hub.referral.created.v1"
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:111:    assert claim["producer_id"] == "hub.referral"
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:112:    assert claim["producer_event_type"] == "referral.created"
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:121:def test_referral_retry_is_idempotent_and_does_not_duplicate_evidence(isolated_wave2_storage):
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:140:def test_referral_claim_internal_approval_contract_is_separate(isolated_wave2_storage):
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:151:        json={"reason": "reviewed referral"},
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:157:def test_unknown_referral_payload_is_rejected_without_projection(isolated_wave2_storage):
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:162:        json=_payload(event_type="referral.deleted"),
+services/shf-agent-fabric/fabric/reports/institutional/platypus_preview.py:199:                "Add retention intervention checkpoints for at-risk participants and monitor weekly exit reasons."
+services/shf-agent-fabric/fabric/reports/institutional/platypus_preview.py:203:                "Operational risk is elevated and should be addressed before expansion."
+services/shf-agent-fabric/fabric/reports/institutional/platypus_preview.py:211:                "condition": "Retention stabilization",
+services/shf-agent-fabric/fabric/reports/institutional/platypus_preview.py:215:                "measure": "Retention meets target",
+apps/shf-web/src/pages/civicsure/explorer/components/funding-detail/FundingOutcomesPanel.jsx:2:// training completion through employment retention. DEMO / FRAME DATA
+services/shf-agent-fabric/tests/test_truth_public_population_postgres_runtime.py:44:        "claim_id": claim_id, "version": 1, "claim_type": "hub_referral_created", "predicate": "referral_created",
+services/shf-agent-fabric/tests/test_truth_public_population_postgres_runtime.py:45:        "claim_text": "synthetic referral created", "subject_id": "synthetic-case", "tenant_id": "runtime-tenant",
+services/shf-agent-fabric/tests/test_truth_public_population_postgres_runtime.py:47:        "evidence_ids": ["runtime-evidence"], "lineage_id": "lineage.hub.referral.created.v1", "verification_status": "verified",
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:44:- Added the real `hub.referral` producer lineage entry based on
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:46:- Added allowlisted `referral.created` ingestion with `referral` subject
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:53:- No referral report surface was migrated; the canonical referral count metric
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:59:- Added a PostgreSQL integration outbox migration and transactional referral
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:81:  `hub.referral` / `referral.created` binding.
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:85:  uniqueness and transactional referral enqueue.
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:117:test referral was created.
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:497:`ISOLATED_DEV_RUNTIME_VERIFIED` on 2026-08-25. A synthetic SHS API referral
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:506:referral when SHS API creation fails. The `Referrals Created` field on
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:507:`surface.hub.referrals` now has a canonical Reporting Service mapping; JSONL stores remain development-only and
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:512:## Hub Referral Truth Semantic Contract
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:517:version/current-state metadata for `hub_referral_created` projections.
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:526:The versioned `hub.referral.created_count.v1` metric is now implemented as a
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:527:distinct current referral-subject count. Internal calculation requires verified
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:530:definition `hub.referral.created_count` v1 is exposed at
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:531:`GET /shf/reports/hub.referral-created-count`; lifecycle and outcome surface
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:534:`surface.hub.reports` was reviewed at `/hub/reports`. Its `Hub Referrals
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:535:Created` KPI now consumes the canonical referral report through the shared
+services/shf-agent-fabric/tests/test_reporting_lineage_registry.py:78:        if entry["lineage_id"] == "lineage.hub.referral.created.v1":
+services/shf-agent-fabric/fabric/reports/institutional/pages/decision_summary.py:12:    recommendation = ds.get("primary_recommendation", "Add retention intervention checkpoints for at-risk participants and monitor weekly exit reasons.")
+services/shf-agent-fabric/docs/reporting/OPERATIONAL_EVENT_STORE_V1.md:29:- retention enforcement
+services/shf-agent-fabric/fabric/reports/institutional/pages/risk_analysis.py:8:    summary = risk.get("risk_summary", "Operational risk is elevated (RED) and should be addressed before expansion.")
+services/shf-agent-fabric/fabric/reports/institutional/pages/risk_analysis.py:10:        {"type": "Outcome", "title": "Retention below target", "severity": "High", "owner": "Program Ops", "status": "Open"},
+services/shf-agent-fabric/fabric/reports/institutional/pages/evidence_scorecard.py:30:            ["Retention", "75.0%", "78.0%", "-", "-", "FAIL"],
+services/shf-agent-fabric/tests/test_funding_integrity_gate.py:60:            "retention_3m_rate": 0.62,
+services/shf-agent-fabric/tests/test_funding_integrity_gate.py:61:            "retention_6m_rate": 0.48,
+services/shf-agent-fabric/fabric/reports/institutional/pages/trend_analysis.py:9:        {"metric_label": "Retention", "values": [0.79, 0.77, 0.76, 0.75]},
+services/shf-agent-fabric/fabric/reports/institutional/pages/trend_analysis.py:14:        {"metric_label": "Retention", "current": 0.75, "target": 0.78, "direction": "below"},
+src/apps/allocation/methodology/methodology-v1.md:9:- Retention stability
+src/apps/allocation/methodology/methodology-v1.md:57:Participants × Employment Rate (Q2) × Retention Proxy (Q4 or 90-Day Equivalent)
+src/apps/allocation/methodology/methodology-v1.md:78:- Retention Stability
+services/shf-agent-fabric/fabric/reports/institutional/pages/kpi_dashboard.py:12:        ("Retention", pct(k.get("retention_rate"))),
+services/shf-agent-fabric/fabric/reports/institutional/pages/kpi_dashboard.py:16:        ("Program Health Score", num(k.get("program_health_score"))),
+services/shf-agent-fabric/fabric/reports/institutional/pages/kpi_dashboard.py:22:        ["Retention", pct(k.get("retention_rate")), pct(t.get("retention_rate_target"))],
+services/shf-agent-fabric/fabric/reports/institutional/pages/operational_integrity.py:19:        ["Program Health Score", str(oi.get("program_health_score", 0.0))],
+services/shf-agent-fabric/tests/test_workforce_employment_ingestion.py:83:        ("shf.workforce", "referral.created"),
+services/shf-agent-fabric/tests/test_workforce_employment_ingestion.py:86:        ("hub.referral", "employment_started.verified"),
+services/shf-agent-fabric/tests/test_workforce_employment_ingestion.py:114:    assert evidence["metadata"]["outcome_fact_scope"] == "employment_started_only_not_retention_wage_or_impact"
+services/shf-agent-fabric/tests/test_workforce_employment_ingestion.py:125:    for forbidden in ("participant_name", "email", "phone", "wage", "job_90d", "oracle", "retention", "impact"):
+services/shf-agent-fabric/fabric/reports/institutional/pages/pages_5_16.py:43:        ("Retention", pct(k.get("retention_rate"))),
+services/shf-agent-fabric/fabric/reports/institutional/pages/pages_5_16.py:47:        ("Program Health Score", num(k.get("program_health_score"))),
+services/shf-agent-fabric/fabric/reports/institutional/pages/pages_5_16.py:53:        ["Retention", pct(k.get("retention_rate")), pct(t.get("retention_rate_target"))],
+services/shf-agent-fabric/fabric/reports/institutional/pages/pages_5_16.py:74:        ["Retention", pct(k.get("retention_rate")), pct(t.get("retention_rate_target")), f"{variance(k.get('retention_rate'), t.get('retention_rate_target'))*100:.1f} pts"],
+services/shf-agent-fabric/fabric/reports/institutional/pages/pages_5_16.py:83:        ("Retention", float(t.get("retention_rate_target", 0))*100, float(k.get("retention_rate", 0))*100),
+services/shf-agent-fabric/fabric/reports/institutional/pages/pages_5_16.py:96:        {"metric_label": "Retention", "values": [0.79, 0.77, 0.76, 0.75]},
+services/shf-agent-fabric/fabric/reports/institutional/pages/pages_5_16.py:101:        {"metric_label": "Retention", "current": 0.75, "target": 0.78, "direction": "below"},
+services/shf-agent-fabric/fabric/reports/institutional/pages/pages_5_16.py:148:        rows = [["Attendance", "89.2%", "85.0%", "-", "-", "PASS"], ["Retention", "75.0%", "78.0%", "-", "-", "FAIL"]]
+services/shf-agent-fabric/fabric/reports/institutional/pages/pages_5_16.py:163:        ["Program Health Score", safe(oi.get("program_health_score", 0.0))],
+services/shf-agent-fabric/fabric/reports/institutional/pages/pages_5_16.py:176:        safe(ra.get("risk_summary", "Operational risk is elevated and should be addressed before expansion."))
+services/shf-agent-fabric/fabric/reports/institutional/pages/pages_5_16.py:179:        {"risk_type": "Outcome", "title": "Retention below target", "severity": "High", "owner": "Program Ops", "status": "Open"},
+services/shf-agent-fabric/fabric/reports/institutional/pages/pages_5_16.py:198:    p.card("Recommendation Summary", [safe(fr.get("recommendation_summary", "Add retention intervention checkpoints for at-risk participants and monitor weekly exit reasons."))], min_h=60)
+services/shf-agent-fabric/fabric/reports/institutional/pages/pages_5_16.py:199:    p.card("Justification", [safe(fr.get("justification", "Operational risk is elevated and should be addressed before expansion."))], min_h=60)
+services/shf-agent-fabric/fabric/reports/institutional/pages/pages_5_16.py:218:            {"condition": "Retention stabilization", "owner": "Program Ops", "due": "2026-06-30", "status": "Open", "measure": "Retention meets target"},
+services/shf-agent-fabric/fabric/reports/institutional/pages/pages_5_16.py:253:            {"action_title": "Weekly retention review", "owner": "Program Ops", "priority": "High", "related_metric": "Retention", "due_date": "2026-05-01"},
+services/shf-agent-fabric/fabric/reports/institutional/pages/pages_5_16.py:261:            ("Retention checkpoint active", "2026-04-20"),
+services/shf-agent-fabric/fabric/reports/institutional/pages/outcome_performance.py:18:        ["Retention", pct(k.get("retention_rate")), pct(t.get("retention_rate_target")), f"{variance(k.get('retention_rate'), t.get('retention_rate_target'))*100:.1f} pts"],
+services/shf-agent-fabric/fabric/reports/institutional/pages/outcome_performance.py:27:        ("Retention", float(t.get("retention_rate_target", 0))*100, float(k.get("retention_rate", 0))*100),
+services/shf-agent-fabric/fabric/reports/institutional/pages/executive_summary.py:9:    risks = ex.get("top_risks") or ["Operational risk is elevated (RED) and should be addressed before expansion."]
+services/shf-agent-fabric/fabric/reports/institutional/pages/executive_summary.py:10:    rec = ex.get("recommendation_summary", "Add retention intervention checkpoints for at-risk participants and monitor weekly exit reasons.")
+services/shf-agent-fabric/fabric/reports/institutional/pages/funding_conditions.py:70:            "condition": "Retention stabilization",
+services/shf-agent-fabric/fabric/reports/institutional/pages/funding_conditions.py:74:            "success_measure": "Retention meets target",
+services/shf-agent-fabric/tests/test_truth_public_population.py:30:        "claim_type": "hub_referral_created",
+services/shf-agent-fabric/tests/test_truth_public_population.py:31:        "predicate": "referral_created",
+services/shf-agent-fabric/tests/test_truth_public_population.py:32:        "claim_text": "referral created",
+services/shf-agent-fabric/tests/test_truth_public_population.py:39:        "lineage_id": "lineage.hub.referral.created.v1",
+services/shf-agent-fabric/tests/test_truth_public_population.py:40:        "producer_id": "hub.referral",
+services/shf-agent-fabric/tests/test_truth_public_population.py:41:        "producer_event_type": "referral.created",
+services/shf-agent-fabric/tests/test_truth_public_population.py:91:    before = metric_registry_service.calculate_metric("hub.referral.created_count.v1", "org-hub", "2026-08-01T00:00:00+00:00", "2026-08-31T23:59:59+00:00", actor=actor, public=True)
+services/shf-agent-fabric/tests/test_truth_public_population.py:96:    after = metric_registry_service.calculate_metric("hub.referral.created_count.v1", "org-hub", "2026-08-01T00:00:00+00:00", "2026-08-31T23:59:59+00:00", actor=actor, public=True)
+services/shf-agent-fabric/fabric/reports/institutional/pages/improvement_plan.py:8:        {"action": "Weekly retention review", "owner": "Program Ops", "priority": "High", "metric": "Retention", "due": "2026-05-01"},
+services/shf-agent-fabric/fabric/reports/institutional/pages/improvement_plan.py:12:        ("Retention checkpoint active", "2026-04-20"),
+services/shf-agent-fabric/tests/test_shf_reporting_service.py:79:def test_hub_referral_report_composes_registered_metric_and_preserves_lineage(monkeypatch):
+services/shf-agent-fabric/tests/test_shf_reporting_service.py:90:            "unit": "referrals",
+services/shf-agent-fabric/tests/test_shf_reporting_service.py:94:            "definition_digest": "referral-digest",
+services/shf-agent-fabric/tests/test_shf_reporting_service.py:95:            "source_claim_ids": ["claim-referral-1", "claim-referral-2"],
+services/shf-agent-fabric/tests/test_shf_reporting_service.py:97:            "source_evidence_ids": ["evidence-referral-1", "evidence-referral-2"],
+services/shf-agent-fabric/tests/test_shf_reporting_service.py:104:        "/shf/reports/hub.referral-created-count?organization_id=other&tenant_id=other&formula=client_formula",
+services/shf-agent-fabric/tests/test_shf_reporting_service.py:109:    assert report["report_id"] == "report.hub.referral.created_count.v1"
+services/shf-agent-fabric/tests/test_shf_reporting_service.py:110:    assert report["report_definition_id"] == "hub.referral.created_count"
+services/shf-agent-fabric/tests/test_shf_reporting_service.py:112:    assert report["metric_results"][0]["metric_id"] == "hub.referral.created_count.v1"
+services/shf-agent-fabric/tests/test_shf_reporting_service.py:114:    assert report["lineage_reference"]["source_claim_ids"] == ["claim-referral-1", "claim-referral-2"]
+services/shf-agent-fabric/tests/test_shf_reporting_service.py:115:    assert report["lineage_reference"]["source_evidence_ids"] == ["evidence-referral-1", "evidence-referral-2"]
+services/shf-agent-fabric/tests/test_shf_reporting_service.py:120:def test_hub_referral_report_preserves_zero_and_rejects_unavailable_population(monkeypatch):
+services/shf-agent-fabric/tests/test_shf_reporting_service.py:125:        "metric_id": "hub.referral.created_count.v1", "metric_version": 1, "value": 0, "unit": "referrals",
+services/shf-agent-fabric/tests/test_shf_reporting_service.py:130:    zero = client.get("/shf/reports/hub.referral-created-count", headers=_headers(identity))
+services/shf-agent-fabric/tests/test_shf_reporting_service.py:138:    failed = client.get("/shf/reports/hub.referral-created-count", headers=_headers(identity))
+services/shf-agent-fabric/tests/test_shf_reporting_service.py:142:def test_hub_referral_public_report_requires_metric_public_eligibility(monkeypatch):
+services/shf-agent-fabric/tests/test_shf_reporting_service.py:150:            "metric_id": "hub.referral.created_count.v1", "metric_version": 1, "value": 0, "unit": "referrals",
+services/shf-agent-fabric/tests/test_shf_reporting_service.py:157:    response = client.get("/shf/reports/hub.referral-created-count?public=true", headers=_headers(identity))
+services/shf-agent-fabric/tests/test_shf_reporting_service.py:252:    assert "retention" not in report["report_definition_id"]
+services/shf-agent-fabric/contracts/registry_entity.examples.json:24:        "retention": { "artifactsDays": 365, "auditLogsDays": 365, "deletionPolicy": "retire_only" },
+services/shf-agent-fabric/contracts/registry_entity.examples.json:53:        "retention": { "artifactsDays": 365, "auditLogsDays": 365, "deletionPolicy": "retire_only" },
+services/shf-agent-fabric/fabric/reports/institutional/builder.py:89:            "retention_rate": snap.get("retention_rate", 0.75),
+services/shf-agent-fabric/fabric/reports/institutional/builder.py:93:            "program_health_score": (loe.get("program_health_score", 0.0) if isinstance(loe, dict) else 0.0),
+services/shf-agent-fabric/fabric/reports/institutional/builder.py:97:            "retention_rate_target": _target("retentionTarget", 0.78),
+services/shf-agent-fabric/fabric/reports/institutional/builder.py:106:                {"metric_label": "Retention", "values": [0.79, 0.77, 0.76, snap.get("retention_rate", 0.75)]},
+services/shf-agent-fabric/fabric/reports/institutional/builder.py:111:                {"metric_label": "Retention", "current": snap.get("retention_rate", 0.75), "target": _target("retentionTarget", 0.78), "direction": "below"},
+services/shf-agent-fabric/fabric/reports/institutional/builder.py:127:            "program_health_score": (loe.get("program_health_score", 0.0) if isinstance(loe, dict) else 0.0),
+services/shf-agent-fabric/fabric/reports/institutional/builder.py:136:            "risk_summary": safe(funder.get("risk"), "Operational risk is elevated and should be addressed before expansion."),
+services/shf-agent-fabric/fabric/reports/institutional/builder.py:138:                {"risk_type": "Outcome", "title": "Retention below target", "severity": "High", "owner": "Program Ops", "status": "Open"},
+services/shf-agent-fabric/fabric/reports/institutional/builder.py:144:            "recommendation_summary": safe(funder.get("recommendation"), "Add retention intervention checkpoints for at-risk participants and monitor weekly exit reasons."),
+services/shf-agent-fabric/fabric/reports/institutional/builder.py:145:            "justification": safe(funder.get("risk"), "Operational risk is elevated and should be addressed before expansion."),
+services/shf-agent-fabric/fabric/reports/institutional/builder.py:151:            {"condition": "Retention stabilization", "owner": "Program Ops", "due": "2026-06-30", "status": "Open", "measure": "Retention meets target"},
+services/shf-agent-fabric/fabric/reports/institutional/builder.py:155:            {"action_title": "Weekly retention review", "owner": "Program Ops", "priority": "High", "related_metric": "Retention", "due_date": "2026-05-01"},
+services/shf-agent-fabric/fabric/reports/institutional/builder.py:159:            {"title": "Retention checkpoint active", "date": "2026-04-20"},
+services/shf-agent-fabric/fabric/reports/institutional/platypus_pages.py:39:        card("Recommendation Summary", [fr.get("recommendation_summary", "Add retention intervention checkpoints for at-risk participants and monitor weekly exit reasons.")]),
+services/shf-agent-fabric/fabric/reports/institutional/platypus_pages.py:41:        card("Justification", [fr.get("justification", "Operational risk is elevated and should be addressed before expansion.")]),
+services/shf-agent-fabric/fabric/reports/institutional/platypus_pages.py:65:            {"condition": "Retention stabilization", "owner": "Program Ops", "due": "2026-06-30", "status": "Open", "measure": "Retention meets target"},
+services/shf-agent-fabric/fabric/watchtower/self_audit/daily_cycle.py:88:        data_health=scores["data_health"],
+services/shf-agent-fabric/fabric/watchtower/self_audit/daily_cycle.py:89:        verification_health=scores["verification_health"],
+services/shf-agent-fabric/fabric/watchtower/self_audit/daily_cycle.py:92:        infrastructure_health=scores["infrastructure_health"],
+services/shf-agent-fabric/contracts/data/data_entity.schema.v1.json:15:    "retention_days": { "type": "integer", "minimum": 0, "maximum": 36500 },
+services/shf-agent-fabric/app/core/growth_provider.py:32:        sqlite_growth.upsert_claim(self.path, claim_id="g2", title="Arcade retention will increase with Tower integration", thesis="Tower + market incentives increases weekly return rate.", tags=["arcade","retention","product"])
+services/shf-agent-fabric/services/ai_layer/bfe_engine.py:114:        return "Test Controlled Expansion" if decisions >= 3 else "Maintain Current Strategy"
+services/shf-agent-fabric/contracts/registry_entity.schema.json:62:    "Retention": {
+services/shf-agent-fabric/contracts/registry_entity.schema.json:95:        "retention",
+services/shf-agent-fabric/contracts/registry_entity.schema.json:126:        "retention": {
+services/shf-agent-fabric/contracts/registry_entity.schema.json:127:          "$ref": "#/$defs/Retention"
+services/shf-agent-fabric/contracts/registry/registry_entity.schema.v1.json:62:    "Retention": {
+services/shf-agent-fabric/contracts/registry/registry_entity.schema.v1.json:95:        "retention",
+services/shf-agent-fabric/contracts/registry/registry_entity.schema.v1.json:126:        "retention": {
+services/shf-agent-fabric/contracts/registry/registry_entity.schema.v1.json:127:          "$ref": "#/$defs/Retention"
+services/shf-agent-fabric/contracts/registry/registry.json:24:        "retention": {
+services/shf-agent-fabric/contracts/registry/registry.json:65:        "retention": {
+services/shf-agent-fabric/contracts/registry/registry.json:108:        "retention": {
+services/shf-agent-fabric/contracts/registry/registry.json:151:        "retention": {
+services/shf-agent-fabric/contracts/registry/registry.json:192:        "retention": {
+services/shf-agent-fabric/contracts/registry/registry.json:234:        "retention": {
+services/shf-agent-fabric/contracts/registry/registry.json:278:        "retention": {
+services/shf-agent-fabric/contracts/registry/registry.json:332:        "retention": {
+services/shf-agent-fabric/contracts/registry/registry.json:385:        "retention": {
+services/shf-agent-fabric/contracts/registry/registry.json:416:          "referrals"
+services/shf-agent-fabric/contracts/registry/registry.json:438:        "retention": {
+services/shf-agent-fabric/contracts/registry/registry.json:491:        "retention": {
+services/shf-agent-fabric/contracts/registry/registry.json:543:        "retention": {
+services/shf-agent-fabric/contracts/registry/registry.json:585:        "retention": {
+services/shf-agent-fabric/contracts/registry/registry.json:629:        "retention": {
+services/shf-agent-fabric/contracts/registry/registry.json:673:        "retention": {
+services/shf-agent-fabric/contracts/registry/registry.json:717:        "retention": {
+services/shf-agent-fabric/_LOCKED_AGENT_FABRIC_V1_20260514_183731/agents.json:357:    "role": "Recommends partner matches, referral routes, bundled opportunities, and business network combinations.",
+services/shf-agent-fabric/_LOCKED_AGENT_FABRIC_V1_20260514_183731/agents.json:362:      "referral_route_scoring",
+services/shf-agent-fabric/_LOCKED_AGENT_FABRIC_V1_20260514_183731/admin_agents_response.json:1:{"ok":true,"source":"contracts/agents/agents.json","count":11,"agents":[{"agent_id":"ai_analyst_agent","agentId":"ai_analyst_agent","name":"AI Analyst Agent","label":"AI Analyst Agent","layer":"analyst_layer","role":"Explains dashboard state, drawer context, verification readiness, and recommended next actions in plain language.","lifecycle":"active","version":"v1","enabled":true,"policy":{"humanApproval":false,"maxSteps":6,"notes":"Can explain and recommend. Cannot approve, verify, publish, or modify official records without another system action."},"capabilities":["dashboard_explanation","drawer_context_summary","next_action_recommendation","plain_language_reasoning"],"allowedTools":["log_note","save_draft_artifact"],"visibility":"user_visible"},{"agent_id":"adaptive_experience_agent","agentId":"adaptive_experience_agent","name":"Adaptive Experience Agent","label":"Adaptive Experience Agent","layer":"adaptive_experience_layer","role":"Reads privacy-safe experience signals, detects workflow friction, and recommends page or workflow improvements.","lifecycle":"active","version":"v1","enabled":true,"policy":{"humanApproval":false,"maxSteps":7,"notes":"Can recommend UX improvements. Should not collect sensitive user data or alter production behavior automatically."},"capabilities":["friction_detection","feature_usage_summary","workflow_bottleneck_detection","ux_recommendation"],"allowedTools":["log_note","save_draft_artifact"],"visibility":"internal"},{"agent_id":"hub_guide_agent","agentId":"hub_guide_agent","name":"Hub Guide Agent","label":"Hub Guide Agent","layer":"hub_collaboration_layer","role":"Guides users to the correct Hub page based on their goal, role, status, and next best workflow step.","lifecycle":"active","version":"v1","enabled":true,"policy":{"humanApproval":false,"maxSteps":5,"notes":"Can guide navigation and explain workflows. Cannot change permissions or submit official records."},"capabilities":["guided_page_selection","workflow_guidance","role_aware_navigation","next_page_recommendation"],"allowedTools":["log_note"],"visibility":"user_visible"},{"agent_id":"hub_matching_agent","agentId":"hub_matching_agent","name":"Hub Matching Agent","label":"Hub Matching Agent","layer":"hub_intelligence_engine","role":"Recommends partner matches, referral routes, bundled opportunities, and business network combinations.","lifecycle":"active","version":"v1","enabled":true,"policy":{"humanApproval":true,"maxSteps":8,"notes":"Can recommend matches and bundles. Human review required before final partner commitment or proposal submission."},"capabilities":["partner_matching","referral_route_scoring","bundle_recommendation","business_network_matching"],"allowedTools":["log_note","save_draft_artifact"],"visibility":"internal"},{"agent_id":"impact_comparison_agent","agentId":"impact_comparison_agent","name":"Impact Comparison Agent","label":"Impact Comparison Agent","layer":"impact_intelligence_layer","role":"Compares measured impact across programs, partners, counties, neighborhoods, funders, service lanes, and time periods.","lifecycle":"active","version":"v1","enabled":true,"policy":{"humanApproval":false,"maxSteps":8,"notes":"Must use measured impact first before comparison. Should not compare weak data as if verified."},"capabilities":["impact_comparison","program_efficiency_comparison","partner_performance_comparison","funding_risk_comparison"],"allowedTools":["log_note","save_draft_artifact"],"visibility":"internal"},{"agent_id":"impact_measurement_agent","agentId":"impact_measurement_agent","name":"Impact Measurement Agent","label":"Impact Measurement Agent","layer":"impact_intelligence_layer","role":"Measures verified impact using outcome definitions, time windows, cost logic, evidence strength, and confidence scoring.","lifecycle":"active","version":"v1","enabled":true,"policy":{"humanApproval":false,"maxSteps":8,"notes":"Measures impact from available data. Must clearly separate claimed, verified, pending, and weak-evidence outcomes."},"capabilities":["impact_measurement","cost_per_outcome_analysis","evidence_strength_summary","verified_outcome_summary"],"allowedTools":["log_note","save_draft_artifact"],"visibility":"internal"},{"agent_id":"oracle_truth_agent","agentId":"oracle_truth_agent","name":"Oracle Truth Agent","label":"Oracle Truth Agent","layer":"oracle_layer","role":"Reads Oracle truth packages and returns truth status, confidence state, contradiction state, readiness state, and trust-envelope notes.","lifecycle":"active","version":"v1","enabled":true,"policy":{"humanApproval":false,"maxSteps":5,"notes":"Reads and explains Oracle outputs. Does not create truth by itself."},"capabilities":["truth_package_reading","confidence_interpretation","contradiction_detection","readiness_summary"],"allowedTools":["log_note"],"visibility":"internal"},{"agent_id":"reconciliation_agent","agentId":"reconciliation_agent","name":"Reconciliation Agent","label":"Reconciliation Agent","layer":"reconciliation_layer","role":"Finds conflicting records, compares source priority, and prepares contradiction-resolution notes before Oracle judgment.","lifecycle":"active","version":"v1","enabled":true,"policy":{"humanApproval":true,"maxSteps":6,"notes":"Can identify conflicts and recommend resolution. Should not silently overwrite source records."},"capabilities":["conflict_detection","source_priority_comparison","contradiction_resolution_notes"],"allowedTools":["log_note"],"visibility":"internal"},{"agent_id":"report_narrator_agent","agentId":"report_narrator_agent","name":"Report Narrator Agent","label":"Report Narrator Agent","layer":"reporting_layer","role":"Turns verified outcomes, trust envelopes, audit traces, and report readiness into plain-language report narratives.","lifecycle":"active","version":"v1","enabled":true,"policy":{"humanApproval":true,"maxSteps":8,"notes":"Can draft report language. Human approval required before export, publication, or funder submission."},"capabilities":["report_summary","funder_language_draft","plain_language_explanation","readiness_explanation"],"allowedTools":["log_note","save_draft_artifact"],"visibility":"user_visible"},{"agent_id":"verification_agent","agentId":"verification_agent","name":"Verification Agent","label":"Verification Agent","layer":"verification_layer","role":"Reviews evidence sufficiency, verification status, audit trace coverage, and weak-proof risk.","lifecycle":"active","version":"v1","enabled":true,"policy":{"humanApproval":true,"maxSteps":6,"notes":"Can recommend verification state but final approval should remain human-controlled or policy-controlled."},"capabilities":["evidence_review","verification_status_summary","audit_trace_check","weak_evidence_flagging"],"allowedTools":["log_note"],"visibility":"internal"},{"agent_id":"watchtower_agent","agentId":"watchtower_agent","name":"Watchtower Agent","label":"Watchtower Agent","layer":"watchtower_layer","role":"Monitors risk signals, system integrity, audit health, weak proof, and infrastructure alerts.","lifecycle":"active","version":"v1","enabled":true,"policy":{"humanApproval":false,"maxSteps":8,"notes":"Can alert and summarize. Cannot override locked enforcement gates."},"capabilities":["risk_monitoring","audit_health_monitoring","integrity_signal_detection","alert_summary"],"allowedTools":["log_note"],"visibility":"internal"}],"disabled":[]}
+services/shf-agent-fabric/tests/test_internal_service_identity.py:44:    body = {"producer_id": "hub.referral", "event_type": "referral.created"}
+services/shf-agent-fabric/tests/test_internal_service_identity.py:57:    body = {"producer_id": "hub.referral", "event_type": "referral.created"}
+services/shf-agent-fabric/tests/test_internal_service_identity.py:88:    for body in ({"producer_id": "curriculum.lesson", "event_type": "truth.approved"}, {"producer_id": "hub.referral", "event_type": "truth.approved"}):
+services/shf-agent-fabric/tests/test_internal_service_identity.py:113:        {"producer_id": "shs.reporting", "event_type": "referral.created"},
+services/shf-agent-fabric/tests/test_internal_service_identity.py:114:        {"producer_id": "hub.referral", "event_type": "report.created"},
+services/shf-agent-fabric/tests/test_internal_service_identity.py:140:        {"producer_id": "shs.exchange", "event_type": "referral.created"},
+services/shf-agent-fabric/tests/test_internal_service_identity.py:143:        {"producer_id": "hub.referral", "event_type": "funding_commitment.committed"},
+services/shf-agent-fabric/tests/test_internal_service_identity.py:164:    body = {"producer_id": "hub.referral", "event_type": "referral.created"}
+services/shf-agent-fabric/tests/test_internal_service_identity.py:192:        "producer_id": "hub.referral",
+services/shf-agent-fabric/tests/test_internal_service_identity.py:193:        "event_type": "referral.created",
+services/shf-agent-fabric/tests/test_internal_service_identity.py:194:        "subject_type": "referral",
+services/shf-agent-fabric/tests/test_internal_service_identity.py:201:        "idempotency_key": "referral:case_internal_1:created",
+services/shf-agent-fabric/tests/test_internal_service_identity.py:203:        "payload": {"referral_id": "case_internal_1"},
+services/shf-agent-fabric/tests/test_internal_service_identity.py:286:def test_report_created_payload_rejects_content_expansion_and_scope_forgery(tmp_path, monkeypatch):
+services/shf-agent-fabric/tests/test_internal_service_identity.py:513:        {"producer_id": "shs.grant_binder", "event_type": "referral.created"},
+services/shf-agent-fabric/tests/test_internal_service_identity.py:514:        {"producer_id": "hub.referral", "event_type": "grant_binder.created"},
+services/shf-agent-fabric/fabric/compliance/gate_g.py:42:    loosen_num("maxRetentionDays")
+services/shf-agent-fabric/contracts/registry_entity.schema.json.bak_add_business:62:    "Retention": {
+services/shf-agent-fabric/contracts/registry_entity.schema.json.bak_add_business:95:        "retention",
+services/shf-agent-fabric/contracts/registry_entity.schema.json.bak_add_business:126:        "retention": {
+services/shf-agent-fabric/contracts/registry_entity.schema.json.bak_add_business:127:          "$ref": "#/$defs/Retention"
+services/shf-agent-fabric/fabric/orchestrator_plan.py:51:                    "Weekly dashboard: attendance, retention, incidents, staff notes",
+services/shf-agent-fabric/contracts/agents/agents.json:144:      "referral_route_scoring",
+services/shf-agent-fabric/contracts/agents/agents.json:177:    "role": "Recommends partner matches, referral routes, bundled opportunities, and business network combinations.",
+services/shf-agent-fabric/contracts/agents/agents.json:435:      "renewal_context",
+services/shf-agent-fabric/contracts/agents/agents.json:446:      "renewal_opportunity_summary",
+services/shf-agent-fabric/contracts/agents/agents.json:476:    "role": "Client record review, support/maintenance summary, renewal/upgrade opportunity support, and client health review.",
+services/shf-agent-fabric/tests/test_workforce_employment_metric.py:155:    assert not any("retention" in metric_id for metric_id in metric_ids if metric_id.startswith("workforce."))
+services/shf-agent-fabric/contracts/aim_rulesets/rs_2026Q2_workforce_v1_0.json:42:      "retention_3m_rate": "retention_3m_rate",
+services/shf-agent-fabric/contracts/aim_rulesets/rs_2026Q2_workforce_v1_0.json:43:      "retention_6m_rate": "retention_6m_rate",
+services/shf-agent-fabric/contracts/aim_rulesets/rs_2026Q2_workforce_v1_0.json:99:      "rule_id": "retention_3_month",
+services/shf-agent-fabric/contracts/aim_rulesets/rs_2026Q2_workforce_v1_0.json:109:      "rule_id": "retention_6_month",
+services/shf-agent-fabric/contracts/aim_rulesets/rs_2026Q2_workforce_v1_0.json:180:      { "signal": "risk_flag.attendance_drop", "severity": ["medium", "high"], "action": "shift_weight_to_retention" },
+services/shf-agent-fabric/contracts/aim_rulesets/rs_2026Q2_workforce_v1_0.json:188:      "primary": "maximize_verified_retention_outcomes",
+services/shf-agent-fabric/contracts/aim_rulesets/rs_2026Q2_workforce_v1_0.json:195:      "payout_rules.retention_3_month.amount_per_unit",
+services/shf-agent-fabric/contracts/aim_rulesets/rs_2026Q2_workforce_v1_0.json:196:      "payout_rules.retention_6_month.amount_per_unit",
+services/shf-agent-fabric/contracts/aim_rulesets/rs_2026Q2_workforce_v1_0.json:204:      "min_retention_weight_ratio": 0.40
+services/shf-agent-fabric/contracts/aim_rulesets/rs_2026Q2_workforce_v1_0.json:214:        "notes": "baseline payouts + verification gating + retention weighting"
+services/shf-agent-fabric/fabric/contracts/evidence_contract_v1.json:8:    "retentionRate",
+services/shf-agent-fabric/services/truth_public_population_authority_service.py:32:REGISTERED_PREDICATES = {("curriculum_completion", "completed_lesson"), ("hub_referral_created", "referral_created")}
+services/shf-agent-fabric/contracts/aim_rulesets/aim_lock_triggers_v1.json:58:      "trigger_id": "retention_rate_drop",
+services/shf-agent-fabric/contracts/aim_rulesets/aim_lock_triggers_v1.json:60:      "metric_key": "retention_3m_rate",
+services/shf-agent-fabric/contracts/aim_rulesets/aim_lock_triggers_v1.json:64:      "action": "increase_retention_weight",
+services/shf-agent-fabric/tests/test_truth_routes_security.py:187:        json={"claim_id": "claim_internal_approval", "claim_text": "referral created", "source_ids": [source_id], "trace_coverage": 90},
+services/shf-agent-fabric/tests/test_truth_routes_security.py:224:        json={"claim_id": "claim_internal_unverified", "claim_text": "referral created", "source_ids": ["missing-source"], "trace_coverage": 90},
+services/shf-agent-fabric/tests/test_truth_routes_security.py:265:        json={"claim_id": "claim_internal_scope", "claim_text": "referral created", "source_ids": [source_id], "trace_coverage": 90},
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:22:  { icon: "↔", label: "Open Referrals", value: "58", delta: "▲ 14%", note: "vs last 30 days", tone: "violet" },
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:32:  ["Referrals", "↔", "/hub/lifecycle"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:45:  ["Referral Exchange", "↔", "/hub/lifecycle"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:68:  ["⚠", "Referral review needed", "Referral #R-26471 requires your review.", "10:24 AM", "warn"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:92:      "After the data is clean, review Partner Network or create referrals in Intake.",
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:106:      "After reviewing partners, create referrals in Intake or work partner issues in Action Queue.",
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:111:    id: "create-referral",
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:114:    title: "Create a referral",
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:120:      "After creating the referral, go to Action Queue to assign, review, hold, resolve, or close it.",
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:122:      "Sender, receiver, need category, urgency, notes, consent, and referral creation.",
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:125:    id: "work-referrals",
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:128:    title: "Work today’s referrals",
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:134:      "After actions are taken, go to Referral Lifecycle to confirm movement.",
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:136:      "High priority items, unassigned referrals, review, hold, resolve, close, and logged queue actions.",
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:142:    title: "Track referral progress",
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:144:    page: "Referral Lifecycle",
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:146:      "Use this when the client needs to see whether referrals are moving, stuck, resolved, or closed.",
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:164:      "Monthly summary, referral activity, partner network report, unmet needs report, import quality, and outcome snapshot.",
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:192:      "Partner opportunities, service-lane expansion, bundles, pilots, funding, and business network growth.",
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:212:  const demoReferrals = [
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:243:    referrals: demoReferrals,
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:255:    ["Open", model.metrics.openReferrals],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:256:    ["Assigned", model.metrics.assignedReferrals],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:257:    ["Aging", model.metrics.agingReferrals],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:480:  ["📈", "Referrals Closed This Month", "Target: 50 · Current: 46", "92%", "blue"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:846:          <p>Coordinate partners, manage referrals, and close gaps across the network.</p>
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:913:          <h2>◔ Referral Aging</h2>
+services/shf-agent-fabric/fabric/registry_schema_validation.py:67:    # legal + retention baseline (if legal exists, it must be an object)
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:83:def _referral_source_and_claim(org: str, claim_id: str, subject_id: str, *, internal_approved=True, public_approved=False, verification="verified", occurred_at="2026-08-25T12:00:00+00:00"):
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:94:        "claim_type": "hub_referral_created",
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:95:        "claim_text": "referral created",
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:96:        "predicate": "referral_created",
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:103:        "lineage_id": "lineage.hub.referral.created.v1",
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:104:        "producer_id": "hub.referral",
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:105:        "producer_event_type": "referral.created",
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:214:def test_referral_count_uses_internal_approval_and_distinct_subjects(isolated_metric_storage, monkeypatch):
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:215:    source_a, claim_a = _referral_source_and_claim("org-a", "referral-1", "case-1")
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:216:    source_b, claim_b = _referral_source_and_claim("org-a", "referral-2", "case-2")
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:217:    duplicate_source, duplicate_claim = _referral_source_and_claim("org-a", "referral-replay", "case-1")
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:222:        "hub.referral.created_count.v1", "org-a", "2026-08-01T00:00:00+00:00", "2026-08-31T23:59:59+00:00", actor=actor,
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:226:    assert result["source_claim_ids"] == ["referral-1", "referral-2"]
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:231:def test_referral_count_excludes_unapproved_unverified_superseded_and_wrong_scope(isolated_metric_storage, monkeypatch):
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:232:    good_source, good = _referral_source_and_claim("org-a", "good", "case-good")
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:233:    unapproved_source, unapproved = _referral_source_and_claim("org-a", "unapproved", "case-unapproved", internal_approved=False)
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:234:    unverified_source, unverified = _referral_source_and_claim("org-a", "unverified", "case-unverified", verification="unverified")
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:235:    wrong_source, wrong = _referral_source_and_claim("org-b", "wrong-org", "case-wrong")
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:236:    superseded_source, superseded = _referral_source_and_claim("org-a", "superseded", "case-old")
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:243:        "hub.referral.created_count.v1", "org-a", "2026-08-01T00:00:00+00:00", "2026-08-31T23:59:59+00:00", actor=actor,
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:250:def test_referral_count_public_mode_requires_population_eligibility_in_addition_to_internal_approval(isolated_metric_storage, monkeypatch):
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:251:    source, claim = _referral_source_and_claim("org-a", "internal-only", "case-1", internal_approved=True, public_approved=False)
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:252:    public_only_source, public_only_claim = _referral_source_and_claim("org-a", "public-only", "case-2", internal_approved=False, public_approved=True)
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:256:    internal = metric_registry_service.calculate_metric("hub.referral.created_count.v1", "org-a", "2026-08-01T00:00:00+00:00", "2026-08-31T23:59:59+00:00", actor=actor)
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:257:    public = metric_registry_service.calculate_metric("hub.referral.created_count.v1", "org-a", "2026-08-01T00:00:00+00:00", "2026-08-31T23:59:59+00:00", actor=actor, public=True)
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:264:def test_referral_count_fails_closed_for_missing_metadata_or_source(isolated_metric_storage, monkeypatch):
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:265:    source, claim = _referral_source_and_claim("org-a", "missing-metadata", "case-1")
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:271:        metric_registry_service.calculate_metric("hub.referral.created_count.v1", "org-a", "2026-08-01T00:00:00+00:00", "2026-08-31T23:59:59+00:00", actor=actor)
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:273:    claim["lineage_id"] = "lineage.hub.referral.created.v1"
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:276:        metric_registry_service.calculate_metric("hub.referral.created_count.v1", "org-a", "2026-08-01T00:00:00+00:00", "2026-08-31T23:59:59+00:00", actor=actor)
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:279:def test_referral_count_window_and_zero_are_deterministic(isolated_metric_storage, monkeypatch):
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:280:    source, claim = _referral_source_and_claim("org-a", "boundary", "case-boundary", occurred_at="2026-08-01T00:00:00+00:00")
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:284:    included = metric_registry_service.calculate_metric("hub.referral.created_count.v1", "org-a", "2026-08-01T00:00:00+00:00", "2026-08-01T00:00:00+00:00", actor=actor)
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:285:    excluded = metric_registry_service.calculate_metric("hub.referral.created_count.v1", "org-a", "2026-08-02T00:00:00+00:00", "2026-08-02T00:00:00+00:00", actor=actor)
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:292:def test_referral_count_fails_closed_for_unknown_approval_state(isolated_metric_storage, monkeypatch):
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:293:    source, claim = _referral_source_and_claim("org-a", "unknown-approval", "case-1")
+services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py:299:        metric_registry_service.calculate_metric("hub.referral.created_count.v1", "org-a", "2026-08-01T00:00:00+00:00", "2026-08-31T23:59:59+00:00", actor=actor)
+services/shf-agent-fabric/contracts/layers/layer_registry.json:105:      "description": "Defines data types, sensitivity, retention, and allowed flows.",
+src/pages/hub/HubSalesPipelinePage.jsx:85:    title: "Low-Fit Vendor Referral",
+src/pages/hub/HubSalesPipelinePage.jsx:91:    relatedOpportunity: "Low-Fit Vendor Referral",
+services/shf-agent-fabric/contracts/registry_entity.contract.ts:3:export type Retention = {
+services/shf-agent-fabric/contracts/registry_entity.contract.ts:22:  retention: Retention;
+src/pages/hub/HubReports.jsx:15:import { fetchHubReferralCreatedCountReport } from "@/shared/reporting/hubReferralReportingClient";
+src/pages/hub/HubReports.jsx:174:const HUB_REPORT_WORKFLOW_REFERRALS = [
+src/pages/hub/HubReports.jsx:200:    referrals: HUB_REPORT_WORKFLOW_REFERRALS,
+src/pages/hub/HubReports.jsx:208:    ["Open Referrals", model.metrics.openReferrals],
+src/pages/hub/HubReports.jsx:209:    ["Unassigned", model.metrics.unassignedReferrals],
+src/pages/hub/HubReports.jsx:210:    ["Aging", model.metrics.agingReferrals],
+src/pages/hub/HubReports.jsx:289:  const [referralReport, setReferralReport] = React.useState(null);
+src/pages/hub/HubReports.jsx:290:  const [referralReportStatus, setReferralReportStatus] = React.useState("loading");

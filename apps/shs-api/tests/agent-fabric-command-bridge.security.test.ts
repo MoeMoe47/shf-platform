@@ -54,6 +54,7 @@ function envelope(kind: string) {
     if (mode === "unverified") return { ...base, state: "NOT_YET_VERIFIED", reason_code: "NO_VERIFICATION_RECORDED", source: { run_on_read: false } };
     return { ...base, status: "DEGRADED", last_verified_at: "2026-09-26T07:00:00Z", trigger: `admin_${kind}_verify`, checks: [{ name: "registry_contract", ok: true, reason_code: null }, { name: "watchtower_attestation", ok: false, reason_code: "CHECK_FAILED" }], degraded: ["watchtower_attestation"], staleness: { age_seconds: 600, threshold_seconds: null, threshold: "NOT_DEFINED" }, stdout_tail: "/Users/x/secret" };
   }
+  if (kind === "artifact_storage") return { ...base, state: "AVAILABLE", reason_code: "SHARED_ARTIFACT_STORE_READY", source: { authority: "Agent Fabric shared run authority", read_only: true, record_type: "artifact_storage" }, artifact_storage: "FABRIC_RUN_ARTIFACTS", durable: true, check: "READ_ONLY_CATALOG_LOOKUP", checked_at: "2026-09-27T10:00:00Z", dsn: "postgresql://u:pw@db/x" };
   if (kind === "gate") return { ...base, gate_pass: false, auditor_one_liner: "GATE FAIL: blockers=L08(not_enforced_ready)", gate_required_layers: ["L07", "L08"], gate_blockers: [{ layer: "L08", reason: "not_enforced_ready" }] };
   return { ...base, window: 25, events: [{ runId: "r1", planId: "p1", agentName: "Layer23OrchestratorAgent", kind: "execute", outcome: "ok", ts: "2026-01-09T03:56:55+00:00", snapshotSha256: SHA, artifacts: [{ artifactId: "draft_1", sha256: SHA, path: "/Users/x/db/a.json" }] }] };
 }
@@ -88,7 +89,7 @@ function liveRunBody(kind: string) {
     timed_out_at: "NOT_AVAILABLE",
     execution_lease: { status: "EXPIRED", lease_expires_at: "2026-09-27T09:05:00Z", lease_seconds: 300, heartbeat: "NOT_SUPPORTED", orphan_recorded: true, scope: "REPLICA_LOCAL", evaluated_at: "2026-09-27T10:00:00Z", holder: { pid: 4242, process_instance: "abc" } },
   };
-  const executionSafety = { level: "LOCAL", local_single_flight: "ACTIVE", distributed_single_flight: "NOT_GUARANTEED", scope: "REPLICA_LOCAL", production_blocker: "DISTRIBUTED_SINGLE_FLIGHT_NOT_GUARANTEED", summary: "LOCAL SINGLE-FLIGHT ACTIVE; DISTRIBUTED SINGLE-FLIGHT NOT YET GUARANTEED", claims_dir: "/srv/db/runs/claims" };
+  const executionSafety = { level: "LOCAL", local_single_flight: "ACTIVE", distributed_single_flight: "NOT_GUARANTEED", scope: "REPLICA_LOCAL", production_blocker: "DISTRIBUTED_SINGLE_FLIGHT_NOT_GUARANTEED", summary: "LOCAL SINGLE-FLIGHT ACTIVE; DISTRIBUTED SINGLE-FLIGHT NOT YET GUARANTEED", artifact_storage: "REPLICA_LOCAL", claims_dir: "/srv/db/runs/claims" };
   if (kind === "runs_live") return { ...base, source, count: 1, runs: [run], execution_safety: executionSafety, lifecycle: { supported_states: ["APPROVAL_DENIED", "APPROVAL_REQUIRED", "APPROVED", "COMPLETED", "FAILED"], deferred_states: ["QUEUED", "EXECUTING"] }, freshness: { last_updated: "2026-09-27T09:00:00Z", captured_at: "2026-09-27T10:00:00Z", threshold: "NOT_DEFINED" } };
   if (kind === "run_detail") return { ...base, source, run, execution_safety: executionSafety };
   if (kind === "run_timeline") return { ...base, source, run_id: "a1b2c3", events: [{ event_id: "run_evt_1", run_id: "a1b2c3", event_type: "run.completed", from_state: "APPROVED", to_state: "COMPLETED", occurred_at: "2026-09-27T09:00:00Z", actor_ref: "NOT_CAPTURED", authority_ref: "agent_fabric.run_events", reason_code: "NOT_CAPTURED", reason_summary: "plan executed", evidence_refs: [], policy_refs: [], correlation_id: "corr_1234abcd", source: "agent_fabric.run_events", provenance: "RECORDED", raw: { path: "/srv/a" } }] };
@@ -339,7 +340,7 @@ test("the SHS bridge never reads or sends the Fabric admin key", () => {
 
 // ------------------------------------------------------------------ AFCC-2A.3
 test("2A.3: Watchtower, Infrastructure and Observability are bridged as last-known reads", async () => {
-  assert.deepEqual(SOURCES.slice(-3), ["watchtower", "infrastructure", "observability"]);
+  assert.deepEqual(SOURCES.slice(-4), ["watchtower", "infrastructure", "observability", "storage/artifacts"], "AFCC-3 Phase 6 adds artifact storage readiness last");
   await withApp(userFor("shs_admin"), async (base) => {
     const wt = await (await fetch(`${base}/agent-fabric/command/watchtower`)).json();
     assert.equal(wt.state, "AVAILABLE");
@@ -441,7 +442,7 @@ test("AFCC-3 P2: lifecycle, execution, lineage and domain-ref blocks are minimiz
     assert.ok(!("raw" in timeline.events[0]));
 
     const evidence = await (await fetch(`${base}/agent-fabric/command/runs/a1b2c3/evidence`)).json();
-    assert.deepEqual(evidence.evidence.artifact_refs, [{ artifact_id: "draft_1", sha256: SHA }]);
+    assert.deepEqual(evidence.evidence.artifact_refs.map((a: any) => [a.artifact_id, a.sha256]), [["draft_1", SHA]]);
     assert.deepEqual(evidence.evidence.domain_refs.truth_spine.refs, ["truth:claim_1"]);
 
     const deps = await (await fetch(`${base}/agent-fabric/command/runs/a1b2c3/dependencies`)).json();
@@ -483,7 +484,7 @@ test("AFCC-3 P4: execution lease passes minimized; holder process details never 
 
 test("AFCC-3 P4.1: execution safety stays LOCAL / NOT_GUARANTEED through the bridge; no internals", async () => {
   await withApp(userFor("shs_admin"), async (base) => {
-    const expected = { level: "LOCAL", local_single_flight: "ACTIVE", distributed_single_flight: "NOT_GUARANTEED", scope: "REPLICA_LOCAL", production_blocker: "DISTRIBUTED_SINGLE_FLIGHT_NOT_GUARANTEED", summary: "LOCAL SINGLE-FLIGHT ACTIVE; DISTRIBUTED SINGLE-FLIGHT NOT YET GUARANTEED" };
+    const expected = { level: "LOCAL", local_single_flight: "ACTIVE", distributed_single_flight: "NOT_GUARANTEED", scope: "REPLICA_LOCAL", production_blocker: "DISTRIBUTED_SINGLE_FLIGHT_NOT_GUARANTEED", artifact_storage: "REPLICA_LOCAL", summary: "LOCAL SINGLE-FLIGHT ACTIVE; DISTRIBUTED SINGLE-FLIGHT NOT YET GUARANTEED" };
     const list = await (await fetch(`${base}/agent-fabric/command/runs`)).json();
     const detailRes = await fetch(`${base}/agent-fabric/command/runs/a1b2c3`);
     const detailText = await detailRes.clone().text();
@@ -492,4 +493,71 @@ test("AFCC-3 P4.1: execution safety stays LOCAL / NOT_GUARANTEED through the bri
     assert.deepEqual(detail.execution_safety, expected);
     assert.ok(!detailText.includes("claims_dir") && !detailText.includes("/srv/"));
   });
+});
+
+test("AFCC-3 P5: distributed safety, artifact caveat and record origin pass through; nothing else", async () => {
+  const { readFabricProjection } = await import("../src/domain/agent-fabric-command/fabric-read-bridge.ts");
+  const body = {
+    contract: "afcc.read.v1", kind: "run_detail", read_only: true, state: "AVAILABLE",
+    source: { authority: "Agent Fabric shared run authority", stores: ["postgres:fabric_run_events"], projection: "live_operations", read_only: true, record_type: "run_event", record_origin: "POSTGRES_RUN_AUTHORITY", run_authority: "postgres", dsn: "postgresql://user:pw@db/x" },
+    run: { run_id: "r1", current_state: "COMPLETED", source: { record_origin: "POSTGRES_RUN_AUTHORITY", run_authority: "postgres" } },
+    execution_safety: { level: "DISTRIBUTED", local_single_flight: "ACTIVE", distributed_single_flight: "GUARANTEED", scope: "SHARED_TRANSACTIONAL_STORE", production_blocker: "NONE", artifact_storage: "REPLICA_LOCAL", summary: "DISTRIBUTED SINGLE-FLIGHT ACTIVE (SHARED TRANSACTIONAL RUN AUTHORITY); ARTIFACT STORAGE REMAINS REPLICA-LOCAL", claim_table: "fabric_execution_claims" },
+  };
+  const fetchImpl = async () => ({ status: 200, text: async () => JSON.stringify(body) });
+  const r: any = await readFabricProjection("run_detail", "/api/v1-command-center/agent-fabric/runs/r1", { fetchImpl: fetchImpl as any, config: { fabricBaseUrl: "http://fabric.invalid", timeoutMs: 1000 }, sign: () => ({}) });
+  assert.equal(r.ok, true);
+  assert.deepEqual(r.body.execution_safety, { level: "DISTRIBUTED", local_single_flight: "ACTIVE", distributed_single_flight: "GUARANTEED", scope: "SHARED_TRANSACTIONAL_STORE", production_blocker: "NONE", artifact_storage: "REPLICA_LOCAL", summary: "DISTRIBUTED SINGLE-FLIGHT ACTIVE (SHARED TRANSACTIONAL RUN AUTHORITY); ARTIFACT STORAGE REMAINS REPLICA-LOCAL" });
+  assert.equal(r.body.run.source.record_origin, "POSTGRES_RUN_AUTHORITY");
+  const text = JSON.stringify(r.body);
+  assert.ok(!text.includes("postgresql://") && !text.includes("claim_table") && !text.includes(":pw@"));
+});
+
+test("AFCC-3 P6: artifact durability and verification pass through; bodies, locations and credentials never do", async () => {
+  const { readFabricProjection } = await import("../src/domain/agent-fabric-command/fabric-read-bridge.ts");
+  const ref = { artifact_id: "draft_1", sha256: SHA, canonical_ref: "fabric-artifact:draft_1", type: "draft_artifact", size: 13826, created_at: "2026-09-27T09:00:00+00:00",
+    completeness: "COMPLETE", storage_state: "STORED", verification_state: "VERIFIED", durable: true,
+    body_canonical: "{\"secret\":1}", path: "/srv/db/artifacts/draft_1.json", storage_key: "fabric_run_artifacts/draft_1", dsn: "postgresql://u:pw@db/x" };
+  const evidence = { status: "DURABLE", artifact_count: 1, durable_count: 1, verified: true, storage: "FABRIC_RUN_ARTIFACTS", bucket: "internal" };
+  const body = { contract: "afcc.read.v1", kind: "run_evidence", read_only: true, state: "AVAILABLE", run_id: "r1",
+    evidence: { artifact_refs: [ref], evidence_status: evidence, evidence_refs: [], proof_refs: [], report_refs: [], truth_refs: [], watchtower_refs: [], loo_refs: [], counts: { artifacts: 1 } } };
+  const fetchImpl = async () => ({ status: 200, text: async () => JSON.stringify(body) });
+  const r: any = await readFabricProjection("run_evidence", "/api/v1-command-center/agent-fabric/runs/r1/evidence", { fetchImpl: fetchImpl as any, config: { fabricBaseUrl: "http://fabric.invalid", timeoutMs: 1000 }, sign: () => ({}) });
+  assert.equal(r.ok, true);
+  assert.deepEqual(r.body.evidence.artifact_refs[0], { artifact_id: "draft_1", sha256: SHA, canonical_ref: "fabric-artifact:draft_1", type: "draft_artifact", created_at: "2026-09-27T09:00:00+00:00", completeness: "COMPLETE", storage_state: "STORED", verification_state: "VERIFIED", size: 13826, durable: true });
+  assert.deepEqual(r.body.evidence.evidence_status, { status: "DURABLE", storage: "FABRIC_RUN_ARTIFACTS", artifact_count: 1, durable_count: 1, verified: true });
+  const text = JSON.stringify(r.body);
+  for (const leak of ["body_canonical", "secret", "/srv/", "storage_key", "postgresql://", "bucket"]) assert.ok(!text.includes(leak), leak);
+});
+
+test("AFCC-3 P7: run artifact viewer read is GET-only, id-checked, and forwards only a verified or labelled body", async () => {
+  const { readFabricProjection, safeJson } = await import("../src/domain/agent-fabric-command/fabric-read-bridge.ts");
+  const read = async (payload: any) => {
+    const fetchImpl = async () => ({ status: 200, text: async () => JSON.stringify({ contract: "afcc.read.v1", kind: "run_artifact", read_only: true, state: "AVAILABLE", run_id: "r1", artifact_id: "a1", ...payload }) });
+    return (await readFabricProjection("run_artifact", "/api/v1-command-center/agent-fabric/runs/r1/artifacts/a1", { fetchImpl: fetchImpl as any, config: { fabricBaseUrl: "http://fabric.invalid", timeoutMs: 1000 }, sign: () => ({}) })) as any;
+  };
+  const artifact = { artifact_id: "a1", sha256: SHA, storage_state: "STORED", verification_state: "VERIFIED", durable: true, storage_key: "x" };
+  const body = { title: "Plan", body: { steps: [{ step: 1, note: "see /Users/secret/file.json" }], api_key: "sk-1", nested: { password: "p", ok: 1 } } };
+  const verified = await read({ artifact, trust: "VERIFIED", body });
+  assert.equal(verified.body.trust, "VERIFIED");
+  assert.deepEqual(verified.body.body, { title: "Plan", body: { steps: [{ step: 1, note: "[redacted]" }], nested: { ok: 1 } } });
+  assert.ok(!JSON.stringify(verified.body).includes("storage_key"));
+  const failed = await read({ artifact: { ...artifact, verification_state: "HASH_MISMATCH" }, trust: "INTEGRITY_FAILED", body });
+  assert.equal(failed.body.body, null, "an integrity failure never forwards a body");
+  const legacy = await read({ artifact: { ...artifact, storage_state: "LEGACY_REPLICA_LOCAL", verification_state: "NOT_VERIFIABLE", durable: false }, trust: "NOT_TRUSTED_REPLICA_LOCAL", body: { a: 1 } });
+  assert.deepEqual([legacy.body.trust, legacy.body.body], ["NOT_TRUSTED_REPLICA_LOCAL", { a: 1 }]);
+  const forged = await read({ artifact, trust: "TOTALLY_TRUSTED", body });
+  assert.deepEqual([forged.body.trust, forged.body.body], ["NOT_AVAILABLE", null]);
+  let deep: any = {}; const root = deep; for (let i = 0; i < 20; i++) { deep.n = {}; deep = deep.n; }
+  assert.ok(JSON.stringify(safeJson(root)).includes("[truncated]"));
+
+  await withApp(userFor("shs_admin"), async (base) => {
+    for (const path of ["runs/execute/artifacts/a1", "runs/r1/artifacts/..%2Fsecret", "runs/r1/artifacts/a%20b"]) {
+      const res = await fetch(`${base}/agent-fabric/command/${path}`);
+      assert.ok([400, 404].includes(res.status), path);
+    }
+    for (const method of ["POST", "PUT", "PATCH", "DELETE"]) {
+      assert.equal((await fetch(`${base}/agent-fabric/command/runs/r1/artifacts/a1`, { method })).status, 405, method);
+    }
+  });
+  assert.ok(received.every((r) => r.method === "GET"));
 });

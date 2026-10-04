@@ -1,0 +1,503 @@
+============================================================
+SOURCE: 03_SALES_ROUTES.txt
+============================================================
+./vite.config.js.bak_fix_capital_1773006229:51:        sales: path.resolve(__dirname, "sales.html"),
+./shs_kickoff_snapshot.txt:199:./src/sales
+./vite.config.js.bak_20260424_092057:52:        sales: path.resolve(__dirname, "sales.html"),
+./src/router/AdminRoutes.jsx.bak_force_identity_redirect_20260513_080502:39:import SHSPartnerGrowthEngine from "@/pages/admin/growth/SHSPartnerGrowthEngine.jsx";
+./src/router/AdminRoutes.jsx.bak_force_identity_redirect_20260513_080502:106:        <Route path="/hub/growth-network" element={protect("/hub/growth-network", <HubGrowthNetwork />)} />
+./src/router/AdminRoutes.jsx.bak_force_identity_redirect_20260513_080502:107:        <Route path="/hub/sales-pipeline" element={protect("/hub/sales-pipeline", <HubSalesPipelinePage />)} />
+./src/router/AdminRoutes.jsx.bak_force_identity_redirect_20260513_080502:132:        <Route path="/growth" element={protect("/growth", <SHSPartnerGrowthEngine />)} />
+./sales.html:21:    <script type="module" src="/src/entries/sales.main.jsx"></script>
+./src/router/AdminRoutes.jsx.bak_final_verify_20260513_104716:39:import SHSPartnerGrowthEngine from "@/pages/admin/growth/SHSPartnerGrowthEngine.jsx";
+./src/router/AdminRoutes.jsx.bak_final_verify_20260513_104716:111:        <Route path="/hub/growth-network" element={protect("/hub/growth-network", <HubGrowthNetwork />)} />
+./src/router/AdminRoutes.jsx.bak_final_verify_20260513_104716:112:        <Route path="/hub/sales-pipeline" element={protect("/hub/sales-pipeline", <HubSalesPipelinePage />)} />
+./src/router/AdminRoutes.jsx.bak_final_verify_20260513_104716:137:        <Route path="/growth" element={protect("/growth", <SHSPartnerGrowthEngine />)} />
+./vite.config.js.bak_20260424_092403:52:        sales: path.resolve(__dirname, "sales.html"),
+./src/router/AdminRoutes.jsx.bak_final_routes_clean_20260513_105727:39:import SHSPartnerGrowthEngine from "@/pages/admin/growth/SHSPartnerGrowthEngine.jsx";
+./src/router/AdminRoutes.jsx.bak_final_routes_clean_20260513_105727:111:        <Route path="/hub/growth-network" element={protect("/hub/growth-network", <HubGrowthNetwork />)} />
+./src/router/AdminRoutes.jsx.bak_final_routes_clean_20260513_105727:112:        <Route path="/hub/sales-pipeline" element={protect("/hub/sales-pipeline", <HubSalesPipelinePage />)} />
+./src/router/AdminRoutes.jsx.bak_final_routes_clean_20260513_105727:137:        <Route path="/growth" element={protect("/growth", <SHSPartnerGrowthEngine />)} />
+./src/router/ArcadeRoutes.jsx:21:import GrowthObservationTower from "@/pages/metaverse/GrowthObservationTower.jsx";
+./src/router/ArcadeRoutes.jsx:111:        path="/metaverse/growth-observatory"
+./src/router/AdminRoutes.jsx.bak_hub_growth_v1c_20260509_202239:32:import SHSPartnerGrowthEngine from "@/pages/admin/growth/SHSPartnerGrowthEngine.jsx";
+./src/router/AdminRoutes.jsx.bak_hub_growth_v1c_20260509_202239:53:        <Route path="/hub/growth-network" element={<HubGrowthNetwork />} />
+./src/router/AdminRoutes.jsx.bak_hub_growth_v1c_20260509_202239:75:        <Route path="/growth" element={<SHSPartnerGrowthEngine />} />
+./src/router/AdminRoutes.jsx.bak_cleanup_20260513_103643:39:import SHSPartnerGrowthEngine from "@/pages/admin/growth/SHSPartnerGrowthEngine.jsx";
+./src/router/AdminRoutes.jsx.bak_cleanup_20260513_103643:111:        <Route path="/hub/growth-network" element={protect("/hub/growth-network", <HubGrowthNetwork />)} />
+./src/router/AdminRoutes.jsx.bak_cleanup_20260513_103643:112:        <Route path="/hub/sales-pipeline" element={protect("/hub/sales-pipeline", <HubSalesPipelinePage />)} />
+./src/router/AdminRoutes.jsx.bak_cleanup_20260513_103643:137:        <Route path="/growth" element={protect("/growth", <SHSPartnerGrowthEngine />)} />
+./src/router/AdminRoutes.jsx.bak_hub_growth_network_20260509_200058:31:import SHSPartnerGrowthEngine from "@/pages/admin/growth/SHSPartnerGrowthEngine.jsx";
+./src/router/AdminRoutes.jsx.bak_hub_growth_network_20260509_200058:73:        <Route path="/growth" element={<SHSPartnerGrowthEngine />} />
+./src/router/AdminRoutes.jsx.bak_route_protection_20260513_072505:36:import SHSPartnerGrowthEngine from "@/pages/admin/growth/SHSPartnerGrowthEngine.jsx";
+./src/router/AdminRoutes.jsx.bak_route_protection_20260513_072505:57:        <Route path="/hub/growth-network" element={<HubGrowthNetwork />} />
+./src/router/AdminRoutes.jsx.bak_route_protection_20260513_072505:58:        <Route path="/hub/sales-pipeline" element={<HubSalesPipelinePage />} />
+./src/router/AdminRoutes.jsx.bak_route_protection_20260513_072505:83:        <Route path="/growth" element={<SHSPartnerGrowthEngine />} />
+./src/router/AdminRoutes.jsx.bak_access_redirect_notice_20260513_080116:39:import SHSPartnerGrowthEngine from "@/pages/admin/growth/SHSPartnerGrowthEngine.jsx";
+./src/router/AdminRoutes.jsx.bak_access_redirect_notice_20260513_080116:92:        <Route path="/hub/growth-network" element={protect("/hub/growth-network", <HubGrowthNetwork />)} />
+./src/router/AdminRoutes.jsx.bak_access_redirect_notice_20260513_080116:93:        <Route path="/hub/sales-pipeline" element={protect("/hub/sales-pipeline", <HubSalesPipelinePage />)} />
+./src/router/AdminRoutes.jsx.bak_access_redirect_notice_20260513_080116:118:        <Route path="/growth" element={protect("/growth", <SHSPartnerGrowthEngine />)} />
+./src/router/paths.js:87:  sales:      "/sales.html#",
+./src/router/paths.js:134:    dashboard:  () => "/sales/dashboard",
+./src/router/paths.js:135:    calc:       () => "/sales/calc",
+./src/router/paths.js:136:    demo:       () => "/sales/demo",
+./src/router/paths.js:138:      `/sales/demo/${encodeURIComponent(cur || "asl")}/${encodeURIComponent(slug || "ch1")}`,
+./src/router/AdminRoutes.jsx.bak_safe_redirect_20260513_084112:39:import SHSPartnerGrowthEngine from "@/pages/admin/growth/SHSPartnerGrowthEngine.jsx";
+./src/router/AdminRoutes.jsx.bak_safe_redirect_20260513_084112:122:        <Route path="/hub/growth-network" element={protect("/hub/growth-network", <HubGrowthNetwork />)} />
+./src/router/AdminRoutes.jsx.bak_safe_redirect_20260513_084112:123:        <Route path="/hub/sales-pipeline" element={protect("/hub/sales-pipeline", <HubSalesPipelinePage />)} />
+./src/router/AdminRoutes.jsx.bak_safe_redirect_20260513_084112:148:        <Route path="/growth" element={protect("/growth", <SHSPartnerGrowthEngine />)} />
+./src/router/AdminRoutes 2.jsx:31:import SHSPartnerGrowthEngine from "@/pages/admin/growth/SHSPartnerGrowthEngine.jsx";
+./src/router/AdminRoutes 2.jsx:72:        <Route path="/growth" element={<SHSPartnerGrowthEngine />} />
+./docs/SHF_REPORTING_SURFACE_REGISTRY.v1.json:32:    {"surface_id":"surface.sales.impact_forecast","surface":"Sales Impact Forecaster","route":"/sales","component_file":"src/components/sales/ImpactForecaster.jsx","kpi_displayed":"projected completers/badges/sponsor value","current_formula":"forecast input arithmetic","current_source":"sales inputs","current_storage":"client state","producer":"sales.forecast","producer_status":"projection only","ingestion_route":null,"evidence_path":null,"source_verification":"not applicable","truth_claim_type":null,"truth_predicate":null,"metric_id":null,"metric_version":null,"reporting_service":null,"scope":"demo","provenance_status":"insufficient","browser_storage":"UI_STATE","data_classification":"demo","migration_status":"DEMO_ONLY","required_action":"label forecast and exclude from institutional reporting","blocker":"not an observed outcome","code_evidence":["src/components/sales/ImpactForecaster.jsx"]},
+./docs/SHF_REPORTING_SURFACE_REGISTRY.v1.json:33:    {"surface_id":"surface.sales.funding","surface":"Sales Funding Calculator","route":"/sales","component_file":"src/components/sales/FundingCalculator.jsx","kpi_displayed":"cost/funding/ROI/net impact","current_formula":"client-side funding arithmetic","current_source":"calculator inputs","current_storage":"client state","producer":"funding.simulator","producer_status":"simulation","ingestion_route":null,"evidence_path":null,"source_verification":"not applicable","truth_claim_type":null,"truth_predicate":null,"metric_id":null,"metric_version":null,"reporting_service":null,"scope":"demo","provenance_status":"insufficient","browser_storage":"UI_STATE","data_classification":"demo","migration_status":"DEMO_ONLY","required_action":"label as simulation","blocker":"not institutional result","code_evidence":["src/components/sales/FundingCalculator.jsx"]},
+./src/router/AdminRoutes.jsx.bak_login_identity_20260513_071933:36:import SHSPartnerGrowthEngine from "@/pages/admin/growth/SHSPartnerGrowthEngine.jsx";
+./src/router/AdminRoutes.jsx.bak_login_identity_20260513_071933:57:        <Route path="/hub/growth-network" element={<HubGrowthNetwork />} />
+./src/router/AdminRoutes.jsx.bak_login_identity_20260513_071933:58:        <Route path="/hub/sales-pipeline" element={<HubSalesPipelinePage />} />
+./src/router/AdminRoutes.jsx.bak_login_identity_20260513_071933:83:        <Route path="/growth" element={<SHSPartnerGrowthEngine />} />
+./tests/phase9Wave1Safety.test.mjs:17:  assert.match(read("src/components/sales/ImpactForecaster.jsx"), /not verified institutional data/i);
+./tests/phase9Wave1Safety.test.mjs:18:  assert.match(read("src/components/sales/FundingCalculator.jsx"), /not verified institutional data/i);
+./tests/ui/sales-restoration.spec.mjs:18://   - src/components/sales/LessonBody.jsx had a broken import path
+./tests/ui/sales-restoration.spec.mjs:19://     (stray space: "@/components /sales/AccreditationPanel.jsx").
+./tests/ui/sales-restoration.spec.mjs:26:const BASE = "http://localhost:5173/sales.html";
+./tests/ui/sales-restoration.spec.mjs:142:    await expect(page.getByRole("heading", { name: /Sales Fundamentals/ })).toBeVisible();
+./src/router/appMeta.js:6:  /sales\.html$/i.test(p)      ? "sales"      :
+./src/router/appMeta.js:14:  /sales$/i.test(p)            ? "sales"      :
+./src/router/SalesRoutes.jsx:1:// src/router/SalesRoutes.jsx
+./src/router/SalesRoutes.jsx:5:import SalesLayout from "@/layouts/SalesLayout.jsx";
+./src/router/SalesRoutes.jsx:8:const SalesDashboard = lazy(() => import("@/pages/sales/SalesDashboard.jsx"));
+./src/router/SalesRoutes.jsx:10:  import("@/pages/sales/DashboardNorthstar.jsx").catch(() => ({
+./src/router/SalesRoutes.jsx:15:const Leads = lazy(() => import("@/pages/sales/Leads.jsx"));
+./src/router/SalesRoutes.jsx:16:const Pipeline = lazy(() => import("@/pages/sales/Pipeline.jsx"));
+./src/router/SalesRoutes.jsx:17:const Proposals = lazy(() => import("@/pages/sales/Proposals.jsx"));
+./src/router/SalesRoutes.jsx:18:const Quotes = lazy(() => import("@/pages/sales/Quotes.jsx"));
+./src/router/SalesRoutes.jsx:19:const Orders = lazy(() => import("@/pages/sales/Orders.jsx"));
+./src/router/SalesRoutes.jsx:20:const Analytics = lazy(() => import("@/pages/sales/Analytics.jsx"));
+./src/router/SalesRoutes.jsx:21:const Exports = lazy(() => import("@/pages/sales/Exports.jsx"));
+./src/router/SalesRoutes.jsx:22:const Settings = lazy(() => import("@/pages/sales/Settings.jsx"));
+./src/router/SalesRoutes.jsx:23:const Help = lazy(() => import("@/pages/sales/Help.jsx"));
+./src/router/SalesRoutes.jsx:25:const Lesson = lazy(() => import("@/pages/sales/Lesson.jsx"));
+./src/router/SalesRoutes.jsx:26:const DemoDashboard = lazy(() => import("@/pages/sales/DemoDashboard.jsx"));
+./src/router/SalesRoutes.jsx:27:const DemoProposal = lazy(() => import("@/pages/sales/DemoProposal.jsx"));
+./src/router/SalesRoutes.jsx:37:export default function SalesRoutes() {
+./src/router/SalesRoutes.jsx:41:        <Route element={<SalesLayout />}>
+./src/router/SalesRoutes.jsx:43:          <Route path="dashboard" element={<SalesDashboard />} />
+./src/router/SalesRoutes.jsx:44:          <Route path="northstar" element={<SalesDashboardNorthstar />} />
+./src/router/SalesRoutes.jsx:63:          <Route path="*" element={<RouteFallback app="sales" />} />
+./tests/ui/career-shell-reconciliation.spec.mjs:98:    expect(hrefs.some((h) => h.includes("sales.html"))).toBe(true);
+./src/router/AdminRoutes.jsx.bak_remove_literal_n_20260513_105135:39:import SHSPartnerGrowthEngine from "@/pages/admin/growth/SHSPartnerGrowthEngine.jsx";
+./src/router/AdminRoutes.jsx.bak_remove_literal_n_20260513_105135:111:        <Route path="/hub/growth-network" element={protect("/hub/growth-network", <HubGrowthNetwork />)} />
+./src/router/AdminRoutes.jsx.bak_remove_literal_n_20260513_105135:112:        <Route path="/hub/sales-pipeline" element={protect("/hub/sales-pipeline", <HubSalesPipelinePage />)} />
+./src/router/AdminRoutes.jsx.bak_remove_literal_n_20260513_105135:137:        <Route path="/growth" element={protect("/growth", <SHSPartnerGrowthEngine />)} />
+./src/router/AdminRoutes.jsx:83:import SHSPartnerGrowthEngine from "@/pages/admin/growth/SHSPartnerGrowthEngine.jsx";
+./src/router/AdminRoutes.jsx:156:        <Route path="/hub/growth-network" element={protect("/hub/growth-network", <HubGrowthNetwork />)} />
+./src/router/AdminRoutes.jsx:157:        <Route path="/hub/sales-pipeline" element={protect("/hub/sales-pipeline", <HubSalesPipelinePage />)} />
+./src/router/AdminRoutes.jsx:218:        <Route path="/growth" element={protect("/growth", <SHSPartnerGrowthEngine />, [SHS_SECURITY_PERMISSIONS.GROWTH_VIEW])} />
+./src/SYSTEM_INDEX.txt:91:    shared/employer/salesBridge.js
+./src/SYSTEM_INDEX.txt:92:    shared/sales/leadInbox.js
+./src/SYSTEM_INDEX.txt:93:    shared/sales/pitchPack.js
+./src/SYSTEM_INDEX.txt:116:    entries/sales.main.jsx
+./src/SYSTEM_INDEX.txt:117:    router/SalesRoutes.jsx          (new)
+./src/SYSTEM_INDEX.txt:118:    router/SalesRoutes.jsx.bak      (old)
+./src/SYSTEM_INDEX.txt:119:    layouts/SalesLayout.jsx         (new)
+./src/SYSTEM_INDEX.txt:120:    layouts/SalesLayout.jsx.bak     (old)
+./src/SYSTEM_INDEX.txt:250:    styles/sales-shell.css
+./docs/SHRV1_SHF_NEXT_ROUTE_BRIDGE_AUDIT_V1.md:42:| admin.html#/hub/growth-network | admin.html | HubGrowthNetwork | hub/clientops | True |  | src/router/AdminRoutes.jsx |
+./docs/SHRV1_SHF_NEXT_ROUTE_BRIDGE_AUDIT_V1.md:43:| admin.html#/hub/sales-pipeline | admin.html | HubSalesPipelinePage | hub/clientops | True |  | src/router/AdminRoutes.jsx |
+./docs/SHRV1_SHF_NEXT_ROUTE_BRIDGE_AUDIT_V1.md:80:| admin.html#/growth | admin.html | SHSPartnerGrowthEngine | admin | True | GROWTH_VIEW | src/router/AdminRoutes.jsx |
+./docs/SHRV1_SHF_NEXT_ROUTE_BRIDGE_AUDIT_V1.md:98:| /sales.html#/ | index.html launcher | Launcher link | public/multi-entry | False |  | src/entries/index.main.jsx |
+./docs/SHRV1_SHF_NEXT_ROUTE_BRIDGE_AUDIT_V1.md:127:| /ops/sales | SalesCommandCenter | ops | normal pathname | False | src/App.tsx or linked page |
+./docs/SHRV1_SHF_NEXT_ROUTE_BRIDGE_AUDIT_V1.md:146:| /ops/sales |  | SHF_NEXT_ONLY | admin.html#/growth and admin.html#/hub/sales-pipeline | shf-next | Live sales command workflow belongs in shf-next; shrv1 keeps partner growth/hub sales governance views. |
+./docs/SHRV1_SHF_NEXT_ROUTE_BRIDGE_AUDIT_V1.md:207:| Sales Ops | shf-next | /ops/sales | Dedicated Sales Command Center exists in shf-next. |
+./docs/SHU_PAGE_2_ASSET_AND_BACKGROUND_AUDIT.md:48:| sales | Sales Studio | application | `/sales.html#/dashboard` | rotated application asset | available, live, public |
+./tests/fabricRoutingAuthority.test.mjs:25:  const growth = await import('../src/shared/api/growthMarket.js');
+./tests/fabricRoutingAuthority.test.mjs:30:    '/fabric-api/api/growth/dashboard',
+./tests/fabricRoutingAuthority.test.mjs:31:    '/fabric-api/api/growth/claims',
+./tests/fabricRoutingAuthority.test.mjs:32:    '/fabric-api/api/growth/claims/c-1/support',
+./tests/fabricRoutingAuthority.test.mjs:107:    ['services/shf-agent-fabric/app/api/routes/growth.py', 'prefix="/api/growth"'],
+./docs/CROSS_APP_IDENTITY_BRIDGE_DESIGN_V1.json:76:      "route": "/ops/sales",
+./docs/CROSS_APP_IDENTITY_BRIDGE_DESIGN_V1.json:339:        "/ops/sales"
+./vite.config.js:34:      // and /fabric-api/api/growth/claims -> :8090/api/growth/claims.
+./vite.config.js:103:        sales: path.resolve(__dirname, "sales.html"),
+./docs/GAME_THEORY_LAYER_V1.md:16:- `services/shf-agent-fabric/app/core/growth_game.py` remains a prediction-market style helper, not the governed SHS Game Theory route family.
+./docs/CROSS_APP_IDENTITY_BRIDGE_DESIGN_V1.md:49:| `/ops/sales` | shf-next | INTERNAL_OPS | shs_admin, shs_sales, shs_ops | internal | Identity & Access, SHS Sales Layer, Reports | show notice; later enforce sales/admin roles | sales pipeline data could leak | phase_2_notice |
+./docs/CROSS_APP_IDENTITY_BRIDGE_DESIGN_V1.md:74:| `shs_sales` | new bridge family derived from SHS Sales Layer | /ops/sales | future sales workflow access |
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_2_SALES_HANDOFF.md:46:| `admin.html#/hub/sales-pipeline` | `src/pages/hub/HubSalesPipelinePage.jsx` | Usable sales handoff source | Tracks sales stages, estimated value, priority, due date, related opportunity, related partners, next action, notes, and local sales review events. |
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_2_SALES_HANDOFF.md:48:| `admin.html#/hub/bundles` | `src/pages/hub/HubBundleBuilderPage.jsx` | Usable package context route | Linked from Sales Pipeline as Bundle Builder; useful for package and partner-bundle context. |
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_2_SALES_HANDOFF.md:66:| `/sales.html#/pipeline` | `src/pages/sales/Pipeline.jsx` | Stub | Renders only `Pipeline - stub`; not sufficient as the V1 handoff source. |
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_2_SALES_HANDOFF.md:67:| `admin.html#/sales-handoff` | Not found | Missing | No dedicated SHS Sales Handoff admin route/page was found. |
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_2_SALES_HANDOFF.md:71:`src/components/admin/AdminSidebar.jsx` exposes Production Ops routes directly. It does not currently expose a direct Sales Pipeline, Opportunities, or Sales Handoff link.
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_9_UPGRADE_OPPORTUNITY.md:11:This phase starts when ClientOps, reporting, support, system health, monthly review, or operator observation reveals a possible upgrade. It ends when the upgrade is tracked for proposal/sales follow-up or closed with a reason.
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_9_UPGRADE_OPPORTUNITY.md:44:| SHRV1 Hub Sales Pipeline | `admin.html#/hub/sales-pipeline` | Existing | Tracks sales stages, estimated value, priority, due date, related opportunity, next action, notes, and sales review events. |
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_9_UPGRADE_OPPORTUNITY.json:34:        "route_or_file": "admin.html#/hub/sales-pipeline",
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_9_UPGRADE_OPPORTUNITY.json:170:    "allowed_conversion_path": "Upgrade opportunities may become proposal or report candidate material only through the appropriate sales, reporting, privacy, ownership, and governance gates."
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_2_SALES_HANDOFF.json:14:        "route": "admin.html#/hub/sales-pipeline",
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_2_SALES_HANDOFF.json:78:        "route": "/sales.html#/pipeline",
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_2_SALES_HANDOFF.json:79:        "page": "src/pages/sales/Pipeline.jsx",
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_2_SALES_HANDOFF.json:84:        "route": "admin.html#/sales-handoff",
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_2_SALES_HANDOFF.json:92:      "finding": "AdminSidebar exposes Production Ops routes directly, but no direct Sales Pipeline, Opportunities, or Sales Handoff link was found."
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_V1.json:47:        "admin.html#/hub/sales-pipeline"
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_V1.json:83:        "admin.html#/hub/sales-pipeline",
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_V1.json:397:        "admin.html#/hub/sales-pipeline",
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_V1.json:434:      "route_or_doc_reference": "Phase 2; admin.html#/hub/sales-pipeline"
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_1_LEAD_INTAKE.json:14:        "route": "admin.html#/hub/sales-pipeline",
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_1_LEAD_INTAKE.json:34:        "route": "/sales.html#/leads",
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_1_LEAD_INTAKE.json:35:        "page": "src/pages/sales/Leads.jsx",
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_1_LEAD_INTAKE.json:227:    "SHS has a usable Hub Sales Pipeline route for sales review: admin.html#/hub/sales-pipeline.",
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_1_LEAD_INTAKE.json:231:    "The Sales app /sales.html#/leads page exists but is a stub.",
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_1_LEAD_INTAKE.json:244:    "Create a dedicated Lead Intake page or make /sales.html#/leads fully functional.",
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_V1.md:58:- `admin.html#/hub/sales-pipeline`
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_V1.md:95:- `admin.html#/hub/sales-pipeline`
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_V1.md:381:- `admin.html#/hub/sales-pipeline`
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_V1.md:427:| Proposal | Partial | Yes | Contract/payment/proposal approval hard gate | Phase 2; `admin.html#/hub/sales-pipeline` |
+./docs/operator-runbook/SHS_PRIVATE_BETA_CLIENT_JOURNEY_REHEARSAL_V1.json:240:      "recommended_fix": "Run and archive route smoke for lead, sales, ops, reports, ClientOps, and SHF-Next ops routes.",
+./src/apps/manifest/sales.manifest.json:5:  "entry": "src/entries/sales.main.jsx",
+./src/apps/manifest/sales.manifest.json:8:  "shellCss": "src/styles/sales-shell.css",
+./src/apps/manifest/sales.manifest.json:9:  "dashboard": "src/pages/sales/Dashboard.jsx",
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_1_LEAD_INTAKE.md:49:| `admin.html#/hub/sales-pipeline` | `src/pages/hub/HubSalesPipelinePage.jsx` | Usable sales review surface | Tracks pipeline items, stages, estimated value, priority, due dates, next action, notes, review events, and links to Opportunities and Bundle Builder. |
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_1_LEAD_INTAKE.md:57:| `/sales.html#/leads` | `src/pages/sales/Leads.jsx` | Stub | Renders only `Leads - stub`; not sufficient as the V1 operator lead intake surface. |
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_1_LEAD_INTAKE.md:139:- SHS has a usable Hub Sales Pipeline route for sales review: `admin.html#/hub/sales-pipeline`.
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_1_LEAD_INTAKE.md:143:- The Sales app `/sales.html#/leads` page exists but is a stub.
+./docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_1_LEAD_INTAKE.md:158:- Create a dedicated Lead Intake page or make `/sales.html#/leads` fully functional.
+./docs/operator-runbook/SHS_PRIVATE_BETA_CLIENT_JOURNEY_REHEARSAL_V1.md:27:| 1. Lead Intake | NEAR_READY | Sales and opportunity surfaces exist through Admin Hub routes; no dedicated first-interest intake route was confirmed. | Yes. Operator records lead details manually in sales/opportunity workflow. | SHS private operational only. | `src/router/AdminRoutes.jsx`, `src/components/admin/AdminSidebar.jsx`, `docs/operator-runbook/SHS_OPERATOR_RUNBOOK_V1.md` |
+./docs/operator-runbook/SHS_PRIVATE_BETA_CLIENT_JOURNEY_REHEARSAL_V1.md:28:| 2. Sales Handoff | NEAR_READY | Sales pipeline/opportunity and Production Ops routes are present. | Yes. Operator assembles handoff packet manually and transfers into Production Ops. | SHS private operational only. | `src/router/AdminRoutes.jsx`, `src/pages/admin/ops/`, `docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_2_SALES_HANDOFF.md` |
+./docs/operator-runbook/SHS_PRIVATE_BETA_CLIENT_JOURNEY_REHEARSAL_V1.md:41:| PB-001 | high | All phases | Route smoke evidence is not captured in this rehearsal artifact. | External beta could begin without proof that the full journey loads cleanly. | Run and archive route smoke for lead, sales, ops, reports, ClientOps, and SHF-Next ops routes. | 4 | Yes | Yes |
+./docs/operator-runbook/SHS_PRIVATE_BETA_CLIENT_JOURNEY_REHEARSAL_V1.md:43:| PB-003 | medium | Lead Intake | No dedicated first-interest intake route was confirmed. | Lead capture relies on manual sales/opportunity entry. | Add or designate one lead intake surface after beta if sales flow proves insufficient. | 6 | No | Yes |
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:17:    ".backup_growth_market_fallback_20260218_230840/growthMarket.js",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:18:    ".backup_growth_observatory_20260218_230341/GrowthObservationTower.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:19:    ".backup_growth_tower_20260218_233122/GrowthObservationTower.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:33:    ".restore_points/stable_base_20260422_093031/src/_archive/SalesRoutes.20251107-000126.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:102:    ".restore_points/stable_base_20260422_093031/src/_archive/components.sales.20251107-000126/SalesDashboard.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:103:    ".restore_points/stable_base_20260422_093031/src/_archive/components.sales.20251107-000126/SalesHeader.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:104:    ".restore_points/stable_base_20260422_093031/src/_archive/components.sales.20251107-000126/SalesPaletteMount.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:105:    ".restore_points/stable_base_20260422_093031/src/_archive/components.sales.20251107-000126/SalesSidebar.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:135:    ".restore_points/stable_base_20260422_093031/src/_archive/pages.sales.20251107-000126/SalesDashboard.BASELINE.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:136:    ".restore_points/stable_base_20260422_093031/src/_archive/pages.sales.20251107-000126/SalesDashboard.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:137:    ".restore_points/stable_base_20260422_093031/src/_archive/pages.sales.20251107-000126/SalesDashboardNorthstar.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:138:    ".restore_points/stable_base_20260422_093031/src/_archive/pages.sales.20251107-000126/SalesDashboardPro.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:139:    ".restore_points/stable_base_20260422_093031/src/_archive/pages.sales.20251107-000126/SalesDashboardV2.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:143:    ".restore_points/stable_base_20260422_093031/src/_archive/sales.main.20251107-000126.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:221:    ".restore_points/stable_base_20260422_093031/src/apps/manifest/sales.manifest.json",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:481:    ".restore_points/stable_base_20260422_093031/src/components/metaverse/GrowthDopamineLayer.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:482:    ".restore_points/stable_base_20260422_093031/src/components/metaverse/GrowthObservatoryBackdrop.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:497:    ".restore_points/stable_base_20260422_093031/src/components/sales/AccreditationPanel.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:498:    ".restore_points/stable_base_20260422_093031/src/components/sales/CoachDrawer.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:499:    ".restore_points/stable_base_20260422_093031/src/components/sales/DashboardSwitcher.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:500:    ".restore_points/stable_base_20260422_093031/src/components/sales/InlineCheck.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:501:    ".restore_points/stable_base_20260422_093031/src/components/sales/LessonBody.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:502:    ".restore_points/stable_base_20260422_093031/src/components/sales/MicroQuiz.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:503:    ".restore_points/stable_base_20260422_093031/src/components/sales/NotesHighlighter.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:504:    ".restore_points/stable_base_20260422_093031/src/components/sales/NotesPanel.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:505:    ".restore_points/stable_base_20260422_093031/src/components/sales/PortfolioHint.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:506:    ".restore_points/stable_base_20260422_093031/src/components/sales/SalesHeader.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:507:    ".restore_points/stable_base_20260422_093031/src/components/sales/SalesKpis.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:508:    ".restore_points/stable_base_20260422_093031/src/components/sales/SalesLayout.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:509:    ".restore_points/stable_base_20260422_093031/src/components/sales/SalesSidebar.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:510:    ".restore_points/stable_base_20260422_093031/src/components/sales/SectionTTS.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:517:    ".restore_points/stable_base_20260422_093031/src/components/sidebar/SalesSidebar",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:746:    ".restore_points/stable_base_20260422_093031/src/dev/growthMock.fetch-shim.js",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:755:    ".restore_points/stable_base_20260422_093031/src/entries/_archive/sales.BASELINE.main.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:756:    ".restore_points/stable_base_20260422_093031/src/entries/_archive/sales.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:757:    ".restore_points/stable_base_20260422_093031/src/entries/_archive/sales.smoke.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:758:    ".restore_points/stable_base_20260422_093031/src/entries/_archive/sales.smoke1.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:759:    ".restore_points/stable_base_20260422_093031/src/entries/_archive/sales.smoke2.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:796:    ".restore_points/stable_base_20260422_093031/src/entries/sales.main.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:797:    ".restore_points/stable_base_20260422_093031/src/entries/sales.micro.js",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:798:    ".restore_points/stable_base_20260422_093031/src/entries/sales.micro.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:799:    ".restore_points/stable_base_20260422_093031/src/entries/sales.ping.js",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:881:    ".restore_points/stable_base_20260422_093031/src/layouts/SalesLayout.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1521:    ".restore_points/stable_base_20260422_093031/src/pages/metaverse/GrowthObservationTower.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1522:    ".restore_points/stable_base_20260422_093031/src/pages/metaverse/GrowthObservationTower.jsx.backup_20260219_201649",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1531:    ".restore_points/stable_base_20260422_093031/src/pages/sales/Assignments.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1532:    ".restore_points/stable_base_20260422_093031/src/pages/sales/CoachDrawer.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1533:    ".restore_points/stable_base_20260422_093031/src/pages/sales/Dashboard.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1534:    ".restore_points/stable_base_20260422_093031/src/pages/sales/DashboardNorthstar.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1535:    ".restore_points/stable_base_20260422_093031/src/pages/sales/DebtClock.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1536:    ".restore_points/stable_base_20260422_093031/src/pages/sales/Elections.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1537:    ".restore_points/stable_base_20260422_093031/src/pages/sales/Help.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1538:    ".restore_points/stable_base_20260422_093031/src/pages/sales/IssueSurvey.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1539:    ".restore_points/stable_base_20260422_093031/src/pages/sales/Leads.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1540:    ".restore_points/stable_base_20260422_093031/src/pages/sales/Lesson.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1541:    ".restore_points/stable_base_20260422_093031/src/pages/sales/MicroLessonDetail.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1542:    ".restore_points/stable_base_20260422_093031/src/pages/sales/MicroLessons.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1543:    ".restore_points/stable_base_20260422_093031/src/pages/sales/Mission.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1544:    ".restore_points/stable_base_20260422_093031/src/pages/sales/Notes.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1545:    ".restore_points/stable_base_20260422_093031/src/pages/sales/Parties.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1546:    ".restore_points/stable_base_20260422_093031/src/pages/sales/Pipeline.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1547:    ".restore_points/stable_base_20260422_093031/src/pages/sales/Portfolio.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1548:    ".restore_points/stable_base_20260422_093031/src/pages/sales/Profile.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1549:    ".restore_points/stable_base_20260422_093031/src/pages/sales/ProfileResults.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1550:    ".restore_points/stable_base_20260422_093031/src/pages/sales/Proposals.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1551:    ".restore_points/stable_base_20260422_093031/src/pages/sales/Rewards.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1552:    ".restore_points/stable_base_20260422_093031/src/pages/sales/SalesDashboard.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1553:    ".restore_points/stable_base_20260422_093031/src/pages/sales/SalesLesson.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1554:    ".restore_points/stable_base_20260422_093031/src/pages/sales/Settings.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1555:    ".restore_points/stable_base_20260422_093031/src/pages/sales/Surveys.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1556:    ".restore_points/stable_base_20260422_093031/src/pages/sales/TreasurySim.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1557:    ".restore_points/stable_base_20260422_093031/src/pages/sales/TreasurySnapshots.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1932:    ".restore_points/stable_base_20260422_093031/src/router/SalesRoutes.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1946:    ".restore_points/stable_base_20260422_093031/src/sales/screens/ImpactCalculator.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1949:    ".restore_points/stable_base_20260422_093031/src/shared/api/growthMarket.js",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1964:    ".restore_points/stable_base_20260422_093031/src/shared/dopamine/growthDopamine.js",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1967:    ".restore_points/stable_base_20260422_093031/src/shared/employer/salesBridge.js",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1974:    ".restore_points/stable_base_20260422_093031/src/shared/growth/claimMarket.js",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:1975:    ".restore_points/stable_base_20260422_093031/src/shared/growth/mockSignals.js",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:2008:    ".restore_points/stable_base_20260422_093031/src/shared/sales/analytics.js",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:2009:    ".restore_points/stable_base_20260422_093031/src/shared/sales/goals.js",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:2010:    ".restore_points/stable_base_20260422_093031/src/shared/sales/leadInbox.js",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:2011:    ".restore_points/stable_base_20260422_093031/src/shared/sales/leadQueue.js",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:2012:    ".restore_points/stable_base_20260422_093031/src/shared/sales/pitch.js",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:2013:    ".restore_points/stable_base_20260422_093031/src/shared/sales/pitchClient.js",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:2014:    ".restore_points/stable_base_20260422_093031/src/shared/sales/pitchPack.js",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:2015:    ".restore_points/stable_base_20260422_093031/src/shared/sales/proposals.js",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:2016:    ".restore_points/stable_base_20260422_093031/src/shared/sales/simulator.js",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:2017:    ".restore_points/stable_base_20260422_093031/src/shared/sales/team.js",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:2018:    ".restore_points/stable_base_20260422_093031/src/shared/salesBridge.js",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:2102:    ".restore_points/stable_base_20260422_093031/src/styles/growth-observatory.css",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:2103:    ".restore_points/stable_base_20260422_093031/src/styles/growth-observatory.dopamine.css",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:2117:    ".restore_points/stable_base_20260422_093031/src/styles/sales-shell.css",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:2411:    "_production_archive/v1-hardening/backup-file/src/pages/admin/growth/SHSPartnerGrowthEngine.jsx.bak_fix_footer_wrapper_20260511_203614",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:2412:    "_production_archive/v1-hardening/backup-file/src/pages/admin/growth/SHSPartnerGrowthEngine.jsx.bak_guided_tour_20260511_203224",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:2413:    "_production_archive/v1-hardening/backup-file/src/pages/admin/growth/SHSPartnerGrowthEngine.jsx.bak_relationship_label_20260509_204940",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:2414:    "_production_archive/v1-hardening/backup-file/src/pages/admin/growth/SHSPartnerGrowthEngine.jsx.bak_repair_growth_tour_20260511_205406",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:2415:    "_production_archive/v1-hardening/backup-file/src/pages/admin/growth/partnerGrowthTourSteps.js.bak_growth_v2_20260513_082940",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:2416:    "_production_archive/v1-hardening/backup-file/src/pages/admin/growth/shs-partner-growth-engine.css.bak_relationship_label_20260509_204940",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:2846:    "_production_archive/v1-hardening/backup-file/src/pages/metaverse/GrowthObservationTower.jsx.backup_20260219_201649",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3369:      ".backup_growth_market_fallback_20260218_230840/growthMarket.js": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3370:      ".backup_growth_observatory_20260218_230341/GrowthObservationTower.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3371:      ".backup_growth_tower_20260218_233122/GrowthObservationTower.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3385:      ".restore_points/stable_base_20260422_093031/src/_archive/SalesRoutes.20251107-000126.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3454:      ".restore_points/stable_base_20260422_093031/src/_archive/components.sales.20251107-000126/SalesDashboard.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3455:      ".restore_points/stable_base_20260422_093031/src/_archive/components.sales.20251107-000126/SalesHeader.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3456:      ".restore_points/stable_base_20260422_093031/src/_archive/components.sales.20251107-000126/SalesPaletteMount.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3457:      ".restore_points/stable_base_20260422_093031/src/_archive/components.sales.20251107-000126/SalesSidebar.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3487:      ".restore_points/stable_base_20260422_093031/src/_archive/pages.sales.20251107-000126/SalesDashboard.BASELINE.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3488:      ".restore_points/stable_base_20260422_093031/src/_archive/pages.sales.20251107-000126/SalesDashboard.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3489:      ".restore_points/stable_base_20260422_093031/src/_archive/pages.sales.20251107-000126/SalesDashboardNorthstar.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3490:      ".restore_points/stable_base_20260422_093031/src/_archive/pages.sales.20251107-000126/SalesDashboardPro.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3491:      ".restore_points/stable_base_20260422_093031/src/_archive/pages.sales.20251107-000126/SalesDashboardV2.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3495:      ".restore_points/stable_base_20260422_093031/src/_archive/sales.main.20251107-000126.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3573:      ".restore_points/stable_base_20260422_093031/src/apps/manifest/sales.manifest.json": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3833:      ".restore_points/stable_base_20260422_093031/src/components/metaverse/GrowthDopamineLayer.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3834:      ".restore_points/stable_base_20260422_093031/src/components/metaverse/GrowthObservatoryBackdrop.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3849:      ".restore_points/stable_base_20260422_093031/src/components/sales/AccreditationPanel.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3850:      ".restore_points/stable_base_20260422_093031/src/components/sales/CoachDrawer.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3851:      ".restore_points/stable_base_20260422_093031/src/components/sales/DashboardSwitcher.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3852:      ".restore_points/stable_base_20260422_093031/src/components/sales/InlineCheck.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3853:      ".restore_points/stable_base_20260422_093031/src/components/sales/LessonBody.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3854:      ".restore_points/stable_base_20260422_093031/src/components/sales/MicroQuiz.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3855:      ".restore_points/stable_base_20260422_093031/src/components/sales/NotesHighlighter.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3856:      ".restore_points/stable_base_20260422_093031/src/components/sales/NotesPanel.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3857:      ".restore_points/stable_base_20260422_093031/src/components/sales/PortfolioHint.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3858:      ".restore_points/stable_base_20260422_093031/src/components/sales/SalesHeader.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3859:      ".restore_points/stable_base_20260422_093031/src/components/sales/SalesKpis.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3860:      ".restore_points/stable_base_20260422_093031/src/components/sales/SalesLayout.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3861:      ".restore_points/stable_base_20260422_093031/src/components/sales/SalesSidebar.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3862:      ".restore_points/stable_base_20260422_093031/src/components/sales/SectionTTS.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:3869:      ".restore_points/stable_base_20260422_093031/src/components/sidebar/SalesSidebar": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4098:      ".restore_points/stable_base_20260422_093031/src/dev/growthMock.fetch-shim.js": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4107:      ".restore_points/stable_base_20260422_093031/src/entries/_archive/sales.BASELINE.main.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4108:      ".restore_points/stable_base_20260422_093031/src/entries/_archive/sales.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4109:      ".restore_points/stable_base_20260422_093031/src/entries/_archive/sales.smoke.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4110:      ".restore_points/stable_base_20260422_093031/src/entries/_archive/sales.smoke1.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4111:      ".restore_points/stable_base_20260422_093031/src/entries/_archive/sales.smoke2.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4148:      ".restore_points/stable_base_20260422_093031/src/entries/sales.main.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4149:      ".restore_points/stable_base_20260422_093031/src/entries/sales.micro.js": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4150:      ".restore_points/stable_base_20260422_093031/src/entries/sales.micro.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4151:      ".restore_points/stable_base_20260422_093031/src/entries/sales.ping.js": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4233:      ".restore_points/stable_base_20260422_093031/src/layouts/SalesLayout.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4873:      ".restore_points/stable_base_20260422_093031/src/pages/metaverse/GrowthObservationTower.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4874:      ".restore_points/stable_base_20260422_093031/src/pages/metaverse/GrowthObservationTower.jsx.backup_20260219_201649": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4883:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Assignments.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4884:      ".restore_points/stable_base_20260422_093031/src/pages/sales/CoachDrawer.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4885:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Dashboard.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4886:      ".restore_points/stable_base_20260422_093031/src/pages/sales/DashboardNorthstar.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4887:      ".restore_points/stable_base_20260422_093031/src/pages/sales/DebtClock.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4888:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Elections.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4889:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Help.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4890:      ".restore_points/stable_base_20260422_093031/src/pages/sales/IssueSurvey.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4891:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Leads.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4892:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Lesson.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4893:      ".restore_points/stable_base_20260422_093031/src/pages/sales/MicroLessonDetail.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4894:      ".restore_points/stable_base_20260422_093031/src/pages/sales/MicroLessons.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4895:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Mission.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4896:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Notes.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4897:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Parties.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4898:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Pipeline.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4899:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Portfolio.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4900:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Profile.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4901:      ".restore_points/stable_base_20260422_093031/src/pages/sales/ProfileResults.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4902:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Proposals.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4903:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Rewards.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4904:      ".restore_points/stable_base_20260422_093031/src/pages/sales/SalesDashboard.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4905:      ".restore_points/stable_base_20260422_093031/src/pages/sales/SalesLesson.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4906:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Settings.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4907:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Surveys.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4908:      ".restore_points/stable_base_20260422_093031/src/pages/sales/TreasurySim.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:4909:      ".restore_points/stable_base_20260422_093031/src/pages/sales/TreasurySnapshots.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:5284:      ".restore_points/stable_base_20260422_093031/src/router/SalesRoutes.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:5298:      ".restore_points/stable_base_20260422_093031/src/sales/screens/ImpactCalculator.jsx": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:5301:      ".restore_points/stable_base_20260422_093031/src/shared/api/growthMarket.js": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:5316:      ".restore_points/stable_base_20260422_093031/src/shared/dopamine/growthDopamine.js": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:5319:      ".restore_points/stable_base_20260422_093031/src/shared/employer/salesBridge.js": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:5326:      ".restore_points/stable_base_20260422_093031/src/shared/growth/claimMarket.js": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:5327:      ".restore_points/stable_base_20260422_093031/src/shared/growth/mockSignals.js": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:5360:      ".restore_points/stable_base_20260422_093031/src/shared/sales/analytics.js": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:5361:      ".restore_points/stable_base_20260422_093031/src/shared/sales/goals.js": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:5362:      ".restore_points/stable_base_20260422_093031/src/shared/sales/leadInbox.js": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:5363:      ".restore_points/stable_base_20260422_093031/src/shared/sales/leadQueue.js": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:5364:      ".restore_points/stable_base_20260422_093031/src/shared/sales/pitch.js": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:5365:      ".restore_points/stable_base_20260422_093031/src/shared/sales/pitchClient.js": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:5366:      ".restore_points/stable_base_20260422_093031/src/shared/sales/pitchPack.js": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:5367:      ".restore_points/stable_base_20260422_093031/src/shared/sales/proposals.js": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:5368:      ".restore_points/stable_base_20260422_093031/src/shared/sales/simulator.js": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:5369:      ".restore_points/stable_base_20260422_093031/src/shared/sales/team.js": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:5370:      ".restore_points/stable_base_20260422_093031/src/shared/salesBridge.js": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:5454:      ".restore_points/stable_base_20260422_093031/src/styles/growth-observatory.css": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:5455:      ".restore_points/stable_base_20260422_093031/src/styles/growth-observatory.dopamine.css": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:5469:      ".restore_points/stable_base_20260422_093031/src/styles/sales-shell.css": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:5763:      "_production_archive/v1-hardening/backup-file/src/pages/admin/growth/SHSPartnerGrowthEngine.jsx.bak_fix_footer_wrapper_20260511_203614": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:5764:      "_production_archive/v1-hardening/backup-file/src/pages/admin/growth/SHSPartnerGrowthEngine.jsx.bak_guided_tour_20260511_203224": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:5765:      "_production_archive/v1-hardening/backup-file/src/pages/admin/growth/SHSPartnerGrowthEngine.jsx.bak_relationship_label_20260509_204940": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:5766:      "_production_archive/v1-hardening/backup-file/src/pages/admin/growth/SHSPartnerGrowthEngine.jsx.bak_repair_growth_tour_20260511_205406": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:5767:      "_production_archive/v1-hardening/backup-file/src/pages/admin/growth/partnerGrowthTourSteps.js.bak_growth_v2_20260513_082940": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:5768:      "_production_archive/v1-hardening/backup-file/src/pages/admin/growth/shs-partner-growth-engine.css.bak_relationship_label_20260509_204940": "external_archive_manifest",
+./docs/GIT_STATUS_STABILIZATION_REPORT.json:6198:      "_production_archive/v1-hardening/backup-file/src/pages/metaverse/GrowthObservationTower.jsx.backup_20260219_201649": "external_archive_manifest",
+./docs/CROSS_APP_IDENTITY_BRIDGE_RUNTIME_VERIFICATION_V1.md:26:- `/ops/sales`
+./docs/CROSS_APP_IDENTITY_BRIDGE_RUNTIME_VERIFICATION_V1.md:50:| `/ops/sales` | Notice | Notice | PASS |
+./docs/SHS_V1_GAP_CLOSURE_PLAN.json:20:      "routes": ["/ops/sales", "admin.html#/hub/sales-pipeline"],
+./docs/SHS_V1_GAP_CLOSURE_PLAN.json:21:      "pages": ["/Users/mikeslate/shf-next/src/pages/ops/SalesCommandCenter.tsx", "src/pages/hub/HubSalesPipelinePage.jsx"],
+./docs/GIT_STAGING_PLAN.md:155:- `.backup_growth_market_fallback_20260218_230840/growthMarket.js`
+./docs/GIT_STAGING_PLAN.md:156:- `.backup_growth_observatory_20260218_230341/GrowthObservationTower.jsx`
+./docs/GIT_STAGING_PLAN.md:157:- `.backup_growth_tower_20260218_233122/GrowthObservationTower.jsx`
+./docs/GIT_STAGING_PLAN.md:171:- `.restore_points/stable_base_20260422_093031/src/_archive/SalesRoutes.20251107-000126.jsx`
+./docs/CROSS_APP_IDENTITY_BRIDGE_V1.md:40:| `/ops/sales` | INTERNAL_OPS | shs_admin, shs_sales, shs_ops | shown |
+./docs/CROSS_APP_IDENTITY_BRIDGE_V1.md:62:| `shs_sales` | /ops/sales |
+./docs/SHF_NEXT_PUBLIC_ROUTE_FALLBACK_FIX_V1.json:105:      "route": "/ops/sales",
+./docs/SHF_NEXT_PUBLIC_ROUTE_FALLBACK_FIX_V1.json:154:      "/ops/sales": "PASS",
+./docs/SHS_PRODUCTION_OPS_SPINE_GOVERNANCE_AUDIT_V1_1.md:29:- `/ops/sales`: `SalesCommandCenter`
+./docs/SHS_PRODUCTION_OPS_SPINE_GOVERNANCE_AUDIT_V1_1.md:58:- `/Users/mikeslate/shf-next/src/data/crossAppIdentityBridge.ts` classifies `/ops`, `/ops/sales`, and `/ops/qa` as internal ops; `/ops/clientops` is internal ClientOps.
+./docs/CROSS_APP_IDENTITY_BRIDGE_V1.json:38:      "route": "/ops/sales",
+./docs/CROSS_APP_IDENTITY_BRIDGE_V1.json:175:      "scope": "/ops/sales"
+./docs/MASTER_LAYER_REGISTRY_V1_COMPLETION_AUDIT.json:1054:        "src/pages/admin/growth/SHSPartnerGrowthEngine.jsx",
+./docs/MASTER_LAYER_REGISTRY_V1_COMPLETION_AUDIT.json:1055:        "src/pages/admin/growth/partnerGrowthTourSteps.js",
+./docs/MASTER_LAYER_REGISTRY_V1_COMPLETION_AUDIT.json:1056:        "src/pages/admin/growth/shs-partner-growth-engine.css"
+./docs/MASTER_LAYER_REGISTRY_V1_COMPLETION_AUDIT.json:1292:        "src/router/SalesRoutes.jsx",
+./docs/MASTER_LAYER_REGISTRY_V1_COMPLETION_AUDIT.json:1293:        "src/router/SalesRoutes.jsx.bak",
+./docs/MASTER_LAYER_REGISTRY_V1_COMPLETION_AUDIT.json:1294:        "src/router/SalesRoutes.jsx.bak.20251122-163832"
+./docs/API_BACKEND_CONFIGURATION.md:21:  `/fabric-api/api/growth/claims`, `/fabric-api/api/v1/operator/summary`
+./docs/API_BACKEND_CONFIGURATION.md:64:| Growth Market | `src/shared/api/growthMarket.js` | Fabric | `app/api/routes/growth.py` (`/api/growth`) | `FABRIC_API_BASE` + `/api/growth/*` |
+./docs/AGENT_FABRIC_COMMAND_CENTER_MASTER_PLAN.md:767:1. **Command navigation** — primary list (Command Center, Priority & Alerts, Ecosystem Map, Agent Fleet, Operations, Governance & Alignment, Truth & Evidence, Watchtower & Risk, Infrastructure, Observability, Security & Trust, Incidents, Reports & Insights, Settings) and **Ecosystem Authorities** (Registry, Oracle, LOO, SHS, SHF, BOS, CivicSure, Curriculum, Career & Workforce, Metaverse, OAS, Treasury). Each entry is this page, a region on this page (scroll + focus), an existing admin route (`/truth-spine`, `/reporting`, `/registry`, `/oracle`, `/lord-outcomes`, `/ops/system-registry`, `/command`, `/ops/executive-command`), an existing app route (`/index.html#/civicsure`, `/curriculum.html#/`, `/career.html#/dashboard`, `/arcade.html#/metaverse/growth-observatory`, `/oas.html`, `/treasury.html#/dashboard`), or disabled with its reason (Security & Trust AFCC-10, Incidents AFCC-12, Settings). No placeholder pages were created. Tested: every admin route exists in `AdminRoutes.jsx`; every app href points to an existing HTML entry.
+./src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:185:    route: "/growth",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:28:      ".backup_growth_market_fallback_20260218_230840/growthMarket.js",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:29:      ".backup_growth_observatory_20260218_230341/GrowthObservationTower.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:30:      ".backup_growth_tower_20260218_233122/GrowthObservationTower.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:46:      ".restore_points/stable_base_20260422_093031/src/_archive/SalesRoutes.20251107-000126.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:115:      ".restore_points/stable_base_20260422_093031/src/_archive/components.sales.20251107-000126/SalesDashboard.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:116:      ".restore_points/stable_base_20260422_093031/src/_archive/components.sales.20251107-000126/SalesHeader.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:117:      ".restore_points/stable_base_20260422_093031/src/_archive/components.sales.20251107-000126/SalesPaletteMount.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:118:      ".restore_points/stable_base_20260422_093031/src/_archive/components.sales.20251107-000126/SalesSidebar.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:148:      ".restore_points/stable_base_20260422_093031/src/_archive/pages.sales.20251107-000126/SalesDashboard.BASELINE.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:149:      ".restore_points/stable_base_20260422_093031/src/_archive/pages.sales.20251107-000126/SalesDashboard.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:150:      ".restore_points/stable_base_20260422_093031/src/_archive/pages.sales.20251107-000126/SalesDashboardNorthstar.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:151:      ".restore_points/stable_base_20260422_093031/src/_archive/pages.sales.20251107-000126/SalesDashboardPro.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:152:      ".restore_points/stable_base_20260422_093031/src/_archive/pages.sales.20251107-000126/SalesDashboardV2.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:156:      ".restore_points/stable_base_20260422_093031/src/_archive/sales.main.20251107-000126.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:234:      ".restore_points/stable_base_20260422_093031/src/apps/manifest/sales.manifest.json",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:494:      ".restore_points/stable_base_20260422_093031/src/components/metaverse/GrowthDopamineLayer.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:495:      ".restore_points/stable_base_20260422_093031/src/components/metaverse/GrowthObservatoryBackdrop.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:510:      ".restore_points/stable_base_20260422_093031/src/components/sales/AccreditationPanel.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:511:      ".restore_points/stable_base_20260422_093031/src/components/sales/CoachDrawer.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:512:      ".restore_points/stable_base_20260422_093031/src/components/sales/DashboardSwitcher.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:513:      ".restore_points/stable_base_20260422_093031/src/components/sales/InlineCheck.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:514:      ".restore_points/stable_base_20260422_093031/src/components/sales/LessonBody.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:515:      ".restore_points/stable_base_20260422_093031/src/components/sales/MicroQuiz.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:516:      ".restore_points/stable_base_20260422_093031/src/components/sales/NotesHighlighter.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:517:      ".restore_points/stable_base_20260422_093031/src/components/sales/NotesPanel.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:518:      ".restore_points/stable_base_20260422_093031/src/components/sales/PortfolioHint.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:519:      ".restore_points/stable_base_20260422_093031/src/components/sales/SalesHeader.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:520:      ".restore_points/stable_base_20260422_093031/src/components/sales/SalesKpis.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:521:      ".restore_points/stable_base_20260422_093031/src/components/sales/SalesLayout.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:522:      ".restore_points/stable_base_20260422_093031/src/components/sales/SalesSidebar.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:523:      ".restore_points/stable_base_20260422_093031/src/components/sales/SectionTTS.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:530:      ".restore_points/stable_base_20260422_093031/src/components/sidebar/SalesSidebar",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:759:      ".restore_points/stable_base_20260422_093031/src/dev/growthMock.fetch-shim.js",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:768:      ".restore_points/stable_base_20260422_093031/src/entries/_archive/sales.BASELINE.main.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:769:      ".restore_points/stable_base_20260422_093031/src/entries/_archive/sales.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:770:      ".restore_points/stable_base_20260422_093031/src/entries/_archive/sales.smoke.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:771:      ".restore_points/stable_base_20260422_093031/src/entries/_archive/sales.smoke1.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:772:      ".restore_points/stable_base_20260422_093031/src/entries/_archive/sales.smoke2.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:809:      ".restore_points/stable_base_20260422_093031/src/entries/sales.main.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:810:      ".restore_points/stable_base_20260422_093031/src/entries/sales.micro.js",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:811:      ".restore_points/stable_base_20260422_093031/src/entries/sales.micro.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:812:      ".restore_points/stable_base_20260422_093031/src/entries/sales.ping.js",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:894:      ".restore_points/stable_base_20260422_093031/src/layouts/SalesLayout.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1534:      ".restore_points/stable_base_20260422_093031/src/pages/metaverse/GrowthObservationTower.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1535:      ".restore_points/stable_base_20260422_093031/src/pages/metaverse/GrowthObservationTower.jsx.backup_20260219_201649",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1544:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Assignments.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1545:      ".restore_points/stable_base_20260422_093031/src/pages/sales/CoachDrawer.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1546:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Dashboard.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1547:      ".restore_points/stable_base_20260422_093031/src/pages/sales/DashboardNorthstar.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1548:      ".restore_points/stable_base_20260422_093031/src/pages/sales/DebtClock.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1549:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Elections.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1550:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Help.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1551:      ".restore_points/stable_base_20260422_093031/src/pages/sales/IssueSurvey.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1552:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Leads.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1553:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Lesson.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1554:      ".restore_points/stable_base_20260422_093031/src/pages/sales/MicroLessonDetail.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1555:      ".restore_points/stable_base_20260422_093031/src/pages/sales/MicroLessons.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1556:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Mission.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1557:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Notes.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1558:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Parties.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1559:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Pipeline.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1560:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Portfolio.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1561:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Profile.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1562:      ".restore_points/stable_base_20260422_093031/src/pages/sales/ProfileResults.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1563:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Proposals.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1564:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Rewards.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1565:      ".restore_points/stable_base_20260422_093031/src/pages/sales/SalesDashboard.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1566:      ".restore_points/stable_base_20260422_093031/src/pages/sales/SalesLesson.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1567:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Settings.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1568:      ".restore_points/stable_base_20260422_093031/src/pages/sales/Surveys.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1569:      ".restore_points/stable_base_20260422_093031/src/pages/sales/TreasurySim.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1570:      ".restore_points/stable_base_20260422_093031/src/pages/sales/TreasurySnapshots.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1945:      ".restore_points/stable_base_20260422_093031/src/router/SalesRoutes.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1959:      ".restore_points/stable_base_20260422_093031/src/sales/screens/ImpactCalculator.jsx",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1962:      ".restore_points/stable_base_20260422_093031/src/shared/api/growthMarket.js",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1977:      ".restore_points/stable_base_20260422_093031/src/shared/dopamine/growthDopamine.js",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1980:      ".restore_points/stable_base_20260422_093031/src/shared/employer/salesBridge.js",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1987:      ".restore_points/stable_base_20260422_093031/src/shared/growth/claimMarket.js",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1988:      ".restore_points/stable_base_20260422_093031/src/shared/growth/mockSignals.js",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2021:      ".restore_points/stable_base_20260422_093031/src/shared/sales/analytics.js",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2022:      ".restore_points/stable_base_20260422_093031/src/shared/sales/goals.js",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2023:      ".restore_points/stable_base_20260422_093031/src/shared/sales/leadInbox.js",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2024:      ".restore_points/stable_base_20260422_093031/src/shared/sales/leadQueue.js",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2025:      ".restore_points/stable_base_20260422_093031/src/shared/sales/pitch.js",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2026:      ".restore_points/stable_base_20260422_093031/src/shared/sales/pitchClient.js",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2027:      ".restore_points/stable_base_20260422_093031/src/shared/sales/pitchPack.js",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2028:      ".restore_points/stable_base_20260422_093031/src/shared/sales/proposals.js",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2029:      ".restore_points/stable_base_20260422_093031/src/shared/sales/simulator.js",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2030:      ".restore_points/stable_base_20260422_093031/src/shared/sales/team.js",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2031:      ".restore_points/stable_base_20260422_093031/src/shared/salesBridge.js",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2115:      ".restore_points/stable_base_20260422_093031/src/styles/growth-observatory.css",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2116:      ".restore_points/stable_base_20260422_093031/src/styles/growth-observatory.dopamine.css",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2130:      ".restore_points/stable_base_20260422_093031/src/styles/sales-shell.css",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2498:      "_production_archive/v1-hardening/backup-file/src/pages/admin/growth/SHSPartnerGrowthEngine.jsx.bak_fix_footer_wrapper_20260511_203614",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2499:      "_production_archive/v1-hardening/backup-file/src/pages/admin/growth/SHSPartnerGrowthEngine.jsx.bak_guided_tour_20260511_203224",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2500:      "_production_archive/v1-hardening/backup-file/src/pages/admin/growth/SHSPartnerGrowthEngine.jsx.bak_relationship_label_20260509_204940",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2501:      "_production_archive/v1-hardening/backup-file/src/pages/admin/growth/SHSPartnerGrowthEngine.jsx.bak_repair_growth_tour_20260511_205406",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2502:      "_production_archive/v1-hardening/backup-file/src/pages/admin/growth/partnerGrowthTourSteps.js.bak_growth_v2_20260513_082940",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2503:      "_production_archive/v1-hardening/backup-file/src/pages/admin/growth/shs-partner-growth-engine.css.bak_relationship_label_20260509_204940",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2881:      "_production_archive/v1-hardening/backup-file/src/pages/metaverse/GrowthObservationTower.jsx.backup_20260219_201649",
+./docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:3349:      "/Users/mikeslate/Desktop/SHF_REPO_EXTERNAL_ARCHIVE/shrv1-cleanup-20260614-095113/repo-root/.restore_points/stable_base_20260422_093031/src/apps/manifest/sales.manifest.json",
+./docs/ROUTE_UI_INTEGRATION_AUDIT_V1.json:70:    "/hub/growth-network",
+./docs/ROUTE_UI_INTEGRATION_AUDIT_V1.json:71:    "/hub/sales-pipeline",
+./docs/ROUTE_UI_INTEGRATION_AUDIT_V1.json:97:    "/growth",
+./docs/SHF_TRUSTED_REPORTING_REBUILD_REGISTRY.v1.json:180:      "path_component": "src/components/sales/ImpactForecaster.jsx;src/components/sales/FundingCalculator.jsx",
+./docs/GIT_STATUS_STABILIZATION_REPORT.md:63:- `.backup_growth_market_fallback_20260218_230840/growthMarket.js` - external_archive_manifest
+./docs/GIT_STATUS_STABILIZATION_REPORT.md:64:- `.backup_growth_observatory_20260218_230341/GrowthObservationTower.jsx` - external_archive_manifest
+./docs/GIT_STATUS_STABILIZATION_REPORT.md:65:- `.backup_growth_tower_20260218_233122/GrowthObservationTower.jsx` - external_archive_manifest
+./docs/GIT_STATUS_STABILIZATION_REPORT.md:79:- `.restore_points/stable_base_20260422_093031/src/_archive/SalesRoutes.20251107-000126.jsx` - external_archive_manifest
+./src/pages/hub/HubOpportunitiesPage.jsx.bak_shared_nav_20260510_100708:179:  ["✦", "Growth", "#/hub/growth-network"],
+./src/pages/hub/HubOpportunitiesPage.jsx.bak_shared_nav_20260510_100708:183:  ["$", "Sales", "#/hub/sales-pipeline"],
+./src/pages/hub/HubOpportunitiesPage.jsx.bak_shared_nav_20260510_100708:355:            <button onClick={() => go("#/hub/growth-network")}>Growth Network</button>
+./docs/ROUTE_INTEGRITY_SPINE_COVERAGE_PLAN_V1.md:66:| should_connect_to_spine | shrv1 | src/pages/admin/growth/HubSignalIntelligencePanel.jsx | None | admin | high | phase_3 | Report/narrative/export adjacent surface should consume Truth Spine, Reports, Oracle/trust, and readiness metadata before publication workflows. |

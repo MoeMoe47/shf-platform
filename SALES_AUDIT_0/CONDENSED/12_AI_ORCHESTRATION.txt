@@ -1,0 +1,503 @@
+============================================================
+SOURCE: 12_AI_ORCHESTRATION.txt
+============================================================
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:66:// Maps the Calendar Intelligence Engine's own deterministic recommendations
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:71:function guidanceFromCalendarRecommendations(recommendations: any[]): CompanionGuidance[] {
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:72:  return recommendations.map((rec, index) => ({
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:133:      ...guidanceFromCalendarRecommendations(intelligence.recommendations),
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:162:  // guidanceFromCalendarRecommendations() above (Calendar Intelligence's
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:163:  // own CREDENTIAL_RENEWAL_SOON recommendation, sourced from the same
+services/shf-agent-fabric/ops/audit/export_watchtower_jsonl.py:16:  SHF_AUDIT_EXPORT_DIR="services/shf-agent-fabric/var/audit_exports"
+services/shf-agent-fabric/ops/audit/export_watchtower_jsonl.py:41:    out_dir = _env("SHF_AUDIT_EXPORT_DIR", "services/shf-agent-fabric/var/audit_exports")
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:57:- Added an internal Agent Fabric ingestion route that reuses operational
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:156:- `services/shf-agent-fabric/contracts/reporting/producer_lineage_registry.v1.json`
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:157:- `services/shf-agent-fabric/services/reporting_lineage_service.py`
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:158:- `services/shf-agent-fabric/tests/test_reporting_lineage_registry.py`
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:159:- `services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md`
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:173:authenticated Agent Fabric ingestion is separately authorized. No Evidence,
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:195:- `services/shf-agent-fabric/auth/permissions.py`
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:196:- `services/shf-agent-fabric/main.py`
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:197:- `services/shf-agent-fabric/routers/shf_ingestion_routes.py`
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:198:- `services/shf-agent-fabric/services/operational_event_service.py`
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:199:- `services/shf-agent-fabric/tests/test_shf_ingestion_routes.py`
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:229:- `services/shf-agent-fabric/docs/reporting/OPERATIONAL_EVENT_STORE_V1.md`
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:230:- `services/shf-agent-fabric/routers/shf_ingestion_routes.py`
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:231:- `services/shf-agent-fabric/services/operational_event_service.py`
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:232:- `services/shf-agent-fabric/tests/test_shf_ingestion_routes.py`
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:304:- Eligible events create minimal evidence records, unverified Truth sources, and unapproved version-1 Agent Fabric Truth Spine claims through `services/truth_spine_service.py`.
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:326:- `services/shf-agent-fabric/services/evidence_projection_service.py`
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:327:- `services/shf-agent-fabric/routers/shf_ingestion_routes.py`
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:328:- `services/shf-agent-fabric/services/operational_event_service.py`
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:329:- `services/shf-agent-fabric/services/reporting_lineage_service.py`
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:330:- `services/shf-agent-fabric/tests/test_shf_truth_projection_routes.py`
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:331:- `services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md`
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:360:- `git status --short services/shf-agent-fabric/db/truth services/shf-agent-fabric/logs/truth.audit.log services/shf-agent-fabric/db/reporting`
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:378:- `services/shf-agent-fabric/contracts/reporting/metric_registry.v1.json`
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:379:- `services/shf-agent-fabric/services/metric_registry_service.py`
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:380:- `services/shf-agent-fabric/routers/shf_metric_routes.py`
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:381:- `services/shf-agent-fabric/main.py`
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:382:- `services/shf-agent-fabric/contracts/reporting/producer_lineage_registry.v1.json`
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:383:- `services/shf-agent-fabric/tests/test_metric_registry_and_calculation.py`
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:499:worker using local-only HMAC configuration, and accepted by Agent Fabric in a
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:550:outbox, and accepted by authenticated Agent Fabric ingestion. It contains only
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:559:timestamp, and deterministic idempotency. Agent Fabric creates exactly one
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:562:The surface advances only to `TRUTH_PROJECTION_REQUIRED`. JSONL Agent Fabric
+services/shf-agent-fabric/docs/reporting/OPERATIONAL_EVENT_STORE_V1.md:16:Operational events are accepted through authenticated Agent Fabric ingestion routes. The server derives actor, tenant, organization, and received timestamp. Client-supplied actor, tenant, organization, and approval fields are not authoritative.
+services/shf-agent-fabric/ops/postgres/init_watchtower_pg.sh:4:SVC="services/shf-agent-fabric"
+apps/shs-api/src/domain/companion/model/companion-context.ts:15:import { CalendarRecommendation, LoadCategory } from "../../calendar/service/calendar-intelligence-service.js";
+apps/shs-api/src/domain/companion/model/companion-context.ts:99:export type { CalendarRecommendation };
+services/shf-agent-fabric/docs/TRUTH_SPINE_SECURITY.md:3:This document describes the canonical Agent Fabric Truth Spine's security
+services/shf-agent-fabric/docs/TRUTH_SPINE_SECURITY.md:36:this Agent Fabric process's port (8090 by default) - so in local dev this
+services/shf-agent-fabric/docs/TRUTH_SPINE_SECURITY.md:249:- the real network exposure of the Agent Fabric process in any actual
+services/shf-agent-fabric/services/aal_repository.py:12:        "SHF_AGENT_FABRIC_DB",
+services/shf-agent-fabric/services/aal_repository.py:13:        os.path.join(os.path.dirname(os.path.dirname(__file__)), "db", "shf_agent_fabric.db"),
+services/_graveyard/shf-agent-fabric-backups-manual/main.py.20260116T200843Z:31:app = FastAPI(title="SHF Agent Fabric")
+services/shf-agent-fabric/services/game_theory_service.py:464:    top_recommendation = analyses[-1].get("recommended_strategy") if analyses else "none"
+services/shf-agent-fabric/services/game_theory_service.py:475:        "top_recommendation": top_recommendation,
+src/router/AdminRoutes.jsx:30:import AgentFabricPage from "@/pages/admin/agent-fabric/AgentFabricPage.jsx";
+src/router/AdminRoutes.jsx:31:import AgentFabricCommandCenter from "@/pages/admin/agent-fabric-command/AgentFabricCommandCenter.jsx";
+src/router/AdminRoutes.jsx:32:import LiveOperations from "@/pages/admin/agent-fabric-command/components/LiveOperations.jsx";
+src/router/AdminRoutes.jsx:35:import ShsSystemOrchestratorPage from "@/pages/admin/orchestrator/ShsSystemOrchestratorPage.jsx";
+src/router/AdminRoutes.jsx:182:        <Route path="/watchtower" element={<Navigate to="/agent-fabric" replace />} />
+src/router/AdminRoutes.jsx:190:        <Route path="/agent-fabric" element={protect("/agent-fabric", <AgentFabricPage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
+src/router/AdminRoutes.jsx:191:        {/* AFCC-1: read-only Command Center; same access rule and permission as /agent-fabric. */}
+src/router/AdminRoutes.jsx:192:        <Route path="/agent-fabric/command" element={protect("/agent-fabric", <AgentFabricCommandCenter />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
+src/router/AdminRoutes.jsx:194:        <Route path="/agent-fabric/command/operations" element={protect("/agent-fabric", <LiveOperations />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
+src/router/AdminRoutes.jsx:222:        <Route path="/ops/orchestrator" element={protect("/ops/orchestrator", <ShsSystemOrchestratorPage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
+services/shf-agent-fabric/registry/published/pilot_gladden_001/report.json:152:      "runs_log": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/db/runs.jsonl",
+services/shf-agent-fabric/services/operational_event_service.py:109:        emit_operational_telemetry(event_name="operational_event_rejected", severity="INFO", component="agent_fabric", category="INGESTION", outcome="EXPECTED_DOMAIN_REJECTION", metadata={"reason": exc.reason})
+services/shf-agent-fabric/services/operational_event_service.py:117:        emit_operational_telemetry(event_name="operational_event_idempotent_replay", severity="INFO", component="agent_fabric", category="INGESTION", outcome="SUCCESS", metadata={"reason": "existing_idempotency_key"})
+services/shf-agent-fabric/services/operational_event_service.py:148:        emit_operational_telemetry(event_name="operational_event_persistence_failed", severity="CRITICAL", component="agent_fabric", category="INGESTION", outcome="SYSTEM_FAILURE", metadata={"reason": "operational_event_write_failed"})
+services/shf-agent-fabric/services/operational_event_service.py:150:    emit_operational_telemetry(event_name="operational_event_accepted", severity="INFO", component="agent_fabric", category="INGESTION", outcome="SUCCESS", metadata={"event_class": event_type})
+services/shf-agent-fabric/var/self_audit/reports/2026-04-16T17-26-38Z.json:41:      "json": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/2026-04-16T17-26-38Z.json",
+services/shf-agent-fabric/var/self_audit/reports/2026-04-16T17-26-38Z.json:42:      "markdown": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/2026-04-16T17-26-38Z.md",
+services/shf-agent-fabric/var/self_audit/reports/2026-04-16T17-26-38Z.json:43:      "latest_json": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/latest.json",
+services/shf-agent-fabric/var/self_audit/reports/2026-04-16T17-26-38Z.json:44:      "latest_markdown": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/latest.md"
+services/shf-agent-fabric/registry/contracts/openapi.latest.json:4:        "title": "SHF Agent Fabric",
+services/shf-agent-fabric/var/self_audit/reports/2026-04-15T01-19-34Z.json:41:      "json": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/2026-04-15T01-19-34Z.json",
+services/shf-agent-fabric/var/self_audit/reports/2026-04-15T01-19-34Z.json:42:      "markdown": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/2026-04-15T01-19-34Z.md",
+services/shf-agent-fabric/var/self_audit/reports/2026-04-15T01-19-34Z.json:43:      "latest_json": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/latest.json",
+services/shf-agent-fabric/var/self_audit/reports/2026-04-15T01-19-34Z.json:44:      "latest_markdown": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/latest.md"
+services/shf-agent-fabric/_LOCKED_AGENT_FABRIC_V1_20260514_183731/AGENT_FABRIC_V1_LOCK.md:1:# SHF Agent Fabric V1 Lock
+services/shf-agent-fabric/_LOCKED_AGENT_FABRIC_V1_20260514_183731/AGENT_FABRIC_V1_LOCK.md:5:Agent Fabric V1 is locked as a working checkpoint.
+services/shf-agent-fabric/var/self_audit/reports/2026-04-15T00-58-51Z.json:36:      "json": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/2026-04-15T00-58-51Z.json",
+services/shf-agent-fabric/var/self_audit/reports/2026-04-15T00-58-51Z.json:37:      "markdown": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/2026-04-15T00-58-51Z.md",
+services/shf-agent-fabric/var/self_audit/reports/2026-04-15T00-58-51Z.json:38:      "latest_json": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/latest.json",
+services/shf-agent-fabric/var/self_audit/reports/2026-04-15T00-58-51Z.json:39:      "latest_markdown": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/latest.md"
+services/shf-agent-fabric/_LOCKED_AGENT_FABRIC_V1_20260514_183731/agents.json:15:      "next_action_recommendation",
+services/shf-agent-fabric/_LOCKED_AGENT_FABRIC_V1_20260514_183731/agents.json:124:      "approval_recommendation"
+services/shf-agent-fabric/_LOCKED_AGENT_FABRIC_V1_20260514_183731/agents.json:297:      "scale_recommendation"
+services/shf-agent-fabric/_LOCKED_AGENT_FABRIC_V1_20260514_183731/agents.json:320:      "next_page_recommendation"
+services/shf-agent-fabric/_LOCKED_AGENT_FABRIC_V1_20260514_183731/agents.json:363:      "bundle_recommendation",
+services/shf-agent-fabric/_LOCKED_AGENT_FABRIC_V1_20260514_183731/agents.json:455:      "ux_recommendation"
+services/shf-agent-fabric/_LOCKED_AGENT_FABRIC_V1_20260514_183731/agents.json:476:      "ux_recommendations"
+services/shf-agent-fabric/_LOCKED_AGENT_FABRIC_V1_20260514_183731/admin_agents_response.json:1:{"ok":true,"source":"contracts/agents/agents.json","count":11,"agents":[{"agent_id":"ai_analyst_agent","agentId":"ai_analyst_agent","name":"AI Analyst Agent","label":"AI Analyst Agent","layer":"analyst_layer","role":"Explains dashboard state, drawer context, verification readiness, and recommended next actions in plain language.","lifecycle":"active","version":"v1","enabled":true,"policy":{"humanApproval":false,"maxSteps":6,"notes":"Can explain and recommend. Cannot approve, verify, publish, or modify official records without another system action."},"capabilities":["dashboard_explanation","drawer_context_summary","next_action_recommendation","plain_language_reasoning"],"allowedTools":["log_note","save_draft_artifact"],"visibility":"user_visible"},{"agent_id":"adaptive_experience_agent","agentId":"adaptive_experience_agent","name":"Adaptive Experience Agent","label":"Adaptive Experience Agent","layer":"adaptive_experience_layer","role":"Reads privacy-safe experience signals, detects workflow friction, and recommends page or workflow improvements.","lifecycle":"active","version":"v1","enabled":true,"policy":{"humanApproval":false,"maxSteps":7,"notes":"Can recommend UX improvements. Should not collect sensitive user data or alter production behavior automatically."},"capabilities":["friction_detection","feature_usage_summary","workflow_bottleneck_detection","ux_recommendation"],"allowedTools":["log_note","save_draft_artifact"],"visibility":"internal"},{"agent_id":"hub_guide_agent","agentId":"hub_guide_agent","name":"Hub Guide Agent","label":"Hub Guide Agent","layer":"hub_collaboration_layer","role":"Guides users to the correct Hub page based on their goal, role, status, and next best workflow step.","lifecycle":"active","version":"v1","enabled":true,"policy":{"humanApproval":false,"maxSteps":5,"notes":"Can guide navigation and explain workflows. Cannot change permissions or submit official records."},"capabilities":["guided_page_selection","workflow_guidance","role_aware_navigation","next_page_recommendation"],"allowedTools":["log_note"],"visibility":"user_visible"},{"agent_id":"hub_matching_agent","agentId":"hub_matching_agent","name":"Hub Matching Agent","label":"Hub Matching Agent","layer":"hub_intelligence_engine","role":"Recommends partner matches, referral routes, bundled opportunities, and business network combinations.","lifecycle":"active","version":"v1","enabled":true,"policy":{"humanApproval":true,"maxSteps":8,"notes":"Can recommend matches and bundles. Human review required before final partner commitment or proposal submission."},"capabilities":["partner_matching","referral_route_scoring","bundle_recommendation","business_network_matching"],"allowedTools":["log_note","save_draft_artifact"],"visibility":"internal"},{"agent_id":"impact_comparison_agent","agentId":"impact_comparison_agent","name":"Impact Comparison Agent","label":"Impact Comparison Agent","layer":"impact_intelligence_layer","role":"Compares measured impact across programs, partners, counties, neighborhoods, funders, service lanes, and time periods.","lifecycle":"active","version":"v1","enabled":true,"policy":{"humanApproval":false,"maxSteps":8,"notes":"Must use measured impact first before comparison. Should not compare weak data as if verified."},"capabilities":["impact_comparison","program_efficiency_comparison","partner_performance_comparison","funding_risk_comparison"],"allowedTools":["log_note","save_draft_artifact"],"visibility":"internal"},{"agent_id":"impact_measurement_agent","agentId":"impact_measurement_agent","name":"Impact Measurement Agent","label":"Impact Measurement Agent","layer":"impact_intelligence_layer","role":"Measures verified impact using outcome definitions, time windows, cost logic, evidence strength, and confidence scoring.","lifecycle":"active","version":"v1","enabled":true,"policy":{"humanApproval":false,"maxSteps":8,"notes":"Measures impact from available data. Must clearly separate claimed, verified, pending, and weak-evidence outcomes."},"capabilities":["impact_measurement","cost_per_outcome_analysis","evidence_strength_summary","verified_outcome_summary"],"allowedTools":["log_note","save_draft_artifact"],"visibility":"internal"},{"agent_id":"oracle_truth_agent","agentId":"oracle_truth_agent","name":"Oracle Truth Agent","label":"Oracle Truth Agent","layer":"oracle_layer","role":"Reads Oracle truth packages and returns truth status, confidence state, contradiction state, readiness state, and trust-envelope notes.","lifecycle":"active","version":"v1","enabled":true,"policy":{"humanApproval":false,"maxSteps":5,"notes":"Reads and explains Oracle outputs. Does not create truth by itself."},"capabilities":["truth_package_reading","confidence_interpretation","contradiction_detection","readiness_summary"],"allowedTools":["log_note"],"visibility":"internal"},{"agent_id":"reconciliation_agent","agentId":"reconciliation_agent","name":"Reconciliation Agent","label":"Reconciliation Agent","layer":"reconciliation_layer","role":"Finds conflicting records, compares source priority, and prepares contradiction-resolution notes before Oracle judgment.","lifecycle":"active","version":"v1","enabled":true,"policy":{"humanApproval":true,"maxSteps":6,"notes":"Can identify conflicts and recommend resolution. Should not silently overwrite source records."},"capabilities":["conflict_detection","source_priority_comparison","contradiction_resolution_notes"],"allowedTools":["log_note"],"visibility":"internal"},{"agent_id":"report_narrator_agent","agentId":"report_narrator_agent","name":"Report Narrator Agent","label":"Report Narrator Agent","layer":"reporting_layer","role":"Turns verified outcomes, trust envelopes, audit traces, and report readiness into plain-language report narratives.","lifecycle":"active","version":"v1","enabled":true,"policy":{"humanApproval":true,"maxSteps":8,"notes":"Can draft report language. Human approval required before export, publication, or funder submission."},"capabilities":["report_summary","funder_language_draft","plain_language_explanation","readiness_explanation"],"allowedTools":["log_note","save_draft_artifact"],"visibility":"user_visible"},{"agent_id":"verification_agent","agentId":"verification_agent","name":"Verification Agent","label":"Verification Agent","layer":"verification_layer","role":"Reviews evidence sufficiency, verification status, audit trace coverage, and weak-proof risk.","lifecycle":"active","version":"v1","enabled":true,"policy":{"humanApproval":true,"maxSteps":6,"notes":"Can recommend verification state but final approval should remain human-controlled or policy-controlled."},"capabilities":["evidence_review","verification_status_summary","audit_trace_check","weak_evidence_flagging"],"allowedTools":["log_note"],"visibility":"internal"},{"agent_id":"watchtower_agent","agentId":"watchtower_agent","name":"Watchtower Agent","label":"Watchtower Agent","layer":"watchtower_layer","role":"Monitors risk signals, system integrity, audit health, weak proof, and infrastructure alerts.","lifecycle":"active","version":"v1","enabled":true,"policy":{"humanApproval":false,"maxSteps":8,"notes":"Can alert and summarize. Cannot override locked enforcement gates."},"capabilities":["risk_monitoring","audit_health_monitoring","integrity_signal_detection","alert_summary"],"allowedTools":["log_note"],"visibility":"internal"}],"disabled":[]}
+services/shf-agent-fabric/registry/L23_layer23_orchestrator.agent.json:3:  "name": "Layer23OrchestratorAgent",
+services/shf-agent-fabric/registry/L23_layer23_orchestrator.agent.json:11:    "notes": "Draft-only orchestrator. Requires approval before any action beyond drafting."
+services/shf-agent-fabric/services/internal_service_identity.py:92:        "/api/v1-command-center/agent-fabric/agents/health",
+services/shf-agent-fabric/services/internal_service_identity.py:93:        "/api/v1-command-center/agent-fabric/agents/readiness",
+services/shf-agent-fabric/services/internal_service_identity.py:94:        "/api/v1-command-center/agent-fabric/gate",
+services/shf-agent-fabric/services/internal_service_identity.py:95:        "/api/v1-command-center/agent-fabric/runs/recent",
+services/shf-agent-fabric/services/internal_service_identity.py:97:        "/api/v1-command-center/agent-fabric/runs",
+services/shf-agent-fabric/services/internal_service_identity.py:100:        "/api/v1-command-center/agent-fabric/watchtower",
+services/shf-agent-fabric/services/internal_service_identity.py:101:        "/api/v1-command-center/agent-fabric/infrastructure",
+services/shf-agent-fabric/services/internal_service_identity.py:102:        "/api/v1-command-center/agent-fabric/observability",
+services/shf-agent-fabric/services/internal_service_identity.py:104:        "/api/v1-command-center/agent-fabric/storage/artifacts",
+services/shf-agent-fabric/services/internal_service_identity.py:109:    re.compile(r"^/api/v1-command-center/agent-fabric/runs/[A-Za-z0-9_.:-]{1,128}(?:/(?:timeline|evidence|dependencies))?$"),
+services/shf-agent-fabric/services/internal_service_identity.py:111:    re.compile(r"^/api/v1-command-center/agent-fabric/runs/[A-Za-z0-9_.:-]{1,128}/artifacts/[A-Za-z0-9_.:-]{1,128}$"),
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:35:  "grade11-security-access-control-analysis": { slug: "security-access-control-analysis", activityType: PROOF_ACTIVITY_TYPE, domain: "cybersecurity-security", title: "Analyze synthetic access control", description: "Interpret synthetic identities, roles, and permissions using least-privilege and authorization reasoning.", criteria: ["distinguishes authentication and authorization", "identifies excessive or missing access", "applies least-privilege reasoning", "avoids unauthorized action and documents a recommendation"] },
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:58:  "grade12-cybersecurity-security-access-governance-analysis": { slug: "grade12-cybersecurity-security-access-governance-analysis", activityType: PROOF_ACTIVITY_TYPE, domain: "cybersecurity-security", title: "Analyze defensive access governance", description: "Interpret synthetic identities, roles, permissions, and lifecycle records using least-privilege and separation-of-duties reasoning without changing real accounts.", criteria: ["interprets identity, role, and permission relationships", "identifies stale or excessive access", "applies least-privilege and separation-of-duties reasoning", "preserves uncertainty", "documents an authorized recommendation"] },
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:183:        destination: "agent-fabric",
+services/shf-agent-fabric/var/self_audit/reports/2026-04-15T01-00-39Z.json:36:      "json": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/2026-04-15T01-00-39Z.json",
+services/shf-agent-fabric/var/self_audit/reports/2026-04-15T01-00-39Z.json:37:      "markdown": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/2026-04-15T01-00-39Z.md",
+services/shf-agent-fabric/var/self_audit/reports/2026-04-15T01-00-39Z.json:38:      "latest_json": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/latest.json",
+services/shf-agent-fabric/var/self_audit/reports/2026-04-15T01-00-39Z.json:39:      "latest_markdown": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/latest.md"
+services/shf-agent-fabric/var/self_audit/reports/2026-04-15T00-57-39Z.json:36:      "json": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/2026-04-15T00-57-39Z.json",
+services/shf-agent-fabric/var/self_audit/reports/2026-04-15T00-57-39Z.json:37:      "markdown": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/2026-04-15T00-57-39Z.md",
+services/shf-agent-fabric/var/self_audit/reports/2026-04-15T00-57-39Z.json:38:      "latest_json": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/latest.json",
+services/shf-agent-fabric/var/self_audit/reports/2026-04-15T00-57-39Z.json:39:      "latest_markdown": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/latest.md"
+services/shf-agent-fabric/services/internal_ingestion_rate_limit_service.py:101:            emit_operational_telemetry(event_name="internal_ingestion_rate_limit_backend_failure", severity="ERROR", component="agent_fabric", category="DATABASE", outcome="SYSTEM_FAILURE", metadata={"limiter_class": LIMITER_CLASS})
+services/shf-agent-fabric/services/internal_ingestion_rate_limit_service.py:133:            emit_operational_telemetry(event_name="internal_ingestion_rate_limit_backend_failure", severity="ERROR", component="agent_fabric", category="DATABASE", outcome="SYSTEM_FAILURE", metadata={"limiter_class": LIMITER_CLASS})
+services/shf-agent-fabric/services/internal_ingestion_rate_limit_service.py:137:            emit_operational_telemetry(event_name="internal_ingestion_rate_limit_backend_failure", severity="ERROR", component="agent_fabric", category="DATABASE", outcome="SYSTEM_FAILURE", metadata={"limiter_class": LIMITER_CLASS})
+services/shf-agent-fabric/services/internal_ingestion_rate_limit_service.py:144:        component="agent_fabric",
+services/shf-agent-fabric/var/self_audit/history/2026-04-16.json:41:      "json": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/2026-04-16T17-26-38Z.json",
+services/shf-agent-fabric/var/self_audit/history/2026-04-16.json:42:      "markdown": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/2026-04-16T17-26-38Z.md",
+services/shf-agent-fabric/var/self_audit/history/2026-04-16.json:43:      "latest_json": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/latest.json",
+services/shf-agent-fabric/var/self_audit/history/2026-04-16.json:44:      "latest_markdown": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/latest.md"
+services/shf-agent-fabric/scripts/watchtower_export_audit_jsonl.sh:2:export PYTHONPATH="${PYTHONPATH:-services/shf-agent-fabric}"
+services/shf-agent-fabric/scripts/watchtower_export_audit_jsonl.sh:3:python3 services/shf-agent-fabric/fabric/watchtower/audit/export_attestations_jsonl.py
+services/shf-agent-fabric/var/self_audit/history/2026-04-15.json:41:      "json": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/2026-04-15T01-19-34Z.json",
+services/shf-agent-fabric/var/self_audit/history/2026-04-15.json:42:      "markdown": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/2026-04-15T01-19-34Z.md",
+services/shf-agent-fabric/var/self_audit/history/2026-04-15.json:43:      "latest_json": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/latest.json",
+services/shf-agent-fabric/var/self_audit/history/2026-04-15.json:44:      "latest_markdown": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/latest.md"
+services/shf-agent-fabric/var/self_audit/latest.json:41:      "json": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/2026-04-16T17-26-38Z.json",
+services/shf-agent-fabric/var/self_audit/latest.json:42:      "markdown": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/2026-04-16T17-26-38Z.md",
+services/shf-agent-fabric/var/self_audit/latest.json:43:      "latest_json": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/latest.json",
+services/shf-agent-fabric/var/self_audit/latest.json:44:      "latest_markdown": "/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/var/self_audit/briefs/latest.md"
+services/shf-agent-fabric/scripts/watchtower_integrity_monitor.sh:2:export PYTHONPATH="${PYTHONPATH:-services/shf-agent-fabric}"
+services/shf-agent-fabric/scripts/watchtower_integrity_monitor.sh:3:python3 services/shf-agent-fabric/fabric/watchtower/audit/integrity_monitor.py
+services/shf-agent-fabric/scripts/verify_registry_contract.py:8:ROOT = Path(__file__).resolve().parents[1]  # services/shf-agent-fabric
+services/shf-agent-fabric/services/ai_guardrails_service.py:258:        reason = "AI output may continue only as internal draft/recommendation with listed limits."
+services/shf-agent-fabric/services/ai_guardrails_service.py:261:        reason = "AI output is limited to internal drafting, summarizing, inspection, or recommendation."
+services/shf-agent-fabric/migrations/20260310_07_capital_allocation_engine.sql:11:CREATE TABLE IF NOT EXISTS capital_reallocation_recommendations (
+services/shf-agent-fabric/migrations/20260310_07_capital_allocation_engine.sql:12:    recommendation_id TEXT PRIMARY KEY,
+services/shf-agent-fabric/services/truth_migration.py:30:services/shf-agent-fabric/db/truth/claims.json / sources.json files - see
+services/shf-agent-fabric/scripts/run_pilot_simulation.py:6:DB = "db/shf_agent_fabric.db"
+services/shf-agent-fabric/scripts/verify_runtime_enforcement_lock.py:8:LOCK_PATH = Path("services/shf-agent-fabric/contracts/locks/runtime_enforcement.lock.json")
+services/shf-agent-fabric/scripts/verify_runtime_enforcement_lock.py:19:        print("Run: python3 services/shf-agent-fabric/scripts/lock_runtime_enforcement.py")
+services/shf-agent-fabric/scripts/verify_runtime_enforcement_lock.py:45:        print("  python3 services/shf-agent-fabric/scripts/lock_runtime_enforcement.py")
+services/shf-agent-fabric/routers/health_routes.py:17:    # routers/health_routes.py -> routers/ -> services/shf-agent-fabric/
+src/apps/allocation/sources/raw/bls-columbus-occupational-wages.html:993:<p align="left">Some of the larger detailed occupations within the office and administrative support group included customer service representatives (22,100) and general&nbsp;office clerks (14,310). Among the higher paying jobs in this group were executive secretaries and executive administrative assistants ($35.93) and first-line supervisors of office and administrative support workers ($33.43). At the lower end of the wage scale were hotel, motel, and resort desk clerks ($15.08) and clerical library assistants ($16.36). (Detailed data for the office and administrative support occupations are presented in <a href="#Table1">table 1</a>; for a complete listing of detailed occupations available go to <a href="https://data.bls.gov/oes/#/area/0018140">https://data.bls.gov/oes/#/area/0018140</a>.)</p>
+src/apps/allocation/sources/raw/bls-columbus-occupational-wages.html:1208:<p class="sub1">Library assistants, clerical</p>
+src/apps/allocation/sources/raw/bls-columbus-occupational-wages.html:1235:<p class="sub1">Human resources assistants, except payroll and timekeeping</p>
+src/apps/allocation/sources/raw/bls-columbus-occupational-wages.html:1370:<p class="sub1">Executive secretaries and executive administrative assistants</p>
+src/apps/allocation/sources/raw/bls-columbus-occupational-wages.html:1379:<p class="sub1">Legal secretaries and administrative assistants</p>
+src/apps/allocation/sources/raw/bls-columbus-occupational-wages.html:1388:<p class="sub1">Medical secretaries and administrative assistants</p>
+src/apps/allocation/sources/raw/bls-columbus-occupational-wages.html:1397:<p class="sub1">Secretaries and administrative assistants, except legal, medical, and executive</p>
+services/shf-agent-fabric/services/reporting_lineage_service.py:86:    if registry.get("canonical_truth_authority") != "services/shf-agent-fabric/services/truth_spine_service.py":
+services/shf-agent-fabric/services/outcome_efficiency_service.py:5:DB = "db/shf_agent_fabric.db"
+services/shf-agent-fabric/tests/test_reporting_lineage_registry.py:22:    assert registry["canonical_truth_authority"] == "services/shf-agent-fabric/services/truth_spine_service.py"
+services/shf-agent-fabric/tests/test_reporting_lineage_registry.py:23:    assert registry["canonical_truth_router"] == "services/shf-agent-fabric/routers/truth_routes.py"
+services/shf-agent-fabric/tests/test_gate_g_startup_verify.py:7:    env["PYTHONPATH"] = "services/shf-agent-fabric"
+services/shf-agent-fabric/scripts/lock_runtime_enforcement.py:10:    Path("services/shf-agent-fabric/fabric/compliance/policy_resolver.py"),
+services/shf-agent-fabric/scripts/lock_runtime_enforcement.py:11:    Path("services/shf-agent-fabric/fabric/compliance/runtime_enforce.py"),
+services/shf-agent-fabric/scripts/lock_runtime_enforcement.py:14:LOCK_PATH = Path("services/shf-agent-fabric/contracts/locks/runtime_enforcement.lock.json")
+apps/shs-api/src/domain/notifications/service/delivery-service.ts:1:// NCA-4 — the canonical delivery orchestration layer.
+services/shf-agent-fabric/migrations/20260310_04_aal_predictive_layer.sql:36:CREATE TABLE IF NOT EXISTS aal_recommendations (
+services/shf-agent-fabric/migrations/20260310_04_aal_predictive_layer.sql:37:    recommendation_id TEXT PRIMARY KEY,
+services/shf-agent-fabric/migrations/20260310_04_aal_predictive_layer.sql:41:    recommendation_type TEXT,
+services/shf-agent-fabric/tests/test_health_routes.py:3:# conftest.py already fixes PYTHONPATH to services/shf-agent-fabric, so this import works:
+services/shf-agent-fabric/scripts/migrate_add_hash_chain.py:4:DB = Path("services/shf-agent-fabric/data/watchtower.db")
+services/shf-agent-fabric/tests/test_truth_migration.py:4:Never touches services/shf-agent-fabric/db/truth/*.json - see
+services/shf-agent-fabric/scripts/release_gate_backend.sh:12:export PYTHONPATH="services/shf-agent-fabric"
+services/shf-agent-fabric/scripts/release_gate_backend.sh:31:python3 services/shf-agent-fabric/scripts/verify_runtime_enforcement_lock.py
+services/shf-agent-fabric/scripts/release_gate_backend.sh:35:python3 services/shf-agent-fabric/scripts/verify_registry_contract.py
+services/shf-agent-fabric/scripts/release_gate_backend.sh:46:if [ -f "services/shf-agent-fabric/scripts/verify_watchtower_snapshot_store.py" ]; then
+services/shf-agent-fabric/scripts/release_gate_backend.sh:47:  python3 services/shf-agent-fabric/scripts/verify_watchtower_snapshot_store.py
+services/shf-agent-fabric/scripts/release_gate_backend.sh:56:if [ -f "services/shf-agent-fabric/scripts/verify_watchtower_attestation.py" ]; then
+services/shf-agent-fabric/scripts/release_gate_backend.sh:63:    python3 services/shf-agent-fabric/scripts/verify_watchtower_attestation.py
+services/shf-agent-fabric/tests/test_admin_infra_verify_route.py:3:# conftest.py sets PYTHONPATH so `from main import app` works when running from services/shf-agent-fabric
+services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py:53:            future_paths=("services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py",),
+services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py:168:                "services/shf-agent-fabric/api/routes/runtime_owner.py",
+services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py:170:                "services/shf-agent-fabric/fabric/migrations/999_runtime.sql",
+services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py:224:            repository_path="services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py",
+services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py:225:            test_reference="services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py",
+services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py:263:            repository_path="services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py",
+services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py:264:            test_reference="services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py",
+services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py:286:            repository_path="services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py",
+services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py:287:            test_reference="services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py",
+services/shf-agent-fabric/scripts/ops_storage_pg_quickstart.sh:4:SVC="services/shf-agent-fabric"
+services/shf-agent-fabric/tests/test_agent_contract_bridge_routes.py:11:    "shs_sales_agent",
+services/shf-agent-fabric/tests/conftest.py:9:SERVICE_ROOT = Path(__file__).resolve().parents[1]  # .../services/shf-agent-fabric
+services/shf-agent-fabric/services/ai_layer/orchestrator.py:6:def run_orchestrator(input_data):
+services/shf-agent-fabric/services/ai_layer/orchestrator.py:41:        "funding_recommendation": funding_result["funding_recommendation"],
+services/shf-agent-fabric/routers/runs_routes.py:189:        "execution_system": "agent_fabric",
+services/shf-agent-fabric/tests/test_run_lifecycle_phase2.py:37:BASE = "/api/v1-command-center/agent-fabric"
+services/shf-agent-fabric/tests/test_run_lifecycle_phase2.py:218:    assert run["initiator"]["source_system"] == "agent_fabric.session"
+services/shf-agent-fabric/tests/test_run_lifecycle_phase2.py:228:    assert timeline[0]["provenance"] == "DERIVED" and timeline[0]["source"] == "agent_fabric.plan_store"
+services/shf-agent-fabric/tests/test_run_lifecycle_phase2.py:269:                                  "agent": {"name": "Layer23OrchestratorAgent", "agentId": "L23", "layer": "L23"}})
+services/shf-agent-fabric/tests/test_run_lifecycle_phase2.py:271:                                  "agentName": "Layer23OrchestratorAgent", "requestId": "req-old"})
+services/shf-agent-fabric/main 2.py:113:log = logging.getLogger("shf-agent-fabric")
+services/shf-agent-fabric/main 2.py:129:    # services/shf-agent-fabric/main.py -> services/shf-agent-fabric/
+services/shf-agent-fabric/main 2.py:304:app = FastAPI(lifespan=lifespan, title="SHF Agent Fabric")
+services/shf-agent-fabric/main 2.py:459:    return {"ok": True, "service": "shf-agent-fabric"}
+services/shf-agent-fabric/tests/test_live_operations_projections.py:32:        "agent": {"name": "Layer23OrchestratorAgent", "agentId": "L23-ORCH-001", "layer": "L23"},
+services/shf-agent-fabric/services/ai_layer/agents/funding_agent.py:12:        recommendation = "Protect funding position immediately"
+services/shf-agent-fabric/services/ai_layer/agents/funding_agent.py:17:        recommendation = "Stabilize reporting and verification"
+services/shf-agent-fabric/services/ai_layer/agents/funding_agent.py:22:        recommendation = "Maintain verification discipline"
+services/shf-agent-fabric/services/ai_layer/agents/funding_agent.py:37:        "funding_recommendation": recommendation,
+src/apps/manifest/registry_admin_api.js:11:// Registry admin routes are Agent Fabric-owned (routers/admin_registry_routes.py,
+services/shf-agent-fabric/routers/admin_observability_routes.py:27:# through /api/v1-command-center/agent-fabric/observability instead.
+services/shf-agent-fabric/tests/test_run_execution_safety_phase4.py:389:    run_ledger = [e for e in run_timeline_projection("crash-dead")["events"] if e["source"] == "agent_fabric.run_events"]
+services/shf-agent-fabric/routers/admin_infra_verify_routes.py:16:# through /api/v1-command-center/agent-fabric/infrastructure instead.
+services/shf-agent-fabric/routers/admin_infra_verify_routes.py:21:    # routers/admin_infra_verify_routes.py -> routers -> services/shf-agent-fabric
+services/shf-agent-fabric/services/agent_contract_bridge_service.py:9:    "shs_sales_agent",
+services/shf-agent-fabric/services/agent_contract_bridge_service.py:190:        "backend_contract_source": "services/shf-agent-fabric/contracts/agents/agents.json",
+services/shf-agent-fabric/services/agent_contract_bridge_service.py:210:        "source": "services/shf-agent-fabric/contracts/agents/agents.json",
+services/shf-agent-fabric/tests/test_run_authority_phase3.py:445:    methods = {m for r in app.routes if getattr(r, "path", "").startswith("/api/v1-command-center/agent-fabric") for m in getattr(r, "methods", set())}
+services/shf-agent-fabric/services/execution_service.py:5:DB = "db/shf_agent_fabric.db"
+services/shf-agent-fabric/services/control_service.py:5:DB = "db/shf_agent_fabric.db"
+services/shf-agent-fabric/routers/funding_simulator.py:25:    root = Path(__file__).resolve().parents[1]  # shf-agent-fabric/
+services/shf-agent-fabric/contracts/registry/registry.json:130:    "Layer23OrchestratorAgent": {
+services/shf-agent-fabric/contracts/registry/registry.json:135:      "id": "Layer23OrchestratorAgent",
+services/shf-agent-fabric/contracts/registry/registry.json:161:      "name": "Layer23OrchestratorAgent",
+services/shf-agent-fabric/contracts/registry/registry.json:165:        "notes": "Draft-only orchestrator. Requires approval before any action beyond drafting."
+services/shf-agent-fabric/contracts/registry/registry.json:167:      "title": "Layer23 Orchestrator Agent",
+services/shf-agent-fabric/tests/test_truth_routes.py:26:    developer's persistent services/shf-agent-fabric/db/truth/*.json files
+services/shf-agent-fabric/tests/test_run_artifacts_postgres_phase6.py:418:    via_route = reader.get("/api/v1-command-center/agent-fabric/storage/artifacts").json()
+services/shf-agent-fabric/tests/test_run_artifacts_postgres_phase6.py:431:        assert reader.request(method, "/api/v1-command-center/agent-fabric/storage/artifacts").status_code == 405
+services/shf-agent-fabric/tests/test_run_artifacts_postgres_phase6.py:450:    via_route = _client("u-reader").get(f"/api/v1-command-center/agent-fabric/runs/{run_id}/artifacts/{artifact_id}").json()
+src/pages/CareerPathways.jsx:385:                ? "Recommendations generated based on your profile."
+src/pages/CareerPathways.jsx:386:                : "Using baseline recommendations — Personalize for a tailored plan."}
+src/pages/CareerPathways.jsx:499:                🔄 Regenerate recommendations
+src/pages/CareerPathways.jsx:530:              <span>These are recommendations, not guarantees. Outcomes vary by effort, experience, and local opportunities.</span>
+services/shf-agent-fabric/tests/test_command_bridge_reads.py:36:BASE = "/api/v1-command-center/agent-fabric"
+services/shf-agent-fabric/tests/test_command_bridge_reads.py:74:        {"runId": f"r{i}", "planId": "p1", "agentName": "Layer23OrchestratorAgent", "kind": "execute", "outcome": "ok",
+apps/shs-api/src/domain/conductor/service/conductor-service.ts:233:      metadata_json: { executionEnabled: false, conductorVersion: "controlled-orchestration-v1" },
+services/shf-agent-fabric/routers/shf_internal_ingestion_routes.py:41:            component="agent_fabric",
+services/shf-agent-fabric/contracts/agents/agents.json:13:      "ux_recommendation"
+services/shf-agent-fabric/contracts/agents/agents.json:35:      "ux_recommendations"
+services/shf-agent-fabric/contracts/agents/agents.json:56:      "next_action_recommendation",
+services/shf-agent-fabric/contracts/agents/agents.json:101:      "next_page_recommendation"
+services/shf-agent-fabric/contracts/agents/agents.json:145:      "bundle_recommendation",
+services/shf-agent-fabric/contracts/agents/agents.json:214:      "scale_recommendation"
+services/shf-agent-fabric/contracts/agents/agents.json:685:      "template_recommendation",
+services/shf-agent-fabric/contracts/agents/agents.json:717:    "role": "Development Library support, template/package recommendation, build packet preparation support, and reusable asset recommendations.",
+services/shf-agent-fabric/contracts/agents/agents.json:961:  "shs_sales_agent": {
+services/shf-agent-fabric/contracts/agents/agents.json:962:    "agentId": "shs_sales_agent",
+services/shf-agent-fabric/contracts/agents/agents.json:963:    "agent_id": "shs_sales_agent",
+services/shf-agent-fabric/contracts/agents/agents.json:999:    "label": "SHS Sales Agent",
+services/shf-agent-fabric/contracts/agents/agents.json:1003:    "name": "SHS Sales Agent",
+services/shf-agent-fabric/contracts/agents/agents.json:1073:      "approval_recommendation"
+services/shf-agent-fabric/contracts/assurance/watchtower_storage_truth_model.md:20:- SHF_AUDIT_EXPORT_DIR=services/shf-agent-fabric/var/audit_exports
+src/content/lessons/data-center-systems-7-student/data-center-systems-7-systems-challenge.json:10:  "objectives": ["Identify symptoms and a likely affected subsystem.", "Use evidence to explain possible causes and communicate a safe recommendation."],
+src/content/lessons/data-center-systems-7-student/data-center-systems-7-systems-challenge.json:11:  "vocab": [{ "term": "CONSTRAINT", "def": "A limit or condition that a solution must respect." }, { "term": "RECOMMENDATION", "def": "A reasoned suggestion about what should happen next." }, { "term": "SYSTEMS THINKING", "def": "Looking at parts, connections, and effects as one larger system." }],
+src/content/lessons/data-center-systems-7-student/data-center-systems-7-systems-challenge.json:17:  "practice": [{ "prompt": "Before presenting, check that your explanation includes a symptom, affected system, evidence, possible cause, constraint, and safe recommendation." }],
+src/content/lessons/data-center-systems-7-student/data-center-systems-7-systems-challenge.json:20:  "rubric": { "criteria": [{ "skill": "Systems reasoning", "levels": ["Beginning: names a symptom", "Developing: connects a symptom to a system with some evidence", "Proficient: explains connected systems, evidence, constraints, and a safe recommendation"] }] },
+services/shf-agent-fabric/tests/test_command_read_projections.py:4:AFCC-2A: Agent Fabric Command Center read projections.
+services/shf-agent-fabric/tests/test_command_read_projections.py:34:BASE = "/api/v1-command-center/agent-fabric"
+services/shf-agent-fabric/tests/test_command_read_projections.py:334:        "/Users/someone/services/shf-agent-fabric/db/x.json",
+services/shf-agent-fabric/routers/command_read_routes.py:4:Agent Fabric Command Center — read projections (AFCC-2A).
+services/shf-agent-fabric/routers/command_read_routes.py:41:router = APIRouter(prefix="/api/v1-command-center/agent-fabric", tags=["v1-command-center"])
+services/shf-agent-fabric/routers/command_read_routes.py:105:    source = {"authority": f"Agent Fabric {kind} verifier", "store": "command_verification", "action": action_id, "run_on_read": False}
+services/shf-agent-fabric/main.py:148:log = logging.getLogger("shf-agent-fabric")
+services/shf-agent-fabric/main.py:164:    # services/shf-agent-fabric/main.py -> services/shf-agent-fabric/
+services/shf-agent-fabric/main.py:346:app = FastAPI(lifespan=lifespan, title="SHF Agent Fabric")
+services/shf-agent-fabric/main.py:531:    return {"ok": True, "service": "shf-agent-fabric"}
+services/shf-agent-fabric/tests/test_truth_routes_security.py:7:pytest tmp_path - never the real services/shf-agent-fabric/db/truth/*.json
+services/shf-agent-fabric/tests/test_truth_routes_security.py:93:    real_claims_path = truth_spine_service.SERVICE_ROOT.parent.parent / "services" / "shf-agent-fabric" / "db" / "truth" / "claims.json"
+services/shf-agent-fabric/contracts/layers/layer_registry.json:1645:      "description": "Controls orchestration, routing, sequencing, and tool usage boundaries.",
+services/shf-agent-fabric/contracts/layers/layer_registry.json:1681:      "name": "Orchestrator & Workflow Governance",
+services/shf-agent-fabric/tests/test_registry_contract_script_runs.py:9:    # tests/ -> shf-agent-fabric/ -> services/ -> repo root
+services/shf-agent-fabric/tests/test_registry_contract_script_runs.py:11:    # .../services/shf-agent-fabric/tests/test_*.py
+services/shf-agent-fabric/tests/test_registry_contract_script_runs.py:12:    # parents[0]=tests, [1]=shf-agent-fabric, [2]=services, [3]=repo root
+services/shf-agent-fabric/tests/test_registry_contract_script_runs.py:18:    script = root / "services" / "shf-agent-fabric" / "scripts" / "verify_registry_contract.py"
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:1012:  const nextRecommendation = adaptive.recommendations?.[0];
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:1045:        <span>Next-Version Recommendation</span>
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:1046:        <p>{nextRecommendation?.recommendation || "Continue collecting usage data before changing the dashboard."}</p>
+src/pages/hub/HubSalesPipelinePage.jsx:231:              deals influenced, relationship notes, and next-best actions across the SHS Hub.
+services/shf-agent-fabric/contracts/reporting/producer_lineage_registry.v1.json:4:  "canonical_truth_authority": "services/shf-agent-fabric/services/truth_spine_service.py",
+services/shf-agent-fabric/contracts/reporting/producer_lineage_registry.v1.json:5:  "canonical_truth_router": "services/shf-agent-fabric/routers/truth_routes.py",
+services/shf-agent-fabric/contracts/reporting/producer_lineage_registry.v1.json:525:        "services/shf-agent-fabric/services/evidence_projection_service.py",
+services/shf-agent-fabric/contracts/reporting/producer_lineage_registry.v1.json:526:        "services/shf-agent-fabric/services/truth_spine_service.py",
+services/shf-agent-fabric/contracts/reporting/producer_lineage_registry.v1.json:527:        "services/shf-agent-fabric/routers/truth_routes.py"
+services/shf-agent-fabric/contracts/reporting/producer_lineage_registry.v1.json:592:      "current_runtime_status": "trusted_reporting_outbox_to_signed_agent_fabric_ingestion_to_truth_spine_projection",
+services/shf-agent-fabric/contracts/reporting/producer_lineage_registry.v1.json:596:        "services/shf-agent-fabric/services/operational_event_service.py",
+services/shf-agent-fabric/contracts/reporting/producer_lineage_registry.v1.json:597:        "services/shf-agent-fabric/services/evidence_projection_service.py",
+services/shf-agent-fabric/contracts/reporting/producer_lineage_registry.v1.json:598:        "services/shf-agent-fabric/services/truth_spine_service.py"
+src/pages/hub/HubReports.jsx:602:                  <b>Recommendation:</b> {truthSummary.recommendation || "Continue building verified proof."}
+services/shf-agent-fabric/contracts/reporting/metric_registry.v1.json:4:  "canonical_truth_authority": "services/shf-agent-fabric/services/truth_spine_service.py",
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-guided-workflow-launcher:1007:  const nextRecommendation = adaptive.recommendations?.[0];
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-guided-workflow-launcher:1040:        <span>Next-Version Recommendation</span>
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-guided-workflow-launcher:1041:        <p>{nextRecommendation?.recommendation || "Continue collecting usage data before changing the dashboard."}</p>
+services/shf-agent-fabric/fabric/funding/middleware_ruleset_sha.py:38:    svc_root = here.parents[2]  # services/shf-agent-fabric
+services/shf-agent-fabric/fabric/startup_verify.py:28:    # file: services/shf-agent-fabric/fabric/startup_verify.py
+services/shf-agent-fabric/fabric/startup_verify.py:29:    # parents[0]=fabric, [1]=shf-agent-fabric, [2]=services, [3]=repo root
+services/shf-agent-fabric/contracts/locks/runtime_enforcement.lock.json:12:      "path": "services/shf-agent-fabric/fabric/compliance/policy_resolver.py",
+services/shf-agent-fabric/contracts/locks/runtime_enforcement.lock.json:16:      "path": "services/shf-agent-fabric/fabric/compliance/runtime_enforce.py",
+services/shf-agent-fabric/fabric/funding/partner_docs.py:36:        "service": {"name": "shf-agent-fabric", "component": "funding"},
+services/shf-agent-fabric/fabric/funding/partner_docs.py:412:        "service": {"name": "shf-agent-fabric", "component": "funding"},
+services/shf-agent-fabric/fabric/funding/partner_docs.py:431:        "service": {"name": "shf-agent-fabric", "component": "funding"},
+src/pages/hub/HubBundleBuilderPage.jsx:412:            <article className="hbb-panel hbb-best" data-tour="hub-bundles-recommendation">
+src/pages/hub/HubBundleBuilderPage.jsx:415:                  <span className="hbb-chip hbb-chip--gold">Final Recommendation</span>
+services/shf-agent-fabric/fabric/funding/capabilities.py:68:        "service": {"name": "shf-agent-fabric", "component": "funding"},
+services/shf-agent-fabric/fabric/funding/manifest_signed.py:58:      2) services/shf-agent-fabric/var/keys/funding_manifest_ed25519_private.b64
+services/shf-agent-fabric/routers/reports_routes.py:492:            "top_recommendation": game_theory["top_recommendation"],
+src/pages/hub/HubGrowthNetwork.jsx:412:                  <small className="hgn-estimateNote">V1 estimated recommendation model</small>
+src/pages/hub/HubGrowthNetwork.jsx:454:                  Accept Recommendation
+src/pages/hub/HubGrowthNetwork.jsx:588:                  <p>No feedback logged yet. Accept a recommendation or introduce partners to begin learning.</p>
+services/shf-agent-fabric/auth/permissions.py:11:    "bos.orchestrator.read",
+services/shf-agent-fabric/auth/permissions.py:12:    "bos.orchestrator.review",
+services/shf-agent-fabric/auth/permissions.py:152:# Agent Fabric plan/run authority (AFCC-3 Phase 3). Create, decide and execute
+services/shf-agent-fabric/auth/permissions.py:220:            "route": "/ops/orchestrator",
+services/shf-agent-fabric/auth/permissions.py:222:            "required_permission": "bos.orchestrator.read",
+services/shf-agent-fabric/routers/run_routes.py:10:from services.ai_layer.orchestrator import run_orchestrator
+services/shf-agent-fabric/routers/run_routes.py:162:    # 🔥 AI ORCHESTRATOR EXECUTION
+services/shf-agent-fabric/routers/run_routes.py:163:    orchestrated = run_orchestrator({
+services/shf-agent-fabric/routers/run_routes.py:197:        "ai": orchestrated,
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-workflow-intelligence-20260525_093138:1012:  const nextRecommendation = adaptive.recommendations?.[0];
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-workflow-intelligence-20260525_093138:1045:        <span>Next-Version Recommendation</span>
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-workflow-intelligence-20260525_093138:1046:        <p>{nextRecommendation?.recommendation || "Continue collecting usage data before changing the dashboard."}</p>
+src/pages/hub/HubWorkspaceDashboard.jsx:185:function getAdaptiveWorkflowRecommendation(activeRole = "client") {
+src/pages/hub/HubWorkspaceDashboard.jsx:199:function buildGuidedWorkflowRoute(goal, recommendation) {
+src/pages/hub/HubWorkspaceDashboard.jsx:206:  params.set("goal", goal.id || recommendation?.goalId || "guided-workflow");
+src/pages/hub/HubWorkspaceDashboard.jsx:208:  if (recommendation?.confidence) {
+src/pages/hub/HubWorkspaceDashboard.jsx:209:    params.set("confidence", String(recommendation.confidence));
+src/pages/hub/HubWorkspaceDashboard.jsx:240:  const adaptiveRecommendation = getAdaptiveWorkflowRecommendation(activeRole);
+src/pages/hub/HubWorkspaceDashboard.jsx:242:    safeGoals.find((goal) => goal.id === adaptiveRecommendation.goalId) ||
+src/pages/hub/HubWorkspaceDashboard.jsx:243:    safeGoals.find((goal) => goal.route === adaptiveRecommendation.route) ||
+src/pages/hub/HubWorkspaceDashboard.jsx:264:    const guidedRoute = buildGuidedWorkflowRoute(selectedGoal, adaptiveRecommendation);
+src/pages/hub/HubWorkspaceDashboard.jsx:274:          confidence: adaptiveRecommendation?.confidence || null,
+src/pages/hub/HubWorkspaceDashboard.jsx:275:          reason: selectedGoal.id === recommendedGoal?.id ? adaptiveRecommendation.reason : selectedGoal.why,
+src/pages/hub/HubWorkspaceDashboard.jsx:276:          next: selectedGoal.id === recommendedGoal?.id ? adaptiveRecommendation.next : selectedGoal.next,
+src/pages/hub/HubWorkspaceDashboard.jsx:293:        confidence: adaptiveRecommendation?.confidence,
+src/pages/hub/HubWorkspaceDashboard.jsx:303:    return `#${buildGuidedWorkflowRoute(goal, adaptiveRecommendation)}`;
+src/pages/hub/HubWorkspaceDashboard.jsx:321:            ? adaptiveRecommendation?.confidence || null
+src/pages/hub/HubWorkspaceDashboard.jsx:325:            ? adaptiveRecommendation?.reason || goal.why
+src/pages/hub/HubWorkspaceDashboard.jsx:329:            ? adaptiveRecommendation?.next || goal.next
+src/pages/hub/HubWorkspaceDashboard.jsx:346:        confidence: adaptiveRecommendation?.confidence,
+src/pages/hub/HubWorkspaceDashboard.jsx:362:      target: `adaptive_recommendation_preview_${goal.id}`,
+src/pages/hub/HubWorkspaceDashboard.jsx:367:        confidence: adaptiveRecommendation?.confidence,
+src/pages/hub/HubWorkspaceDashboard.jsx:390:      <article className={`hubV1-adaptiveWorkflow hubV1-adaptiveWorkflow--${adaptiveRecommendation.tone}`} data-tour="hub-workspace-adaptive-workflow">
+src/pages/hub/HubWorkspaceDashboard.jsx:392:          <span className="hubV1-adaptiveWorkflowLabel">{adaptiveRecommendation.label}</span>
+src/pages/hub/HubWorkspaceDashboard.jsx:393:          <h3>{adaptiveRecommendation.title}</h3>
+src/pages/hub/HubWorkspaceDashboard.jsx:394:          <p>{adaptiveRecommendation.reason}</p>
+src/pages/hub/HubWorkspaceDashboard.jsx:396:            {adaptiveRecommendation.evidence.map((item) => (
+src/pages/hub/HubWorkspaceDashboard.jsx:404:          <strong>{adaptiveRecommendation.confidence}%</strong>
+src/pages/hub/HubWorkspaceDashboard.jsx:406:            Preview recommendation
+src/pages/hub/HubWorkspaceDashboard.jsx:440:                ? `SHS recommends this path with ${adaptiveRecommendation.confidence}% confidence.`
+src/pages/hub/HubWorkspaceDashboard.jsx:441:                : `SHS currently recommends ${recommendedGoal?.page || adaptiveRecommendation.title}, but you can still open this page if it fits the task.`}
+src/pages/hub/HubWorkspaceDashboard.jsx:852:  const nextRecommendation = adaptive.recommendations?.[0];
+src/pages/hub/HubWorkspaceDashboard.jsx:885:        <span>Next-Version Recommendation</span>
+src/pages/hub/HubWorkspaceDashboard.jsx:886:        <p>{nextRecommendation?.recommendation || "Continue collecting usage data before changing the dashboard."}</p>
+src/pages/hub/HubWorkspaceDashboard.jsx:912:  const outerRecommendation = getAdaptiveWorkflowRecommendation(getActiveHubRole());
+src/pages/hub/HubWorkspaceDashboard.jsx:913:  const outerGoal = guidedWorkflowGoals.find((goal) => goal.id === outerRecommendation.goalId) || guidedWorkflowGoals[0];
+src/pages/hub/HubWorkspaceDashboard.jsx:975:          description={outerRecommendation?.reason || "The Hub workflow projection identifies the next service-owned action."}
+src/pages/hub/HubWorkspaceDashboard.jsx:976:          href={buildGuidedWorkflowRoute(outerGoal, outerRecommendation)}
+services/shf-agent-fabric/fabric/outcomes/proof_signature_store.py:15:    # Default: services/shf-agent-fabric/var/outcomes_proof_signatures.jsonl
+services/shf-agent-fabric/fabric/outcomes/proof_signature_store.py:16:    # We assume CWD is services/shf-agent-fabric in local/dev and tests.
+services/shf-agent-fabric/fabric/funding/journal/decision_journal.py:8:SVC_ROOT = Path(__file__).resolve().parents[4]  # services/shf-agent-fabric
+src/content/lessons/data-center-specialization-12-student/data-center-specialization-12-advanced-identity-access-governance.json:1:{"id":"data-center-specialization-12-advanced-identity-access-governance","slug":"data-center-specialization-12-advanced-identity-access-governance","nextSlug":"data-center-specialization-12-privileged-access-separation-duties","title":"Advanced Identity and Access Governance","curriculum":"data-center-cybersecurity-security-12","gradeBand":{"minGrade":12,"maxGrade":12,"stage":"PREPARE_PROVE"},"estMinutes":35,"summary":"Interpret synthetic identities, accounts, roles, permissions, and lifecycle states using least privilege and separation of duties.","objectives":["Use synthetic, defensive, authorized evidence to reason about data-center security.","Document uncertainty, safe escalation, and evidence without claiming professional authority."],"vocab":[{"term":"LEAST PRIVILEGE","def":"Give an identity only the access needed for an authorized task."},{"term":"AUTHORIZATION","def":"The decision about what an authenticated identity may access."}],"sections":[{"heading":"Prepare","body":"This is a defensive classroom simulation using mock identities, synthetic logs, and offline tables. Do not use production systems, real passwords, secrets, exploit procedures, scanning, bypasses, malware, or packet interception."},{"heading":"Apply","body":"Interpret the scenario records, compare identity, role, permission, physical-access, and service evidence, and distinguish observed facts from inference and uncertainty."},{"heading":"Prove","body":"Record the evidence source and chronology, identify a safe authorized next step, preserve original records, and escalate to the appropriate qualified role."}],"practice":[{"prompt":"What does an alert establish?","answer":"It establishes a signal that requires scenario-defined review; it does not by itself establish a confirmed incident."}],"quiz":{"question":"What is the allowed scope?","options":["Defensive synthetic analysis and authorized escalation","Bypassing access controls","Using real credentials","Deploying malware"],"answer":"Defensive synthetic analysis and authorized escalation"},"lab":{"safetyClassification":"SIMULATION ONLY","objective":"Advanced Identity and Access Governance"},"reflectionPrompt":"What was observed, what remained uncertain, and what required authorized escalation?","careerConnection":{"careerId":"data-center-technician","text":"This is supervised educational security practice, not a cybersecurity, physical-security, or professional qualification."},"proofActivity":{"activityId":"grade12-cybersecurity-security-access-governance-analysis","activityType":"SIMULATED_INFRASTRUCTURE_PROOF","safetyClassification":"SIMULATION ONLY","competencySlug":"grade12-cybersecurity-security-access-governance-analysis","criteria":["interprets identity, role, and permission relationships","identifies stale or excessive access","applies least privilege and separation of duties","preserves uncertainty","documents an authorized recommendation"]}}
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_identity_nav_tiles_20260512_215346:784:  const nextRecommendation = adaptive.recommendations?.[0];
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_identity_nav_tiles_20260512_215346:817:        <span>Next-Version Recommendation</span>
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_identity_nav_tiles_20260512_215346:818:        <p>{nextRecommendation?.recommendation || "Continue collecting usage data before changing the dashboard."}</p>
+services/shf-agent-fabric/fabric/outcomes/store.py:17:    # - services/shf-agent-fabric/db/db.py (module name db.py inside db folder)
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_identity_nav_tiles_20260512_220012:811:  const nextRecommendation = adaptive.recommendations?.[0];
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_identity_nav_tiles_20260512_220012:844:        <span>Next-Version Recommendation</span>
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_identity_nav_tiles_20260512_220012:845:        <p>{nextRecommendation?.recommendation || "Continue collecting usage data before changing the dashboard."}</p>
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_role_tier_fix_20260512_220850:811:  const nextRecommendation = adaptive.recommendations?.[0];
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_role_tier_fix_20260512_220850:844:        <span>Next-Version Recommendation</span>
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_role_tier_fix_20260512_220850:845:        <p>{nextRecommendation?.recommendation || "Continue collecting usage data before changing the dashboard."}</p>
+src/pages/hub/HubWorkspaceDashboard 2.jsx:526:  const nextRecommendation = adaptive.recommendations?.[0];
+src/pages/hub/HubWorkspaceDashboard 2.jsx:559:        <span>Next-Version Recommendation</span>
+src/pages/hub/HubWorkspaceDashboard 2.jsx:560:        <p>{nextRecommendation?.recommendation || "Continue collecting usage data before changing the dashboard."}</p>
+services/shf-agent-fabric/bin/registry_seed.sh:51:    "id":"Layer23OrchestratorAgent",
+services/shf-agent-fabric/bin/registry_seed.sh:53:    "name":"Layer23OrchestratorAgent",
+services/shf-agent-fabric/bin/registry_seed.sh:54:    "title":"Layer23 Orchestrator Agent",
+services/shf-agent-fabric/bin/registry_seed.sh:57:    "policy":{"humanApproval":True,"maxSteps":6,"notes":"Draft-only orchestrator. Requires approval before any action beyond drafting."},
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_hide_role_switcher_20260513_081315:902:  const nextRecommendation = adaptive.recommendations?.[0];
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_hide_role_switcher_20260513_081315:935:        <span>Next-Version Recommendation</span>
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_hide_role_switcher_20260513_081315:936:        <p>{nextRecommendation?.recommendation || "Continue collecting usage data before changing the dashboard."}</p>
+services/shf-ai-layer/app/core/prompts.py:10:4. Recommend the next best action
+services/shf-agent-fabric/fabric/reports/funder_report.py:52:    # services/shf-agent-fabric/fabric/reports/funder_report.py
+services/shf-agent-fabric/fabric/reports/funder_report.py:53:    # -> services/shf-agent-fabric/
+services/shf-agent-fabric/fabric/reports/funder_report.py:405:        recommendation = "Attach targets and outcomes before using this report for funding or scale decisions."
+services/shf-agent-fabric/fabric/reports/funder_report.py:411:        recommendation = "Proceed with controlled expansion while maintaining routine monitoring."
+services/shf-agent-fabric/fabric/reports/funder_report.py:417:        recommendation = (
+services/shf-agent-fabric/fabric/reports/funder_report.py:427:        recommendation = (
+services/shf-agent-fabric/fabric/reports/funder_report.py:436:        "recommendation": recommendation,
+services/shf-agent-fabric/fabric/watchtower/chain_root.py:13:    # fabric/watchtower/*.py -> fabric/watchtower -> fabric -> services/shf-agent-fabric
+src/pages/hub/IntakeNavigatorConsole.jsx.bak_force_tour_20260512_163053:409:              <dt>Recommendation</dt>
+services/shf-agent-fabric/fabric/reports/pdf_report.py:338:    recommendation = _safe(funder.get("recommendation"), "—")
+services/shf-agent-fabric/fabric/reports/pdf_report.py:391:            f"Action: {recommendation}",
+services/shf-agent-fabric/bin/shf-admin:5:ENV_PATH="${SHF_ENV:-/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/.env}"
+services/shf-agent-fabric/fabric/watchtower/snapshot_verify.py:15:    # services/shf-agent-fabric/fabric/watchtower/snapshot_verify.py -> parents[2] == services/shf-agent-fabric
+services/shf-agent-fabric/fabric/watchtower/snapshot_verify.py:20:    # Prefer explicit env; otherwise default to services/shf-agent-fabric/data/watchtower.db (your snapshots DB)
+services/shf-agent-fabric/fabric/reports/institutional/platypus_preview.py:195:        "funding_recommendation": {
+services/shf-agent-fabric/fabric/reports/institutional/platypus_preview.py:196:            "recommendation_type": "Conditional Continue",
+services/shf-agent-fabric/fabric/reports/institutional/platypus_preview.py:197:            "recommendation_summary": safe(
+services/shf-agent-fabric/fabric/reports/institutional/platypus_preview.py:198:                funder.get("recommendation"),
+services/shf-agent-fabric/fabric/reports/institutional/platypus_preview.py:268:    story.append(Paragraph("Page 13 Preview — Funding Recommendation", TITLE))
+services/shf-agent-fabric/fabric/reports/institutional/platypus_preview.py:269:    fr = ctx["funding_recommendation"]
+services/shf-agent-fabric/fabric/reports/institutional/platypus_preview.py:270:    story.append(metric_banner("Recommendation Type", fr["recommendation_type"], tone="warn"))
+services/shf-agent-fabric/fabric/reports/institutional/platypus_preview.py:272:    story.append(card("Recommendation Summary", [fr["recommendation_summary"]]))
+services/shf-agent-fabric/fabric/watchtower/audit/export_attestations_jsonl.py:44:    out_dir = (os.getenv("SHF_AUDIT_EXPORT_DIR", "services/shf-agent-fabric/var/audit_exports") or "").strip()
+src/pages/hub/IntakeNavigatorConsole.jsx:423:              <dt>Recommendation</dt>
+src/pages/hub/ReferralLifecycleView.jsx:306:  const recommendation = adaptive.recommendations?.[0];
+src/pages/hub/ReferralLifecycleView.jsx:335:        <small>Next-Version Recommendation</small>
+src/pages/hub/ReferralLifecycleView.jsx:336:        <p>{recommendation?.recommendation || "Continue collecting lifecycle behavior before changing the workflow."}</p>
+src/pages/hub/ReferralLifecycleView.jsx:384:      eventType: ADAPTIVE_EVENT_TYPES.RECOMMENDATION_VIEWED,
+src/pages/hub/ReferralLifecycleView.jsx:418:        eventType = ADAPTIVE_EVENT_TYPES.RECOMMENDATION_ACCEPTED;
+services/shf-agent-fabric/bin/shf/smoke.sh:6:cd "$(cd "$DIR/.." && pwd)/.."  # back to services/shf-agent-fabric
+services/shf-agent-fabric/fabric/watchtower/read_projection.py:4:Side-effect-free Watchtower read projection for the Agent Fabric Command Center.
+services/shf-agent-fabric/fabric/reports/institutional/pages/decision_summary.py:12:    recommendation = ds.get("primary_recommendation", "Add retention intervention checkpoints for at-risk participants and monitor weekly exit reasons.")
+services/shf-agent-fabric/fabric/reports/institutional/pages/decision_summary.py:20:    # Primary recommendation
+services/shf-agent-fabric/fabric/reports/institutional/pages/decision_summary.py:23:    txt(c, X0 + 16, y - 22, "Primary Recommendation", 10, font="Helvetica-Bold")
+services/shf-agent-fabric/fabric/reports/institutional/pages/decision_summary.py:24:    paragraph(c, X0 + 16, y - 40, recommendation, width_chars=95, size=8.5)
+services/shf-agent-fabric/bin/run_plan.sh:5:AGENT="${AGENT_NAME:-Layer23OrchestratorAgent}"
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:232:function getAdaptiveWorkflowRecommendation(activeRole = "client") {
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:295:function buildGuidedWorkflowRoute(goal, recommendation) {
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:302:  params.set("goal", goal.id || recommendation?.goalId || "guided-workflow");
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:304:  if (recommendation?.confidence) {
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:305:    params.set("confidence", String(recommendation.confidence));
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:427:  const adaptiveRecommendation = getAdaptiveWorkflowRecommendation(activeRole);
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:429:    safeGoals.find((goal) => goal.id === adaptiveRecommendation.goalId) ||
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:430:    safeGoals.find((goal) => goal.route === adaptiveRecommendation.route) ||
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:451:    const guidedRoute = buildGuidedWorkflowRoute(selectedGoal, adaptiveRecommendation);
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:461:          confidence: adaptiveRecommendation?.confidence || null,
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:462:          reason: selectedGoal.id === recommendedGoal?.id ? adaptiveRecommendation.reason : selectedGoal.why,
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:463:          next: selectedGoal.id === recommendedGoal?.id ? adaptiveRecommendation.next : selectedGoal.next,
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:480:        confidence: adaptiveRecommendation?.confidence,
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:497:      target: `adaptive_recommendation_preview_${goal.id}`,
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:502:        confidence: adaptiveRecommendation?.confidence,
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:560:      <article className={`hubV1-adaptiveWorkflow hubV1-adaptiveWorkflow--${adaptiveRecommendation.tone}`} data-tour="hub-workspace-adaptive-workflow">
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:562:          <span className="hubV1-adaptiveWorkflowLabel">{adaptiveRecommendation.label}</span>
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:563:          <h3>{adaptiveRecommendation.title}</h3>
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:564:          <p>{adaptiveRecommendation.reason}</p>
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:566:            {adaptiveRecommendation.evidence.map((item) => (
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:574:          <strong>{adaptiveRecommendation.confidence}%</strong>
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:576:            Preview recommendation
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:610:                ? `SHS recommends this path with ${adaptiveRecommendation.confidence}% confidence.`
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:611:                : `SHS currently recommends ${recommendedGoal?.page || adaptiveRecommendation.title}, but you can still open this page if it fits the task.`}
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:1201:  const nextRecommendation = adaptive.recommendations?.[0];
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:1234:        <span>Next-Version Recommendation</span>
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-start-guided-workflow-link-20260525_152848:1235:        <p>{nextRecommendation?.recommendation || "Continue collecting usage data before changing the dashboard."}</p>
+services/shf-agent-fabric/bin/run_schema.sh:5:AGENT_NAME="${AGENT_NAME:-Layer23OrchestratorAgent}"
+src/pages/hub/PartnerActionQueueV2.jsx:785:          <span>Next-Version Recommendation</span>
+src/content/lessons/data-center-specialization-12-student/data-center-specialization-12-electrical-load-capacity-headroom.json:1:{"id":"data-center-specialization-12-electrical-load-capacity-headroom","slug":"data-center-specialization-12-electrical-load-capacity-headroom","nextSlug":"data-center-specialization-12-ups-backup-transfer-states","title":"Advanced Electrical Load, Capacity, and Headroom","curriculum":"data-center-electrical-infrastructure-12","gradeBand":{"minGrade":12,"maxGrade":12,"stage":"PREPARE_PROVE"},"estMinutes":45,"summary":"Compare modeled load, capacity, utilization, headroom, and redundancy reserve.","objectives":["Use units and assumptions to compare current and projected synthetic load with stated capacity.","Explain why capacity decisions must include redundancy and downstream dependencies."],"vocab":[{"term":"HEADROOM","def":"Unused modeled capacity available before a stated limit is reached."},{"term":"UTILIZATION","def":"The portion of stated capacity currently in use."}],"sections":[{"heading":"Prepare","body":"Calculations are synthetic and do not authorize system sizing or electrical work."},{"heading":"Apply","body":"For a scenario with 48 kW capacity, 31 kW current load, and 9 kW planned load, compute 40 kW projected load and 8 kW simple headroom. Then state whether redundancy reserve, measurement uncertainty, and shared dependencies require qualified review."},{"heading":"Prove","body":"Show the expression, units, assumptions, and a safe escalation recommendation."}],"practice":[{"prompt":"What must accompany a modeled capacity number?","answer":"Units, assumptions, scenario limits, redundancy context, and uncertainty."}],"quiz":{"question":"What is headroom?","options":["Unused modeled capacity before a stated limit","A guarantee of safe operation","A replacement for redundancy","A live measurement procedure"],"answer":"Unused modeled capacity before a stated limit"},"lab":{"safetyClassification":"SIMULATION ONLY","objective":"Analyze synthetic load and capacity."},"reflectionPrompt":"What additional evidence would a qualified reviewer need?","careerConnection":{"careerId":"data-center-technician","text":"This is supervised educational infrastructure practice, not professional qualification."}}
+services/shf-agent-fabric/bin/restart_8090.sh:14:echo "🔁 Restarting SHF Agent Fabric on ${HOST}:${PORT} ..."
+src/pages/hub/HubGrowthNetwork.jsx.bak_shared_nav_20260510_100708:528:                  <small className="hgn-estimateNote">V1 estimated recommendation model</small>
+src/pages/hub/HubGrowthNetwork.jsx.bak_shared_nav_20260510_100708:570:                  Accept Recommendation
+src/pages/hub/HubGrowthNetwork.jsx.bak_shared_nav_20260510_100708:704:                  <p>No feedback logged yet. Accept a recommendation or introduce partners to begin learning.</p>
+services/shf-agent-fabric/fabric/reports/institutional/pages/pages_5_16.py:194:def render_funding_recommendation_page(c, ctx, page_spec):
+services/shf-agent-fabric/fabric/reports/institutional/pages/pages_5_16.py:195:    fr = ctx.get("funding_recommendation", {}) or {}
+services/shf-agent-fabric/fabric/reports/institutional/pages/pages_5_16.py:197:    p.metric_banner("Recommendation Type", safe(fr.get("recommendation_type", "Conditional Continue")), tone="warn")
+services/shf-agent-fabric/fabric/reports/institutional/pages/pages_5_16.py:198:    p.card("Recommendation Summary", [safe(fr.get("recommendation_summary", "Add retention intervention checkpoints for at-risk participants and monitor weekly exit reasons."))], min_h=60)
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_access_redirect_notice_20260513_080116:844:  const nextRecommendation = adaptive.recommendations?.[0];
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_access_redirect_notice_20260513_080116:877:        <span>Next-Version Recommendation</span>
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_access_redirect_notice_20260513_080116:878:        <p>{nextRecommendation?.recommendation || "Continue collecting usage data before changing the dashboard."}</p>
+services/shf-agent-fabric/fabric/mode_guard.py:6:        raise HTTPException(status_code=503, detail="Agent Fabric is OFF (FABRIC_MODE=OFF)")
+services/shf-agent-fabric/fabric/reports/institutional/pages/__init__.py:14:    render_funding_recommendation_page,
+services/shf-agent-fabric/fabric/reports/institutional/pages/__init__.py:33:    "funding_recommendation": render_funding_recommendation_page,
+services/shf-agent-fabric/fabric/reports/institutional/pages/funding_recommendation.py:82:def render_funding_recommendation_page(c, ctx, page_spec):
+services/shf-agent-fabric/fabric/reports/institutional/pages/funding_recommendation.py:83:    fr = ctx.get("funding_recommendation", {}) or {}
+services/shf-agent-fabric/fabric/reports/institutional/pages/funding_recommendation.py:84:    _header(c, page_spec.get("title", "Funding Recommendation"), ctx)
+services/shf-agent-fabric/fabric/reports/institutional/pages/funding_recommendation.py:86:    type_val = _safe(fr.get("recommendation_type") or fr.get("type") or "Conditional Continue")
+services/shf-agent-fabric/fabric/reports/institutional/pages/funding_recommendation.py:87:    summary = _safe(fr.get("recommendation_summary") or fr.get("summary") or "No recommendation summary provided.")
+services/shf-agent-fabric/fabric/reports/institutional/pages/funding_recommendation.py:95:    _card(c, LEFT, y, RIGHT - LEFT, h1, "Recommendation Type")
+services/shf-agent-fabric/fabric/reports/institutional/pages/funding_recommendation.py:102:    _card(c, LEFT, y, RIGHT - LEFT, h2, "Recommendation Summary")
+services/shf-agent-fabric/fabric/watchtower/self_audit/daily_cycle.py:8:from fabric.governance.self_audit_recommendations import build_recommendations
+services/shf-agent-fabric/fabric/watchtower/self_audit/daily_cycle.py:114:    payload["recommended_actions"] = build_recommendations(findings_dict)
+services/shf-agent-fabric/fabric/reports/institutional/pages/executive_summary.py:10:    rec = ex.get("recommendation_summary", "Add retention intervention checkpoints for at-risk participants and monitor weekly exit reasons.")
+services/shf-agent-fabric/fabric/reports/institutional/pages/executive_summary.py:36:    txt(c, X0 + 16, y - 20, "Recommendation Summary", 10, font="Helvetica-Bold")
+services/shf-agent-fabric/fabric/reports/institutional/pages/table_of_contents.py:19:        ("13. Funding Recommendation", "13"),
+services/shf-agent-fabric/fabric/watchtower/audit.py:11:    # fabric/watchtower/audit.py -> fabric/watchtower -> fabric -> services/shf-agent-fabric
+services/shf-agent-fabric/fabric/watchtower/audit.py:17:    # Default: services/shf-agent-fabric/var/watchtower_audit.jsonl
+src/pages/hub/shared/hubTourSteps.js:714:          "Follow the recommendation. If it says to add notes or context, do that before submitting.",
+src/pages/hub/shared/hubTourSteps.js:1067:          "Adaptive Experience tracks usage, friction, and next-version recommendations.",
+src/pages/hub/shared/hubTourSteps.js:1122:          "The Intel readiness score shows whether the business-network intelligence layer is active enough to support recommendations.",
+src/pages/hub/shared/hubTourSteps.js:1124:          "Recommendations should be reviewed with context. If readiness is weak, operators should not treat the page as final truth.",
+src/pages/hub/shared/hubTourSteps.js:1126:          "If readiness is strong, continue reviewing recommendations. If readiness is weak, check partner data, service lanes, opportunity data, and feedback history.",
+src/pages/hub/shared/hubTourSteps.js:1165:          "Review the fit score and risk. If it looks strong, accept the recommendation or mark the proposal created. If it looks weak, review relationship matches and opportunity board before acting.",
+src/pages/hub/shared/hubTourSteps.js:1226:          "The Feedback Log records accepted recommendations, created proposals, introductions, and other learning events.",
+src/pages/hub/shared/hubTourSteps.js:1228:          "The system should learn which recommendations are useful and which actions actually move the network forward.",
+src/pages/hub/shared/hubTourSteps.js:1230:          "Accept recommendations, introduce partners, and mark proposals when work happens so future recommendations improve.",
+src/pages/hub/shared/hubTourSteps.js:1255:          "Use Hub Intelligence when the user needs to understand why a partner match, bundle, opportunity, or recommendation is being suggested.",
+src/pages/hub/shared/hubTourSteps.js:1259:          "Start by reading the page purpose, then review KPIs, top recommendation, score grid, partner mix, matches, bundle comparison, risk, and feedback.",
+src/pages/hub/shared/hubTourSteps.js:1268:          "The KPI row shows recommendations, accepted actions, bundle suggestions, pricing flags, risk alerts, and feedback events.",
+src/pages/hub/shared/hubTourSteps.js:1272:          "If risk alerts are high, review the recommendation carefully. If feedback events are low, use the decision buttons so the system can learn.",
+src/pages/hub/shared/hubTourSteps.js:1276:      id: "hub-intel-recommendation",
+src/pages/hub/shared/hubTourSteps.js:1277:      target: "[data-tour='hub-intel-recommendation']",
+src/pages/hub/shared/hubTourSteps.js:1278:      title: "Step 3 — Review the Top Recommendation",
+src/pages/hub/shared/hubTourSteps.js:1281:          "The top recommendation shows the strongest bundle or partner move based on the current scoring model.",
+src/pages/hub/shared/hubTourSteps.js:1294:          "The score grid breaks the recommendation into service coverage, pricing fit, readiness, outcomes, success probability, and risk.",
+src/pages/hub/shared/hubTourSteps.js:1296:          "A high recommendation score should be explainable. This makes the decision easier to defend to leadership, partners, or funders.",
+src/pages/hub/shared/hubTourSteps.js:1298:          "If service coverage and readiness are high, the recommendation may be ready for Bundle Builder. If risk is not low, review the risk before moving forward.",
+src/pages/hub/shared/hubTourSteps.js:1307:          "The partner line shows which partners are included in the recommendation.",
+src/pages/hub/shared/hubTourSteps.js:1320:          "The decision buttons let the user accept the recommendation, schedule a meeting, mark proposal created, or reject it.",
+src/pages/hub/shared/hubTourSteps.js:1322:          "These actions create feedback events. That feedback helps the intelligence layer learn which recommendations are useful.",
+src/pages/hub/shared/hubTourSteps.js:1324:          "Use Accept when the recommendation is strong, Meeting Scheduled when follow-up begins, Proposal Created when it moves forward, and Reject when the recommendation is not right.",
+src/pages/hub/shared/hubTourSteps.js:1348:          "The top recommendation may not always be the cheapest, fastest, or lowest-risk option. Comparison helps the user choose the right strategy.",
+src/pages/hub/shared/hubTourSteps.js:1356:      title: "Step 9 — Read Why the Recommendation Works",
+src/pages/hub/shared/hubTourSteps.js:1359:          "The explanation list gives plain-language reasons for the recommendation.",
+src/pages/hub/shared/hubTourSteps.js:1361:          "Users need to understand the logic, not just see a score. This makes the recommendation easier to trust and explain.",

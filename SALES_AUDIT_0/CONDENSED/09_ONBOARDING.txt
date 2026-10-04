@@ -1,0 +1,503 @@
+============================================================
+SOURCE: 09_ONBOARDING.txt
+============================================================
+services/shf-agent-fabric/tests/test_extension_kernel_foundation.py:10:    ExtensionActivationRequest,
+services/shf-agent-fabric/tests/test_extension_kernel_foundation.py:151:    assert ExtensionActivationRequest(
+services/shf-agent-fabric/tests/test_extension_kernel_foundation.py:152:        request_id="activation.generic.fixture",
+services/shf-agent-fabric/services/operational_event_service.py:21:DEPLOYMENT_REQUIREMENT = (
+services/shf-agent-fabric/services/operational_event_service.py:22:    "JSONL is a repository abstraction/development implementation and is not approved production persistence; "
+services/shf-agent-fabric/services/operational_event_service.py:23:    "production deployment requires an owner-approved durable database boundary, backup/restore policy, retention controls, and monitoring."
+services/shf-agent-fabric/services/operational_event_service.py:192:        "deployment_requirement": DEPLOYMENT_REQUIREMENT,
+services/shf-agent-fabric/services/evidence_projection_service.py:24:EVIDENCE_DEPLOYMENT_REQUIREMENT = (
+services/shf-agent-fabric/services/evidence_projection_service.py:25:    "PostgreSQL Truth Spine persistence is selected; production deployment still requires retention controls, backup/restore, and monitoring."
+services/shf-agent-fabric/services/evidence_projection_service.py:28:    "Evidence JSONL is a repository abstraction/development implementation and is not approved production persistence; "
+services/shf-agent-fabric/services/evidence_projection_service.py:29:    "production deployment requires an owner-approved durable evidence store, retention controls, backup/restore, and monitoring."
+services/shf-agent-fabric/services/evidence_projection_service.py:233:        "deployment_requirement": EVIDENCE_DEPLOYMENT_REQUIREMENT,
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:52:            "clientops_activation": {"owner": "ClientOps Owner", "status": "pending"},
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:129:    assert gate["clientops_activation_allowed"] is True
+src/router/CivicRoutes.jsx:31:const OrganizationOnboarding = lazy(() => import("../../apps/shf-web/src/pages/operator/OrganizationOnboarding.jsx"));
+src/router/CivicRoutes.jsx:93:              organization-onboarding console used by authenticated
+src/router/CivicRoutes.jsx:95:          <Route path="operator/onboarding" element={<OrganizationOnboarding />} />
+services/shf-agent-fabric/tests/test_extension_kernel_owner_onboarding.py:7:    OwnerOnboardingDeclaration,
+services/shf-agent-fabric/tests/test_extension_kernel_owner_onboarding.py:8:    onboarding_evidence,
+services/shf-agent-fabric/tests/test_extension_kernel_owner_onboarding.py:15:def _declaration(owner_id: str = "owner.alpha", authority_domain: str = "domain.alpha") -> OwnerOnboardingDeclaration:
+services/shf-agent-fabric/tests/test_extension_kernel_owner_onboarding.py:16:    return OwnerOnboardingDeclaration(
+services/shf-agent-fabric/tests/test_extension_kernel_owner_onboarding.py:56:    assert registry.lookup("registration.owner.alpha.onboarding") is not None
+services/shf-agent-fabric/tests/test_extension_kernel_owner_onboarding.py:61:    declaration = OwnerOnboardingDeclaration(
+services/shf-agent-fabric/tests/test_extension_kernel_owner_onboarding.py:102:        "registration.owner.alpha.onboarding",
+services/shf-agent-fabric/tests/test_extension_kernel_owner_onboarding.py:103:        "registration.owner.beta.onboarding",
+services/shf-agent-fabric/tests/test_extension_kernel_owner_onboarding.py:108:    private_dependency = OwnerOnboardingDeclaration(
+services/shf-agent-fabric/tests/test_extension_kernel_owner_onboarding.py:132:    evidence = onboarding_evidence(declaration, ())
+services/shf-agent-fabric/tests/test_extension_kernel_owner_onboarding.py:134:    assert record.registered_at == "OWNER_ONBOARDING_TIME_NOT_RECORDED"
+services/shf-agent-fabric/tests/test_extension_kernel_owner_onboarding.py:135:    assert record.manifest.metadata.created_at == "OWNER_ONBOARDING_TIME_NOT_RECORDED"
+services/shf-agent-fabric/tests/test_extension_kernel_owner_onboarding.py:136:    assert evidence == onboarding_evidence(declaration, ())
+services/shf-agent-fabric/tests/test_shf_ingestion_routes.py:210:    assert "not approved production persistence" in status["deployment_requirement"]
+src/companion/CompanionProvider.jsx:10:// → reducer → Brainiact UI. Pages never touch animation implementation
+src/companion/companionConfig.js:35:// implementation details — so a future sprite/Lottie/Rive/video asset can
+services/shf-agent-fabric/services/truth_public_population_service.py:7:model; production durability remains a deployment prerequisite.
+services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py:9:    OwnerOnboardingDeclaration,
+services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py:12:    evaluate_owner_activation_readiness,
+services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py:19:def _declaration(owner_id: str = "owner.alpha", authority_domain: str = "domain.alpha") -> OwnerOnboardingDeclaration:
+services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py:20:    return OwnerOnboardingDeclaration(
+services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py:54:            dependency_ids=("services.extension_kernel.owner_onboarding",),
+services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py:65:    result = evaluate_owner_activation_readiness(_declaration())
+services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py:68:    assert result.status == "READY_FOR_ACTIVATION_REVIEW"
+services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py:70:    assert result.payload["readiness_classification"] == "READY_FOR_ACTIVATION_REVIEW"
+services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py:71:    assert result.payload["activation_runtime_introduced"] is False
+services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py:76:    result = evaluate_owner_activation_readiness(
+services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py:77:        OwnerOnboardingDeclaration(
+services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py:90:    result = evaluate_owner_activation_readiness(OwnerOnboardingDeclaration(owner_id="", authority_domain="", capability_declarations=()))
+services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py:143:            proposed_dependencies=("services.owner_onboarding.private",),
+services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py:160:    assert result.payload["deployment_added"] is False
+services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py:163:def test_cap_004_blocks_runtime_api_ui_persistence_and_deployment_drift() -> None:
+services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py:179:    assert {"API_DRIFT", "UI_DRIFT", "PERSISTENCE_DRIFT", "DEPLOYMENT_DRIFT", "RUNTIME_DRIFT", "DUPLICATE_RUNTIME_OWNER"}.issubset(_issue_codes(result))
+services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py:198:    readiness = evaluate_owner_activation_readiness(_declaration())
+services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py:237:    blocked_readiness = evaluate_owner_activation_readiness(
+services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py:238:        OwnerOnboardingDeclaration(owner_id="", authority_domain="", capability_declarations=())
+apps/shs-api/src/domain/notifications/service/notification-service.ts:101:  "deployment.live": {
+apps/shs-api/src/domain/notifications/service/notification-service.ts:102:    type: "DEPLOYMENT_LIVE", title: "Test deployment ready", message: "Your TEST deployment is ready to view.",
+apps/shs-api/src/domain/notifications/service/notification-service.ts:103:    recipient: async (event, db) => (await db.query("SELECT learner_id AS user_id FROM website_deployment_records WHERE deployment_id=$1 AND organization_id=$2 AND tenant_id=$3", [event.subject_id, event.organization_id, event.tenant_id])).rows[0]?.user_id || null,
+apps/shs-api/src/domain/notifications/service/notification-service.ts:106:  "deployment.failed": {
+apps/shs-api/src/domain/notifications/service/notification-service.ts:107:    type: "DEPLOYMENT_FAILED", title: "Test deployment failed", message: "Your TEST deployment could not be completed.",
+apps/shs-api/src/domain/notifications/service/notification-service.ts:108:    recipient: async (event, db) => (await db.query("SELECT learner_id AS user_id FROM website_deployment_records WHERE deployment_id=$1 AND organization_id=$2 AND tenant_id=$3", [event.subject_id, event.organization_id, event.tenant_id])).rows[0]?.user_id || null,
+services/shf-agent-fabric/services/shs_launch_ledger_service.py:196:        "clientops_activation": _normalize_clientops(source.get("clientops_activation") or source.get("clientOpsActivation")),
+services/shf-agent-fabric/services/shs_launch_ledger_service.py:240:        warnings.append("Missing version record blocks paid launch and ClientOps activation.")
+services/shf-agent-fabric/services/shs_launch_ledger_service.py:244:        warnings.append("Missing support_tier blocks ClientOps activation.")
+services/shf-agent-fabric/services/shs_launch_ledger_service.py:245:    if not source["clientops_activation"]["owner"]:
+services/shf-agent-fabric/services/shs_launch_ledger_service.py:246:        warnings.append("Missing ClientOps activation owner blocks ClientOps activation.")
+services/shf-agent-fabric/services/shs_launch_ledger_service.py:268:        blockers.append("Missing support_tier blocks paid launch and ClientOps activation.")
+services/shf-agent-fabric/services/shs_launch_ledger_service.py:269:    if not source["clientops_activation"]["owner"]:
+services/shf-agent-fabric/services/shs_launch_ledger_service.py:270:        blockers.append("Missing ClientOps activation owner blocks paid launch.")
+services/shf-agent-fabric/services/shs_launch_ledger_service.py:277:def is_clientops_activation_allowed(record: Dict[str, Any] | None = None) -> bool:
+services/shf-agent-fabric/services/shs_launch_ledger_service.py:282:        and bool(source["clientops_activation"]["owner"])
+services/shf-agent-fabric/services/shs_launch_ledger_service.py:292:    clientops_allowed = is_clientops_activation_allowed(source)
+services/shf-agent-fabric/services/shs_launch_ledger_service.py:308:            "clientops_activation_allowed": False,
+services/shf-agent-fabric/services/shs_launch_ledger_service.py:317:            "clientops_activation_allowed": False,
+services/shf-agent-fabric/services/shs_launch_ledger_service.py:326:            "clientops_activation_allowed": clientops_allowed,
+services/shf-agent-fabric/services/shs_launch_ledger_service.py:335:            "clientops_activation_allowed": clientops_allowed,
+services/shf-agent-fabric/services/shs_launch_ledger_service.py:354:        "clientops_activation_allowed": gate["clientops_activation_allowed"],
+services/shf-agent-fabric/services/shs_launch_ledger_service.py:518:        "clientops_activation_allowed": len([record for record in records if is_clientops_activation_allowed(record)]),
+apps/shs-api/src/domain/notifications/contracts/communication-contracts.ts:175: * to the ~19 existing implementations. `entitlementCheck` is a reserved
+apps/shs-api/src/domain/notifications/contracts/notification-classification.ts:5:// This is the concrete, read-time implementation of the mandatory/optional
+apps/shs-api/src/domain/notifications/contracts/notification-classification.ts:57:  // Deployment.
+apps/shs-api/src/domain/notifications/contracts/notification-classification.ts:58:  DEPLOYMENT_LIVE: { category: "TRANSACTIONAL", actionRequired: false, urgency: "info", channelEligibility: IN_APP_ONLY },
+apps/shs-api/src/domain/notifications/contracts/notification-classification.ts:59:  DEPLOYMENT_FAILED: { category: "REQUIRED_ACTION", actionRequired: true, urgency: "warning", channelEligibility: IN_APP_ONLY },
+services/shf-agent-fabric/contracts/reporting/producer_lineage_registry.v1.json:6:  "status": "implementation_checkpoint_phase_9_wave_2_referral_contract",
+services/shf-agent-fabric/contracts/reporting/producer_lineage_registry.v1.json:10:    "Entries classify the implementation-relevant producers confirmed in the current repository census; later slices must add or update entries before enabling additional production producers."
+services/shf-agent-fabric/fabric/funding/partner_docs.py:441:                    "Archived legacy funding_partner_pack implementation to ._deprecated_funding_pack (not imported).",
+services/shf-agent-fabric/registry/published/pilot_gladden_001/report.json:370:    "how_to_use": "Use this to monitor implementation fidelity, identify friction, and justify continued funding or scale decisions.",
+services/shf-agent-fabric/fabric/loo/adapter_contract.py:126:    Called at FastAPI startup to prevent broken deployments.
+src/apps/allocation/sources/extracts/ohio-wioa-py2024.txt:5638:      earnings or having performed services for an employer that were not            because of a deployment (as defined in section 991(b) of title 10, United
+apps/shs-api/src/domain/conductor/service/conductor-service.ts:81:    desiredOutput = "Release plan with simulated deployment/release actions.";
+apps/shs-api/src/domain/conductor/service/conductor-service.ts:83:    capabilities.add(CONDUCTOR_CAPABILITIES.PROPOSE_DEPLOYMENT);
+services/shf-agent-fabric/fabric/reports/institutional/platypus_preview.py:192:            "implementation_notes": "This reporting period reflects an active pilot review window.",
+services/shf-agent-fabric/fabric/reports/institutional/platypus_preview.py:264:    story.append(card("Implementation Notes and Limitations", [pop["implementation_notes"], pop["constraints_or_limitations"]]))
+apps/shs-api/src/domain/conductor/model/conductor.ts:11:  PROPOSE_DEPLOYMENT: "PROPOSE_DEPLOYMENT",
+services/shf-agent-fabric/fabric/reports/institutional/pages/population_context.py:19:        "Implementation Notes and Limitations",
+services/shf-agent-fabric/fabric/reports/institutional/pages/population_context.py:20:        (pc.get("implementation_notes", "This reporting period reflects an active pilot review window.") + " " + pc.get("constraints_or_limitations", "Some institutional sections are still being enriched as additional data feeds are connected.")).strip()
+services/shf-agent-fabric/fabric/reports/institutional/platypus_pages.py:28:        card("Implementation Notes and Limitations", [
+services/shf-agent-fabric/fabric/reports/institutional/platypus_pages.py:29:            pop.get("implementation_notes", "This reporting period reflects an active pilot review window."),
+apps/shs-api/src/domain/legal/api/routes.ts:15:    try { return res.json({ ok: true, data: await service.activateArtifact(req.user, req.params.artifactId) }); } catch (error: any) { return res.status(400).json({ ok: false, error: { code: error.message, message: "Legal artifact activation rejected." } }); }
+services/shf-agent-fabric/fabric/reports/institutional/pages/operational_integrity.py:30:    flags = oi.get("integrity_flags") or ["Verification layer is still developing.", "Institutional integrity depth should increase before large-scale deployment."]
+services/shf-agent-fabric/fabric/reports/institutional/pages/pages_5_16.py:30:    p.card("Implementation Notes and Limitations", [
+services/shf-agent-fabric/fabric/reports/institutional/pages/pages_5_16.py:31:        safe(pop.get("implementation_notes", "This reporting period reflects an active pilot review window.")),
+services/shf-agent-fabric/fabric/reports/institutional/pages/pages_5_16.py:167:    flags = oi.get("integrity_flags") or ["Verification layer is still developing.", "Institutional integrity depth should increase before large-scale deployment."]
+services/shf-agent-fabric/fabric/compliance/policy_resolver.py:437:        # out is expected to be a dict-like payload from your PolicyResolver implementation.
+services/shf-agent-fabric/fabric/compliance/policy_resolver.py:690:    # Preferred: class provides a real implementation (if you have one)
+services/shf-agent-fabric/fabric/compliance/policy_resolver.py:701:    raise RuntimeError("No explain implementation found on PolicyResolver")
+apps/shs-api/src/domain/service-agreements/service/service-agreement-service.ts:130:      throw new ServiceAgreementError("FORBIDDEN", "Service agreement activation permission is required.", 403);
+apps/shs-api/src/domain/service-agreements/service/service-agreement-service.ts:156:      throw new ServiceAgreementError("FORBIDDEN", "Service agreement activation permission is required.", 403);
+apps/shs-api/src/domain/service-agreements/service/service-agreement-service.ts:173:      throw new ServiceAgreementError("FORBIDDEN", "Service agreement activation permission is required.", 403);
+apps/shs-api/src/domain/service-agreements/service/service-agreement-service.ts:227:      throw new ServiceAgreementError("ENTITLEMENT_REQUIRED", "An active matching service entitlement is required before activation.", 403);
+services/shf-agent-fabric/fabric/registry_event_ledger.py:12:# Default location used by existing registry implementations
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:7:from services.extension_kernel.owner_onboarding import (
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:8:    OwnerOnboardingDeclaration,
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:9:    onboarding_evidence,
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:43:    "DEPLOYMENT_DRIFT",
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:48:_PRIVATE_MARKERS = ("services.owner_onboarding", "services.shared_integration", "routers.", "src/pages/", "../", "/private/")
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:52:_DEPLOYMENT_PATH_MARKERS = ("Dockerfile", "deploy", "deployment", "k8s", "helm", ".env")
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:119:def evaluate_owner_activation_readiness(
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:120:    declaration: OwnerOnboardingDeclaration,
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:121:    accepted_declarations: tuple[OwnerOnboardingDeclaration, ...] = (),
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:128:        issues.append(_issue("OWNER_READINESS_NOT_PROVEN", "readiness evidence is required before activation review", "readiness_evidence"))
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:130:    evidence = onboarding_evidence(declaration, issues)
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:134:        "capability_title": "Owner Activation Readiness Contract",
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:135:        "readiness_classification": "READY_FOR_ACTIVATION_REVIEW" if not issues else "BLOCKED",
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:136:        "activation_runtime_introduced": False,
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:141:        "owner_onboarding_evidence": evidence,
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:143:    return _result(not issues, "READY_FOR_ACTIVATION_REVIEW" if not issues else "BLOCKED", issues, payload)
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:165:            issues.append(_issue("OWNER_PRIVATE_REACH_IN", "boundary evaluation cannot reference private implementation paths", "proposed_dependencies"))
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:240:        if _contains_marker(path, _DEPLOYMENT_PATH_MARKERS):
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:241:            issues.append(_issue("DEPLOYMENT_DRIFT", "deployment path is outside Phase 6 scope", "future_paths"))
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:258:        "deployment_added": False,
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:24:OWNER_ONBOARDING_CONTRACT_VERSION = "1.0.0"
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:25:OWNER_ONBOARDING_REGISTRATION_VERSION = "1.0.0"
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:26:OWNER_ONBOARDING_EVIDENCE_CONTRACT = "owner_onboarding.evidence.v1"
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:27:DETERMINISTIC_REGISTRATION_TIME = "OWNER_ONBOARDING_TIME_NOT_RECORDED"
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:29:OWNER_ONBOARDING_FAILURE_CODES = (
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:89:class OwnerOnboardingDeclaration:
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:93:    contract_version: str = OWNER_ONBOARDING_CONTRACT_VERSION
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:94:    registration_version: str = OWNER_ONBOARDING_REGISTRATION_VERSION
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:101:    evidence_contract: str = OWNER_ONBOARDING_EVIDENCE_CONTRACT
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:155:def _identity_for(declaration: OwnerOnboardingDeclaration) -> tuple[str, tuple[str, ...]]:
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:162:def _string_values(declaration: OwnerOnboardingDeclaration) -> Iterable[tuple[str, str]]:
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:181:    declaration: OwnerOnboardingDeclaration,
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:182:    accepted_declarations: tuple[OwnerOnboardingDeclaration, ...] = (),
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:238:            issues.append(_issue("OWNER_PRIVATE_IMPORT_DECLARED", "shared onboarding contract cannot reference private implementation paths", field_name))
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:240:            issues.append(_issue("SECRET_FIELD_DECLARED", "onboarding declarations and evidence cannot expose secrets", field_name))
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:248:    evidence = onboarding_evidence(declaration, issues)
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:257:def manifest_for_owner_declaration(declaration: OwnerOnboardingDeclaration) -> ExtensionManifest:
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:279:            extension_id=f"{declaration.owner_id}.onboarding",
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:281:            description=f"Owner onboarding declaration for {declaration.authority_domain}",
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:284:            labels=("owner-onboarding", "package-h", "batch-02"),
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:294:            permissions=tuple(f"owner:onboard:{capability.capability_id}" for capability in declaration.capability_declarations),
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:295:            policy_refs=(OWNER_ONBOARDING_EVIDENCE_CONTRACT,),
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:311:def registration_record_for_owner_declaration(declaration: OwnerOnboardingDeclaration) -> ExtensionRegistrationRecord:
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:313:        registration_id=f"registration.{declaration.owner_id}.onboarding",
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:316:        status_reason="owner_onboarding_contract_accepted",
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:320:def onboarding_evidence(declaration: OwnerOnboardingDeclaration, issues: tuple[ExtensionKernelIssue, ...] | list[ExtensionKernelIssue]) -> dict[str, Any]:
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:323:        "schema_version": OWNER_ONBOARDING_EVIDENCE_CONTRACT,
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:339:    declaration: OwnerOnboardingDeclaration,
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:341:    accepted_declarations: tuple[OwnerOnboardingDeclaration, ...] = (),
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:362:            "evidence": onboarding_evidence(declaration, ()),
+services/shf-agent-fabric/app/core/growth_provider.py:31:        sqlite_growth.upsert_claim(self.path, claim_id="g1", title="New partner school onboarded this month", thesis="Signals show a new district partner is ready to sign an MOU.", tags=["partner","pipeline"])
+services/shf-agent-fabric/fabric/reports/institutional/builder.py:66:            "implementation_notes": "This reporting period reflects an active pilot review window.",
+services/shf-agent-fabric/fabric/reports/institutional/builder.py:131:                "Institutional integrity depth should increase before large-scale deployment.",
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:1:# SHF Trusted Reporting Implementation Status
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:104:`WORKER_ENTRYPOINT_READY_DEPLOYMENT_PENDING`. `apps/shs-api` now exposes the
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:107:migration and managed worker deployment remain unexecuted. Local PostgreSQL was
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:113:Runtime deployment checkpoint attempt: blocked before mutation because the
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:141:Status: implementation-relevant findings recovered for this checkpoint.
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:148:- Curriculum, Exchange, Grant Binder, Placement KPI, public impact, LOO, Oracle, and development-token findings are represented in the lineage registry for follow-on implementation.
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:159:- `services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md`
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:177:deployment, or real institutional data was used.
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:219:- Keeps the JSONL store as a repository abstraction/development implementation.
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:225:- Documents deployment requirements and rollback limits.
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:331:- `services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md`
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:495:## Local Runtime Deployment Checkpoint
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:503:with 401. No production secret, database, deployment, or real data was used.
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:509:worker scheduling remain deployment prerequisites. Other Hub Truth-adapter
+services/shf-agent-fabric/docs/reporting/SHF_TRUSTED_REPORTING_IMPLEMENTATION_STATUS.md:588:pool, deployment, outcome, ranking, risk, and allocation language remains
+services/shf-agent-fabric/services/extension_kernel/__init__.py:26:    ExtensionActivationRequest,
+services/shf-agent-fabric/services/extension_kernel/__init__.py:42:from services.extension_kernel.owner_onboarding import (
+services/shf-agent-fabric/services/extension_kernel/__init__.py:43:    OWNER_ONBOARDING_CONTRACT_VERSION,
+services/shf-agent-fabric/services/extension_kernel/__init__.py:44:    OWNER_ONBOARDING_EVIDENCE_CONTRACT,
+services/shf-agent-fabric/services/extension_kernel/__init__.py:45:    OWNER_ONBOARDING_FAILURE_CODES,
+services/shf-agent-fabric/services/extension_kernel/__init__.py:46:    OWNER_ONBOARDING_REGISTRATION_VERSION,
+services/shf-agent-fabric/services/extension_kernel/__init__.py:49:    OwnerOnboardingDeclaration,
+services/shf-agent-fabric/services/extension_kernel/__init__.py:51:    onboarding_evidence,
+services/shf-agent-fabric/services/extension_kernel/__init__.py:69:    evaluate_owner_activation_readiness,
+services/shf-agent-fabric/services/extension_kernel/__init__.py:85:    "ExtensionActivationRequest",
+services/shf-agent-fabric/services/extension_kernel/__init__.py:110:    "OWNER_ONBOARDING_CONTRACT_VERSION",
+services/shf-agent-fabric/services/extension_kernel/__init__.py:111:    "OWNER_ONBOARDING_EVIDENCE_CONTRACT",
+services/shf-agent-fabric/services/extension_kernel/__init__.py:112:    "OWNER_ONBOARDING_FAILURE_CODES",
+services/shf-agent-fabric/services/extension_kernel/__init__.py:113:    "OWNER_ONBOARDING_REGISTRATION_VERSION",
+services/shf-agent-fabric/services/extension_kernel/__init__.py:116:    "OwnerOnboardingDeclaration",
+services/shf-agent-fabric/services/extension_kernel/__init__.py:133:    "evaluate_owner_activation_readiness",
+services/shf-agent-fabric/services/extension_kernel/__init__.py:141:    "onboarding_evidence",
+services/shf-agent-fabric/docs/reporting/OPERATIONAL_EVENT_STORE_V1.md:5:The current SHF operational event store is a repository abstraction and development implementation.
+services/shf-agent-fabric/docs/reporting/OPERATIONAL_EVENT_STORE_V1.md:24:## Deployment Requirement
+services/shf-agent-fabric/services/extension_kernel/constants.py:35:    ACTIVATION = "ACTIVATION"
+services/shf-agent-fabric/services/extension_kernel/constants.py:58:    ACTIVATION_REQUESTED = "EXTENSION_ACTIVATION_REQUESTED"
+services/shf-agent-fabric/docs/TRUTH_SPINE_SECURITY.md:9:Canonical implementation: `services/truth_spine_service.py`,
+services/shf-agent-fabric/docs/TRUTH_SPINE_SECURITY.md:240:dependencies without justification. **Deployment-level rate limiting
+services/shf-agent-fabric/docs/TRUTH_SPINE_SECURITY.md:242:endpoints remains a deployment requirement**, not something the
+services/shf-agent-fabric/docs/TRUTH_SPINE_SECURITY.md:245:## Deployment verification still required
+services/shf-agent-fabric/docs/TRUTH_SPINE_SECURITY.md:250:  deployment (no Dockerfile/k8s manifest/reverse-proxy config exists in
+services/shf-agent-fabric/docs/TRUTH_SPINE_SECURITY.md:257:These require infrastructure/deployment-configuration verification outside
+services/shf-agent-fabric/services/extension_kernel/models.py:216:class ExtensionActivationRequest:
+services/shf-agent-fabric/services/extension_kernel/interfaces.py:6:    ExtensionActivationRequest,
+services/shf-agent-fabric/services/extension_kernel/interfaces.py:63:class ExtensionActivationProvider(Protocol):
+services/shf-agent-fabric/services/extension_kernel/interfaces.py:64:    def activation_request(self, request: ExtensionActivationRequest) -> ExtensionKernelResult:
+services/shf-agent-fabric/services/truth_public_population_authority_service.py:7:uses file-backed development persistence; deployment durability remains a
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:18:export class OrganizationOnboardingRepo {
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:22:       FROM organization_onboarding_cases c
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:36:       FROM organization_onboarding_cases c
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:37:       WHERE c.onboarding_case_id = $1
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:51:      `SELECT * FROM organization_onboarding_cases WHERE onboarding_case_id = $1 FOR UPDATE`,
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:60:      `INSERT INTO organization_onboarding_cases (
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:61:         onboarding_case_id, status, existing_organization_id, organization_name,
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:68:        input.onboarding_case_id,
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:89:        `INSERT INTO organization_onboarding_requested_services (onboarding_case_id, service_id)
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:91:         ON CONFLICT (onboarding_case_id, service_id) DO NOTHING`,
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:137:      `UPDATE organization_onboarding_cases
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:145:           activation_relationship_id = COALESCE($8, activation_relationship_id),
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:155:       WHERE onboarding_case_id = $1
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:165:        input.activation_relationship_id || null,
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:178:      `UPDATE organization_onboarding_requested_services
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:180:       WHERE onboarding_case_id = $1`,
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:185:      `UPDATE organization_onboarding_requested_services
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:187:       WHERE onboarding_case_id = $1 AND service_id = ANY($2::text[])`,
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:194:      `UPDATE organization_onboarding_requested_services
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:196:       WHERE onboarding_case_id = $1 AND service_id = $2`,
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:203:      `INSERT INTO organization_onboarding_decisions (
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:204:         onboarding_decision_id, onboarding_case_id, decision, actor_user_id,
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:209:        input.onboarding_decision_id,
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:210:        input.onboarding_case_id,
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:225:      `SELECT * FROM organization_onboarding_decisions
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:226:       WHERE onboarding_case_id = $1
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:252:    const ids = rows.map((row) => row.onboarding_case_id);
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:254:      `SELECT rs.onboarding_case_id, s.service_id, s.service_key, s.name AS service_name,
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:256:       FROM organization_onboarding_requested_services rs
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:258:       WHERE rs.onboarding_case_id = ANY($1::text[])
+apps/shs-api/src/domain/organization-onboarding/repo/organization-onboarding-repo.ts:263:      withServices(row, services.rows.filter((service) => service.onboarding_case_id === row.onboarding_case_id))
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:7:import { OrganizationOnboardingRepo } from "../repo/organization-onboarding-repo.js";
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:9:  ONBOARDING_RELATIONSHIP_TYPES,
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:10:  ONBOARDING_STATUSES,
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:11:  OrganizationOnboardingError,
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:12:} from "../model/organization-onboarding.js";
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:54:      throw new OrganizationOnboardingError("SERVER_DERIVED_AUTHORITY", `${field} is server-derived.`, 400);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:79:export class OrganizationOnboardingService {
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:81:    private repo = new OrganizationOnboardingRepo(),
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:102:    if (!userId || !organizationId) throw new OrganizationOnboardingError("AUTH_REQUIRED", "Authentication required.", 401);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:103:    if (!actorHasPermission(actor, "organization.onboarding.submit")) {
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:104:      throw new OrganizationOnboardingError("FORBIDDEN", "Onboarding submit permission is required.", 403);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:118:        throw new OrganizationOnboardingError("INVALID_REQUEST", "organization name and primary contact are required.", 400);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:123:        throw new OrganizationOnboardingError("ORGANIZATION_NOT_FOUND", "Existing organization was not found.", 404);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:127:        onboarding_case_id: caseId,
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:142:      await this.recordDecision(caseId, "SUBMITTED", userId, null, ONBOARDING_STATUSES.SUBMITTED, "Onboarding case submitted.", null, null, executor);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:143:      await this.writeAudit("organization.onboarding.submitted", created, actor, null, executor);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:161:        throw new OrganizationOnboardingError("ORGANIZATION_NOT_FOUND", "Existing organization was not found.", 404);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:165:        status: ONBOARDING_STATUSES.APPROVED,
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:168:        decision_reason: input?.reason || "Onboarding approved.",
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:171:      await this.recordDecision(caseId, "APPROVED", userId, current.status, ONBOARDING_STATUSES.APPROVED, input?.reason, input?.internal_notes || input?.internalNotes, input?.applicant_feedback || input?.applicantFeedback, executor);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:172:      await this.writeAudit("organization.onboarding.approved", updated, actor, current, executor);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:184:        status: ONBOARDING_STATUSES.DECLINED,
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:186:        decision_reason: input?.reason || "Onboarding declined.",
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:189:      await this.recordDecision(caseId, "DECLINED", userId, current.status, ONBOARDING_STATUSES.DECLINED, input?.reason, input?.internal_notes || input?.internalNotes, input?.applicant_feedback || input?.applicantFeedback, executor);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:190:      await this.writeAudit("organization.onboarding.declined", updated, actor, current, executor);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:198:    const activation = await withTransaction(async (executor) => {
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:200:      if (!current) throw new OrganizationOnboardingError("NOT_FOUND", "Onboarding case not found.", 404);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:201:      if (current.status === ONBOARDING_STATUSES.ACTIVATED) {
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:202:        return { current, organizationId: current.activated_organization_id, relationshipId: current.activation_relationship_id, replayed: true };
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:204:      if (current.status !== ONBOARDING_STATUSES.APPROVED) {
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:205:        throw new OrganizationOnboardingError("INVALID_STATUS", "Only approved onboarding cases can activate.", 409);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:212:    if (!activation.replayed) {
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:213:      await this.provisionApprovedServices(caseId, activation.organizationId, actor);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:216:        if (current.status === ONBOARDING_STATUSES.ACTIVATED) return current;
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:218:          status: ONBOARDING_STATUSES.ACTIVATED,
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:219:          activated_organization_id: activation.organizationId,
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:220:          activation_relationship_id: activation.relationshipId,
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:223:        await this.recordDecision(caseId, "ACTIVATED", userId, current.status, ONBOARDING_STATUSES.ACTIVATED, input?.reason || "Onboarding activated.", null, null, executor);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:224:        await this.writeAudit("organization.onboarding.activated", updated, actor, current, executor);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:234:    return this.endNetworkAccess(caseId, ONBOARDING_STATUSES.SUSPENDED, "SUSPENDED", "organization.onboarding.suspended", userId, input, actor);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:240:    return this.endNetworkAccess(caseId, ONBOARDING_STATUSES.EXITED, "REVOKED", "organization.onboarding.exited", userId, input, actor);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:246:      if (!locked) throw new OrganizationOnboardingError("NOT_FOUND", "Onboarding case not found.", 404);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:247:      if (![ONBOARDING_STATUSES.ACTIVATED, ONBOARDING_STATUSES.SUSPENDED].includes(locked.status)) {
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:248:        throw new OrganizationOnboardingError("INVALID_STATUS", "Only activated or suspended onboarding cases can transition network access.", 409);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:252:    if (current.activation_relationship_id) {
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:253:      const relationshipStatus = nextCaseStatus === ONBOARDING_STATUSES.SUSPENDED ? "SUSPENDED" : "ENDED";
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:255:        await this.relationships.transitionRelationship(current.activation_relationship_id, relationshipStatus, actor, input?.reason);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:276:        suspended_by_user_id: nextCaseStatus === ONBOARDING_STATUSES.SUSPENDED ? userId : null,
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:277:        exited_by_user_id: nextCaseStatus === ONBOARDING_STATUSES.EXITED ? userId : null,
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:290:        reason: `Phase 4 onboarding activation ${caseId}`,
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:300:      if (!existing) throw new OrganizationOnboardingError("ORGANIZATION_NOT_FOUND", "Linked organization was not found.", 404);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:309:      organization_id: `org_${current.onboarding_case_id}`,
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:320:    return this.relationships.createRelationshipForOnboarding({
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:326:      authority_context: "organization_onboarding",
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:335:    if (missing.length) throw new OrganizationOnboardingError("INVALID_SERVICE", `Unknown service: ${missing.join(", ")}`, 400);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:341:    if (!ONBOARDING_RELATIONSHIP_TYPES.includes(relationshipType as any)) {
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:342:      throw new OrganizationOnboardingError("INVALID_RELATIONSHIP", "Unsupported requested relationship type.", 400);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:349:      if (!current) throw new OrganizationOnboardingError("NOT_FOUND", "Onboarding case not found.", 404);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:350:      if (![ONBOARDING_STATUSES.SUBMITTED, ONBOARDING_STATUSES.UNDER_REVIEW, ONBOARDING_STATUSES.APPROVED].includes(current.status)) {
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:351:        throw new OrganizationOnboardingError("INVALID_STATUS", "Onboarding case is not reviewable.", 409);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:358:    if (!actorId(actor)) throw new OrganizationOnboardingError("AUTH_REQUIRED", "Authentication required.", 401);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:359:    if (!actorHasPermission(actor, "organization.onboarding.view") && !actorHasPermission(actor, "organization.onboarding.submit")) {
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:360:      throw new OrganizationOnboardingError("FORBIDDEN", "Onboarding view permission is required.", 403);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:366:    if (!userId) throw new OrganizationOnboardingError("AUTH_REQUIRED", "Authentication required.", 401);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:367:    if (!actorHasPermission(actor, "organization.onboarding.review")) {
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:368:      throw new OrganizationOnboardingError("FORBIDDEN", "Onboarding review permission is required.", 403);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:375:    if (!userId) throw new OrganizationOnboardingError("AUTH_REQUIRED", "Authentication required.", 401);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:376:    if (!actorHasPermission(actor, "organization.onboarding.activate")) {
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:377:      throw new OrganizationOnboardingError("FORBIDDEN", "Onboarding activation permission is required.", 403);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:384:    if (!userId) throw new OrganizationOnboardingError("AUTH_REQUIRED", "Authentication required.", 401);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:385:    if (!actorHasPermission(actor, "organization.onboarding.suspend")) {
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:386:      throw new OrganizationOnboardingError("FORBIDDEN", "Onboarding suspension permission is required.", 403);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:393:    if (!userId) throw new OrganizationOnboardingError("AUTH_REQUIRED", "Authentication required.", 401);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:394:    if (!actorHasPermission(actor, "organization.onboarding.exit")) {
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:395:      throw new OrganizationOnboardingError("FORBIDDEN", "Onboarding exit permission is required.", 403);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:403:      throw new OrganizationOnboardingError("SELF_APPROVAL_FORBIDDEN", "Applicant cannot approve or decline its own onboarding case.", 403);
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:411:        actorHasPermission(actor, "organization.onboarding.review") ||
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:412:        actorHasPermission(actor, "organization.onboarding.activate") ||
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:413:        actorHasPermission(actor, "organization.onboarding.suspend") ||
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:414:        actorHasPermission(actor, "organization.onboarding.exit"),
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:420:      onboarding_decision_id: `onbdec_${randomUUID()}`,
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:421:      onboarding_case_id: caseId,
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:437:      target_object_type: "organization_onboarding_case",
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:438:      target_object_id: current.onboarding_case_id,
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:440:      previous_state_json: previous ? { status: previous.status, onboarding_case_id: previous.onboarding_case_id } : null,
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:443:        onboarding_case_id: current.onboarding_case_id,
+apps/shs-api/src/domain/organization-onboarding/service/organization-onboarding-service.ts:446:      reason_text: current.decision_reason || "Organization onboarding changed",
+apps/shs-api/src/domain/organization-onboarding/api/routes.ts:3:import { OrganizationOnboardingError, toOnboardingCaseResponse, toOnboardingDecisionResponse } from "../model/organization-onboarding.js";
+apps/shs-api/src/domain/organization-onboarding/api/routes.ts:4:import { OrganizationOnboardingService } from "../service/organization-onboarding-service.js";
+apps/shs-api/src/domain/organization-onboarding/api/routes.ts:6:const service = new OrganizationOnboardingService();
+apps/shs-api/src/domain/organization-onboarding/api/routes.ts:9:  if (error instanceof OrganizationOnboardingError) {
+apps/shs-api/src/domain/organization-onboarding/api/routes.ts:15:export function registerOrganizationOnboardingRoutes(app: any) {
+apps/shs-api/src/domain/organization-onboarding/api/routes.ts:16:  app.get("/organization-onboarding/cases", requirePermission("organization.onboarding.view"), async (req: any, res: any, next: any) => {
+apps/shs-api/src/domain/organization-onboarding/api/routes.ts:19:      return res.json(ok({ items: items.map(toOnboardingCaseResponse) }));
+apps/shs-api/src/domain/organization-onboarding/api/routes.ts:25:  app.post("/organization-onboarding/cases", requirePermission("organization.onboarding.submit"), async (req: any, res: any, next: any) => {
+apps/shs-api/src/domain/organization-onboarding/api/routes.ts:28:      return res.status(201).json(ok(toOnboardingCaseResponse(created)));
+apps/shs-api/src/domain/organization-onboarding/api/routes.ts:34:  app.get("/organization-onboarding/cases/:caseId", requirePermission("organization.onboarding.view"), async (req: any, res: any, next: any) => {
+apps/shs-api/src/domain/organization-onboarding/api/routes.ts:37:      if (!found) return res.status(404).json(fail("NOT_FOUND", "Onboarding case not found"));
+apps/shs-api/src/domain/organization-onboarding/api/routes.ts:39:        ...toOnboardingCaseResponse(found),
+apps/shs-api/src/domain/organization-onboarding/api/routes.ts:40:        decisions: (found.decisions || []).map(toOnboardingDecisionResponse),
+apps/shs-api/src/domain/organization-onboarding/api/routes.ts:47:  app.post("/organization-onboarding/cases/:caseId/approve", requirePermission("organization.onboarding.review"), async (req: any, res: any, next: any) => {
+apps/shs-api/src/domain/organization-onboarding/api/routes.ts:50:      return res.json(ok(toOnboardingCaseResponse(updated)));
+apps/shs-api/src/domain/organization-onboarding/api/routes.ts:56:  app.post("/organization-onboarding/cases/:caseId/decline", requirePermission("organization.onboarding.review"), async (req: any, res: any, next: any) => {
+apps/shs-api/src/domain/organization-onboarding/api/routes.ts:59:      return res.json(ok(toOnboardingCaseResponse(updated)));
+apps/shs-api/src/domain/organization-onboarding/api/routes.ts:65:  app.post("/organization-onboarding/cases/:caseId/activate", requirePermission("organization.onboarding.activate"), async (req: any, res: any, next: any) => {
+apps/shs-api/src/domain/organization-onboarding/api/routes.ts:68:      return res.json(ok(toOnboardingCaseResponse(updated)));
+apps/shs-api/src/domain/organization-onboarding/api/routes.ts:74:  app.post("/organization-onboarding/cases/:caseId/suspend", requirePermission("organization.onboarding.suspend"), async (req: any, res: any, next: any) => {
+apps/shs-api/src/domain/organization-onboarding/api/routes.ts:77:      return res.json(ok(toOnboardingCaseResponse(updated)));
+apps/shs-api/src/domain/organization-onboarding/api/routes.ts:83:  app.post("/organization-onboarding/cases/:caseId/exit", requirePermission("organization.onboarding.exit"), async (req: any, res: any, next: any) => {
+apps/shs-api/src/domain/organization-onboarding/api/routes.ts:86:      return res.json(ok(toOnboardingCaseResponse(updated)));
+apps/shs-api/src/domain/organization-onboarding/model/organization-onboarding.ts:1:export const ONBOARDING_STATUSES = {
+apps/shs-api/src/domain/organization-onboarding/model/organization-onboarding.ts:12:export const ONBOARDING_RELATIONSHIP_TYPES = [
+apps/shs-api/src/domain/organization-onboarding/model/organization-onboarding.ts:18:export type OnboardingStatus = typeof ONBOARDING_STATUSES[keyof typeof ONBOARDING_STATUSES];
+apps/shs-api/src/domain/organization-onboarding/model/organization-onboarding.ts:20:export class OrganizationOnboardingError extends Error {
+apps/shs-api/src/domain/organization-onboarding/model/organization-onboarding.ts:23:    this.name = "OrganizationOnboardingError";
+apps/shs-api/src/domain/organization-onboarding/model/organization-onboarding.ts:30:    onboardingCaseId: row.onboarding_case_id,
+apps/shs-api/src/domain/organization-onboarding/model/organization-onboarding.ts:50:    activationRelationshipId: row.activation_relationship_id,
+apps/shs-api/src/domain/organization-onboarding/model/organization-onboarding.ts:65:export function toOnboardingCaseResponse(row: any) {
+apps/shs-api/src/domain/organization-onboarding/model/organization-onboarding.ts:69:export function toOnboardingDecisionResponse(row: any) {
+apps/shs-api/src/domain/organization-onboarding/model/organization-onboarding.ts:72:    onboardingDecisionId: row.onboarding_decision_id,
+apps/shs-api/src/domain/organization-onboarding/model/organization-onboarding.ts:73:    onboardingCaseId: row.onboarding_case_id,
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-real-structure-20260525_093935:479:  ["👥", "New Partner Onboarding", "Completed onboarding for Bright Futures", "100%", "green"],
+src/pages/hub/HubSalesPipelinePage.jsx:81:    notes: "Won pilot. Convert into active implementation and proof workflow.",
+src/utils/validateDataCenterCurriculumMap.js:88:          if (!["SHARED_CORE_PROOF", "SHARED_CORE_AND_TECHNICAL_OPERATIONS", "SHARED_CORE_AND_TECHNICAL_OPERATIONS_AND_NETWORKING_FIBER", "SHARED_CORE_AND_TECHNICAL_OPERATIONS_AND_NETWORKING_FIBER_AND_ELECTRICAL", "SHARED_CORE_AND_TECHNICAL_OPERATIONS_AND_NETWORKING_FIBER_AND_ELECTRICAL_AND_MECHANICAL_HVAC", "SHARED_CORE_AND_TECHNICAL_OPERATIONS_AND_NETWORKING_FIBER_AND_ELECTRICAL_AND_MECHANICAL_HVAC_AND_SECURITY", "SHARED_CORE_AND_TECHNICAL_OPERATIONS_AND_NETWORKING_FIBER_AND_ELECTRICAL_AND_MECHANICAL_HVAC_AND_SECURITY_AND_AI_CLOUD"].includes(planned.activationScope) || planned.contentStatus !== "active" || planned.lessonIds.length === 0) errors.push(`shared core course is not active: ${courseId}`);
+src/utils/validateDataCenterCurriculumMap.js:93:      if (specialization.activationStatus === "active" && !["technical-operations", "networking-fiber", "electrical-infrastructure", "mechanical-hvac", "cybersecurity-security", "ai-cloud-infrastructure"].includes(specialization.specializationId)) errors.push(`unsupported active specialization: ${specialization.specializationId}`);
+src/utils/validateDataCenterCurriculumMap.js:94:      if (specialization.activationStatus === "active" && (!Array.isArray(specialization.executableLessonIds) || specialization.executableLessonIds.length === 0)) errors.push(`active specialization needs executable lessons: ${specialization.specializationId}`);
+src/utils/validateDataCenterCurriculumMap.js:116:      if (!course || course.grade !== 11 || !["SHARED_CORE_PROOF", "SHARED_CORE_AND_TECHNICAL_OPERATIONS", "SHARED_CORE_AND_TECHNICAL_OPERATIONS_AND_NETWORKING_FIBER", "SHARED_CORE_AND_TECHNICAL_OPERATIONS_AND_NETWORKING_FIBER_AND_ELECTRICAL", "SHARED_CORE_AND_TECHNICAL_OPERATIONS_AND_NETWORKING_FIBER_AND_ELECTRICAL_AND_MECHANICAL_HVAC", "SHARED_CORE_AND_TECHNICAL_OPERATIONS_AND_NETWORKING_FIBER_AND_ELECTRICAL_AND_MECHANICAL_HVAC_AND_SECURITY", "SHARED_CORE_AND_TECHNICAL_OPERATIONS_AND_NETWORKING_FIBER_AND_ELECTRICAL_AND_MECHANICAL_HVAC_AND_SECURITY_AND_AI_CLOUD"].includes(course.activationScope)) errors.push(`invalid executable shared core course: ${courseId}`);
+src/utils/validateDataCenterCurriculumMap.js:140:      if (!reference || reference.contentStatus !== "active" || reference.activationScope !== "GRADE12_SHARED_CORE_AND_TECHNICAL_OPERATIONS" || reference.grade !== 12 || reference.lessonIds.length === 0) errors.push("Grade 12 Technical Operations reference course must be active and bounded");
+src/utils/validateDataCenterCurriculumMap.js:141:      if (!networking || networking.contentStatus !== "active" || networking.activationScope !== "GRADE12_SHARED_CORE_AND_TECHNICAL_OPERATIONS_AND_NETWORKING_FIBER" || networking.grade !== 12 || networking.lessonIds.length === 0) errors.push("Grade 12 Networking/Fiber course must be active and bounded");
+src/utils/validateDataCenterCurriculumMap.js:142:      if (!electrical || electrical.contentStatus !== "active" || electrical.activationScope !== "GRADE12_SHARED_CORE_AND_TECHNICAL_OPERATIONS_AND_NETWORKING_FIBER_AND_ELECTRICAL" || electrical.grade !== 12 || electrical.lessonIds.length === 0) errors.push("Grade 12 Electrical course must be active and bounded");
+src/utils/validateDataCenterCurriculumMap.js:143:      if (!mechanical || mechanical.contentStatus !== "active" || mechanical.activationScope !== "GRADE12_SHARED_CORE_AND_TECHNICAL_OPERATIONS_AND_NETWORKING_FIBER_AND_ELECTRICAL_AND_MECHANICAL_HVAC" || mechanical.grade !== 12 || mechanical.lessonIds.length === 0) errors.push("Grade 12 Mechanical/HVAC course must be active and bounded");
+src/utils/validateDataCenterCurriculumMap.js:144:      if (!security || security.contentStatus !== "active" || security.activationScope !== "GRADE12_SHARED_CORE_AND_TECHNICAL_OPERATIONS_AND_NETWORKING_FIBER_AND_ELECTRICAL_AND_MECHANICAL_HVAC_AND_SECURITY" || security.grade !== 12 || security.lessonIds.length === 0) errors.push("Grade 12 Security course must be active and bounded");
+src/utils/validateDataCenterCurriculumMap.js:145:      if (!aiCloud || aiCloud.contentStatus !== "active" || aiCloud.activationScope !== "GRADE12_SHARED_CORE_AND_TECHNICAL_OPERATIONS_AND_NETWORKING_FIBER_AND_ELECTRICAL_AND_MECHANICAL_HVAC_AND_SECURITY_AND_AI_CLOUD" || aiCloud.grade !== 12 || aiCloud.lessonIds.length === 0) errors.push("Grade 12 AI/Cloud course must be active and bounded");
+src/utils/validateDataCenterCurriculumMap.js:160:    if (!capstoneEntryPolicy || capstoneEntryPolicy.policyVersion !== "grade12-capstone-entry-v1" || capstoneEntryPolicy.decision !== "DERIVED_FROM_CANONICAL_FACTS" || capstoneEntryPolicy.status !== "GATE_ONLY_CAPSTONE_NON_EXECUTABLE" || !Array.isArray(capstoneEntryPolicy.requirements) || capstoneEntryPolicy.requirements.length !== 5) errors.push("Grade 12 capstone entry must remain a five-part derived gate without activation");
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-guided-workflow-launcher:474:  ["👥", "New Partner Onboarding", "Completed onboarding for Bright Futures", "100%", "green"],
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:6:import { defaultWebsiteDeploymentProvider, type WebsiteDeploymentProvider } from "../provider/deployment-provider.js";
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:7:import { validateWebsiteDeploymentPackage, WEBSITE_DEPLOYMENT_PROVIDER, type WebsiteDeploymentPackage } from "../model/deployment-contract.js";
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:25:  return { deploymentId: row.deployment_id, organizationId: row.organization_id, tenantId: row.tenant_id, learnerId: row.learner_id, projectId: row.project_id, deliveryRecordId: row.delivery_record_id, workspaceRevision: Number(row.workspace_revision), projectType: row.project_type, providerKey: row.provider_key, target: row.target, status: row.status, providerDeploymentId: row.provider_deployment_id, liveUrl: row.live_url, isPublic: false, packageHash: row.package_hash, failureCode: row.failure_code, failureMessage: row.failure_message, requestedAt: row.requested_at, startedAt: row.started_at, deployedAt: row.deployed_at, failedAt: row.failed_at, supersededAt: row.superseded_at, unpublishedAt: row.unpublished_at };
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:28:function packageFromArtifact(row: any, projectId: string, revision: number): WebsiteDeploymentPackage {
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:34:  return validateWebsiteDeploymentPackage({ projectType: "WEBSITE", projectId, revision, files, packageHash });
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:37:export class WebsiteDeploymentService {
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:38:  constructor(private dbQuery: typeof query = query, private transaction: typeof withTransaction = withTransaction, private outbox = new IntegrationOutboxRepo(), private provider: WebsiteDeploymentProvider = defaultWebsiteDeploymentProvider()) {}
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:54:    if (!row) throw new Error("DEPLOYMENT_NOT_ELIGIBLE");
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:56:    if (row.learner_id !== s.userId && !teamMember && !s.permissions.includes(SHS_SECURITY_PERMISSIONS.WEBSITE_DEPLOYMENT_MANAGE)) throw new Error("DEPLOYMENT_FORBIDDEN");
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:61:    await this.outbox.enqueue({ producer_id: "shs-api.website-deployment", event_type: type, subject_type: "website_deployment", subject_id: row.deployment_id, organization_id: s.organizationId, originating_actor_id: s.userId, originating_actor_type: "user", tenant_id: s.tenantId, occurred_at: new Date().toISOString(), idempotency_key: `${type}:${row.deployment_id}`, correlation_id: `deployment:${row.deployment_id}`, destination: "shs-website-deployment", payload: { project_id: row.project_id, delivery_record_id: row.delivery_record_id, workspace_revision: row.workspace_revision, provider_key: row.provider_key, target: row.target } }, executor);
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:64:  private async start(deployment: any, actor: Actor, source: any) {
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:67:      const updated = await db.query("UPDATE website_deployment_records SET status='DEPLOYING', started_at=NOW(), updated_at=NOW() WHERE deployment_id=$1 AND status IN ('REQUESTED','QUEUED') RETURNING *", [deployment.deployment_id]);
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:68:      if (updated.rows[0]) await this.emit(db, "deployment.started", updated.rows[0], s);
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:71:    if (!claimed) return this.waitForTerminal(deployment.deployment_id, s);
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:75:        const updated = await db.query("UPDATE website_deployment_records SET status='LIVE', provider_deployment_id=$2, live_url=NULL, deployed_at=NOW(), updated_at=NOW() WHERE deployment_id=$1 AND status='DEPLOYING' RETURNING *", [deployment.deployment_id, result.providerDeploymentId]);
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:76:        if (!updated.rows[0]) throw new Error("DEPLOYMENT_STATE_CONFLICT");
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:77:        await this.emit(db, "deployment.live", updated.rows[0], s);
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:82:        const updated = await db.query("UPDATE website_deployment_records SET status='FAILED', failure_code='PROVIDER_FAILED', failure_message=$2, failed_at=NOW(), updated_at=NOW() WHERE deployment_id=$1 RETURNING *", [deployment.deployment_id, String(error?.message || "provider failed").slice(0, 500)]);
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:83:        if (updated.rows[0]) await this.emit(db, "deployment.failed", updated.rows[0], s);
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:85:      throw new Error("DEPLOYMENT_PROVIDER_FAILED");
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:89:  private async waitForTerminal(deploymentId: string, s: { organizationId: string; tenantId: string }) {
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:91:      const result = await this.dbQuery("SELECT * FROM website_deployment_records WHERE deployment_id=$1 AND organization_id=$2 AND tenant_id=$3", [deploymentId, s.organizationId, s.tenantId]);
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:93:      if (!row) throw new Error("DEPLOYMENT_NOT_FOUND");
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:97:    throw new Error("DEPLOYMENT_IN_PROGRESS");
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:101:    requirePermission(actor, SHS_SECURITY_PERMISSIONS.WEBSITE_DEPLOYMENT_CREATE);
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:102:    if (!input || typeof input !== "object" || Object.keys(input).some((key) => key !== "deliveryId")) throw new Error("DEPLOYMENT_FIELD_NOT_ALLOWED");
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:104:    if (!deliveryId) throw new Error("DEPLOYMENT_DELIVERY_REQUIRED");
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:107:      const existing = await db.query(`SELECT * FROM website_deployment_records WHERE organization_id=$1 AND tenant_id=$2 AND project_id=$3 AND delivery_record_id=$4 AND workspace_revision=$5 AND provider_key=$6 AND target='TEST' AND status NOT IN ('FAILED','SUPERSEDED','UNPUBLISHED') ORDER BY created_at DESC LIMIT 1`, [found.scope.organizationId, found.scope.tenantId, found.row.project_id, deliveryId, found.row.workspace_revision, WEBSITE_DEPLOYMENT_PROVIDER]);
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:108:      if (existing.rows[0]) return { found, deployment: existing.rows[0], idempotent: true };
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:109:      const inserted = await db.query(`INSERT INTO website_deployment_records (deployment_id, organization_id, tenant_id, learner_id, project_id, delivery_record_id, workspace_revision, project_type, provider_key, target, status, package_hash) VALUES ($1,$2,$3,$4,$5,$6,$7,'WEBSITE',$8,'TEST','REQUESTED',$9) ON CONFLICT DO NOTHING RETURNING *`, [`deployment_${randomUUID()}`, found.scope.organizationId, found.scope.tenantId, found.row.learner_id, found.row.project_id, deliveryId, found.row.workspace_revision, WEBSITE_DEPLOYMENT_PROVIDER, found.package.packageHash]);
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:110:      if (!inserted.rows[0]) return { found, deployment: (await db.query(`SELECT * FROM website_deployment_records WHERE organization_id=$1 AND tenant_id=$2 AND delivery_record_id=$3 AND status NOT IN ('FAILED','SUPERSEDED','UNPUBLISHED')`, [found.scope.organizationId, found.scope.tenantId, deliveryId])).rows[0], idempotent: true };
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:111:      await this.emit(db, "deployment.requested", inserted.rows[0], found.scope);
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:112:      return { found, deployment: inserted.rows[0], idempotent: false };
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:114:    if (source.idempotent && source.deployment.status === "LIVE") return { deployment: mapRow(source.deployment), idempotent: true };
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:115:    return { deployment: await this.start(source.deployment, actor, source.found), idempotent: source.idempotent };
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:118:  async get(actor: Actor, deploymentId: string) {
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:119:    requirePermission(actor, SHS_SECURITY_PERMISSIONS.WEBSITE_DEPLOYMENT_VIEW);
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:121:    const result = await this.dbQuery("SELECT * FROM website_deployment_records WHERE deployment_id=$1 AND organization_id=$2 AND tenant_id=$3 AND (learner_id=$4 OR $5 = ANY($6::text[]))", [deploymentId, s.organizationId, s.tenantId, s.userId, SHS_SECURITY_PERMISSIONS.WEBSITE_DEPLOYMENT_MANAGE, actor.permissions || []]);
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:122:    if (!result.rows[0]) throw new Error("DEPLOYMENT_NOT_FOUND");
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:127:    requirePermission(actor, SHS_SECURITY_PERMISSIONS.WEBSITE_DEPLOYMENT_VIEW);
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:129:    const result = await this.dbQuery("SELECT * FROM website_deployment_records WHERE project_id=$1 AND organization_id=$2 AND tenant_id=$3 AND (learner_id=$4 OR $5 = ANY($6::text[])) ORDER BY created_at DESC", [projectId, s.organizationId, s.tenantId, s.userId, SHS_SECURITY_PERMISSIONS.WEBSITE_DEPLOYMENT_MANAGE, actor.permissions || []]);
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:133:  async retry(actor: Actor, deploymentId: string) {
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:134:    requirePermission(actor, SHS_SECURITY_PERMISSIONS.WEBSITE_DEPLOYMENT_CREATE);
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:136:    const prior = (await this.dbQuery("SELECT * FROM website_deployment_records WHERE deployment_id=$1 AND organization_id=$2 AND tenant_id=$3", [deploymentId, s.organizationId, s.tenantId])).rows[0];
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:137:    if (!prior) throw new Error("DEPLOYMENT_NOT_FOUND");
+apps/shs-api/src/domain/deployment/service/website-deployment-service.ts:138:    if (prior.status !== "FAILED") throw new Error("DEPLOYMENT_RETRY_INVALID");
+src/pages/hub/HubWorkspaceDashboard.jsx.bak-adaptive-workflow-intelligence-20260525_093138:479:  ["👥", "New Partner Onboarding", "Completed onboarding for Bright Futures", "100%", "green"],
+apps/shs-api/src/domain/deployment/service/studio-release-service.ts:5:import { WebsiteDeploymentService } from "./website-deployment-service.js";
+apps/shs-api/src/domain/deployment/service/studio-release-service.ts:16:function map(row: any) { return { releaseId: row.release_id, organizationId: row.organization_id, tenantId: row.tenant_id, projectId: row.project_id, artifactId: row.artifact_id, reviewSubmissionId: row.review_submission_id, qaRunId: row.qa_run_id, deliveryRecordId: row.delivery_record_id, target: row.target, providerKey: row.provider_key, status: row.status, gateDecision: row.gate_decision, gateCodes: row.gate_codes, contentHash: row.content_hash, providerDeploymentId: row.provider_deployment_id, requestedByUserId: row.requested_by_user_id, createdAt: row.created_at, updatedAt: row.updated_at, releasedAt: row.released_at }; }
+apps/shs-api/src/domain/deployment/service/studio-release-service.ts:19:  constructor(private dbQuery: typeof query = query, private transaction: typeof withTransaction = withTransaction, private deployment = new WebsiteDeploymentService()) {}
+apps/shs-api/src/domain/deployment/service/studio-release-service.ts:34:    requirePermission(actor, SHS_SECURITY_PERMISSIONS.WEBSITE_DEPLOYMENT_CREATE);
+apps/shs-api/src/domain/deployment/service/studio-release-service.ts:50:    requirePermission(actor, SHS_SECURITY_PERMISSIONS.WEBSITE_DEPLOYMENT_CREATE);
+apps/shs-api/src/domain/deployment/service/studio-release-service.ts:63:      const delivery = await this.deployment.requestFromStudioDelivery(actor, { deliveryId: release.delivery_record_id });
+apps/shs-api/src/domain/deployment/service/studio-release-service.ts:65:        await db.query("UPDATE studio_release_attempts SET status='RELEASED', provider_deployment_id=$2, completed_at=NOW() WHERE attempt_id=$1", [attemptId, delivery.deployment.providerDeploymentId]);
+apps/shs-api/src/domain/deployment/service/studio-release-service.ts:66:        await db.query("UPDATE studio_release_requests SET status='RELEASED', provider_deployment_id=$2, released_at=NOW(), updated_at=NOW() WHERE release_id=$1", [releaseId, delivery.deployment.providerDeploymentId]);
+apps/shs-api/src/domain/deployment/service/studio-release-service.ts:75:  async get(actor: Actor, releaseId: string) { requirePermission(actor, SHS_SECURITY_PERMISSIONS.WEBSITE_DEPLOYMENT_VIEW); const s = scope(actor); const row = (await this.dbQuery("SELECT * FROM studio_release_requests WHERE release_id=$1 AND organization_id=$2 AND tenant_id=$3", [releaseId, s.organizationId, s.tenantId])).rows[0]; if (!row) throw new Error("RELEASE_NOT_FOUND"); const attempts = (await this.dbQuery("SELECT attempt_id, attempt_number, status, provider_deployment_id, error_code, error_message, started_at, completed_at FROM studio_release_attempts WHERE release_id=$1 AND organization_id=$2 AND tenant_id=$3 ORDER BY attempt_number", [releaseId, s.organizationId, s.tenantId])).rows; return { release: map(row), attempts }; }
+src/content/curriculum/data-center-pathway-map.json:148:      "units": ["dc10-linux-and-deployment", "dc10-power-and-cooling-reliability", "dc10-security-and-incidents"],
+src/content/curriculum/data-center-pathway-map.json:162:        "data-center-reliable-operations-10-server-deployment",
+src/content/curriculum/data-center-pathway-map.json:254:      "activationScope": "SHARED_CORE_AND_TECHNICAL_OPERATIONS_AND_NETWORKING_FIBER_AND_ELECTRICAL_AND_MECHANICAL_HVAC_AND_SECURITY_AND_AI_CLOUD"
+src/content/curriculum/data-center-pathway-map.json:297:        "data-center-specialization-12-controlled-change-deployment",
+src/content/curriculum/data-center-pathway-map.json:304:      "activationScope": "GRADE12_SHARED_CORE_AND_TECHNICAL_OPERATIONS"
+src/content/curriculum/data-center-pathway-map.json:330:      "activationScope": "GRADE12_SHARED_CORE_AND_TECHNICAL_OPERATIONS_AND_NETWORKING_FIBER"
+src/content/curriculum/data-center-pathway-map.json:356:      "activationScope": "GRADE12_SHARED_CORE_AND_TECHNICAL_OPERATIONS_AND_NETWORKING_FIBER_AND_ELECTRICAL"
+src/content/curriculum/data-center-pathway-map.json:382:      "activationScope": "GRADE12_SHARED_CORE_AND_TECHNICAL_OPERATIONS_AND_NETWORKING_FIBER_AND_ELECTRICAL_AND_MECHANICAL_HVAC"
+src/content/curriculum/data-center-pathway-map.json:408:      "activationScope": "GRADE12_SHARED_CORE_AND_TECHNICAL_OPERATIONS_AND_NETWORKING_FIBER_AND_ELECTRICAL_AND_MECHANICAL_HVAC_AND_SECURITY"
+src/content/curriculum/data-center-pathway-map.json:434:      "activationScope": "GRADE12_SHARED_CORE_AND_TECHNICAL_OPERATIONS_AND_NETWORKING_FIBER_AND_ELECTRICAL_AND_MECHANICAL_HVAC_AND_SECURITY_AND_AI_CLOUD"
+src/content/curriculum/data-center-pathway-map.json:486:        "activationStatus": "active",
+src/content/curriculum/data-center-pathway-map.json:488:        "purpose": "Deepen server, Linux, monitoring, deployment, troubleshooting, and operational procedure practice.",
+src/content/curriculum/data-center-pathway-map.json:493:        "appliedFocus": ["supervised Linux and server-operations scenarios", "monitoring interpretation", "deployment and troubleshooting documentation"],
+src/content/curriculum/data-center-pathway-map.json:503:        "activationStatus": "active",
+src/content/curriculum/data-center-pathway-map.json:520:        "activationStatus": "active",
+src/content/curriculum/data-center-pathway-map.json:538:        "activationStatus": "active",
+src/content/curriculum/data-center-pathway-map.json:556:        "activationStatus": "active",
+src/content/curriculum/data-center-pathway-map.json:574:        "activationStatus": "active",
+src/content/curriculum/data-center-pathway-map.json:617:        { "specializationId": "technical-operations", "purpose": "Apply multi-system operations, Linux, deployment, reliability, incident coordination, and runbook reasoning.", "complexity": "multi-system supervised scenarios", "advancedDomains": ["service operations", "Linux systems", "deployment and change control", "reliability", "incident coordination"], "safetyBoundary": "simulation and authorized supervised operations; no production authority", "candidateEvidence": ["operations runbook", "incident coordination record"], "transitionConnections": ["technical operations", "postsecondary systems training"] },
+src/content/curriculum/data-center-pathway-map.json:655:        "projectDomainAudit": "The repository has generic project-adjacent operational records but no canonical youth collaborative project/team submission domain suitable for activation; define the contract now and implement the smallest generic Project integration before executable capstone authoring.",
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_identity_nav_tiles_20260512_215346:335:  ["👥", "New Partner Onboarding", "Completed onboarding for Bright Futures", "100%", "green"],
+apps/shs-api/src/domain/deployment/api/release-routes.ts:8:  app.post("/studio/releases", requirePermission(SHS_SECURITY_PERMISSIONS.WEBSITE_DEPLOYMENT_CREATE), async (req: any, res: any) => { try { const created = await service.create(req.user, req.body || {}); return res.status(created.idempotent ? 200 : 201).json(ok(created)); } catch (e) { return reject(res, e); } });
+apps/shs-api/src/domain/deployment/api/release-routes.ts:9:  app.post("/studio/releases/:releaseId/execute", requirePermission(SHS_SECURITY_PERMISSIONS.WEBSITE_DEPLOYMENT_CREATE), async (req: any, res: any) => { try { return res.status(201).json(ok(await service.execute(req.user, req.params.releaseId))); } catch (e) { return reject(res, e); } });
+apps/shs-api/src/domain/deployment/api/release-routes.ts:10:  app.get("/studio/releases/:releaseId", requirePermission(SHS_SECURITY_PERMISSIONS.WEBSITE_DEPLOYMENT_VIEW), async (req: any, res: any) => { try { return res.json(ok(await service.get(req.user, req.params.releaseId))); } catch (e) { return reject(res, e); } });
+src/_archive/_layers_legacy_20260105-202433/L15/index.js:7:  fundableAngle: "Workforce readiness kits, rapid training deployment, barrier reduction.",
+apps/shs-api/src/domain/deployment/api/routes.ts:4:import { WebsiteDeploymentService } from "../service/website-deployment-service.js";
+apps/shs-api/src/domain/deployment/api/routes.ts:6:const service = new WebsiteDeploymentService();
+apps/shs-api/src/domain/deployment/api/routes.ts:8:  const code = String(error?.message || "DEPLOYMENT_REQUEST_REJECTED");
+apps/shs-api/src/domain/deployment/api/routes.ts:9:  const notFound = ["DEPLOYMENT_NOT_FOUND"].includes(code);
+apps/shs-api/src/domain/deployment/api/routes.ts:10:  const forbidden = ["DEPLOYMENT_FORBIDDEN", "DEPLOYMENT_NOT_ELIGIBLE"].includes(code);
+apps/shs-api/src/domain/deployment/api/routes.ts:14:export function registerWebsiteDeploymentRoutes(app: any) {
+apps/shs-api/src/domain/deployment/api/routes.ts:15:  app.post("/deployments/from-studio-delivery", requirePermission(SHS_SECURITY_PERMISSIONS.WEBSITE_DEPLOYMENT_CREATE), async (req: any, res: any) => {
+apps/shs-api/src/domain/deployment/api/routes.ts:18:  app.get("/deployments/:deploymentId", requirePermission(SHS_SECURITY_PERMISSIONS.WEBSITE_DEPLOYMENT_VIEW), async (req: any, res: any) => {
+apps/shs-api/src/domain/deployment/api/routes.ts:19:    try { return res.json(ok(await service.get(req.user, req.params.deploymentId))); } catch (error) { return reject(res, error); }
+apps/shs-api/src/domain/deployment/api/routes.ts:21:  app.get("/studio/projects/:projectId/deployments", requirePermission(SHS_SECURITY_PERMISSIONS.WEBSITE_DEPLOYMENT_VIEW), async (req: any, res: any) => {
+apps/shs-api/src/domain/deployment/api/routes.ts:24:  app.post("/deployments/:deploymentId/retry", requirePermission(SHS_SECURITY_PERMISSIONS.WEBSITE_DEPLOYMENT_CREATE), async (req: any, res: any) => {
+apps/shs-api/src/domain/deployment/api/routes.ts:25:    try { return res.status(201).json(ok(await service.retry(req.user, req.params.deploymentId))); } catch (error) { return reject(res, error); }
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_identity_nav_tiles_20260512_220012:335:  ["👥", "New Partner Onboarding", "Completed onboarding for Bright Futures", "100%", "green"],
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_role_tier_fix_20260512_220850:335:  ["👥", "New Partner Onboarding", "Completed onboarding for Bright Futures", "100%", "green"],
+apps/shs-api/src/domain/deployment/model/deployment-contract.ts:1:export const WEBSITE_DEPLOYMENT_STATUSES = ["REQUESTED", "QUEUED", "DEPLOYING", "LIVE", "FAILED", "SUPERSEDED", "UNPUBLISHED"] as const;
+apps/shs-api/src/domain/deployment/model/deployment-contract.ts:2:export type WebsiteDeploymentStatus = typeof WEBSITE_DEPLOYMENT_STATUSES[number];
+apps/shs-api/src/domain/deployment/model/deployment-contract.ts:4:export const WEBSITE_DEPLOYMENT_TARGETS = ["TEST"] as const;
+apps/shs-api/src/domain/deployment/model/deployment-contract.ts:5:export type WebsiteDeploymentTarget = typeof WEBSITE_DEPLOYMENT_TARGETS[number];
+apps/shs-api/src/domain/deployment/model/deployment-contract.ts:7:export const WEBSITE_DEPLOYMENT_PROVIDER = "local_mock" as const;
+apps/shs-api/src/domain/deployment/model/deployment-contract.ts:9:export type WebsiteDeploymentFile = { path: string; content: string };
+apps/shs-api/src/domain/deployment/model/deployment-contract.ts:10:export type WebsiteDeploymentPackage = {
+apps/shs-api/src/domain/deployment/model/deployment-contract.ts:14:  files: WebsiteDeploymentFile[];
+apps/shs-api/src/domain/deployment/model/deployment-contract.ts:18:export const DEPLOYMENT_TRANSITIONS: Readonly<Record<WebsiteDeploymentStatus, readonly WebsiteDeploymentStatus[]>> = {
+apps/shs-api/src/domain/deployment/model/deployment-contract.ts:31:export function validateWebsiteDeploymentPackage(input: unknown): WebsiteDeploymentPackage {
+apps/shs-api/src/domain/deployment/model/deployment-contract.ts:32:  if (!input || typeof input !== "object" || Array.isArray(input)) throw new Error("DEPLOYMENT_PACKAGE_INVALID");
+apps/shs-api/src/domain/deployment/model/deployment-contract.ts:34:  if (value.projectType !== "WEBSITE" || typeof value.projectId !== "string" || !value.projectId) throw new Error("DEPLOYMENT_PACKAGE_TYPE_INVALID");
+apps/shs-api/src/domain/deployment/model/deployment-contract.ts:35:  if (!Number.isInteger(value.revision) || Number(value.revision) < 1) throw new Error("DEPLOYMENT_PACKAGE_REVISION_INVALID");
+apps/shs-api/src/domain/deployment/model/deployment-contract.ts:36:  if (!Array.isArray(value.files) || value.files.length > 100) throw new Error("DEPLOYMENT_PACKAGE_FILES_INVALID");
+apps/shs-api/src/domain/deployment/model/deployment-contract.ts:38:    if (!raw || typeof raw !== "object" || Array.isArray(raw)) throw new Error("DEPLOYMENT_PACKAGE_FILE_INVALID");
+apps/shs-api/src/domain/deployment/model/deployment-contract.ts:42:    if (typeof path !== "string" || !path || path.startsWith("/") || path.includes("..") || path.includes("\\") || SECRET_NAME.test(path)) throw new Error("DEPLOYMENT_PACKAGE_PATH_INVALID");
+apps/shs-api/src/domain/deployment/model/deployment-contract.ts:43:    if (typeof content !== "string" || content.length > 250_000 || SECRET_CONTENT.test(content)) throw new Error("DEPLOYMENT_PACKAGE_CONTENT_INVALID");
+apps/shs-api/src/domain/deployment/model/deployment-contract.ts:46:  if (JSON.stringify(files).length > 1_000_000) throw new Error("DEPLOYMENT_PACKAGE_TOO_LARGE");
+apps/shs-api/src/domain/deployment/model/deployment-contract.ts:47:  if (typeof value.packageHash !== "string" || !value.packageHash) throw new Error("DEPLOYMENT_PACKAGE_HASH_REQUIRED");
+apps/shs-api/src/domain/deployment/model/deployment-contract.ts:51:export function canTransition(from: WebsiteDeploymentStatus, to: WebsiteDeploymentStatus) {
+apps/shs-api/src/domain/deployment/model/deployment-contract.ts:52:  return DEPLOYMENT_TRANSITIONS[from]?.includes(to) || false;
+src/pages/hub/HubWorkspaceDashboard 2.jsx:77:  ["👥", "New Partner Onboarding", "Completed onboarding for Bright Futures", "100%", "green"],
+src/pages/career/Portfolio.jsx:22:    <p className="portfolio-v1-provenance">Connected to your finalized Studio work. Portfolio presentation does not change Evidence, completion, deployment, or credentials.</p>
+src/pages/hub/HubWorkspaceDashboard.jsx.bak_hide_role_switcher_20260513_081315:369:  ["👥", "New Partner Onboarding", "Completed onboarding for Bright Futures", "100%", "green"],
+apps/shs-api/src/domain/deployment/provider/deployment-provider.ts:2:import { validateWebsiteDeploymentPackage, type WebsiteDeploymentPackage } from "../model/deployment-contract.js";
+apps/shs-api/src/domain/deployment/provider/deployment-provider.ts:4:export type ProviderDeploymentResult = {
+apps/shs-api/src/domain/deployment/provider/deployment-provider.ts:5:  providerDeploymentId: string;
+apps/shs-api/src/domain/deployment/provider/deployment-provider.ts:11:export interface WebsiteDeploymentProvider {
+apps/shs-api/src/domain/deployment/provider/deployment-provider.ts:12:  deploy(input: WebsiteDeploymentPackage): Promise<ProviderDeploymentResult>;
+apps/shs-api/src/domain/deployment/provider/deployment-provider.ts:15:export class LocalMockWebsiteDeploymentProvider implements WebsiteDeploymentProvider {

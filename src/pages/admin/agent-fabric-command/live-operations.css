@@ -1,0 +1,413 @@
+/* AFCC-3 Phase 7 — Live Operations (read-only). Builds on the Command Center
+   tokens in agent-fabric-command.css. Status is always text + glyph, never
+   colour alone. Class names avoid the substrings that global admin selectors
+   ([class*=…]) restyle; see tests/afccCommandCenter.test.mjs. */
+
+.afcc-lo { position: relative; }
+
+/* High-contrast focus on the dark surface. The design-system shell rule
+   (.ds-shell :where(button, …):focus-visible) swaps the outline for a faint
+   28% ring; this selector is one class more specific. */
+.afcc-root.afcc-lo :focus-visible {
+  outline: 2px solid var(--afcc-accent);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+/* wide: list + docked context */
+.afcc-lo.has-lo-dock {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(360px, 30vw, 480px);
+  align-items: start;
+}
+
+.afcc-lo-canvas { gap: 14px; }
+
+.afcc-lo-dock {
+  position: sticky;
+  top: 0;
+  max-height: 100vh;
+  overflow-y: auto;
+  border-left: 1px solid var(--afcc-line);
+  background: var(--afcc-panel);
+  min-height: 100vh;
+}
+
+.afcc-lo-dock-empty { padding: 28px 22px; }
+
+/* ------------------------------------------------------------ totals */
+.afcc-lo-totals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 6px;
+  padding: 0;
+  list-style: none;
+}
+
+.afcc-lo-count {
+  display: grid;
+  gap: 2px;
+  min-width: 128px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--afcc-line-strong);
+  border-left: 3px solid var(--afcc-tone, var(--afcc-quiet));
+  border-radius: var(--afcc-radius);
+  background: var(--afcc-panel);
+  color: var(--afcc-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.afcc-lo-count:hover { border-color: var(--afcc-accent); border-left-color: var(--afcc-tone, var(--afcc-quiet)); }
+.afcc-lo-count.is-active { background: var(--afcc-panel-2); outline: 1px solid var(--afcc-accent); }
+.afcc-lo-count-value { font-size: 22px; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.afcc-lo-count-label { color: var(--afcc-quiet); font-size: 12px; font-weight: 600; }
+
+/* ------------------------------------------------------------ filters */
+.afcc-lo-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px 12px;
+}
+
+.afcc-lo-filter { display: grid; gap: 3px; font-size: 11.5px; color: var(--afcc-quiet); font-weight: 600; }
+
+.afcc-lo-filter select {
+  min-height: 36px;
+  min-width: 150px;
+  max-width: 240px;
+  padding: 0 8px;
+  border: 1px solid var(--afcc-line-strong);
+  border-radius: 6px;
+  background: var(--afcc-bg-2);
+  color: var(--afcc-text);
+  font: inherit;
+  font-size: 13px;
+}
+
+.afcc-lo-attn-line { margin: 2px 0 0; color: var(--afcc-quiet); font-size: 12.5px; }
+.afcc-lo-empty { padding: 18px 0; }
+
+/* ------------------------------------------------------------ list (table) */
+.afcc-lo-grid {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.afcc-lo-grid th,
+.afcc-lo-grid td {
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--afcc-line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.afcc-lo-grid thead th {
+  color: var(--afcc-quiet);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.afcc-lo-grid tbody tr { cursor: pointer; }
+.afcc-lo-grid tbody tr:hover { background: rgba(125, 211, 252, 0.04); }
+.afcc-lo-grid tbody tr.is-selected { background: rgba(125, 211, 252, 0.09); box-shadow: inset 3px 0 0 var(--afcc-accent); }
+.afcc-lo-grid tbody th { font-weight: 400; }
+
+.afcc-lo-row-open {
+  display: inline-flex;
+  min-height: 28px;
+  align-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--afcc-accent);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: left;
+}
+
+.afcc-lo-row-open:hover { text-decoration: underline; }
+
+.afcc-lo-sub { display: block; margin-top: 3px; color: var(--afcc-quiet); font-size: 11.5px; overflow-wrap: anywhere; }
+.afcc-lo-clip { max-width: 170px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.afcc-lo-gap-quiet { color: var(--afcc-faint); font-style: italic; }
+.afcc-lo-grid tbody th .afcc-lo-mono { white-space: nowrap; }
+.afcc-lo-when { white-space: nowrap; }
+.afcc-lo-who-inline,
+.afcc-lo-when-inline { display: none; }
+.afcc-lo-scroll { max-width: 100%; overflow-x: auto; }
+.afcc-lo-scroll:focus-visible { outline: 2px solid var(--afcc-accent); outline-offset: 2px; }
+
+/* Narrow list (e.g. beside the docked focus): initiator folds into the agent cell. */
+@container afcc-canvas (max-width: 1060px) {
+  .afcc-lo-col-who,
+  .afcc-lo-col-when { display: none; }
+  .afcc-lo-who-inline,
+  .afcc-lo-when-inline { display: block; }
+}
+.afcc-lo-mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; }
+.afcc-lo-glyph { margin-right: 4px; }
+.afcc-lo-state, .afcc-lo-evidence { gap: 0; }
+
+.afcc-lo-approval { color: var(--afcc-tone, var(--afcc-text)); font-weight: 600; font-size: 12.5px; }
+
+.afcc-lo-attn {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 0 6px;
+  border-left: 2px solid var(--afcc-fail);
+  color: var(--afcc-fail);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ------------------------------------------------------------ list (phone) */
+.afcc-lo-items { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+
+.afcc-lo-item {
+  display: grid;
+  gap: 5px;
+  width: 100%;
+  min-height: 44px;
+  padding: 12px;
+  border: 1px solid var(--afcc-line-strong);
+  border-radius: var(--afcc-radius);
+  background: var(--afcc-panel);
+  color: var(--afcc-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.afcc-lo-item.is-selected { border-color: var(--afcc-accent); }
+.afcc-lo-item-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-weight: 700; }
+.afcc-lo-item-line { font-size: 12.5px; overflow-wrap: anywhere; }
+
+/* ------------------------------------------------------------ source */
+.afcc-lo-source { margin-top: 6px; color: var(--afcc-quiet); font-size: 12px; }
+.afcc-lo-source summary { cursor: pointer; min-height: 28px; }
+.afcc-lo-source dl { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 6px 16px; margin: 6px 0 0; }
+.afcc-lo-source dt { font-weight: 700; }
+.afcc-lo-source dd { margin: 0; overflow-wrap: anywhere; }
+
+/* ------------------------------------------------------------ focus */
+.afcc-lo-focus { display: grid; grid-template-rows: auto auto 1fr; min-height: 0; background: var(--afcc-panel); }
+.afcc-lo-focus.is-docked { min-height: 100vh; }
+
+.afcc-lo-focus.is-overlay,
+.afcc-lo-focus.is-sheet {
+  position: fixed;
+  z-index: 40;
+  overflow-y: auto;
+}
+
+.afcc-lo-focus.is-overlay {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(520px, 92vw);
+  border-left: 1px solid var(--afcc-line-strong);
+  box-shadow: -18px 0 48px rgba(0, 0, 0, 0.45);
+}
+
+.afcc-lo-focus.is-sheet { inset: 0; width: 100%; }
+
+.afcc-lo .afcc-scrim { position: fixed; z-index: 39; }
+
+.afcc-lo-focus-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 18px 10px;
+  border-bottom: 1px solid var(--afcc-line);
+}
+
+.afcc-lo-focus-head h2 { margin: 3px 0 0; font-size: 17px; font-weight: 700; }
+.afcc-lo-focus-head h2:focus { outline: none; }
+.afcc-lo-focus-line { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 0; }
+
+.afcc-lo-views {
+  display: flex;
+  gap: 2px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--afcc-line);
+  overflow-x: auto;
+}
+
+.afcc-lo-view-btn {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--afcc-quiet);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.afcc-lo-view-btn.is-active { color: var(--afcc-text); border-bottom-color: var(--afcc-accent); }
+.afcc-lo-view-btn:hover { color: var(--afcc-text); }
+
+.afcc-lo-pane { padding: 14px 18px 28px; min-width: 0; }
+.afcc-lo-pane:focus-visible { outline: 2px solid var(--afcc-accent); outline-offset: -2px; }
+.afcc-lo-view-body { display: grid; gap: 16px; }
+
+.afcc-lo-h3 {
+  margin: 0 0 8px;
+  color: var(--afcc-quiet);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.afcc-lo-fields { display: grid; gap: 7px; margin: 0; }
+.afcc-lo-field { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 10px; align-items: baseline; }
+.afcc-lo-field dt { color: var(--afcc-quiet); font-size: 12px; }
+.afcc-lo-field dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.afcc-lo-verif { color: var(--afcc-quiet); font-size: 12px; }
+
+.afcc-lo-more summary,
+.afcc-lo-json-group summary { cursor: pointer; min-height: 32px; color: var(--afcc-accent); font-weight: 600; }
+.afcc-lo-more[open] summary { margin-bottom: 8px; }
+
+.afcc-lo-failure { padding: 10px 12px; border: 1px solid rgba(252, 165, 165, 0.35); border-radius: var(--afcc-radius); }
+
+.afcc-lo-copy { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; }
+.afcc-lo-copy code { overflow-wrap: anywhere; }
+
+.afcc-lo-copy-btn {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--afcc-line-strong);
+  border-radius: 6px;
+  background: var(--afcc-panel-2);
+  color: var(--afcc-quiet);
+  cursor: pointer;
+}
+
+.afcc-lo-copy-btn:hover { color: var(--afcc-text); border-color: var(--afcc-accent); }
+
+.afcc-lo-warning {
+  margin: 0;
+  padding: 10px 12px;
+  border-left: 3px solid var(--afcc-warn);
+  background: rgba(252, 211, 77, 0.07);
+  color: var(--afcc-text);
+  font-size: 12.5px;
+}
+
+.afcc-lo-inline { display: flex; flex-wrap: wrap; gap: 4px 10px; margin: 0; padding: 0; list-style: none; }
+
+/* ------------------------------------------------------------ timeline */
+.afcc-lo-tl { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+
+.afcc-lo-tl-item {
+  position: relative;
+  padding: 0 0 16px 20px;
+  border-left: 1px solid var(--afcc-line-strong);
+  margin-left: 6px;
+}
+
+.afcc-lo-tl-item:last-child { border-left-color: transparent; }
+.afcc-lo-tl-item.is-legacy { opacity: 0.85; }
+.afcc-lo-tl-item.is-legacy .afcc-lo-tl-dot { background: transparent; border-style: dashed; }
+
+.afcc-lo-tl-dot {
+  position: absolute;
+  left: -6px;
+  top: 3px;
+  width: 11px;
+  height: 11px;
+  border: 2px solid var(--afcc-accent);
+  border-radius: 50%;
+  background: var(--afcc-panel);
+}
+
+.afcc-lo-tl-title { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; margin: 0; }
+.afcc-lo-tl-when { color: var(--afcc-quiet); font-size: 12px; }
+.afcc-lo-tl-line { margin: 2px 0 6px; font-size: 12.5px; }
+
+.afcc-lo-tl-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 4px 14px;
+  margin: 0;
+  font-size: 12px;
+}
+
+.afcc-lo-tl-meta dt { color: var(--afcc-quiet); font-size: 11px; }
+.afcc-lo-tl-meta dd { margin: 0; overflow-wrap: anywhere; }
+
+/* ------------------------------------------------------------ evidence */
+.afcc-lo-split-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 0; }
+.afcc-lo-split-facts > div { padding: 10px 12px; border: 1px solid var(--afcc-line); border-radius: var(--afcc-radius); }
+.afcc-lo-split-facts dt { color: var(--afcc-quiet); font-size: 11.5px; margin-bottom: 4px; }
+.afcc-lo-split-facts dd { margin: 0; }
+
+.afcc-lo-artifacts { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.afcc-lo-artifact-row { display: grid; gap: 6px; padding: 12px; border: 1px solid var(--afcc-line); border-radius: var(--afcc-radius); }
+.afcc-lo-artifact-id { margin: 0; overflow-wrap: anywhere; }
+.afcc-lo-artifact-flags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; }
+
+.afcc-lo-artifact { display: grid; gap: 10px; padding: 12px; border: 1px solid var(--afcc-line-strong); border-radius: var(--afcc-radius); background: var(--afcc-bg-2); }
+.afcc-lo-artifact-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.afcc-lo-artifact-title { display: grid; gap: 2px; margin: 0; color: var(--afcc-quiet); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.afcc-lo-artifact-title code { font-size: 12.5px; letter-spacing: 0; text-transform: none; color: var(--afcc-text); }
+.afcc-lo-trust { margin: 0; }
+.afcc-lo-artifact-sum { margin: 0; }
+.afcc-lo-artifact-body { display: grid; gap: 8px; }
+.afcc-lo-artifact-body.is-untrusted { padding-left: 10px; border-left: 3px dashed var(--afcc-warn); }
+
+.afcc-lo-json { display: grid; gap: 4px; margin: 0; }
+.afcc-lo-json > div { display: grid; grid-template-columns: minmax(90px, 160px) minmax(0, 1fr); gap: 8px; }
+.afcc-lo-json dt { color: var(--afcc-quiet); font-size: 12px; overflow-wrap: anywhere; }
+.afcc-lo-json dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.afcc-lo-json-group { min-width: 0; }
+.afcc-lo-json-group > .afcc-lo-json { padding-left: 10px; border-left: 1px solid var(--afcc-line); }
+.afcc-lo-json-scalar { white-space: pre-wrap; }
+
+/* ------------------------------------------------------------ narrow */
+.afcc-mode-narrow .afcc-lo-totals { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.afcc-mode-narrow .afcc-lo-count { width: 100%; min-width: 0; }
+.afcc-lo-filters-toggle summary { min-height: 44px; display: flex; align-items: center; color: var(--afcc-accent); font-weight: 600; cursor: pointer; }
+.afcc-lo-filters-toggle[open] summary { margin-bottom: 8px; }
+.afcc-mode-narrow .afcc-lo-filter,
+.afcc-mode-narrow .afcc-lo-filter select { width: 100%; max-width: none; }
+.afcc-mode-narrow .afcc-lo-filters > .afcc-lo-filter { flex: 1 1 100%; }
+.afcc-lo-focus.is-sheet .afcc-lo-field { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.afcc-lo-focus.is-sheet .afcc-lo-split-facts { grid-template-columns: minmax(0, 1fr); }
+.afcc-lo-focus.is-sheet .afcc-lo-json > div { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+
+/* ------------------------------------------------------------ motion */
+@media (prefers-reduced-motion: no-preference) {
+  .afcc-lo-focus.is-overlay { animation: afcc-slide-in 180ms ease-out; }
+  .afcc-lo-focus.is-sheet { animation: afcc-rise-in 180ms ease-out; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .afcc-lo *,
+  .afcc-lo *::before,
+  .afcc-lo *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

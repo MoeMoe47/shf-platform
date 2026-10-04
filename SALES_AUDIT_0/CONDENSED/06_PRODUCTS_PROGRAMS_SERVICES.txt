@@ -1,0 +1,503 @@
+============================================================
+SOURCE: 06_PRODUCTS_PROGRAMS_SERVICES.txt
+============================================================
+docs/DATA_OWNERSHIP_IP_LAYER_V1.md:35:Source Registry -> Data Federation -> Data Aggregator -> Data Normalization -> Evidence Package -> Data Verification -> Truth Spine -> Oracle -> Data Approval -> Readiness Gate -> Security / Privacy -> Data Ownership / IP -> Public Approval -> Data Approval Gateway -> SHF Impact Data Spine -> Reports / Watchtower / LOO / Public Impact.
+docs/DATA_OWNERSHIP_IP_LAYER_V1.md:230:- `python3 scripts/check_evidence_package_layer.py`
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:6:// exactly as they exist today. It never re-implements their entitlement,
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:48:// selection odds, or entitlement (entitlement was already enforced by
+src/router/AdminRoutes.jsx.bak_force_identity_redirect_20260513_080502:30:import HubBundleBuilderPage from "@/pages/hub/HubBundleBuilderPage.jsx";
+src/router/AdminRoutes.jsx.bak_force_identity_redirect_20260513_080502:109:        <Route path="/hub/bundles" element={protect("/hub/bundles", <HubBundleBuilderPage />)} />
+docs/MASTER_LAYER_REGISTRY_V1_REAUDIT.json:13:    "Evidence Package Layer",
+docs/MASTER_LAYER_REGISTRY_V1_REAUDIT.json:54:    "Program Registry",
+docs/MASTER_LAYER_REGISTRY_V1_REAUDIT.json:77:      "detail": "Requested check:ai-governance is not present. Existing package script is check:ai-guardrails for the registered AI/Swarm Layer."
+docs/MASTER_LAYER_REGISTRY_V1_REAUDIT.json:85:      "detail": "Verified Aggregation is registered but lacks dedicated V1 docs, service, router, tests, checker, package script, main.py mount, and Reports/Watchtower visibility."
+docs/MASTER_LAYER_REGISTRY_V1_REAUDIT.json:112:    "Program Registry",
+docs/MASTER_LAYER_REGISTRY_V1_REAUDIT.json:174:    "Program Registry",
+docs/MASTER_LAYER_REGISTRY_V1_REAUDIT.json:207:    "Formalize Verified Aggregation V1 or explicitly merge its ownership into Data Aggregator/Evidence Package/Readiness Gate in the registry.",
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md:109:| Courses, lessons, assignments, assessments, completion | `curriculum` / `curriculum-catalog` domains | References `curriculum_id`/`lesson_id` by id only |
+apps/shs-api/src/domain/companion/api/routes.ts:27:  // through those very endpoints, never a new entitlement surface.
+docs/SHS_PRODUCTION_AUTH_IDENTITY_HARDENING_V1_MANUAL_GOVERNANCE_REVIEW.json:34:    "Full legacy backend route dependency migration is deferred to a follow-up route-by-route hardening package.",
+docs/SHS_PRODUCTION_AUTH_IDENTITY_HARDENING_V1_MANUAL_GOVERNANCE_REVIEW.json:46:  "recommended_next_action": "Run validation and package this auth hardening work without staging unrelated files."
+src/router/CurriculumRoutes.jsx:29: * CurriculumSidebar.jsx (Learning nav item) and student-catalog-
+docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_RECORD_SCHEMA_V1.json:23:      "curriculum_refs": { "type": "array", "items": "string", "canonical_owner": "curriculum / curriculum-catalog", "description": "curriculum_id values as used in career_curriculum_requirements." },
+src/utils/storeTheme.js:3:// new Catalog shell. Mirrors src/utils/arcadeTheme.js's established
+src/utils/storeTheme.js:8:// Store is a separate Vite HTML entrypoint/bundle with no shared runtime
+src/utils/storeTheme.js:51:// Shared hook — the single source of theme state for the Store Catalog
+docs/DATA_VERIFICATION_LAYER_V1.md:5:Data Verification Layer V1 formalizes the checkpoint between Evidence Package and Truth Spine. It evaluates whether an Evidence Package is ready for Truth Spine review by inspecting package completeness, source/provenance quality, evidence references, warnings, blockers, and recommended next action.
+docs/DATA_VERIFICATION_LAYER_V1.md:13:Data Verification receives Evidence Package-style records and evaluates review readiness.
+docs/DATA_VERIFICATION_LAYER_V1.md:17:- Evidence Package readiness evaluation.
+docs/DATA_VERIFICATION_LAYER_V1.md:29:Source -> Data Aggregator -> Data Normalization -> Evidence Package -> Data Verification -> Truth Spine -> Oracle -> Reports / Watchtower / LOO -> Data Approval Gateway -> SHF Impact Data Spine.
+docs/DATA_VERIFICATION_LAYER_V1.md:36:  "package_id": "",
+docs/DATA_VERIFICATION_LAYER_V1.md:58:- Missing `package_id` blocks readiness.
+docs/DATA_VERIFICATION_LAYER_V1.md:63:- Complete package with source metadata, provenance, and evidence refs can return `ready_for_truth_spine: true`.
+docs/DATA_VERIFICATION_LAYER_V1.md:73:- Evidence Package.
+docs/DATA_VERIFICATION_LAYER_V1.md:92:- Evaluate Evidence Package readiness.
+docs/DATA_VERIFICATION_LAYER_V1.md:98:- Prepare package for Truth Spine review.
+docs/DATA_VERIFICATION_LAYER_V1.md:112:- Replace Evidence Package.
+docs/DATA_VERIFICATION_LAYER_V1.md:116:## Relationship To Evidence Package
+docs/DATA_VERIFICATION_LAYER_V1.md:118:Evidence Package builds the review package. Data Verification evaluates whether that package is ready to move to Truth Spine review. It does not replace Evidence Package.
+docs/DATA_VERIFICATION_LAYER_V1.md:122:Truth Spine remains the authority for verification status, trust level, report readiness, public approval, packages, replay, federation, and audit feed. Data Verification only recommends readiness for Truth Spine review.
+docs/DATA_VERIFICATION_LAYER_V1.md:149:- `python3 scripts/check_evidence_package_layer.py`
+docs/DATA_VERIFICATION_LAYER_V1.md:159:- `python3 -m pytest services/shf-agent-fabric/tests/test_evidence_package_routes.py services/shf-agent-fabric/tests/test_data_normalization_routes.py services/shf-agent-fabric/tests/test_data_aggregator_routes.py services/shf-agent-fabric/tests/test_truth_routes.py`
+docs/DUPLICATE_LAYER_AUDIT.md:77:42. Program Registry
+docs/DUPLICATE_LAYER_AUDIT.md:147:| Truth Spine | `services/truth_spine_service.py`, `db/truth/*` | Official claims/sources/packages/federation | Low | Keep |
+docs/DUPLICATE_LAYER_AUDIT.md:391:This audit intentionally did not modify source code, package scripts, governance scripts, backend behavior, frontend routes, persistence files, or runtime data. The only intended file change from this task is this audit report:
+docs/DUPLICATE_LAYER_AUDIT.md:395:Note: Cleanup Pass 1 occurred after the initial no-code-change audit. Cleanup Pass 1 moved confirmed duplicate files into `_archive/duplicate-layer-audit/20260614-093838/`, added `scripts/check_duplicate_layer_cleanup.py`, and added `check:duplicates` to `package.json`. No source file was deleted and no active official router behavior was changed.
+src/router/AdminRoutes.jsx.bak_final_verify_20260513_104716:30:import HubBundleBuilderPage from "@/pages/hub/HubBundleBuilderPage.jsx";
+src/router/AdminRoutes.jsx.bak_final_verify_20260513_104716:114:        <Route path="/hub/bundles" element={protect("/hub/bundles", <HubBundleBuilderPage />)} />
+services/shf-agent-fabric/services/game_theory_service.py:11:from services.truth_spine_service import build_truth_package
+services/shf-agent-fabric/services/game_theory_service.py:127:    packages: List[Dict[str, Any]] = []
+services/shf-agent-fabric/services/game_theory_service.py:131:        package = build_truth_package(claim_id)
+services/shf-agent-fabric/services/game_theory_service.py:132:        if not package:
+services/shf-agent-fabric/services/game_theory_service.py:134:            warnings.append(f"missing_truth_package:{claim_id}")
+services/shf-agent-fabric/services/game_theory_service.py:136:        packages.append(package)
+services/shf-agent-fabric/services/game_theory_service.py:137:        for warning in package.get("warnings") or []:
+services/shf-agent-fabric/services/game_theory_service.py:141:    verified = [p for p in packages if p.get("verification_status") == "verified"]
+services/shf-agent-fabric/services/game_theory_service.py:142:    public = [p for p in packages if p.get("public_approved") is True]
+services/shf-agent-fabric/services/game_theory_service.py:143:    draft = [p for p in packages if p.get("verification_status") != "verified"]
+services/shf-agent-fabric/services/game_theory_service.py:144:    low_trace = [p for p in packages if int(p.get("trace_coverage") or 0) < 80]
+services/shf-agent-fabric/services/game_theory_service.py:145:    avg_trace = int(round(sum(int(p.get("trace_coverage") or 0) for p in packages) / len(packages))) if packages else 0
+services/shf-agent-fabric/services/game_theory_service.py:147:        "packages": packages,
+services/shf-agent-fabric/services/game_theory_service.py:148:        "package_count": len(packages),
+services/shf-agent-fabric/services/game_theory_service.py:154:        "package_hashes": [p.get("package_hash") for p in packages if p.get("package_hash")],
+services/shf-agent-fabric/services/game_theory_service.py:252:        return "advance_with_truth_backed_growth_package"
+services/shf-agent-fabric/services/game_theory_service.py:389:            "Deterministic V1 strategic analysis using scenario type, severity, Truth Package quality, "
+services/shf-agent-fabric/services/game_theory_service.py:393:            "truth_package_count": truth["package_count"],
+services/shf-agent-fabric/services/game_theory_service.py:394:            "verified_truth_package_count": truth["verified_count"],
+services/shf-agent-fabric/services/game_theory_service.py:395:            "public_approved_truth_package_count": truth["public_approved_count"],
+services/shf-agent-fabric/services/game_theory_service.py:397:            "package_hashes": truth["package_hashes"],
+services/shf-agent-fabric/services/game_theory_service.py:437:                "strategy_id": "advance_with_truth_backed_growth_package",
+services/shf-agent-fabric/services/game_theory_service.py:438:                "label": "Advance with Truth-backed growth package",
+services/shf-agent-fabric/services/game_theory_service.py:451:                "use_when": "Cooperation exceeds conflict and verified packages are available.",
+docs/DATA_AGGREGATOR_VALIDATION_VISIBILITY_AUDIT_V1.md:26:- `ready_for_evidence_package`
+docs/DATA_AGGREGATOR_VALIDATION_VISIBILITY_AUDIT_V1.md:44:- `ready_for_evidence_package`
+docs/DATA_AGGREGATOR_VALIDATION_VISIBILITY_AUDIT_V1.md:68:`package.json` includes:
+docs/DATA_AGGREGATOR_VALIDATION_VISIBILITY_AUDIT_V1.md:153:Truth Spine remains the authority for claims, sources, verification, trust level, public approval, report readiness, packages, replay, federation, and audit feed.
+docs/DATA_AGGREGATOR_VALIDATION_VISIBILITY_AUDIT_V1.md:175:- `ready_for_evidence_package`
+docs/DATA_AGGREGATOR_VALIDATION_VISIBILITY_AUDIT_V1.md:188:- `ready_for_evidence_package`
+src/utils/curriculumTheme.js:9:// separate Vite HTML entrypoint/bundle with no shared runtime, and a shared
+src/router/AdminRoutes.jsx.bak_final_routes_clean_20260513_105727:30:import HubBundleBuilderPage from "@/pages/hub/HubBundleBuilderPage.jsx";
+src/router/AdminRoutes.jsx.bak_final_routes_clean_20260513_105727:114:        <Route path="/hub/bundles" element={protect("/hub/bundles", <HubBundleBuilderPage />)} />
+docs/career/data-center-employer-validation/DATA_CENTER_EMPLOYER_FEEDBACK_RECORD_V1.json:5:  "package_ref": "docs/career/data-center-employer-validation/DATA_CENTER_EMPLOYER_VALIDATION_PACKAGE_V1.md",
+docs/career/data-center-employer-validation/DATA_CENTER_EMPLOYER_FEEDBACK_RECORD_V1.json:7:  "note": "This is a BLANK TEMPLATE. No feedback has been recorded yet. Completing this record alone does not constitute formal validation, and does not by itself move the pathway from EMPLOYER REVIEWED to EMPLOYER VALIDATED — see DATA_CENTER_EMPLOYER_VALIDATION_RECORD_V1.json and the Validation Decision Rule in the main package for that separate, explicit decision. Do not populate this file with invented, hypothetical, or placeholder feedback attributed to a real or fictional employer.",
+docs/career/data-center-employer-validation/DATA_CENTER_EMPLOYER_FEEDBACK_RECORD_V1.json:43:    "created_by_process": "CPAS-1 Phase 2 employer validation package build; questionnaire/record structure revised in Phase 2A"
+docs/ARCHITECTURE_CHANGE_PROPOSAL_TEMPLATE.md:25:Explain whether claims, sources, Truth Packages, public approval, or report readiness are affected.
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:7:    "package.json",
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:43:    { "path": "docs/REPO_SAFETY_FREEZE_AUDIT_V1.md", "status": "untracked", "classification": "SAFE_TO_STAGE_NOW", "package": "Repo Safety Freeze Audit V1", "reason": "Requested audit report only; no runtime behavior." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:44:    { "path": "docs/REPO_SAFETY_FREEZE_AUDIT_V1.json", "status": "untracked", "classification": "SAFE_TO_STAGE_NOW", "package": "Repo Safety Freeze Audit V1", "reason": "Requested machine-readable audit report only; no runtime behavior." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:45:    { "path": "docs/V1_COMMIT_PACKAGING_AUDIT.md", "status": "untracked", "classification": "NEEDS_OWNER_REVIEW", "package": "Prior V1 Commit Packaging Audit", "reason": "Governance report is likely safe, but owner should decide whether to preserve it with this freeze report or separately." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:46:    { "path": "docs/V1_COMMIT_PACKAGING_AUDIT.json", "status": "untracked", "classification": "NEEDS_OWNER_REVIEW", "package": "Prior V1 Commit Packaging Audit", "reason": "Machine-readable prior audit; owner should decide package placement." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:47:    { "path": "docs/AGENT_V1_FINAL_READINESS_AUDIT.md", "status": "untracked", "classification": "NEEDS_OWNER_REVIEW", "package": "Agent V1 Final Readiness Audit", "reason": "Completed V1 audit candidate, but still untracked and should be owner-approved before staging." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:48:    { "path": "docs/AGENT_V1_FINAL_READINESS_AUDIT.json", "status": "untracked", "classification": "NEEDS_OWNER_REVIEW", "package": "Agent V1 Final Readiness Audit", "reason": "Machine-readable Agent V1 audit candidate." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:49:    { "path": "docs/AGENT_COORDINATION_LAYER_V1.md", "status": "untracked", "classification": "NEEDS_OWNER_REVIEW", "package": "Agent Coordination Layer V1", "reason": "V1 extension documentation/check package; should not be mixed with V2/source changes." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:50:    { "path": "docs/AGENT_COORDINATION_LAYER_V1.json", "status": "untracked", "classification": "NEEDS_OWNER_REVIEW", "package": "Agent Coordination Layer V1", "reason": "Machine-readable V1 extension record." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:51:    { "path": "scripts/check_agent_coordination_layer.py", "status": "untracked", "classification": "NEEDS_OWNER_REVIEW", "package": "Agent Coordination Layer V1", "reason": "Validator for V1 extension package." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:52:    { "path": "docs/AGENT_MEMORY_CONTEXT_LAYER_V1.md", "status": "untracked", "classification": "NEEDS_OWNER_REVIEW", "package": "Agent Memory Context Layer V1", "reason": "V1 extension documentation/check package; should not be mixed with V2/source changes." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:53:    { "path": "docs/AGENT_MEMORY_CONTEXT_LAYER_V1.json", "status": "untracked", "classification": "NEEDS_OWNER_REVIEW", "package": "Agent Memory Context Layer V1", "reason": "Machine-readable V1 extension record." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:54:    { "path": "scripts/check_agent_memory_context_layer.py", "status": "untracked", "classification": "NEEDS_OWNER_REVIEW", "package": "Agent Memory Context Layer V1", "reason": "Validator for V1 extension package." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:55:    { "path": "docs/SHS_DIRECT_CONNECT_BATCH2_DATA_MODEL.md", "status": "untracked", "classification": "NEEDS_OWNER_REVIEW", "package": "Direct Connect Batch 2", "reason": "V1 extension data model, but it must be owner-confirmed after the direct-source proof correction." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:56:    { "path": "docs/SHS_DIRECT_CONNECT_BATCH2_DATA_MODEL.json", "status": "untracked", "classification": "NEEDS_OWNER_REVIEW", "package": "Direct Connect Batch 2", "reason": "Machine-readable Direct Connect Batch 2 record." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:57:    { "path": "scripts/check_shs_direct_connect_batch2.py", "status": "untracked", "classification": "NEEDS_OWNER_REVIEW", "package": "Direct Connect Batch 2", "reason": "Validator for Direct Connect Batch 2 package." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:58:    { "path": "src/data/shsDirectConnectData.js", "status": "untracked", "classification": "NEEDS_OWNER_REVIEW", "package": "Direct Connect Batch 2", "reason": "Standalone data module; safe-looking but still needs owner V1 scope approval." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:59:    { "path": "services/shf-agent-fabric/main.py", "status": "modified", "classification": "NEEDS_OWNER_REVIEW", "package": "Agent Contract Bridge Route Mount", "reason": "Backend route import/include for agent_contract_bridge_router; not formatting and not safe to bundle blindly." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:60:    { "path": "package.json", "status": "modified", "classification": "DO_NOT_COMMIT", "package": "Production Automation V2", "reason": "Adds check:production-automation-v2; should not enter V1 milestone unless owner approves V2." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:61:    { "path": "docs/PRODUCTION_AUTOMATION_V2.md", "status": "untracked", "classification": "DO_NOT_COMMIT", "package": "Production Automation V2", "reason": "Explicit V2 work; hold out of V1 freeze." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:62:    { "path": "docs/PRODUCTION_AUTOMATION_V2.json", "status": "untracked", "classification": "DO_NOT_COMMIT", "package": "Production Automation V2", "reason": "Explicit V2 work; hold out of V1 freeze." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:63:    { "path": "scripts/check_production_automation_v2.py", "status": "untracked", "classification": "DO_NOT_COMMIT", "package": "Production Automation V2", "reason": "V2 validator; hold out of V1 freeze." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:64:    { "path": "src/data/agents/productionAutomationV2Metrics.js", "status": "untracked", "classification": "DO_NOT_COMMIT", "package": "Production Automation V2", "reason": "V2 data helper; hold out of V1 freeze." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:65:    { "path": "src/data/agents/productionAutomationV2Recipes.js", "status": "untracked", "classification": "DO_NOT_COMMIT", "package": "Production Automation V2", "reason": "V2 data helper; hold out of V1 freeze." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:66:    { "path": "src/data/agents/productionAutomationV2Runs.js", "status": "untracked", "classification": "DO_NOT_COMMIT", "package": "Production Automation V2", "reason": "V2 data helper; hold out of V1 freeze." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:67:    { "path": "src/data/agents/productionAutomationV2Safety.js", "status": "untracked", "classification": "DO_NOT_COMMIT", "package": "Production Automation V2", "reason": "V2 safety helper; hold out of V1 freeze." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:68:    { "path": "src/data/agents/productionAutomationV2Storage.js", "status": "untracked", "classification": "DO_NOT_COMMIT", "package": "Production Automation V2", "reason": "V2 storage helper; hold out of V1 freeze." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:69:    { "path": "src/pages/admin/agents/AgentWorkbenchPage.jsx", "status": "modified", "classification": "DO_NOT_COMMIT", "package": "Production Automation V2", "reason": "Mixes V2 automation UI into Agent Workbench; hold out of V1 freeze." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:70:    { "path": "src/pages/admin/agents/agentWorkbench.css", "status": "modified", "classification": "DO_NOT_COMMIT", "package": "Production Automation V2", "reason": "V2 automation styling; hold out of V1 freeze." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:71:    { "path": "src/pages/admin/agents/components/ProductionAutomationRecipePanel.jsx", "status": "untracked", "classification": "DO_NOT_COMMIT", "package": "Production Automation V2", "reason": "V2 UI component; hold out of V1 freeze." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:72:    { "path": "src/pages/admin/agents/components/ProductionAutomationRunDetail.jsx", "status": "untracked", "classification": "DO_NOT_COMMIT", "package": "Production Automation V2", "reason": "V2 UI component; hold out of V1 freeze." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:73:    { "path": "src/pages/admin/agents/components/ProductionAutomationSafetyPanel.jsx", "status": "untracked", "classification": "DO_NOT_COMMIT", "package": "Production Automation V2", "reason": "V2 UI component; hold out of V1 freeze." },
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:74:    { "path": "src/pages/admin/agents/components/ProductionAutomationV2Panel.jsx", "status": "untracked", "classification": "DO_NOT_COMMIT", "package": "Production Automation V2", "reason": "V2 UI component; hold out of V1 freeze." }
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:84:    "would_commit_now_bundle_unrelated_work": true
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:86:  "mixed_work_risk": "HIGH: a commit right now would bundle V1 audit docs, Agent V1 extension docs/checks, Direct Connect Batch 2, Agent Contract Bridge backend routing, and explicit Production Automation V2 work.",
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:95:  "recommended_commit_packages": [
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:97:      "name": "Package A - Repo Safety Freeze Audit V1",
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:98:      "purpose": "Preserve this safety audit and manual package plan.",
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:106:      "name": "Package B - Prior V1 Commit Packaging Audit",
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:115:      "name": "Package C - Agent V1 Final Readiness Audit",
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:124:      "name": "Package D - Agent Coordination Layer V1 Docs and Check",
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:133:      "name": "Package E - Agent Memory Context Layer V1 Docs and Check",
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:142:      "name": "Package F - Agent Contract Bridge Route Mount",
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:151:      "name": "Package G - Direct Connect Batch 2 Data Model",
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:160:      "name": "Package H - Production Automation V2",
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:162:      "files": ["package.json", "docs/PRODUCTION_AUTOMATION_V2.md", "docs/PRODUCTION_AUTOMATION_V2.json", "scripts/check_production_automation_v2.py", "src/data/agents/productionAutomationV2Metrics.js", "src/data/agents/productionAutomationV2Recipes.js", "src/data/agents/productionAutomationV2Runs.js", "src/data/agents/productionAutomationV2Safety.js", "src/data/agents/productionAutomationV2Storage.js", "src/pages/admin/agents/AgentWorkbenchPage.jsx", "src/pages/admin/agents/agentWorkbench.css", "src/pages/admin/agents/components/ProductionAutomationRecipePanel.jsx", "src/pages/admin/agents/components/ProductionAutomationRunDetail.jsx", "src/pages/admin/agents/components/ProductionAutomationSafetyPanel.jsx", "src/pages/admin/agents/components/ProductionAutomationV2Panel.jsx"],
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:170:    "package.json",
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:188:    "package.json",
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:230:    "# Package A - Repo Safety Freeze Audit V1",
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:235:    "# Package B - Prior V1 Commit Packaging Audit",
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:240:    "# Package C - Agent V1 Final Readiness Audit",
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:245:    "# Package D - Agent Coordination Layer V1 Docs and Check",
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:251:    "# Package E - Agent Memory Context Layer V1 Docs and Check",
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:257:    "# Package F - Agent Contract Bridge Route Mount",
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:262:    "# Package G - Direct Connect Batch 2 Data Model",
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:268:    "# Package H - Production Automation V2 - hold unless owner approves V2",
+docs/REPO_SAFETY_FREEZE_AUDIT_V1.json:269:    "git add package.json docs/PRODUCTION_AUTOMATION_V2.md docs/PRODUCTION_AUTOMATION_V2.json scripts/check_production_automation_v2.py src/data/agents/productionAutomationV2Metrics.js src/data/agents/productionAutomationV2Recipes.js src/data/agents/productionAutomationV2Runs.js src/data/agents/productionAutomationV2Safety.js src/data/agents/productionAutomationV2Storage.js src/pages/admin/agents/AgentWorkbenchPage.jsx src/pages/admin/agents/agentWorkbench.css src/pages/admin/agents/components/ProductionAutomationRecipePanel.jsx src/pages/admin/agents/components/ProductionAutomationRunDetail.jsx src/pages/admin/agents/components/ProductionAutomationSafetyPanel.jsx src/pages/admin/agents/components/ProductionAutomationV2Panel.jsx",
+docs/V1_COMMIT_PACKAGING_AUDIT.md:7:The working tree is not a single clean V1 package. It contains V1-complete audit docs, V1 extension docs/checks, a backend route mount requiring owner review, Direct Connect Batch 2 extension work, and explicit Production Automation V2 work.
+docs/V1_COMMIT_PACKAGING_AUDIT.md:9:V1 readiness decision: **NO** for immediate all-in commit. The repo can reach a clean V1 milestone after owner selects which packages belong in V1 and excludes V2 work from the V1 commit.
+docs/V1_COMMIT_PACKAGING_AUDIT.md:26:- `package.json`: adds `check:production-automation-v2`.
+docs/V1_COMMIT_PACKAGING_AUDIT.md:42:| File | Status | Classification | Package | Reason |
+docs/V1_COMMIT_PACKAGING_AUDIT.md:44:| `package.json` | M | OWNER_REVIEW_REQUIRED | Production Automation V2 | Adds V2 check script; package metadata should travel with owner-approved V2 package. |
+docs/V1_COMMIT_PACKAGING_AUDIT.md:75:## Recommended Commit Packages
+docs/V1_COMMIT_PACKAGING_AUDIT.md:121:Recommendation: owner review required. This imports and mounts `agent_contract_bridge_router`; it is backend/routing work and should not be bundled silently with docs.
+docs/V1_COMMIT_PACKAGING_AUDIT.md:138:- `package.json`
+docs/V1_COMMIT_PACKAGING_AUDIT.md:163:- package scripts
+docs/V1_COMMIT_PACKAGING_AUDIT.md:170:Recommended separation: use the packages above and do not stage all changed files together.
+docs/V1_COMMIT_PACKAGING_AUDIT.md:223:- `package.json` adds a V2 check script and should travel with the V2 package only if approved.
+docs/V1_COMMIT_PACKAGING_AUDIT.md:225:- The repo is not V1-ready for one broad commit until packages are separated.
+docs/V1_COMMIT_PACKAGING_AUDIT.md:253:V1 can become ready after the owner approves exact packages and excludes or separately approves V2 work.
+src/router/AdminRoutes.jsx.bak_cleanup_20260513_103643:30:import HubBundleBuilderPage from "@/pages/hub/HubBundleBuilderPage.jsx";
+src/router/AdminRoutes.jsx.bak_cleanup_20260513_103643:114:        <Route path="/hub/bundles" element={protect("/hub/bundles", <HubBundleBuilderPage />)} />
+docs/career/data-center-employer-validation/outreach/DATA_CENTER_OUTREACH_WAVE_PLAN_V1.md:44:2. Send the employer validation package once they confirm interest.
+src/utils/civicTheme.js:9:// application, since Civic is a separate Vite HTML entrypoint/bundle with
+docs/SHF_IMPACT_CANONICAL_POPULATION_CONTRACT.md:150:flag controls unauthenticated raw Truth claim and package routes. The separate
+services/shf-agent-fabric/services/audit_verification_service.py:14:    "evidence_package",
+services/shf-agent-fabric/services/audit_verification_service.py:30:    "evidence_package",
+services/shf-agent-fabric/services/audit_verification_service.py:306:                    "input_ref": "truth/package/claim_001",
+apps/shs-api/src/domain/credentials/service/credential-service.ts:210:// --- Reads (entitlement-scoped) ---
+src/router/AdminRoutes.jsx.bak_route_protection_20260513_072505:27:import HubBundleBuilderPage from "@/pages/hub/HubBundleBuilderPage.jsx";
+src/router/AdminRoutes.jsx.bak_route_protection_20260513_072505:60:        <Route path="/hub/bundles" element={<HubBundleBuilderPage />} />
+docs/SHF_CALENDAR_INTELLIGENCE.md:18:re-implements entitlement (see `docs/SHF_CALENDAR_PROJECTION_SERVICE.md`).
+docs/DATA_AGGREGATOR_LAYER_V1.md:67:- Evidence Package.
+services/shf-agent-fabric/services/internal_service_identity.py:103:        # AFCC-3 Phase 6: artifact storage readiness (read-only catalog lookup).
+docs/career/data-center-employer-validation/outreach/DATA_CENTER_WAVE1_FINAL_SEND_PACKET_V1.md:30:### Attachment package
+docs/career/data-center-employer-validation/outreach/DATA_CENTER_WAVE1_FINAL_SEND_PACKET_V1.md:34:3. Full Employer Validation Package (`../DATA_CENTER_EMPLOYER_VALIDATION_PACKAGE_V1.md`)
+docs/career/data-center-employer-validation/outreach/DATA_CENTER_WAVE1_FINAL_SEND_PACKET_V1.md:54:### Attachment package
+docs/career/data-center-employer-validation/outreach/DATA_CENTER_WAVE1_FINAL_SEND_PACKET_V1.md:58:3. Full Employer Validation Package (`../DATA_CENTER_EMPLOYER_VALIDATION_PACKAGE_V1.md`)
+docs/career/data-center-employer-validation/outreach/DATA_CENTER_WAVE1_FINAL_SEND_PACKET_V1.md:82:### Attachment package
+docs/career/data-center-employer-validation/outreach/DATA_CENTER_WAVE1_FINAL_SEND_PACKET_V1.md:86:3. Full Employer Validation Package (`../DATA_CENTER_EMPLOYER_VALIDATION_PACKAGE_V1.md`)
+docs/career/data-center-employer-validation/outreach/DATA_CENTER_WAVE1_FINAL_SEND_PACKET_V1.md:90:**Deep Technical (Part 2) decision:** do not include — the Review Scope sheet already marks Part 2 as "optional/selective" and not expected from this reviewer type; offering it upfront would misrepresent the ask as more technical than intended for a curriculum/credential-alignment review.
+src/router/AdminRoutes.jsx.bak_access_redirect_notice_20260513_080116:30:import HubBundleBuilderPage from "@/pages/hub/HubBundleBuilderPage.jsx";
+src/router/AdminRoutes.jsx.bak_access_redirect_notice_20260513_080116:95:        <Route path="/hub/bundles" element={protect("/hub/bundles", <HubBundleBuilderPage />)} />
+docs/SHF_CALENDAR_PROJECTION_SERVICE.md:27:| Calendar Event Type | Owning Domain | Canonical Source Table / Service | Projection Adapter | Completion Owner | Entitlement Owner |
+docs/SHF_CALENDAR_PROJECTION_SERVICE.md:54:## 5. Entitlement
+docs/SHF_CALENDAR_PROJECTION_SERVICE.md:59:`ProjectService.listScheduleForActor`, `listCredentialsForActor`) — entitlement logic is never duplicated.
+docs/SHF_CALENDAR_PROJECTION_SERVICE.md:151:source domain directly and never re-implements entitlement — see
+docs/AGENT_CANONICAL_WORKFORCE_CAPABILITY_MATRIX_V1.json:169:      "role": "Development Library support, template/package recommendation, build packet preparation support, and reusable asset recommendations.",
+docs/AGENT_CANONICAL_WORKFORCE_CAPABILITY_MATRIX_V1.json:174:      "default_task_types": ["development_library_support", "template_package_recommendation", "build_packet_preparation_support", "reusable_asset_recommendation"],
+docs/career/data-center-employer-validation/outreach/DATA_CENTER_WAVE1_RESPONSE_HANDLING_GUIDE_V1.md:7:- **What SHF should do next:** send the full attachment package (per the Final Send Packet's per-organization list); move the Outreach Log's `contact_status` to reflect a response and begin tracking `reviewer_identity` once a specific person is named by them.
+docs/career/data-center-employer-validation/outreach/DATA_CENTER_WAVE1_RESPONSE_HANDLING_GUIDE_V1.md:14:- **What SHF should do next:** answer their specific questions using only material already in the approved package/questionnaire — do not improvise new claims. Offer a call or written follow-up, whichever they prefer.
+docs/career/data-center-employer-validation/outreach/DATA_CENTER_WAVE1_RESPONSE_HANDLING_GUIDE_V1.md:21:- **What SHF should do next:** politely ask if they can redirect to the appropriate person/department; do not re-send the full package to a new address without confirming it first.
+docs/career/data-center-employer-validation/outreach/DATA_CENTER_WAVE1_RESPONSE_HANDLING_GUIDE_V1.md:42:- **What SHF should do next:** thank them, clarify that a review is still the specific ask being made right now, and separately note their partnership interest for a future, distinct conversation (per the Partnership Options section of the main package) — do not let partnership interest substitute for the review itself.
+docs/career/data-center-employer-validation/outreach/DATA_CENTER_WAVE1_RESPONSE_HANDLING_GUIDE_V1.md:51:- **What must NOT be inferred:** that work-based-learning interest constitutes any review, validation, or commitment — per the package's own repeated statement, work-based learning is explicitly not part of this request.
+docs/STUDIO_V1_SOURCE_AND_LEGACY_INVENTORY.md:15:| assignment routes/services and completion-policy adapters | CANONICAL | Assignment entitlement, Studio requirement evaluation, and whole-policy completion authority. |
+src/utils/arcadeTheme.js:10:// Arcade and Career are separate Vite HTML entrypoints/bundles with no
+src/router/StoreRoutes.jsx:5:import StoreCatalogShell from "@/layouts/store/StoreCatalogShell.jsx";
+src/router/StoreRoutes.jsx:12:const StoreCatalog = lazy(() =>
+src/router/StoreRoutes.jsx:13:  import("@/pages/store/StoreCatalog.jsx")
+src/router/StoreRoutes.jsx:31:        {/* Catalog gets its own new sidebar+header shell (see
+src/router/StoreRoutes.jsx:32:            src/layouts/store/StoreCatalogShell.jsx) — a sibling route
+src/router/StoreRoutes.jsx:36:            unaffected: still /store.html#/catalog. */}
+src/router/StoreRoutes.jsx:38:          path="/catalog"
+src/router/StoreRoutes.jsx:40:            <StoreCatalogShell>
+src/router/StoreRoutes.jsx:41:              <StoreCatalog />
+src/router/StoreRoutes.jsx:42:            </StoreCatalogShell>
+src/router/StoreRoutes.jsx:48:            Catalog. */}
+src/router/StoreRoutes.jsx:52:            <StoreCatalogShell>
+src/router/StoreRoutes.jsx:54:            </StoreCatalogShell>
+src/router/StoreRoutes.jsx:60:          {/* Default: go to catalog */}
+src/router/StoreRoutes.jsx:61:          <Route index element={<Navigate to="catalog" replace />} />
+src/router/StoreRoutes.jsx:71:          <Route path="*" element={<Navigate to="catalog" replace />} />
+docs/SHF_HYBRID_PHASE_5_FUNDING_GRANTS_RESTRICTED_FUNDS_V1.md:5:Funding / Grants owns canonical grant award records and program allocations. It does not own Organization, Program, Evidence, Truth, Service Entitlement, Onboarding, Reporting, or accounting-ledger state.
+docs/SHF_HYBRID_PHASE_5_FUNDING_GRANTS_RESTRICTED_FUNDS_V1.md:37:Funding actions do not create Evidence, Truth claims, completions, credentials, Studio state, service entitlements, or network relationships.
+docs/SHF_HYBRID_PHASE_5_FUNDING_GRANTS_RESTRICTED_FUNDS_V1.md:39:## Entitlement And Onboarding Boundary
+docs/SHF_HYBRID_PHASE_5_FUNDING_GRANTS_RESTRICTED_FUNDS_V1.md:41:Network membership, onboarding activation, and service entitlements do not imply funding. Funding records do not grant service access or alter onboarding status.
+docs/SHF_HYBRID_PHASE_5_FUNDING_GRANTS_RESTRICTED_FUNDS_V1.md:61:Phase 6 may consume Organization, Network Relationship, Service Catalog, Organization Entitlement, activated onboarding state, and Funding relationships to implement shared-service operations and agreements. Phase 5 does not implement Phase 6.
+docs/MASTER_LAYER_REGISTRY_V1_COMPLETION_AUDIT.md:7:Core Truth Spine, Oracle, AI Guardrails, Game Theory, Source Registry, Data Federation, Data Aggregator, Data Normalization, Evidence Package, Data Verification, Data Approval, Reports, Watchtower, and major identity/admin surfaces are substantially complete. The shortest path to ecosystem V1 is not new product work; it is formalizing the remaining infrastructure/governance boundary layers that already have partial implementation signals.
+docs/MASTER_LAYER_REGISTRY_V1_COMPLETION_AUDIT.md:33:- Evidence Package Layer
+docs/MASTER_LAYER_REGISTRY_V1_COMPLETION_AUDIT.md:61:- Program Registry
+docs/MASTER_LAYER_REGISTRY_V1_COMPLETION_AUDIT.md:110:| Evidence Package Layer | COMPLETE_V1 | Data Operations | docs 2, service 1, router 1, tests 1, check, reports, watchtower |  | Keep under governance; no immediate V1 work beyond routine hardening. | P4 |
+docs/MASTER_LAYER_REGISTRY_V1_COMPLETION_AUDIT.md:150:| Program Registry | MOSTLY_COMPLETE | Programs | tests 3 | Meaningful implementation exists, but formal layer-specific V1 doc/check/test coverage is incomplete | Add or finish formal V1 doc/check/test only where needed; avoid rebuilding mature behavior. | P3 |
+docs/MASTER_LAYER_REGISTRY_V1_COMPLETION_AUDIT.md:209:- Program Registry
+docs/MASTER_LAYER_REGISTRY_V1_COMPLETION_AUDIT.md:237:- No commit, staging, restore, reset, delete, move, source edit, route edit, service edit, or package edit was performed.
+docs/career/data-center-employer-validation/outreach/wave1/COLUMBUS_STATE_DATA_CENTER_VALIDATION_COVER_LETTER_V1.md:3:**Draft only. Owner send approval: PENDING OWNER SEND APPROVAL.** Accompanies the full [Employer Validation Package](../../DATA_CENTER_EMPLOYER_VALIDATION_PACKAGE_V1.md) once Columbus State has agreed to participate.
+docs/career/data-center-employer-validation/outreach/wave1/COLUMBUS_STATE_DATA_CENTER_VALIDATION_COVER_LETTER_V1.md:17:Silicon Heartland Foundation (SHF) is a nonprofit education organization operating a K-12 Career Center in Columbus. This letter accompanies a package asking for your review of our Data Center & AI Infrastructure curriculum, grades 6-12.
+services/shf-agent-fabric/services/contract_runtime/__init__.py:3:This package does not own Identity, Command Bus, Oracle, Truth Spine, or audit.
+docs/SHS_DIRECT_CONNECT_BATCH2_DIRECT_SOURCE_PROOF.md:25:- Validator script and package check.
+docs/SHS_DIRECT_CONNECT_BATCH2_DIRECT_SOURCE_PROOF.md:31:The model includes source owner, source reference, Source Registry reference, Evidence Package reference, related claim/metric/report/client/project, verification pathway, verification status, approval status, readiness score, privacy status, ownership status, visibility, reporting/public safety flags, blockers, warnings, and audit events.
+docs/SHS_DIRECT_CONNECT_BATCH2_DIRECT_SOURCE_PROOF.md:87:- 20 if Evidence Package reference is missing.
+docs/SHS_DIRECT_CONNECT_BATCH2_DIRECT_SOURCE_PROOF.md:124:- Evidence Package
+docs/SHS_DIRECT_CONNECT_BATCH2_DIRECT_SOURCE_PROOF.md:217:- Public approval and Truth Spine package attachment remain future gated work.
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:139:  async getReviewPackage(actor: any, evidenceId: string) {
+docs/AGENT_FABRIC_REALITY_SCAN_V1.md:40:- `package.json`
+docs/career/data-center-employer-validation/outreach/wave1/QTS_DATA_CENTER_VALIDATION_COVER_LETTER_V1.md:3:**Draft only. Owner send approval: PENDING OWNER SEND APPROVAL.** Accompanies the full [Employer Validation Package](../../DATA_CENTER_EMPLOYER_VALIDATION_PACKAGE_V1.md) once QTS has agreed to participate — not a substitute for it.
+docs/career/data-center-employer-validation/outreach/wave1/QTS_DATA_CENTER_VALIDATION_COVER_LETTER_V1.md:16:Silicon Heartland Foundation (SHF) is a nonprofit education organization operating a K-12 Career Center in Central Ohio. This letter accompanies a package asking for your professional review of our Data Center & AI Infrastructure curriculum, grades 6-12.
+services/shf-agent-fabric/services/oracle_service.py:9:from services.truth_spine_service import build_truth_package
+services/shf-agent-fabric/services/oracle_service.py:137:def _claim_package_for_case(claim_id: str) -> Optional[Dict[str, Any]]:
+services/shf-agent-fabric/services/oracle_service.py:138:    return build_truth_package(claim_id)
+services/shf-agent-fabric/services/oracle_service.py:141:def _has_metric_conflict(packages: List[Dict[str, Any]]) -> bool:
+services/shf-agent-fabric/services/oracle_service.py:143:    for package in packages:
+services/shf-agent-fabric/services/oracle_service.py:144:        claim = package.get("claim") if isinstance(package.get("claim"), dict) else {}
+services/shf-agent-fabric/services/oracle_service.py:155:def _has_text_conflict(packages: List[Dict[str, Any]]) -> bool:
+services/shf-agent-fabric/services/oracle_service.py:157:        _clean_string((package.get("claim") or {}).get("claim_text")).lower()
+services/shf-agent-fabric/services/oracle_service.py:158:        for package in packages
+services/shf-agent-fabric/services/oracle_service.py:159:        if isinstance(package.get("claim"), dict)
+services/shf-agent-fabric/services/oracle_service.py:168:def _confidence(packages: List[Dict[str, Any]], warnings: List[str], missing_count: int) -> int:
+services/shf-agent-fabric/services/oracle_service.py:169:    if not packages:
+services/shf-agent-fabric/services/oracle_service.py:171:    average_trace = round(sum(_int_0_100(package.get("trace_coverage")) for package in packages) / len(packages))
+services/shf-agent-fabric/services/oracle_service.py:172:    public_bonus = 8 if all(package.get("public_approved") is True for package in packages) else 0
+services/shf-agent-fabric/services/oracle_service.py:173:    ready_bonus = 10 if all(package.get("report_ready") is True for package in packages) else 0
+services/shf-agent-fabric/services/oracle_service.py:179:def _evidence_summary(packages: List[Dict[str, Any]], missing_claim_ids: List[str]) -> Dict[str, Any]:
+services/shf-agent-fabric/services/oracle_service.py:181:        "package_count": len(packages),
+services/shf-agent-fabric/services/oracle_service.py:183:        "package_hashes": [package.get("package_hash") for package in packages if package.get("package_hash")],
+services/shf-agent-fabric/services/oracle_service.py:184:        "claim_ids": [package.get("claim_id") for package in packages],
+services/shf-agent-fabric/services/oracle_service.py:185:        "report_ready_count": len([package for package in packages if package.get("report_ready") is True]),
+services/shf-agent-fabric/services/oracle_service.py:186:        "public_approved_count": len([package for package in packages if package.get("public_approved") is True]),
+services/shf-agent-fabric/services/oracle_service.py:196:    packages: List[Dict[str, Any]] = []
+services/shf-agent-fabric/services/oracle_service.py:201:        package = _claim_package_for_case(claim_id)
+services/shf-agent-fabric/services/oracle_service.py:202:        if not package:
+services/shf-agent-fabric/services/oracle_service.py:204:            warnings.append(f"missing_truth_package:{claim_id}")
+services/shf-agent-fabric/services/oracle_service.py:206:        packages.append(package)
+services/shf-agent-fabric/services/oracle_service.py:207:        for warning in package.get("warnings") or []:
+services/shf-agent-fabric/services/oracle_service.py:213:        package
+services/shf-agent-fabric/services/oracle_service.py:214:        for package in packages
+services/shf-agent-fabric/services/oracle_service.py:215:        if package.get("verification_status") != "verified" or package.get("report_ready") is not True
+services/shf-agent-fabric/services/oracle_service.py:223:        reasoning = "One or more Truth Packages could not be found."
+services/shf-agent-fabric/services/oracle_service.py:224:    elif _has_metric_conflict(packages) or _has_text_conflict(packages):
+services/shf-agent-fabric/services/oracle_service.py:226:        reasoning = "Truth Packages contain conflicting metric values or contradictory claim text signals."
+services/shf-agent-fabric/services/oracle_service.py:227:    elif packages and all(
+services/shf-agent-fabric/services/oracle_service.py:228:        package.get("verification_status") == "verified"
+services/shf-agent-fabric/services/oracle_service.py:229:        and package.get("report_ready") is True
+services/shf-agent-fabric/services/oracle_service.py:230:        and package.get("trust_level") in {"verified", "public_approved"}
+services/shf-agent-fabric/services/oracle_service.py:231:        for package in packages
+services/shf-agent-fabric/services/oracle_service.py:234:        reasoning = "All included Truth Packages are verified or public-approved and report-ready."
+services/shf-agent-fabric/services/oracle_service.py:235:    elif packages and len(draft_like) >= max(1, round(len(packages) / 2)):
+services/shf-agent-fabric/services/oracle_service.py:242:    confidence = min(_confidence(packages, warnings, len(missing_claim_ids)), 30) if decision == "insufficient_evidence" and not packages else _confidence(packages, warnings, len(missing_claim_ids))
+services/shf-agent-fabric/services/oracle_service.py:249:        "evidence_summary": _evidence_summary(packages, missing_claim_ids),
+services/shf-agent-fabric/services/oracle_service.py:250:        "claim_packages": packages,
+src/router/AdminRoutes.jsx.bak_safe_redirect_20260513_084112:30:import HubBundleBuilderPage from "@/pages/hub/HubBundleBuilderPage.jsx";
+src/router/AdminRoutes.jsx.bak_safe_redirect_20260513_084112:125:        <Route path="/hub/bundles" element={protect("/hub/bundles", <HubBundleBuilderPage />)} />
+apps/shs-api/src/domain/prepare-prove/api/routes.ts:23:    try { return res.json({ ok: true, data: await service.getReviewPackage(req.user, req.params.evidenceId) }); } catch (error: any) { return reject(res, error, error?.message === "evidence_not_found" ? 404 : 403); }
+docs/SHF_REPORTING_SURFACE_REGISTRY.v1.json:36:    {"surface_id":"surface.impact.ohio","surface":"SHF Impact Ohio Map","route":"/foundation/impact","component_file":"src/pages/shf-command/components/SHFImpactOhioMap.jsx","kpi_displayed":"county impact values","current_formula":"static map data","current_source":"static frontend data","current_storage":"bundle/static","producer":"impact.ohio.static","producer_status":"static","ingestion_route":null,"evidence_path":null,"source_verification":"missing","truth_claim_type":null,"truth_predicate":null,"metric_id":null,"metric_version":null,"reporting_service":null,"scope":"public","provenance_status":"insufficient","browser_storage":"UI_STATE","data_classification":"static","migration_status":"PROVENANCE_INSUFFICIENT","required_action":"identify real county producer","blocker":"county data provenance","code_evidence":["src/pages/shf-command/components/SHFImpactOhioMap.jsx"]},
+docs/SHF_REPORTING_SURFACE_REGISTRY.v1.json:43:    {"surface_id":"surface.hub.intelligence","surface":"Hub Intelligence Summary","route":"/hub/intelligence","component_file":"src/pages/hub/HubIntelligencePage.jsx","kpi_displayed":"risk/scored counts","current_formula":"array filters","current_source":"Hub feedback/scored bundles","current_storage":"frontend/API mix","producer":"hub.intelligence","producer_status":"noncanonical","ingestion_route":null,"evidence_path":null,"source_verification":"missing","truth_claim_type":null,"truth_predicate":null,"metric_id":null,"metric_version":null,"reporting_service":null,"scope":"internal","provenance_status":"insufficient","browser_storage":"CACHE_ONLY","data_classification":"legacy","migration_status":"METRIC_REQUIRED","required_action":"define operational/advisory boundary","blocker":"canonical metric policy","code_evidence":["src/pages/hub/HubIntelligencePage.jsx"]},
+docs/SHF_REPORTING_SURFACE_REGISTRY.v1.json:48:    {"surface_id":"surface.iep.command","surface":"IEP Command Center","route":"/iep-command-v2","component_file":"src/pages/iep-command-v2/IEPCommandCenterV2.jsx","kpi_displayed":"county/IEP metrics","current_formula":"static county profiles and client calculations","current_source":"countyProfiles","current_storage":"static bundle","producer":"iep.fabricated.student.data","producer_status":"fabricated/static","ingestion_route":null,"evidence_path":null,"source_verification":"not applicable","truth_claim_type":null,"truth_predicate":null,"metric_id":null,"metric_version":null,"reporting_service":null,"scope":"restricted","provenance_status":"absent","browser_storage":"DEMO_ONLY","data_classification":"fabricated","migration_status":"REMOVE","required_action":"do not use for institutional reporting","blocker":"sensitive producer contract","code_evidence":["src/pages/iep-command-v2/countyProfiles.js"]},
+docs/career/data-center-employer-validation/outreach/wave1/IBEW_683_DATA_CENTER_VALIDATION_COVER_LETTER_V1.md:3:**Draft only. Owner send approval: PENDING OWNER SEND APPROVAL.** Accompanies the full [Employer Validation Package](../../DATA_CENTER_EMPLOYER_VALIDATION_PACKAGE_V1.md) once the Electrical Trades Center has agreed to participate.
+docs/career/data-center-employer-validation/outreach/wave1/IBEW_683_DATA_CENTER_VALIDATION_COVER_LETTER_V1.md:18:Silicon Heartland Foundation (SHF) is a nonprofit education organization operating a K-12 Career Center in Columbus. This letter accompanies a package asking for your review of the electrical-infrastructure portion of our Data Center & AI Infrastructure curriculum, grades 6-12.
+docs/SHS_TRACKING_INTELLIGENCE_LAYER_V1.json:155:    "package.json",
+services/shf-agent-fabric/services/ai_guardrails_service.py:9:from services.truth_spine_service import build_truth_package
+services/shf-agent-fabric/services/ai_guardrails_service.py:128:def _truth_package_status(claim_ids: List[str]) -> Dict[str, Any]:
+services/shf-agent-fabric/services/ai_guardrails_service.py:129:    packages: List[Dict[str, Any]] = []
+services/shf-agent-fabric/services/ai_guardrails_service.py:131:    package_warnings: List[str] = []
+services/shf-agent-fabric/services/ai_guardrails_service.py:133:        package = build_truth_package(claim_id)
+services/shf-agent-fabric/services/ai_guardrails_service.py:134:        if not package:
+services/shf-agent-fabric/services/ai_guardrails_service.py:137:        packages.append(package)
+services/shf-agent-fabric/services/ai_guardrails_service.py:138:        for warning in package.get("warnings") or []:
+services/shf-agent-fabric/services/ai_guardrails_service.py:139:            package_warnings.append(f"{claim_id}:{warning}")
+services/shf-agent-fabric/services/ai_guardrails_service.py:141:    all_verified = bool(packages) and not missing_claim_ids and all(
+services/shf-agent-fabric/services/ai_guardrails_service.py:142:        package.get("verification_status") == "verified" and package.get("trust_level") in {"verified", "public_approved"}
+services/shf-agent-fabric/services/ai_guardrails_service.py:143:        for package in packages
+services/shf-agent-fabric/services/ai_guardrails_service.py:145:    all_report_ready = bool(packages) and all(package.get("report_ready") is True for package in packages)
+services/shf-agent-fabric/services/ai_guardrails_service.py:146:    all_public_approved = bool(packages) and all(package.get("public_approved") is True for package in packages)
+services/shf-agent-fabric/services/ai_guardrails_service.py:149:        "packages": packages,
+services/shf-agent-fabric/services/ai_guardrails_service.py:151:        "warnings": package_warnings,
+services/shf-agent-fabric/services/ai_guardrails_service.py:179:    truth_status = _truth_package_status(check["claim_ids"])
+services/shf-agent-fabric/services/ai_guardrails_service.py:210:            warnings.append("public_publish_requires_public_approved_truth_package")
+services/shf-agent-fabric/services/ai_guardrails_service.py:219:            warnings.append("report_export_requires_report_ready_truth_package")
+services/shf-agent-fabric/services/ai_guardrails_service.py:242:        warnings.append("missing_truth_package")
+services/shf-agent-fabric/services/ai_guardrails_service.py:255:        reason = "AI output uses verified/public/official language without verified Truth Spine packages."
+services/shf-agent-fabric/services/ai_guardrails_service.py:282:        "truth_package_summary": {
+services/shf-agent-fabric/services/ai_guardrails_service.py:284:            "package_hashes": [package.get("package_hash") for package in truth_status["packages"] if package.get("package_hash")],
+docs/career/data-center-employer-validation/outreach/wave1/QTS_DATA_CENTER_VALIDATION_OUTREACH_EMAIL_V1.md:24:If this is of interest, I'll follow up with the full package and questionnaire. There's no deadline — we're looking for substantive, honest feedback, including anything you think should be corrected, removed, or strengthened. If this falls outside your team's scope, please let us know and we won't follow up further.
+src/router/AdminRoutes.jsx.bak_login_identity_20260513_071933:27:import HubBundleBuilderPage from "@/pages/hub/HubBundleBuilderPage.jsx";
+src/router/AdminRoutes.jsx.bak_login_identity_20260513_071933:60:        <Route path="/hub/bundles" element={<HubBundleBuilderPage />} />
+docs/SHF_CAREER_EVENTS_OPPORTUNITIES_FOUNDATION.md:26:- **Store Catalog** (`src/data/catalogOfferings.js`, `StoreCatalog.jsx`): audited and confirmed unrelated — it models purchasable organizational offerings (programs, curriculum bundles), not learner-facing internships/scholarships. Not reused.
+docs/SHF_CAREER_EVENTS_OPPORTUNITIES_FOUNDATION.md:64:**Built in Phase 5.** No FK link to `careers`/`career_families` was added in this phase (4) — the physical blocker (migration 033 being absent from `shs_dev`) was resolved in Phase 4.1, and the linkage itself was built in Phase 5: `career_events`/`opportunities` gained optional `career_id`/`career_family_id` columns (migration 049), plus a server-computed `pathwayRelevant` boolean for student-tier reads, deterministically derived from the learner's own `ACTIVE Enrollment → Program → Career`. Career relevance remains strictly a category/relevance signal, never an access-control rule — the audience-scope entitlement described above is unchanged and unaffected by it. See `docs/SHF_CAREER_PATHWAY_INTEGRATION.md` for full detail.
+services/shf-agent-fabric/services/api_gateway_service.py:23:    "/evidence-package",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:121:      ".restore_points/stable_base_20260422_093031/src/_archive/pages.sales.20251107-000126/Bundles.jsx",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:177:      ".restore_points/stable_base_20260422_093031/src/adapters/catalog.js",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:242:      ".restore_points/stable_base_20260422_093031/src/assets/brand/catalog-hero-16x9-1280.jpg",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:243:      ".restore_points/stable_base_20260422_093031/src/assets/brand/catalog-hero-16x9-1920.jpg",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:244:      ".restore_points/stable_base_20260422_093031/src/assets/brand/catalog-hero-2x1-1280.jpg",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:245:      ".restore_points/stable_base_20260422_093031/src/assets/brand/catalog-hero-2x1-1920.jpg",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:246:      ".restore_points/stable_base_20260422_093031/src/assets/brand/catalog-hero-2x1-2560.jpg",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:247:      ".restore_points/stable_base_20260422_093031/src/assets/brand/catalog-hero-placeholder-32x16.png",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:254:      ".restore_points/stable_base_20260422_093031/src/assets/catalog/sky-layer.jpg/ChatGPT Image Nov 18, 2025, 12_19_06 PM.png",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:359:      ".restore_points/stable_base_20260422_093031/src/components/catalog/CatalogCard.jsx",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:360:      ".restore_points/stable_base_20260422_093031/src/components/catalog/CatalogFilterBar.jsx",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:361:      ".restore_points/stable_base_20260422_093031/src/components/catalog/CatalogGrid.jsx",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:362:      ".restore_points/stable_base_20260422_093031/src/components/catalog/CatalogHeader.jsx",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:363:      ".restore_points/stable_base_20260422_093031/src/components/catalog/SubmitProofModal.jsx",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:715:      ".restore_points/stable_base_20260422_093031/src/context/EntitlementsContext.jsx",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:734:      ".restore_points/stable_base_20260422_093031/src/data/civic/missions/examples/evidence.bundle.example.json",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:785:      ".restore_points/stable_base_20260422_093031/src/entries/catalog.main.jsx",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1040:      ".restore_points/stable_base_20260422_093031/src/pages/admin/reporting/ReportingCommandSurface.jsx.bak_oracle_truth_package_20260418_122827",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1105:      ".restore_points/stable_base_20260422_093031/src/pages/catalog/Catalog.jsx",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1106:      ".restore_points/stable_base_20260422_093031/src/pages/catalog/CatalogLanding.jsx",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:1911:      ".restore_points/stable_base_20260422_093031/src/pages/store/StoreCatalog.jsx",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2014:      ".restore_points/stable_base_20260422_093031/src/shared/rewards/catalog.arcade.js",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2015:      ".restore_points/stable_base_20260422_093031/src/shared/rewards/catalog.career.js",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2016:      ".restore_points/stable_base_20260422_093031/src/shared/rewards/catalog.civic.js",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2017:      ".restore_points/stable_base_20260422_093031/src/shared/rewards/catalog.js",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2098:      ".restore_points/stable_base_20260422_093031/src/styles/catalog.css",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2292:      "_backup_post_v1_bundle_patch_10_20260523_124057/src/App.jsx",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2293:      "_backup_post_v1_bundle_patch_12_20260523_125033/src/pages/exchange/unified-truth/SHSUnifiedTruthShell.jsx",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2294:      "_backup_post_v1_bundle_patch_12b_20260523_125225/src/pages/exchange/unified-truth/SHSUnifiedTruthShell.jsx",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2295:      "_backup_post_v1_bundle_patch_15_20260523_130227/vite.config.js",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2296:      "_backup_post_v1_bundle_patch_15_20260523_130524/vite.config.js",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2297:      "_backup_post_v1_bundle_patch_15b_20260523_131232/vite.config.js",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2298:      "_backup_post_v1_bundle_patch_17_20260523_132910/vite.config.js",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2299:      "_backup_post_v1_bundle_patch_22_20260523_142610/src/entries/capital.main.jsx",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2300:      "_backup_post_v1_bundle_patch_22_20260523_142610/src/pages/exchange/ExchangeLayout.jsx",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2301:      "_backup_post_v1_bundle_patch_22_20260523_142610/src/pages/exchange/SHSExchangeMissionControl.jsx",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2302:      "_backup_post_v1_bundle_patch_22_20260523_142610/src/routes/exchangeRoutes.jsx",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2303:      "_backup_post_v1_bundle_patch_22_20260523_142950/src/entries/capital.main.jsx",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2304:      "_backup_post_v1_bundle_patch_22_20260523_142950/src/pages/exchange/ExchangeLayout.jsx",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2305:      "_backup_post_v1_bundle_patch_22_20260523_142950/src/pages/exchange/SHSExchangeMissionControl.jsx",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2306:      "_backup_post_v1_bundle_patch_22_20260523_142950/src/routes/exchangeRoutes.jsx",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2307:      "_backup_post_v1_bundle_patch_24_20260523_144827/vite.config.js",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2308:      "_backup_post_v1_bundle_patch_26_20260523_145742/src/pages/exchange/unified-truth/components/SHSOperationalMapboxMap.jsx",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2309:      "_backup_post_v1_bundle_patch_2_20260523_121401/src/shared/hardening/bundleImportSourceAudit.json",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2310:      "_backup_post_v1_bundle_patch_30_20260523_152124/src/shared/hardening/shsV1LayerReadinessRegistry.json",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2311:      "_backup_post_v1_bundle_patch_4_20260523_122050/src/components/globe/OperationalMap.jsx",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2312:      "_backup_post_v1_bundle_patch_7_20260523_122909/src/routes/exchangeRoutes.jsx",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2372:      "_backup_post_v1_bundle_patch_22_20260523_142950/src/shared/hardening/capitalExchangePreloadBoundaryPatchReport.json",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2415:      "_production_archive/v1-hardening/backup-file/src/pages/admin/reporting/ReportingCommandSurface.jsx.bak_oracle_truth_package_20260418_122827",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2428:      "_production_archive/v1-hardening/backup-file/src/pages/hub/HubBundleBuilderPage.jsx.bak_v1b_shs_reporting_20260509_231604",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2430:      "_production_archive/v1-hardening/backup-file/src/pages/hub/hub-bundle-builder-page.css.bak_v1b_shs_reporting_20260509_231604",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2809:      "_production_archive/v1-hardening/backup-file/src/pages/hub/HubBundleBuilderPage.jsx.bak_full_walkthrough_tours_20260510_163241",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2810:      "_production_archive/v1-hardening/backup-file/src/pages/hub/HubBundleBuilderPage.jsx.bak_real_bundle_20260509_230833",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2811:      "_production_archive/v1-hardening/backup-file/src/pages/hub/HubBundleBuilderPage.jsx.bak_shared_data_20260510_105304",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2812:      "_production_archive/v1-hardening/backup-file/src/pages/hub/HubBundleBuilderPage.jsx.bak_shared_storage_20260510_113945",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2840:      "_production_archive/v1-hardening/backup-file/src/pages/hub/hub-bundle-builder-page.css.bak_force_logo_visible_20260510_103240",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:2852:      "_production_archive/v1-hardening/backup-file/src/pages/hub/shared/hubTourSteps.js.bak_bundles_v2_20260513_100955",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:3271:      "_production_archive/v1-hardening/broken-or-recovery-file/src/assets/brand/catalog-hero-placeholder-32x16.png",
+docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json:3394:    "package_files_changed": false,
+docs/STUDIO_V1_PLUS_PHASE_11_TEAM_PROJECT_AUTHORITY_V1.md:5:Phase 11 adds a minimal durable Team Project Authority for Studio. Teams and memberships are scoped to an organization and tenant; Studio projects explicitly identify `INDIVIDUAL` or `TEAM` ownership. Team authority controls access and contribution only. Review, QA, Completion, Evidence, Credential, Portfolio, Deployment, Agent Package, Registry, and Notification remain separate authorities.
+docs/STUDIO_V1_PLUS_PHASE_11_TEAM_PROJECT_AUTHORITY_V1.md:23:QA, Review, Delivery, Evidence, Completion, Credential, Portfolio, Website Deployment, Agent Package, Registry, and Notification do not receive automatic facts from team membership or team creation. A Team project may enter those domains only through their existing explicit APIs and policies. Team membership alone cannot complete learners or issue credentials. Phase 12 owns collaborative revision identity and Phase 13 owns real-time collaboration.
+docs/STUDIO_V1_PLUS_PHASE_11_TEAM_PROJECT_AUTHORITY_V1.md:31:Team operations emit bounded `studio.team.created`, `studio.team.member_added`, and `studio.team.member_removed` outbox events with organization and tenant scope. Event identities are operation-specific and idempotent through the existing outbox contract. Team actions directly mutate only `studio_teams`, `studio_team_members`, Studio project ownership metadata when a Team project is created, and the outbox. They do not manufacture Review decisions, Evidence, Completion, Credentials, Portfolio artifacts, Deployments, Packages, Registry submissions, runtime permissions, or ClientOps facts.
+docs/STUDIO_V1_PLUS_PHASE_11_TEAM_PROJECT_AUTHORITY_V1.md:47:Phase 11 Team Project Authority is **PARTIAL**. The durable team, membership, ownership, removal, event, and cross-organization boundaries are implemented and passed focused live acceptance. Full certification remains open for the complete Team QA → Review Routing → Review Decision flow, downstream Team Deployment/Agent Package/Registry authorization, full cross-tenant mutation coverage, and dedicated responsive/accessibility acceptance.
+docs/STUDIO_V1_PLUS_PHASE_11_TEAM_PROJECT_AUTHORITY_V1.md:55:* `tests/phase11.1-team-final-live.spec.mjs` passed `2/2`. The live path created Team-owned WEBSITE and AI_AGENT projects, submitted exact revisions for Review, routed and recorded canonical Review decisions, finalized delivery, performed Team-member Website TEST deployment, generated a governed Team Agent Package, submitted it to Registry, rejected same-org nonmember downstream operations, removed a member, archived the Team, and verified durable Team ownership and downstream rows. Three concurrent member-add calls produced one active membership.
+docs/STUDIO_V1_PLUS_PHASE_11_TEAM_PROJECT_AUTHORITY_V1.md:59:* Fresh isolated regressions passed for Portfolio (`4/4`), Agent Package (`1/1`), Registry (`1/1`), and Credential (`1/1`). The strongest Studio/Review path was exercised by the Team final flow and the fresh Reviewer Routing acceptance.
+docs/STUDIO_V1_PLUS_PHASE_11_TEAM_PROJECT_AUTHORITY_V1.md:63:The live downstream path initially exposed a real authorization gap: Website Deployment, Agent Package, and Registry compared only `studio_learner_id` and rejected active Team members. Their source checks now accept an active, same-organization, same-tenant `studio_team_members` row while retaining manager overrides and canonical scope checks. Reviewer Routing also excludes active members of a Team-owned project from the eligible reviewer pool. Team archive now has a manager-authorized `POST /studio/teams/:teamId/archive` operation and bounded `studio.team.archived` event.
+docs/STUDIO_V1_PLUS_PHASE_11_TEAM_PROJECT_AUTHORITY_V1.md:67:The executed Team path verified individual submitting actors, explicit `TEAM` project ownership, exact Review revision binding, separate Review decision creation, TEST deployment terminology, Team provenance in Agent Package/Registry rows, removed-member denial, archive denial for new Team project creation, and no automatic Team Evidence, Completion, Credential, or Portfolio propagation. Existing Team project ownership remained durable after archive. Team events remained scoped to the organization and tenant.
+docs/STUDIO_V1_PLUS_PHASE_11_TEAM_PROJECT_AUTHORITY_V1.md:71:PASS: Team Review, downstream Deployment, Agent Package, Registry, member removal, archive, concurrent add uniqueness, cross-organization/nonmember denial, responsive Team UI, accessibility baseline, migration replay, and build/validation checks. NON-BLOCKING: the historical Deployment final-acceptance failure-injection test reproduced `expected 400, received 201` twice because its provider-interception fixture did not intercept the request; the Team-owned Deployment acceptance passed and no production defect was reproduced. DEFERRED: Assignment TEAM targeting, self-service leave/lead transfer, collaborative revision, real-time collaboration, chat, task management, and Phase 14 full assistive-technology certification.
+docs/STUDIO_V1_PLUS_PHASE_11_TEAM_PROJECT_AUTHORITY_V1.md:84:* Fresh regressions passed: `phase11-team-live` `1/1`, Reviewer Routing `1/1`, Notification `1/1`, Portfolio/Completion `4/4`, Agent Package `1/1`, Registry `1/1`, and Credential `1/1`. The fresh authoritative Deployment suite passed `2/2`.
+docs/STUDIO_V1_PLUS_PHASE_11_TEAM_PROJECT_AUTHORITY_V1.md:88:PASS: Team Review path, individual submitting actor provenance, Team ownership persistence, self-review denial, concurrent membership uniqueness, cross-tenant Team API denial, downstream Team Deployment/Agent Package/Registry authorization, archive/history behavior, notification/routing/source-domain regressions, migration replay, and build/validation gates.
+docs/STUDIO_V1_PLUS_PHASE_11_TEAM_PROJECT_AUTHORITY_V1.md:152:The existing `tests/phase11.1-team-ui-live.spec.mjs` was rerun after the fix and passed `2/2`, including desktop/tablet/mobile layout, focus visibility, Team-page ARIA semantics, empty state, and reduced-motion behavior. No mature downstream domain was changed by Phase 11.5; the fresh Phase 11.2–11.4 PASS evidence for Reviewer Routing, Studio/Review, Notifications, Completion, Portfolio, Deployment, Agent Package, Registry, Credential, and DB containment is reused.
+services/shf-agent-fabric/services/source_registry_service.py:26:    "Evidence Package",
+services/shf-agent-fabric/services/source_registry_service.py:126:    eligible_for_evidence_package = (
+services/shf-agent-fabric/services/source_registry_service.py:132:    eligible_for_truth_spine = eligible_for_evidence_package and not blockers
+services/shf-agent-fabric/services/source_registry_service.py:141:    if eligible_for_evidence_package:
+services/shf-agent-fabric/services/source_registry_service.py:142:        allowed_downstream_targets.extend(["Data Normalization", "Evidence Package", "Data Verification"])
+services/shf-agent-fabric/services/source_registry_service.py:162:        "eligible_for_evidence_package": eligible_for_evidence_package,
+services/shf-agent-fabric/services/source_registry_service.py:175:        "eligible_for_evidence_package": eligible_for_evidence_package,
+services/shf-agent-fabric/services/source_registry_service.py:195:        "eligible_for_evidence_package": sum(1 for item in sources if item["eligible_for_evidence_package"]),
+services/shf-agent-fabric/services/source_registry_service.py:233:            "eligible_for_evidence_package",
+services/shf-agent-fabric/services/source_registry_service.py:286:        "eligible_for_evidence_package": sample["eligible_for_evidence_package"],
+services/shf-agent-fabric/services/source_registry_service.py:305:        "eligible_for_evidence_package": summary["eligible_for_evidence_package"],
+docs/career/data-center-employer-validation/outreach/DATA_CENTER_REVIEW_SCOPE_MATRIX_V1.md:3:No reviewer should be asked to review everything. This matrix maps each Tier 1 candidate to the specific [package](../DATA_CENTER_EMPLOYER_VALIDATION_PACKAGE_V1.md) sections and [questionnaire](../DATA_CENTER_EMPLOYER_VALIDATION_QUESTIONNAIRE_V1.md) parts most relevant to their actual expertise, so their time is spent where their perspective is most valuable.
+docs/career/data-center-employer-validation/outreach/DATA_CENTER_REVIEW_SCOPE_MATRIX_V1.md:15:| Candidate | Category | Package sections to prioritize | Questionnaire — Core (Part 1) | Questionnaire — Optional Deep Technical (Part 2) |
+docs/MANUAL_GOVERNANCE_REVIEWS_V1.json:123:  "recommended_next_action": "Run npm run check:governance, bash scripts/run_daily_governance_audit.sh, bash scripts/run_paid_launch_checks.sh, and npm run build from an npm-enabled local shell, then package these manual governance review docs before rerunning final clean-state tag prep."
+docs/paid-launch/SHS_DURABLE_LAUNCH_SIGNOFF_VERSION_LEDGER_V1.json:23:    "Missing package_name is a private-beta warning and paid-launch blocker.",
+docs/career/data-center-employer-validation/outreach/DATA_CENTER_FIRST_COHORT_PLAN_V1.md:17:**Package sections to prioritize:** §3 (Target Roles), §6 (Competency Map), §7 (Practical Activities), §9 (Assessment Model), §11 (Credential Strategy), Questionnaire Part 1 in full.
+docs/career/data-center-employer-validation/outreach/DATA_CENTER_FIRST_COHORT_PLAN_V1.md:33:**Package sections to prioritize:** §7 (Practical Activities, especially the electrical/HVAC/networking rows), §12 (Safety, Professional Practice, and Minor/Student Considerations, both 12.1 and 12.2), §13 (Accessibility + Learner Support, for physical-access considerations), Questionnaire Part 1 Sections E (Safety) and D, plus Part 2 Sections L-S (Physical Infrastructure through Facility Access/Security).
+docs/career/data-center-employer-validation/outreach/DATA_CENTER_FIRST_COHORT_PLAN_V1.md:49:**Package sections to prioritize:** §2/§2.1 (Pathway Status and Validation Decision Rule), §5 (Curriculum Summary), §11 (Credential Strategy), §16 (Proposed Work-Based-Learning Model), §17 (Partnership Options), Questionnaire Part 1 Sections C, I, and J.
+docs/career/data-center-employer-validation/outreach/DATA_CENTER_FIRST_COHORT_PLAN_V1.md:61:1. **Initial email/introduction** — the outreach email, asking only whether the recipient is open to reviewing, before sending the full package.
+docs/career/data-center-employer-validation/outreach/DATA_CENTER_FIRST_COHORT_PLAN_V1.md:62:2. **Send the employer validation package** — once a reviewer confirms interest, send the cover letter, the full package, and the questionnaire.
+docs/career/data-center-employer-validation/outreach/DATA_CENTER_FIRST_COHORT_PLAN_V1.md:66:6. **SHF determines Employer Reviewed vs. sufficiency for Employer Validated** — using the sufficiency requirements in the Validation Record and package §2.1. This is an SHF decision, made against the recorded evidence, not something the reviewer's ratings alone trigger.
+docs/career/data-center-employer-validation/outreach/DATA_CENTER_FIRST_COHORT_PLAN_V1.md:79:Every piece of outreach material in this folder states, in some form: participation does not guarantee validation; feedback may result in required changes rather than validation; positive feedback alone is not automatically validation; SHF controls the pathway-status record (a reviewer's opinion informs it, but does not directly edit it); and any validated outcome must state an explicit, bounded scope. The full progression — NOT REVIEWED → EMPLOYER REVIEWED → EMPLOYER VALIDATED → MULTIPLE-EMPLOYER VALIDATED — and its sufficiency requirements live in `docs/career/data-center-employer-validation/DATA_CENTER_EMPLOYER_VALIDATION_RECORD_V1.json` and package §2.1; outreach material should point to, not restate or loosen, that rule.
+src/router/AdminRoutes.jsx.bak_remove_literal_n_20260513_105135:30:import HubBundleBuilderPage from "@/pages/hub/HubBundleBuilderPage.jsx";
+src/router/AdminRoutes.jsx.bak_remove_literal_n_20260513_105135:114:        <Route path="/hub/bundles" element={protect("/hub/bundles", <HubBundleBuilderPage />)} />
+services/shf-agent-fabric/services/event_webhook_service.py:29:    "evidence_package",
+docs/SHS_CLIENTOPS_SPINE_GOVERNANCE_AUDIT_V1_1.json:131:      "Evidence Package",
+docs/paid-launch/SHS_LAUNCH_WORKFLOW_V1_1_BACKEND_LEDGER.json:35:    "package.json"
+services/shf-agent-fabric/services/evidence_package_service.py:8:SUPPORTED_PACKAGE_TYPES = [
+services/shf-agent-fabric/services/evidence_package_service.py:19:REQUIRED_PACKAGE_COMPONENTS = [
+services/shf-agent-fabric/services/evidence_package_service.py:37:    "Evidence Package prepares review-ready packages only.",
+services/shf-agent-fabric/services/evidence_package_service.py:38:    "Evidence Package does not verify truth, public-approve data, override Truth Spine, override Oracle, publish reports, or mutate SHF Impact Data Spine.",
+services/shf-agent-fabric/services/evidence_package_service.py:73:def _package_id(payload: Dict[str, Any]) -> str:
+services/shf-agent-fabric/services/evidence_package_service.py:119:def build_evidence_package(payload: Dict[str, Any] | None) -> Dict[str, Any]:
+services/shf-agent-fabric/services/evidence_package_service.py:122:    if canonical_type not in SUPPORTED_PACKAGE_TYPES:
+services/shf-agent-fabric/services/evidence_package_service.py:146:    package_basis = {
+services/shf-agent-fabric/services/evidence_package_service.py:156:    package = {
+services/shf-agent-fabric/services/evidence_package_service.py:157:        "package_id": _package_id(package_basis),
+services/shf-agent-fabric/services/evidence_package_service.py:173:        "layer": "evidence_package",
+services/shf-agent-fabric/services/evidence_package_service.py:174:        "package": package,
+services/shf-agent-fabric/services/evidence_package_service.py:185:def batch_build_evidence_packages(records: Any) -> Dict[str, Any]:
+services/shf-agent-fabric/services/evidence_package_service.py:187:    packages = [build_evidence_package(item if isinstance(item, dict) else {}) for item in items]
+services/shf-agent-fabric/services/evidence_package_service.py:188:    ready = [item for item in packages if item["ready_for_truth_spine"]]
+services/shf-agent-fabric/services/evidence_package_service.py:189:    blocked = [item for item in packages if item["blockers"]]
+services/shf-agent-fabric/services/evidence_package_service.py:192:        "layer": "evidence_package",
+services/shf-agent-fabric/services/evidence_package_service.py:193:        "total": len(packages),
+services/shf-agent-fabric/services/evidence_package_service.py:194:        "complete_packages": len(ready),
+services/shf-agent-fabric/services/evidence_package_service.py:195:        "incomplete_packages": len(blocked),
+services/shf-agent-fabric/services/evidence_package_service.py:198:        "packages": packages,
+services/shf-agent-fabric/services/evidence_package_service.py:202:def evidence_package_schema() -> Dict[str, Any]:
+services/shf-agent-fabric/services/evidence_package_service.py:205:        "layer": "evidence_package",
+services/shf-agent-fabric/services/evidence_package_service.py:206:        "supported_package_types": list(SUPPORTED_PACKAGE_TYPES),
+services/shf-agent-fabric/services/evidence_package_service.py:207:        "required_components": list(REQUIRED_PACKAGE_COMPONENTS),
+services/shf-agent-fabric/services/evidence_package_service.py:208:        "package_fields": [
+services/shf-agent-fabric/services/evidence_package_service.py:209:            "package_id",
+services/shf-agent-fabric/services/evidence_package_service.py:226:def evidence_package_summary() -> Dict[str, Any]:
+services/shf-agent-fabric/services/evidence_package_service.py:227:    sample_batch = batch_build_evidence_packages(
+services/shf-agent-fabric/services/evidence_package_service.py:254:    packages = sample_batch["packages"]
+services/shf-agent-fabric/services/evidence_package_service.py:255:    missing_provenance = len([item for item in packages if "missing_provenance" in item["warnings"]])
+services/shf-agent-fabric/services/evidence_package_service.py:256:    missing_sources = len([item for item in packages if "missing_source_metadata" in item["warnings"]])
+services/shf-agent-fabric/services/evidence_package_service.py:259:        "total_packages": sample_batch["total"],
+services/shf-agent-fabric/services/evidence_package_service.py:260:        "complete_packages": sample_batch["complete_packages"],
+services/shf-agent-fabric/services/evidence_package_service.py:261:        "incomplete_packages": sample_batch["incomplete_packages"],
+services/shf-agent-fabric/services/evidence_package_service.py:273:def evidence_package_readiness() -> Dict[str, Any]:
+services/shf-agent-fabric/services/evidence_package_service.py:274:    summary = evidence_package_summary()
+services/shf-agent-fabric/services/evidence_package_service.py:277:        "layer": "evidence_package",
+services/shf-agent-fabric/services/evidence_package_service.py:279:        "blocked": summary["incomplete_packages"],
+services/shf-agent-fabric/services/evidence_package_service.py:285:def evidence_package_health() -> Dict[str, Any]:
+services/shf-agent-fabric/services/evidence_package_service.py:288:        "service": "evidence_package",
+services/shf-agent-fabric/services/evidence_package_service.py:290:        "summary": evidence_package_summary(),
+docs/career/data-center-employer-validation/outreach/DATA_CENTER_REVIEWER_CANDIDATE_RESEARCH_V1.md:208:**TechCred (Ohio Department of Development / OhioMeansJobs.ohio.gov)** — a real, verified state credential-reimbursement program (up to $2,000/credential, employer-facing). Source: development.ohio.gov, ohiomeansjobs.ohio.gov, accessed Sept 2026. This is a funding mechanism, not an organization with staff who would review curriculum — relevant as future credential-strategy context (package §11), not as a Tier 1/2/3 reviewer candidate.
+src/router/AdminRoutes.jsx:74:import HubBundleBuilderPage from "@/pages/hub/HubBundleBuilderPage.jsx";
+src/router/AdminRoutes.jsx:159:        <Route path="/hub/bundles" element={protect("/hub/bundles", <HubBundleBuilderPage />)} />
+docs/paid-launch/SHS_LAUNCH_WORKFLOW_V1_1_BACKEND_LEDGER.md:23:- `package.json`
+docs/career/data-center-employer-validation/outreach/DATA_CENTER_EMPLOYER_OUTREACH_EMAIL_V1.md:15:That's what we're asking: **a professional review, not an endorsement.** If you're willing, we'll send you a short package describing the program honestly, including what it does well and what it doesn't do yet, along with a questionnaire. The questionnaire has a Core section that should be sufficient on its own, and an Optional Deep Technical section for anyone with the additional time and hands-on expertise to go further.
+docs/career/data-center-employer-validation/outreach/DATA_CENTER_EMPLOYER_OUTREACH_EMAIL_V1.md:21:If you're open to this, I'll send the full package and questionnaire. There's no deadline pressure — we're looking for substantive, honest feedback, including anything you think should be corrected, removed, or strengthened, whenever you have time to give it.
+services/shf-agent-fabric/services/data_verification_service.py:40:def _package(payload: Dict[str, Any]) -> Dict[str, Any]:
+services/shf-agent-fabric/services/data_verification_service.py:41:    package = payload.get("package") if isinstance(payload.get("package"), dict) else payload
+services/shf-agent-fabric/services/data_verification_service.py:42:    return dict(package or {})
+services/shf-agent-fabric/services/data_verification_service.py:45:def _source_metadata(package: Dict[str, Any]) -> Dict[str, Any]:
+services/shf-agent-fabric/services/data_verification_service.py:46:    value = package.get("source_metadata") if isinstance(package.get("source_metadata"), dict) else {}
+services/shf-agent-fabric/services/data_verification_service.py:55:def _provenance(package: Dict[str, Any]) -> Dict[str, Any]:
+services/shf-agent-fabric/services/data_verification_service.py:56:    value = package.get("provenance") if isinstance(package.get("provenance"), dict) else {}
+services/shf-agent-fabric/services/data_verification_service.py:65:def _evidence_refs(package: Dict[str, Any]) -> List[Dict[str, Any]]:
+services/shf-agent-fabric/services/data_verification_service.py:66:    value = package.get("evidence_refs")
+services/shf-agent-fabric/services/data_verification_service.py:106:    package_id: str,
+services/shf-agent-fabric/services/data_verification_service.py:113:    if package_id:
+services/shf-agent-fabric/services/data_verification_service.py:125:    package = _package(source)
+services/shf-agent-fabric/services/data_verification_service.py:126:    package_id = _clean_str(package.get("package_id"))
+services/shf-agent-fabric/services/data_verification_service.py:127:    canonical_type = _clean_str(package.get("canonical_type") or "unknown")
+services/shf-agent-fabric/services/data_verification_service.py:128:    normalized_record = package.get("normalized_record") if isinstance(package.get("normalized_record"), dict) else {}
+services/shf-agent-fabric/services/data_verification_service.py:129:    source_metadata = _source_metadata(package)
+services/shf-agent-fabric/services/data_verification_service.py:130:    provenance = _provenance(package)
+services/shf-agent-fabric/services/data_verification_service.py:131:    evidence_refs = _evidence_refs(package)
+services/shf-agent-fabric/services/data_verification_service.py:135:    if not package_id:
+services/shf-agent-fabric/services/data_verification_service.py:136:        warnings.append("missing_package_id")
+services/shf-agent-fabric/services/data_verification_service.py:137:        blockers.append("missing_package_id")
+services/shf-agent-fabric/services/data_verification_service.py:169:    readiness_score = _readiness_score(package_id, normalized_record, source_quality, provenance_quality, evidence_quality)
+services/shf-agent-fabric/services/data_verification_service.py:183:        "verification_id": _verification_id({"package_id": package_id, "canonical_type": canonical_type, "score": readiness_score}),
+services/shf-agent-fabric/services/data_verification_service.py:184:        "package_id": package_id,
+services/shf-agent-fabric/services/data_verification_service.py:237:            "package_id",
+services/shf-agent-fabric/services/data_verification_service.py:259:                "package": {
+services/shf-agent-fabric/services/data_verification_service.py:260:                    "package_id": "evidence_pkg_sample_ready",
+services/shf-agent-fabric/services/data_verification_service.py:282:                "package": {
+services/shf-agent-fabric/services/data_verification_service.py:283:                    "package_id": "evidence_pkg_sample_review",
+services/shf-agent-fabric/services/data_verification_service.py:292:                "package": {
+services/shf-agent-fabric/services/data_verification_service.py:294:                    "normalized_record": {"story_text": "Missing package id and provenance"},
+docs/SHF_DATABASE_MIGRATION_RECONCILIATION.md:134:The expected indexes, primary keys, foreign keys, unique constraints, check constraints, column types, nullability, and defaults were verified from PostgreSQL catalogs.
+docs/SHF_DATABASE_MIGRATION_RECONCILIATION.md:219:`shs_dev`'s `curriculum_lesson_completions` table now physically exists with all expected columns, the primary key, both unique constraints, the reporting index, and both foreign keys, verified against PostgreSQL catalogs. `db:migrate:status` reports `001` through `045` applied, `pending: []`, `drift: []`, `unknownApplied: []`. `db:schema:integrity` reports `{"ok":true,"failures":[]}`.
+docs/SHF_DATABASE_MIGRATION_RECONCILIATION.md:291:All five objects (`rate_limit_windows`, `organization_relationships`, `programs`' four new columns, `career_families`, `careers`, `career_curriculum_requirements`) physically exist in `shs_dev` with correct columns, types, defaults, primary keys, foreign keys, unique/check constraints (including the `EXCLUDE USING gist` overlap-prevention constraint on `organization_relationships` and the `btree_gist` extension it depends on), and indexes — verified against PostgreSQL catalogs directly. `GET /programs`, `GET /careers`, and `GET /organization-relationships` all now return `200` against `shs_dev`; the API process no longer crashes.
+docs/SHF_DATABASE_MIGRATION_RECONCILIATION.md:382:All six pg_catalog/information_schema queries (`schema_migrations`, `information_schema.tables`, `information_schema.columns`, `pg_indexes`, `pg_constraint`, `pg_extension`) are issued exactly once each, regardless of how many of the 1261+ expectations are being checked — no per-object query. (Originally parallelized via `Promise.all`; changed to sequential in Phase 4.3 — see that section's "Baseline Guard" note — because `buildPhysicalObjectExistenceCheck()` is now also called with a single `Client`/`PoolClient` connection, which cannot run concurrent queries safely.) The full exhaustive check still completes in well under a second against `shs_dev`.
+docs/SHF_DATABASE_MIGRATION_RECONCILIATION.md:471:### Physical Catalog Verification
+docs/SHF_DATABASE_MIGRATION_RECONCILIATION.md:473:Verified directly against PostgreSQL catalogs post-repair (not just "migration ran"): `GET /programs`/`/careers`/`/prepare-prove/...`/`/public/impact/...` all return `200`; `db:schema:integrity:strict` independently confirms every column/index/constraint/extension for all 23 root objects (not just table existence) via `information_schema.columns`, `pg_indexes`, `pg_constraint`, and `pg_extension`.
+docs/SHF_DATABASE_MIGRATION_RECONCILIATION.md:499:While implementing this, found and fixed a related issue: the exhaustive checker's five catalog queries were run via `Promise.all`, which is unsafe when `executor` is a single `Client`/`PoolClient` (as `baselineMigrations` uses, to keep its whole operation on one transaction) — a single Postgres connection cannot run concurrent queries, and node-postgres only papers over it today with a deprecation warning. Changed to sequential (still exactly 5 fixed queries regardless of object count, so the O(1) performance property is unchanged) and added a regression test.
+apps/shs-api/src/domain/notifications/service/notification-service.ts:4:import { isOrganizationEntitled } from "./entitlement-resolver.js";
+apps/shs-api/src/domain/notifications/service/notification-service.ts:14:// NCA-2 §14 (Entitlement Resolution): a policy may optionally declare the
+apps/shs-api/src/domain/notifications/service/notification-service.ts:15:// service_key (apps/shs-api/migrations/084_service_catalog_entitlements.sql)
+apps/shs-api/src/domain/notifications/service/notification-service.ts:19:// entitlement. Deliberately unset on every existing policy below: no
+apps/shs-api/src/domain/notifications/service/notification-service.ts:21:// pass did not verify organization_service_entitlements is backfilled for
+apps/shs-api/src/domain/notifications/service/notification-service.ts:24:// would risk a silent regression. New, entitlement-gated policies should
+apps/shs-api/src/domain/notifications/service/notification-service.ts:40:  requiresEntitlementService?: string;
+apps/shs-api/src/domain/notifications/service/notification-service.ts:112:    type: "REGISTRY_ACCEPTED", title: "Agent package accepted", message: "Your agent package was accepted by the Registry.",

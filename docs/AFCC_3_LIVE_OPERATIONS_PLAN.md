@@ -225,3 +225,94 @@ Phase 4 reported "no duplicate execution" for the same plan store. The accurate 
 - No heartbeat.
 - Report publishing and `/runs/recent` use the admin key.
 - Live Operations UI not built.
+
+## PHASE 5 — DISTRIBUTED RUN AUTHORITY
+
+### Projection
+
+The read contract is unchanged; additions only:
+- `source.run_authority` (`postgres` / `file`)
+- `source.record_origin` (`POSTGRES_RUN_AUTHORITY`, `LEGACY_FILE_STORE`, `REPLICA_LOCAL_FILE_STORE`)
+- `source.stores` names the Postgres tables when active
+- `execution_lease.scope`: `SHARED_TRANSACTIONAL_STORE` for Postgres runs, `REPLICA_LOCAL` for file/legacy runs
+- `execution_safety` is `DISTRIBUTED` / `GUARANTEED` only under the Postgres authority and always carries `artifact_storage`
+
+The SHS bridge forwards exactly these fields; connection strings and table internals are dropped (tested).
+
+UI wording:
+- Postgres authority: "DISTRIBUTED SINGLE-FLIGHT ACTIVE (SHARED TRANSACTIONAL RUN AUTHORITY); RUN ARTIFACTS DURABLE IN THE SAME STORE" (Phase 6; was "ARTIFACT STORAGE REMAINS REPLICA-LOCAL")
+- file authority: "LOCAL SINGLE-FLIGHT ACTIVE; DISTRIBUTED SINGLE-FLIGHT NOT YET GUARANTEED"
+
+### Proof (real PostgreSQL; `SHF_RUNTIME_PG_PROOF=1`, throwaway database per run)
+
+- **Raw two-connection SQL:** B's conditional claim blocks on A's uncommitted row and then affects no row.
+- **2 and 8 independent connections** calling begin → exactly one claim, one start event, one active claim.
+- **8 concurrent HTTP executions** → 1 × 200, 7 × 409 `RUN_ALREADY_EXECUTING`, one artifact path.
+- **Expired-claim reclaim race** (8 connections) → one winner, `claim_version` 2, old run keeps start + `run.lease_expired`.
+- **Not reclaimable** inside the grace window.
+- **Stale executor fenced:** TIMED_OUT `CLAIM_FENCED`, plan not DONE, new owner's claim untouched.
+- **Terminal close race** (4 concurrent closes) → exactly one terminal event.
+- **Approval decision race** (6 approvers) → one decision row, 5 × 409.
+- **Failure atomicity:**
+  - begin: before the plan lock, after the plan lock, before the claim, after the claim, during the start-event insert, before commit → nothing persisted, plan still executable;
+  - DB unreachable → 503, nothing written;
+  - crash after commit → EXECUTING, then ORPHANED, then reclaimed;
+  - failure during artifact work → FAILED + release;
+  - close: before the event, during the event insert, before release, before commit → whole close rolled back, run EXECUTING, claim held, no FAILED invented.
+- **Two application instances** (separate OS processes with separate filesystems, same DB) → one 200, one 409; neither wrote local plan/run/claim files; one start event; plan DONE.
+- **Security on the shared authority:** admin key, missing CSRF, read-only permission, and wrong org all refused; body identity only DECLARED; no secrets or paths in any table.
+- **Mutation checks:** an unconditional claim fails 7 tests (including multi-instance); removing fencing fails 1.
+
+### Production readiness
+
+| Area | Status |
+| --- | --- |
+| Run authority (plans, approvals, claims, events, terminal transitions) | distributed-safe when the Postgres authority is active (always, in production) |
+| Deploy prerequisite | migration 149 applied by the SHS migration runner |
+| Artifact storage | Phase 5: replica-local. **Phase 6: shared (migration 150)** — see Phase 6 |
+| Live Operations UI | not built |
+
+## PHASE 6 — SHARED ARTIFACT & EVIDENCE STORAGE
+
+### Projection changes
+
+| Field | Content |
+| --- | --- |
+| `artifact_refs[]` | `artifact_id`, `sha256`, `canonical_ref`, `type`, `size`, `created_at`, `completeness`, `storage_state` (`STORED` / `STORAGE_FAILED` / `MISSING` / `LEGACY_REPLICA_LOCAL` / `REPLICA_LOCAL`), `verification_state` (`VERIFIED` / `HASH_RECORDED` / `HASH_MISMATCH` / `NOT_VERIFIABLE` / `NOT_APPLICABLE`), `durable` |
+| run `evidence` | `status`, `artifact_count`, `durable_count`, `verified`, `storage` — separate from `current_state` |
+| evidence projection | adds `evidence_status` |
+| new read | `GET …/storage/artifacts` — storage readiness |
+
+Cost model:
+- the list projection does one metadata query with no bodies (`HASH_RECORDED`);
+- detail and evidence re-verify hashes (`VERIFIED`), reading only that run's bodies, with no writes.
+
+Never published: bodies, `body_canonical`, paths, storage keys, DSNs, credentials. The SHS bridge allowlists each field; leaks are dropped (tested).
+
+### Verification
+
+Real PostgreSQL, opt-in `SHF_RUNTIME_PG_PROOF=1`, throwaway databases. 14 Phase 6 tests:
+- durable + verified retrieval;
+- tamper (body, and a self-consistent row disagreeing with the lifecycle digest) → detected, never served;
+- **Replica B resolves and verifies after Replica A exited and its filesystem was deleted**, and after an empty-disk restart;
+- evidence storage failure → FAILED `EVIDENCE_STORAGE_FAILED`, no rows, not DONE, retry OK;
+- oversize refused;
+- storage + failure record both down → EXECUTING, nothing invented;
+- crash before terminal → no orphan artifact rows;
+- missing row → INCOMPLETE; NULL body rejected by schema;
+- org / tenant / guess / no-auth / wrong role / no mutation routes;
+- projections leak nothing;
+- legacy labelled and never served in production;
+- production without migration 150 fails closed with no local fallback;
+- readiness `AVAILABLE` / `DEGRADED` / `UNAVAILABLE` / `NOT_CONFIGURED`, side-effect free.
+
+Mutation checks: no body persistence fails 10 tests; always-verified fails 2; always-allow scope fails 1.
+
+### Production readiness
+
+| Area | Status |
+| --- | --- |
+| Run authority | distributed (Phase 5), gate: migration 149 |
+| JSON run artifacts | durable and cross-replica (Phase 6), gate: migration 150 |
+| Binary / report / upload storage | platform gap PR0-GAP-010 (object store, option B) |
+| Live Operations UI | not built |

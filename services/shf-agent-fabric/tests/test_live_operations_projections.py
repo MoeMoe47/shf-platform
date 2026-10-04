@@ -56,7 +56,10 @@ def test_live_operations_derives_only_supported_lifecycle_from_run_events(monkey
     assert run["approval"]["state"] == "APPROVED"
     assert run["provider"] == NOT_CAPTURED
     assert run["model"] == NOT_CAPTURED
-    assert run["artifact_refs"] == [{"artifact_id": "draft_1", "sha256": SHA}]
+    assert [(r["artifact_id"], r["sha256"]) for r in run["artifact_refs"]] == [("draft_1", SHA)]
+    # Phase 6: file-store artifacts are truthfully replica-local, never durable evidence.
+    assert run["artifact_refs"][0]["storage_state"] == "REPLICA_LOCAL" and run["artifact_refs"][0]["durable"] is False
+    assert run["evidence"]["status"] == "NOT_DURABLE"
     assert "/Users/" not in json.dumps(body)
 
 
@@ -107,7 +110,8 @@ def test_timeline_evidence_dependencies_are_references_only(monkeypatch, tmp_pat
     deps = run_dependencies_projection("run-lineage")
     assert timeline["events"][0]["to_state"] == "COMPLETED"
     assert evidence["evidence"]["counts"] == {"evidence": 1, "artifacts": 1, "proofs": 1, "reports": 1}
-    assert evidence["evidence"]["artifact_refs"] == [{"artifact_id": "draft_1", "sha256": SHA}]
+    assert [(r["artifact_id"], r["sha256"]) for r in evidence["evidence"]["artifact_refs"]] == [("draft_1", SHA)]
+    assert evidence["evidence"]["evidence_status"]["status"] == "NOT_DURABLE"
     assert deps["dependency_run_ids"] == ["run-parent"]
     assert deps["correlation_id"] == "corr-1"
 

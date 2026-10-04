@@ -752,7 +752,8 @@ test("routing: /agent-fabric/command is registered with the /agent-fabric access
 
 test("routing: command navigation goes somewhere real or is disabled with a reason", () => {
   assert.deepEqual(COMMAND_SECTIONS.map((s) => s.label), [
-    "Command Center", "Priority & Alerts", "Ecosystem Map", "Agent Fleet", "Operations", "Governance & Alignment",
+    "Command Center",
+    "Live Operations", "Priority & Alerts", "Ecosystem Map", "Agent Fleet", "Operations", "Governance & Alignment",
     "Truth & Evidence", "Watchtower & Risk", "Infrastructure", "Observability", "Security & Trust", "Incidents",
     "Reports & Insights", "Settings",
   ]);
@@ -787,6 +788,10 @@ test("reduced motion: animations only under no-preference, and disabled under re
   const firstAnimation = css.indexOf("animation:");
   assert.ok(noPref > 0 && firstAnimation > noPref, "animations are declared only inside the no-preference block");
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*animation: none !important/);
+  // AFCC-3 Phase 7: the Live Operations stylesheet follows the same rule.
+  const live = read(`${AFCC_DIR}/live-operations.css`);
+  assert.ok(live.indexOf("@media (prefers-reduced-motion: no-preference)") < live.indexOf("animation:"));
+  assert.match(live, /@media \(prefers-reduced-motion: reduce\)[\s\S]*animation: none !important/);
 });
 
 test("UI: no high-authority action controls exist in the Command Center", () => {
@@ -799,7 +804,7 @@ test("UI: no high-authority action controls exist in the Command Center", () => 
 });
 
 test("UI: class names avoid the global [class*=…] selectors that restyle admin pages", () => {
-  const css = read(`${AFCC_DIR}/agent-fabric-command.css`);
+  const css = read(`${AFCC_DIR}/agent-fabric-command.css`) + read(`${AFCC_DIR}/live-operations.css`);
   const classes = [...new Set(css.match(/\.afcc-[a-z0-9-]+/g))];
   for (const c of classes) {
     assert.doesNotMatch(c, /overview|layer|chip|card|panel|status|badge|header|tab|bar|kpi|metric|summary|readiness|command|hero|rail|main|muted|next|index|progress/i, c);

@@ -26,6 +26,8 @@ export const BRIDGED_SOURCES = Object.freeze({
   watchtower: { kind: "watchtower", fabricPath: `${FABRIC_READ_BASE}/watchtower` },
   infrastructure: { kind: "infrastructure", fabricPath: `${FABRIC_READ_BASE}/infrastructure` },
   observability: { kind: "observability", fabricPath: `${FABRIC_READ_BASE}/observability` },
+  // AFCC-3 Phase 6: artifact storage readiness (read-only catalog lookup on Fabric).
+  "storage/artifacts": { kind: "artifact_storage", fabricPath: `${FABRIC_READ_BASE}/storage/artifacts` },
 } as const);
 
 // Truthful non-error projection states. Anything else is outside the contract.
@@ -37,6 +39,8 @@ const VALID_STATES: Record<string, string[]> = {
   run_timeline: ["AVAILABLE", "NOT_AVAILABLE"],
   run_evidence: ["AVAILABLE", "NOT_AVAILABLE"],
   run_dependencies: ["AVAILABLE", "NOT_AVAILABLE"],
+  artifact_storage: ["AVAILABLE", "DEGRADED", "UNAVAILABLE", "NOT_CONFIGURED"],
+  run_artifact: ["AVAILABLE", "NOT_AVAILABLE"],
 };
 
 export type BridgedSource = keyof typeof BRIDGED_SOURCES;
@@ -233,6 +237,26 @@ const MINIMIZE: Record<string, (p: Record<string, unknown>) => Record<string, un
       }),
     };
   },
+  run_artifact(p) {
+    const base = { run_id: safeText(p.run_id), artifact_id: safeText(p.artifact_id), source: commandSource(p.source) };
+    if (p.state === "NOT_AVAILABLE") return base;
+    const a = obj(p.artifact);
+    if (!a) return null;
+    const TRUST = ["VERIFIED", "INTEGRITY_FAILED", "NOT_TRUSTED_REPLICA_LOCAL", "NOT_AVAILABLE"];
+    const trust = TRUST.includes(String(p.trust)) ? String(p.trust) : "NOT_AVAILABLE";
+    // Only a verified or explicitly-untrusted replica-local body is forwarded; never an integrity failure.
+    const body = trust === "VERIFIED" || trust === "NOT_TRUSTED_REPLICA_LOCAL" ? safeJson(p.body) : null;
+    return { ...base, artifact: artifactRef(a), trust, body, body_available: body !== null && body !== undefined };
+  },
+  artifact_storage(p) {
+    return {
+      source: commandSource(p.source),
+      artifact_storage: safeText(p.artifact_storage),
+      durable: bool(p.durable),
+      check: code(p.check),
+      checked_at: safeText(p.checked_at),
+    };
+  },
   runs_live(p) {
     if (!Array.isArray(p.runs)) return null;
     return {
@@ -282,6 +306,7 @@ const MINIMIZE: Record<string, (p: Record<string, unknown>) => Record<string, un
       evidence: {
         evidence_refs: list(evidence.evidence_refs),
         artifact_refs: objects(evidence.artifact_refs).map(artifactRef),
+        evidence_status: evidenceStatus(evidence.evidence_status),
         proof_refs: list(evidence.proof_refs),
         report_refs: list(evidence.report_refs),
         truth_refs: list(evidence.truth_refs),
@@ -313,6 +338,8 @@ function commandSource(v: unknown) {
     projection: safeText(s.projection),
     read_only: bool(s.read_only),
     record_type: safeText(s.record_type),
+    record_origin: safeText(s.record_origin),
+    run_authority: safeText(s.run_authority),
     malformed_event_count: num(s.malformed_event_count),
     unattributed_event_count: num(s.unattributed_event_count),
   } : null;
@@ -351,8 +378,46 @@ function domainRefs(v: unknown) {
   };
 }
 
+// AFCC-3 Phase 7: bounded deep copy of artifact JSON for display. Strings pass the
+// same redaction as every other field; credential-like keys are dropped; depth,
+// breadth and string length are capped so a hostile payload cannot flood the UI.
+const SENSITIVE_KEY = /^(path|paths|token|tokens|secret|secrets|password|key|keys|keyring|kid|env|environ|dsn|api[_-]?key|authorization|cookie|credentials?|stdout|stderr|traceback|storage_key|body_canonical)$/i;
+export function safeJson(value: unknown, depth = 0): unknown {
+  if (depth > 12) return "[truncated]";
+  if (value === null || typeof value === "boolean") return value;
+  if (typeof value === "number") return Number.isFinite(value) ? value : null;
+  if (typeof value === "string") return safeText(value) ?? "";
+  if (Array.isArray(value)) return value.slice(0, 200).map((v) => safeJson(v, depth + 1));
+  if (typeof value === "object") {
+    const out: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(value as Record<string, unknown>).slice(0, 200)) {
+      if (SENSITIVE_KEY.test(k) || !/^[\w .:-]{1,80}$/.test(k)) continue;
+      out[k] = safeJson(v, depth + 1);
+    }
+    return out;
+  }
+  return null;
+}
+
 function artifactRef(a: Record<string, unknown>) {
-  return { artifact_id: safeText(a.artifact_id), sha256: hash(a.sha256) };
+  // AFCC-3 Phase 6: identifiers, digest and durability state only; never bodies or locations.
+  return {
+    artifact_id: safeText(a.artifact_id),
+    sha256: hash(a.sha256),
+    ...pick(a, ["canonical_ref", "type", "created_at", "completeness", "storage_state", "verification_state"]),
+    size: countOrCode(a.size),
+    durable: bool(a.durable),
+  };
+}
+
+function evidenceStatus(v: unknown) {
+  const e = obj(v);
+  return e ? {
+    ...pick(e, ["status", "storage"]),
+    artifact_count: num(e.artifact_count),
+    durable_count: num(e.durable_count),
+    verified: bool(e.verified),
+  } : null;
 }
 
 function liveRun(r: Record<string, unknown>) {
@@ -379,6 +444,7 @@ function liveRun(r: Record<string, unknown>) {
     policy: { policy_ref: safeText(policy.policy_ref), gate_decision_refs: list(policy.gate_decision_refs) },
     evidence_refs: list(r.evidence_refs),
     artifact_refs: objects(r.artifact_refs).map(artifactRef),
+    evidence: evidenceStatus(r.evidence),
     proof_refs: list(r.proof_refs),
     report_refs: list(r.report_refs),
     policy_decision_refs: list(r.policy_decision_refs),
@@ -427,7 +493,7 @@ function executionLease(v: unknown) {
 // visible to operators; it never upgrades to distributed assurance.
 function executionSafety(v: unknown) {
   const s = obj(v);
-  return s ? pick(s, ["level", "local_single_flight", "distributed_single_flight", "scope", "production_blocker", "summary"]) : null;
+  return s ? pick(s, ["level", "local_single_flight", "distributed_single_flight", "scope", "production_blocker", "artifact_storage", "summary"]) : null;
 }
 
 function stateDerivation(v: unknown) {

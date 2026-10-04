@@ -93,18 +93,16 @@ curl -fsS -b "$EXECUTOR_COOKIES" -X POST "${BASE_URL}/runs/dry-run" \
   -H "Content-Type: application/json" \
   -d "{\"planId\":\"${PLAN_ID}\"}" | python3 -m json.tool
 
-curl -fsS -b "$EXECUTOR_COOKIES" -X POST "${BASE_URL}/runs/execute" \
+EXEC_JSON="$(curl -fsS -b "$EXECUTOR_COOKIES" -X POST "${BASE_URL}/runs/execute" \
   -H "X-CSRF-Token: ${EXECUTOR_CSRF}" \
   -H "Content-Type: application/json" \
-  -d "{\"planId\":\"${PLAN_ID}\"}" | python3 -m json.tool
+  -d "{\"planId\":\"${PLAN_ID}\"}")"
+echo "$EXEC_JSON" | python3 -m json.tool
 
-ART_PATH="$(ls -t db/artifacts/*.json 2>/dev/null | head -1)"
-if [ -z "$ART_PATH" ]; then
-  echo "ERROR: no artifact files found in db/artifacts/"
-  exit 1
-fi
-
-ART_ID="$(basename "$ART_PATH" .json)"
+# AFCC-3 Phase 6: the artifact id comes from the run itself (never from a local
+# directory), and is read through the authenticated, scope-checked, hash-verified
+# artifact route, which works on any replica when the shared run authority is active.
+ART_ID="$(echo "$EXEC_JSON" | python3 -c 'import sys,json; print(json.load(sys.stdin)["results"][0]["result"]["artifactId"])')"
 echo "ART_ID=${ART_ID}"
 
-curl -fsS "${BASE_URL}/artifacts/${ART_ID}" | python3 -m json.tool
+curl -fsS -b "$EXECUTOR_COOKIES" "${BASE_URL}/artifacts/${ART_ID}" | python3 -m json.tool

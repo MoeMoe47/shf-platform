@@ -1,0 +1,503 @@
+============================================================
+SOURCE: 05_ACCOUNTS_RELATIONSHIPS.txt
+============================================================
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:14:import { getExternalAvailabilityForActor } from "../../external-accounts/service/external-availability-service.js";
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:15:import { getExternalCalendarProvider } from "../../external-accounts/providers/provider-registry.js";
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:25:  organization_id: string;
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:26:  active_organization_id?: string;
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:96:    listJourneyMilestonesForLearner({ organization_id: actor.organization_id, user_id: actor.user_id }),
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:97:    deriveLearnerPathway({ organization_id: actor.organization_id, user_id: actor.user_id }),
+src/utils/pricing.js:9:  enterprise: { monthly_cents: 0,    yearly_cents: 0, contact: true },
+apps/shs-api/src/domain/companion/api/routes.ts:9:  const organizationId = req.user.active_organization_id || req.user.organization_id;
+apps/shs-api/src/domain/companion/api/routes.ts:12:    organization_id: organizationId,
+apps/shs-api/src/domain/companion/api/routes.ts:13:    active_organization_id: organizationId,
+apps/shs-api/src/domain/companion/api/routes.ts:22:  // Self-service only — no client-suppliable learnerId, mirroring
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:1:import { query } from "../../../db/client.js";
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:5:  learner_credential_id, credential_definition_id, learner_user_id, organization_id,
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:16:    organizationId: row.organization_id,
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:35:    id: string; credentialDefinitionId: string; learnerUserId: string; organizationId: string;
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:41:        learner_credential_id, credential_definition_id, learner_user_id, organization_id, tenant_id,
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:46:      [input.id, input.credentialDefinitionId, input.learnerUserId, input.organizationId, input.tenantId, input.expiresAt, input.issuedByUserId, input.verificationId, input.issuanceKey, JSON.stringify(input.provenance), input.verificationHash],
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:64:  async listForLearner(organizationId: string, learnerUserId: string): Promise<LearnerCredential[]> {
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:66:      `SELECT ${COLUMNS} FROM learner_credentials WHERE organization_id=$1 AND learner_user_id=$2 ORDER BY issued_at DESC`,
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:67:      [organizationId, learnerUserId],
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:72:  async listForOrganization(organizationId: string): Promise<LearnerCredential[]> {
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:73:    const res = await query(`SELECT ${COLUMNS} FROM learner_credentials WHERE organization_id=$1 ORDER BY issued_at DESC`, [organizationId]);
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:77:  async revoke(id: string, organizationId: string, revokedByUserId: string, executor: { query: (sql: string, params?: unknown[]) => Promise<any> } = { query }): Promise<LearnerCredential | null> {
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:80:       WHERE learner_credential_id=$1 AND organization_id=$2 AND status='ISSUED'
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:82:      [id, organizationId, revokedByUserId],
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:94:  // CAPSTONE-typed Project in this organization. Mirrors exactly the
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:97:  async hasAcceptedCapstone(organizationId: string, learnerUserId: string): Promise<boolean> {
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:98:    return Boolean(await this.getAcceptedCapstone(organizationId, learnerUserId));
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:101:  async getAcceptedCapstone(organizationId: string, learnerUserId: string): Promise<{ submissionId: string; projectId: string } | null> {
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:106:       WHERE p.organization_id=$1 AND p.project_type='CAPSTONE' AND s.status='ACCEPTED'
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:109:      [organizationId, learnerUserId],
+apps/shs-api/src/domain/credentials/repo/certificate-repo.ts:1:import { query } from "../../../db/client.js";
+apps/shs-api/src/domain/credentials/repo/certificate-repo.ts:6:  organizationId: string;
+apps/shs-api/src/domain/credentials/repo/certificate-repo.ts:38:    organizationId: row.organization_id,
+apps/shs-api/src/domain/credentials/repo/certificate-repo.ts:66:const COLUMNS = `certificate_id, learner_user_id, organization_id, tenant_id,
+apps/shs-api/src/domain/credentials/repo/certificate-repo.ts:77:      (certificate_id, learner_user_id, organization_id, tenant_id, canonical_program_reference,
+apps/shs-api/src/domain/credentials/repo/certificate-repo.ts:83:      RETURNING ${COLUMNS}`, [input.certificateId, input.learnerUserId, input.organizationId, input.tenantId,
+apps/shs-api/src/domain/credentials/repo/certificate-repo.ts:102:  async getActiveByQualification(input: { learnerUserId: string; organizationId: string; canonicalProgramReference: string; certificateType: string; qualificationReference: string }, executor: any = { query }): Promise<IssuedCertificate | null> {
+apps/shs-api/src/domain/credentials/repo/certificate-repo.ts:104:      WHERE learner_user_id=$1 AND organization_id=$2 AND canonical_program_reference=$3
+apps/shs-api/src/domain/credentials/repo/certificate-repo.ts:106:      ORDER BY issued_at DESC LIMIT 1`, [input.learnerUserId, input.organizationId, input.canonicalProgramReference, input.certificateType, input.qualificationReference]);
+apps/shs-api/src/domain/credentials/repo/certificate-repo.ts:110:  async listForActor(organizationId: string, learnerUserId: string, admin: boolean): Promise<IssuedCertificate[]> {
+apps/shs-api/src/domain/credentials/repo/certificate-repo.ts:112:      ? `SELECT ${COLUMNS} FROM issued_certificates WHERE organization_id=$1 ORDER BY issued_at DESC`
+apps/shs-api/src/domain/credentials/repo/certificate-repo.ts:113:      : `SELECT ${COLUMNS} FROM issued_certificates WHERE organization_id=$1 AND learner_user_id=$2 ORDER BY issued_at DESC`, admin ? [organizationId] : [organizationId, learnerUserId]);
+apps/shs-api/src/domain/credentials/repo/certificate-repo.ts:117:  async updateStatus(id: string, organizationId: string, status: string, actorId: string, reason: string | null, successorId: string | null = null): Promise<IssuedCertificate | null> {
+apps/shs-api/src/domain/credentials/repo/certificate-repo.ts:122:      WHERE certificate_id=$1 AND organization_id=$2 RETURNING ${COLUMNS}`, [id, organizationId, status, actorId, reason, successorId]);
+apps/shs-api/src/domain/credentials/repo/certificate-repo.ts:126:  async setSuccessor(id: string, organizationId: string, successorId: string): Promise<void> {
+apps/shs-api/src/domain/credentials/repo/certificate-repo.ts:127:    await query("UPDATE issued_certificates SET status='REPLACED', replaced_by_certificate_id=$3, updated_at=NOW() WHERE certificate_id=$1 AND organization_id=$2", [id, organizationId, successorId]);
+apps/shs-api/src/domain/credentials/repo/certificate-repo.ts:132:      (certificate_render_id, certificate_id, organization_id, tenant_id, format, mime_type, byte_length,
+apps/shs-api/src/domain/credentials/repo/certificate-repo.ts:134:      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) RETURNING *`, [input.renderId, input.certificateId, input.organizationId, input.tenantId, input.format, input.mimeType, input.byteLength, input.contentHash, input.rendererVersion, input.templateKey, input.templateVersion, input.storageReference, input.filename]);
+apps/shs-api/src/domain/credentials/repo/certificate-repo.ts:145:      (delivery_id, certificate_id, organization_id, tenant_id, channel, recipient_reference,
+apps/shs-api/src/domain/credentials/repo/certificate-repo.ts:147:      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *`, [input.deliveryId, input.certificateId, input.organizationId, input.tenantId, input.channel, input.recipientReference || null, input.requestedByUserId, input.status, input.providerMessageReference || null, input.failureReason || null]);
+src/shf-entry.jsx.pre_target_restore_20260421_025734:2:import { createRoot } from "react-dom/client";
+services/shf-ai-layer/app/routers/analyze.py:4:from app.core.openai_client import run_analysis
+src/router/SolutionsRoutes.jsx.bak_fix_layers_correct_router_20260429_173840:15:      <Route path="/contact" element={<SHSRequestDemoPage />} />
+src/router/SolutionsRoutes.jsx.bak_fix_layers_correct_router_20260429_173840:16:      <Route path="contact" element={<SHSRequestDemoPage />} />
+src/router/SolutionsRoutes.jsx:19:      <Route path="/contact" element={<SHSRequestDemoPage />} />
+src/router/SolutionsRoutes.jsx:20:      <Route path="contact" element={<SHSRequestDemoPage />} />
+apps/shs-api/src/domain/credentials/repo/credential-definition-repo.ts:1:import { query } from "../../../db/client.js";
+services/shf-ai-layer/app/core/openai_client.py:49:    client = OpenAI(api_key=settings.openai_api_key)
+services/shf-ai-layer/app/core/openai_client.py:51:    response = client.responses.create(
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:5:import { query } from "../../../db/client.js";
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:22:  if (!actor.user_id || !actor.organization_id) throw new CredentialError("SCOPE_MISSING", "Actor organization/user is required.", 403);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:23:  return { organizationId: actor.organization_id, tenantId: `tenant:${actor.organization_id}`, userId: actor.user_id };
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:58:  const learner = await query("SELECT user_id, full_name, email FROM users WHERE user_id=$1 AND organization_id=$2 LIMIT 1", [learnerUserId, current.organizationId]);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:59:  if (!learner.rows[0]) throw new CredentialError("LEARNER_NOT_FOUND", "Learner not found in this organization.", 404);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:76:  const course = await query("SELECT course_id, title, status FROM curriculum_courses WHERE course_id=$1 AND organization_id=$2 LIMIT 1", [courseReference, actor.organization_id]);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:77:  if (!course.rows[0]) throw new CredentialError("COURSE_NOT_FOUND", "Canonical course not found in this organization.", 404);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:78:  const release = await query("SELECT release_id, version_number, snapshot, content_hash FROM curriculum_releases WHERE course_id=$1 AND organization_id=$2 AND status='PUBLISHED' ORDER BY version_number DESC LIMIT 1", [courseReference, actor.organization_id]);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:82:  const completed = await query("SELECT lesson_id, completed_at FROM curriculum_lesson_completions WHERE organization_id=$1 AND user_id=$2 AND curriculum_id=$3", [actor.organization_id, learnerUserId, courseReference]);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:83:  const lessonRows = await query(`SELECT l.lesson_id, l.stable_key, u.stable_key AS unit_stable_key FROM curriculum_lessons l JOIN curriculum_units u ON u.unit_id=l.unit_id WHERE l.organization_id=$1 AND u.organization_id=$1 AND l.status='ACTIVE' AND u.status='ACTIVE' AND u.course_id=$2`, [actor.organization_id, courseReference]);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:114:    await db.query("SELECT pg_advisory_xact_lock(hashtext($1))", [`certificate:${current.organizationId}:${learnerUserId}:${profile.profileKey}:${eligibility.qualificationReference}`]);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:115:    const existing = await certificateRepo.getActiveByQualification({ learnerUserId, organizationId: current.organizationId, canonicalProgramReference: profile.canonicalProgramReference, certificateType: profile.certificateType, qualificationReference: eligibility.qualificationReference }, db);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:117:    return certificateRepo.create({ certificateId, learnerUserId, organizationId: current.organizationId, tenantId: current.tenantId, canonicalProgramReference: profile.canonicalProgramReference, courseReference: profile.canonicalReferenceMode === "COURSE_INPUT" ? String(input.courseReference || input.course_reference) : null, certificateType: profile.certificateType, profileKey: profile.profileKey, profileVersion: profile.version, issuerReference: profile.issuerReference, issuedAt, qualificationReference: eligibility.qualificationReference, evidenceReferences: eligibility.evidenceReferences, verificationReference, certificateSerial: serial, templateKey: profile.templateKey, templateVersion: profile.templateVersion, sourceVersions: { qualification: eligibility.qualificationReference }, presentationSnapshot: snapshot, contentHash }, db);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:125:  if (!item || item.organizationId !== current.organizationId || (!isAdminTier(actor.roles) && item.learnerUserId !== current.userId)) return null;
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:129:export async function listCertificates(actor: CredentialActor) { assertPermission(actor, SHS_SECURITY_PERMISSIONS.CREDENTIAL_VIEW); const current = scope(actor); return certificateRepo.listForActor(current.organizationId, current.userId, isAdminTier(actor.roles)); }
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:139:  const reference = ["certificates", item.organizationId, item.tenantId, item.certificateId, `${renderId}.${extension}`].map((v) => safeSegment(v, "unknown")).join("/");
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:142:  const render = await certificateRepo.addRender({ renderId, certificateId: item.certificateId, organizationId: item.organizationId, tenantId: item.tenantId, format, mimeType: output.mimeType, byteLength: output.bytes.length, contentHash: output.hash, rendererVersion: output.rendererVersion, templateKey: item.templateKey, templateVersion: item.templateVersion, storageReference: reference, filename });
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:148:  const render = await certificateRepo.getRender(renderId, id); if (!render || render.organization_id !== item.organizationId || render.tenant_id !== item.tenantId) throw new CredentialError("CERTIFICATE_RENDER_NOT_FOUND", "Certificate rendition not found.", 404);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:151:  await certificateRepo.addDeliveryEvent({ deliveryId: `certificate_delivery_${randomUUID()}`, certificateId: id, organizationId: item.organizationId, tenantId: item.tenantId, channel: "DOWNLOAD", requestedByUserId: actor.user_id, status: "DELIVERED" });
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:164:  await certificateOutbox.enqueue({ producer_id: "shs-api.credentials", event_type: "certificate.email.requested", schema_version: "1.0", subject_type: "issued_certificate", subject_id: item.certificateId, organization_id: item.organizationId, originating_actor_id: actor.user_id, originating_actor_type: "user", tenant_id: item.tenantId, occurred_at: new Date().toISOString(), idempotency_key: `certificate.email.requested:${item.certificateId}:${rendered.hash}:${email}`, correlation_id: `certificate-delivery:${item.certificateId}`, payload: { certificate_id: item.certificateId, certificate_reference: item.certificateSerial, recipient_reference: email, attachment_hash: rendered.hash, template_key: item.profileKey }, destination: "email-provider" });
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:174:export async function revokeIssuedCertificate(actor: CredentialActor, id: string, reason?: string) { assertPermission(actor, SHS_SECURITY_PERMISSIONS.CREDENTIAL_REVOKE); const item = await authorizedCertificate(actor, id); if (!item) throw new CredentialError("CERTIFICATE_NOT_FOUND", "Certificate not found.", 404); return certificateRepo.updateStatus(id, actor.organization_id, "REVOKED", actor.user_id, reason || "Revoked by authorized credential authority"); }
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:178:  const current = scope(actor); const replacement = await withTransaction(async (db: any) => { await db.query("SELECT pg_advisory_xact_lock(hashtext($1))", [`certificate-replacement:${id}`]); const next = await certificateRepo.create({ ...item, certificateId: `certificate_${randomUUID()}`, verificationReference: `shs-cert-${randomUUID().replaceAll("-", "").slice(0, 20)}`, certificateSerial: `${item.profileKey.split(".").pop()}-${new Date().getUTCFullYear()}-${randomUUID().replaceAll("-", "").slice(0, 10).toUpperCase()}`, issuedAt: new Date().toISOString(), supersedesCertificateId: item.certificateId, presentationSnapshot: { ...item.presentationSnapshot, issuedAt: new Date().toISOString() }, contentHash: item.contentHash }, db); await db.query("UPDATE issued_certificates SET status='REPLACED', replaced_by_certificate_id=$3, updated_at=NOW() WHERE certificate_id=$1 AND organization_id=$2", [id, current.organizationId, next.certificateId]); return next; }); return replacement;
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:181:export async function recordDelivery(actor: CredentialActor, id: string, channel: "DOWNLOAD" | "PRINT_ACTION" | "EMAIL", status: "REQUESTED" | "DELIVERED" | "FAILED", recipientReference?: string, failureReason?: string, providerMessageReference?: string) { const item = await authorizedCertificate(actor, id); if (!item) throw new CredentialError("CERTIFICATE_NOT_FOUND", "Certificate not found.", 404); return certificateRepo.addDeliveryEvent({ deliveryId: `certificate_delivery_${randomUUID()}`, certificateId: id, organizationId: item.organizationId, tenantId: item.tenantId, channel, recipientReference, requestedByUserId: actor.user_id, status, failureReason, providerMessageReference }); }
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:183:export async function learnerEmail(actor: CredentialActor, id: string) { const item = await authorizedCertificate(actor, id); if (!item) throw new CredentialError("CERTIFICATE_NOT_FOUND", "Certificate not found.", 404); const result = await query("SELECT email FROM users WHERE user_id=$1 AND organization_id=$2", [item.learnerUserId, item.organizationId]); return result.rows[0]?.email || null; }
+src/utils/pathwaySchema.js:131:const fundingContactSchema = z
+src/utils/pathwaySchema.js:146:    contact: fundingContactSchema.optional(),
+apps/shs-api/src/domain/credentials/service/credential-service.ts:10:import { query } from "../../../db/client.js";
+apps/shs-api/src/domain/credentials/service/credential-service.ts:40:  organization_id: string;
+apps/shs-api/src/domain/credentials/service/credential-service.ts:46:  const organizationId = String(actor.organization_id || "");
+apps/shs-api/src/domain/credentials/service/credential-service.ts:48:  if (!organizationId || !userId) throw new CredentialError("SCOPE_MISSING", "Actor organization/user is required.", 403);
+apps/shs-api/src/domain/credentials/service/credential-service.ts:49:  return { organizationId, userId, tenantId: `tenant:${organizationId}` };
+apps/shs-api/src/domain/credentials/service/credential-service.ts:110:  const { organizationId } = scope(actor);
+apps/shs-api/src/domain/credentials/service/credential-service.ts:130:      WHERE m.organization_id=$1 AND m.tenant_id=$2 AND m.learner_user_id=$3 AND m.competency_id=$4
+apps/shs-api/src/domain/credentials/service/credential-service.ts:132:      ORDER BY m.determined_at DESC LIMIT 1`, [organizationId, `tenant:${organizationId}`, learnerUserId, competencyId, masteryStatus, verificationStatus, courseId]);
+apps/shs-api/src/domain/credentials/service/credential-service.ts:134:      const mastery = await query(`SELECT 1 FROM curriculum_learner_mastery WHERE organization_id=$1 AND tenant_id=$2 AND learner_user_id=$3 AND competency_id=$4 AND mastery_status=$5 LIMIT 1`, [organizationId, `tenant:${organizationId}`, learnerUserId, competencyId, masteryStatus]);
+apps/shs-api/src/domain/credentials/service/credential-service.ts:140:  const hasCapstone = await learnerCredentialRepo.hasAcceptedCapstone(organizationId, learnerUserId);
+apps/shs-api/src/domain/credentials/service/credential-service.ts:155:  const { organizationId, tenantId, userId } = scope(actor);
+apps/shs-api/src/domain/credentials/service/credential-service.ts:161:    ? await learnerCredentialRepo.getAcceptedCapstone(organizationId, input.learnerUserId)
+apps/shs-api/src/domain/credentials/service/credential-service.ts:175:  const issuanceKey = `${definition.id}:v1:${organizationId}:${input.learnerUserId}`;
+apps/shs-api/src/domain/credentials/service/credential-service.ts:181:    const learner = await db.query("SELECT 1 FROM users WHERE user_id=$1 AND organization_id=$2 LIMIT 1", [input.learnerUserId, organizationId]);
+apps/shs-api/src/domain/credentials/service/credential-service.ts:182:    if (!learner.rows[0]) throw new CredentialError("LEARNER_NOT_FOUND", "Learner not found in this organization.", 400);
+apps/shs-api/src/domain/credentials/service/credential-service.ts:188:      learnerUserId: input.learnerUserId, organizationId, tenantId, expiresAt,
+apps/shs-api/src/domain/credentials/service/credential-service.ts:192:    await outbox.enqueue({ producer_id: "shs-api.credentials", event_type: "credential.issued", subject_type: "learner_credential", subject_id: credential.id, organization_id: organizationId, originating_actor_id: userId, originating_actor_type: "user", tenant_id: tenantId, occurred_at: credential.issuedAt, idempotency_key: `credential.issued:${credential.id}`, correlation_id: `credential:${credential.id}`, destination: "shs-credentials", payload: { credential_definition_id: credential.credentialDefinitionId, learner_user_id: credential.learnerUserId, credential_version: credential.credentialVersion, verification_hash: credential.verificationHash, provenance_policy: provenance.policy } }, db);
+apps/shs-api/src/domain/credentials/service/credential-service.ts:201:  const { organizationId, tenantId, userId } = scope(actor);
+apps/shs-api/src/domain/credentials/service/credential-service.ts:203:    const revoked = await learnerCredentialRepo.revoke(learnerCredentialId, organizationId, userId, db);
+apps/shs-api/src/domain/credentials/service/credential-service.ts:205:    await outbox.enqueue({ producer_id: "shs-api.credentials", event_type: "credential.revoked", subject_type: "learner_credential", subject_id: revoked.id, organization_id: organizationId, originating_actor_id: userId, originating_actor_type: "user", tenant_id: tenantId, occurred_at: revoked.revokedAt || new Date().toISOString(), idempotency_key: `credential.revoked:${revoked.id}:${revoked.revokedAt}`, correlation_id: `credential:${revoked.id}`, destination: "shs-credentials", payload: { credential_definition_id: revoked.credentialDefinitionId, learner_user_id: revoked.learnerUserId, credential_version: revoked.credentialVersion } }, db);
+apps/shs-api/src/domain/credentials/service/credential-service.ts:238:// Admin-tier sees every organization issuance; a student sees only their
+apps/shs-api/src/domain/credentials/service/credential-service.ts:245:  const { organizationId, userId } = scope(actor);
+apps/shs-api/src/domain/credentials/service/credential-service.ts:247:    ? await learnerCredentialRepo.listForOrganization(organizationId)
+apps/shs-api/src/domain/credentials/service/credential-service.ts:248:    : await learnerCredentialRepo.listForLearner(organizationId, userId);
+apps/shs-api/src/domain/credentials/service/credential-service.ts:257:  const { organizationId, userId } = scope(actor);
+apps/shs-api/src/domain/credentials/service/credential-service.ts:259:  if (!credential || credential.organizationId !== organizationId) return null;
+services/shf-agent-fabric/services/notification_alert_service.py:16:    "clientops_update",
+services/shf-agent-fabric/services/notification_alert_service.py:23:RECIPIENT_SCOPES = ["internal_admin", "internal_ops", "client", "partner", "public", "unknown"]
+services/shf-agent-fabric/services/notification_alert_service.py:26:EXTERNAL_RECIPIENT_SCOPES = {"client", "partner", "public"}
+services/shf-agent-fabric/services/notification_alert_service.py:373:                    "notification_review_id": "notification_client_001",
+services/shf-agent-fabric/services/notification_alert_service.py:374:                    "alert_name": "Client Readiness Notice",
+services/shf-agent-fabric/services/notification_alert_service.py:377:                    "recipient_scope": "client",
+services/shf-agent-fabric/services/notification_alert_service.py:380:                    "subject_id": "client-001",
+src/router/DebtRoutes.jsx:10:const Accounts  = lazy(() => import("@/pages/debt/Accounts.jsx"));
+src/router/DebtRoutes.jsx:39:          <Route path="accounts"      element={<Accounts />} />
+src/hooks/metaverse/useMetaverseTrafficLivePreview.js:8:// nothing here calls any production traffic/entry/unlock client, and no
+apps/shs-api/src/domain/credentials/api/routes.ts:12:    organization_id: req.user.active_organization_id || req.user.organization_id,
+apps/shs-api/src/domain/credentials/api/routes.ts:93:  // Self-service eligibility check — no client-suppliable learnerUserId;
+services/shf-agent-fabric/services/adapter_layer_service.py:11:    "clientops",
+services/shf-agent-fabric/services/adapter_layer_service.py:26:PAYLOAD_DOMAINS = ["operational", "impact", "reporting", "event", "client_private", "public_candidate", "unknown"]
+services/shf-agent-fabric/services/adapter_layer_service.py:29:    "shs_clientops_record",
+services/shf-agent-fabric/services/adapter_layer_service.py:43:SHS_OPERATIONAL_SOURCE_TYPES = {"shs_spine", "clientops", "production_ops", "website_studio", "webmaker", "builderhub"}
+services/shf-agent-fabric/services/adapter_layer_service.py:82:    if source_system_type == "clientops":
+services/shf-agent-fabric/services/adapter_layer_service.py:83:        return "shs_clientops_record"
+services/shf-agent-fabric/services/adapter_layer_service.py:108:    if payload_domain == "client_private":
+services/shf-agent-fabric/services/adapter_layer_service.py:183:    if payload_domain == "client_private":
+services/shf-agent-fabric/services/adapter_layer_service.py:332:                    "adapter_review_id": "adapter_clientops_001",
+services/shf-agent-fabric/services/adapter_layer_service.py:333:                    "source_system": "SHS ClientOps",
+services/shf-agent-fabric/services/adapter_layer_service.py:334:                    "source_system_type": "clientops",
+services/shf-agent-fabric/services/adapter_layer_service.py:336:                    "payload_domain": "client_private",
+services/shf-agent-fabric/services/adapter_layer_service.py:337:                    "payload_ref": "clientops/local",
+services/shf-agent-fabric/services/adapter_layer_service.py:338:                    "source_metadata": {"source_name": "ClientOps"},
+services/shf-agent-fabric/services/adapter_layer_service.py:340:                    "mapping_profile": "shs_clientops_record",
+src/hooks/metaverse/useMetaverseTrafficAuthoring.js:12:// entry/unlock/fast-travel/civic/treasury client, and its only persistence
+services/shf-agent-fabric/services/game_theory_service.py:33:    "client_churn_risk",
+services/shf-agent-fabric/services/game_theory_service.py:49:    "client_churn_risk",
+services/shf-agent-fabric/services/game_theory_service.py:228:        "client_id": _clean_string(payload.get("client_id")),
+services/shf-agent-fabric/services/game_theory_service.py:229:        "stakeholder_ids": _clean_list(payload.get("stakeholder_ids")),
+services/shf-agent-fabric/services/game_theory_service.py:249:    if scenario_type in {"funding_loss", "client_churn_risk"}:
+services/shf-agent-fabric/services/game_theory_service.py:250:        return "stabilize_relationship_and_prepare_retention_path"
+services/shf-agent-fabric/services/game_theory_service.py:256:        return "coordinate_stakeholders_with_verified_evidence"
+services/shf-agent-fabric/services/game_theory_service.py:269:        "region": scenario.get("program_id") or scenario.get("client_id") or "Strategic scenario",
+services/shf-agent-fabric/services/game_theory_service.py:320:    if scenario_type in {"adoption_resistance", "client_churn_risk"}:
+services/shf-agent-fabric/services/game_theory_service.py:352:    if not scenario.get("stakeholder_ids"):
+services/shf-agent-fabric/services/game_theory_service.py:353:        warnings.append("stakeholders_missing")
+services/shf-agent-fabric/services/game_theory_service.py:363:    if scenario.get("stakeholder_ids"):
+services/shf-agent-fabric/services/game_theory_service.py:443:                "strategy_id": "stabilize_relationship_and_prepare_retention_path",
+services/shf-agent-fabric/services/game_theory_service.py:444:                "label": "Stabilize relationship",
+services/shf-agent-fabric/services/game_theory_service.py:445:                "use_when": "Funding loss or client churn risk appears.",
+services/shf-agent-fabric/services/game_theory_service.py:449:                "strategy_id": "coordinate_stakeholders_with_verified_evidence",
+services/shf-agent-fabric/services/game_theory_service.py:450:                "label": "Coordinate stakeholders",
+apps/shs-api/src/domain/credentials/model/credential.ts:42:  organizationId: string;
+services/shf-agent-fabric/services/truth_public_population_postgres_repository.py:71:              (authority_event_id, authority_id, authority_type, authority_reference, tenant_id, organization_id,
+services/shf-agent-fabric/services/truth_public_population_postgres_repository.py:75:                row["tenant_id"], row["organization_id"], row.get("parent_authority_id"), row["status"],
+services/shf-agent-fabric/services/truth_public_population_postgres_repository.py:79:            audit(cursor, row.get("event_type", "public_population_authority.created"), row["authority_id"], row, row["tenant_id"], row["organization_id"], row["created_by"])
+services/shf-agent-fabric/services/truth_public_population_postgres_repository.py:88:              (signoff_event_id, signoff_id, truth_claim_id, truth_version, predicate, tenant_id, organization_id,
+services/shf-agent-fabric/services/truth_public_population_postgres_repository.py:93:                row["tenant_id"], row["organization_id"], row["authority_id"], row["signoff_type"], row["institutional_authority_reference"],
+services/shf-agent-fabric/services/truth_public_population_postgres_repository.py:101:            audit(cursor, row.get("event_type", "public_population_signoff.approved"), row["signoff_id"], row, row["tenant_id"], row["organization_id"], row["signed_by"])
+services/shf-agent-fabric/services/truth_public_population_postgres_repository.py:110:              (eligibility_event_id, eligibility_id, truth_claim_id, truth_version, predicate, tenant_id, organization_id,
+services/shf-agent-fabric/services/truth_public_population_postgres_repository.py:115:                row["tenant_id"], row["organization_id"], row["authority_id"], row["signoff_id"], row["status"],
+services/shf-agent-fabric/services/truth_public_population_postgres_repository.py:123:            audit(cursor, row.get("event_type", "truth.public_population_approved"), row["eligibility_id"], row, row["tenant_id"], row["organization_id"], row.get("revoked_by", row.get("approved_by", "")))
+services/shf-agent-fabric/services/truth_public_population_postgres_repository.py:127:def audit(cursor: Any, event_type: str, target_id: str, metadata: Dict[str, Any], tenant_id: str, organization_id: str, actor_id: str) -> None:
+services/shf-agent-fabric/services/truth_public_population_postgres_repository.py:130:      (governance_event_id, event_type, target_id, tenant_id, organization_id, actor_user_id, event_metadata)
+services/shf-agent-fabric/services/truth_public_population_postgres_repository.py:131:      VALUES (%s,%s,%s,%s,%s,%s,%s::jsonb)""", (f"pgevt_{uuid.uuid4().hex[:16]}", event_type, target_id, tenant_id, organization_id, actor_id, json.dumps(safe, default=str)))
+src/hooks/useBrandKit.js:41:  el.style.setProperty("--client-brand-primary", p);
+src/hooks/useBrandKit.js:42:  el.style.setProperty("--client-brand-secondary", s);
+src/hooks/useBrandKit.js:43:  el.style.setProperty("--client-brand-accent", a);
+src/hooks/useBrandKit.js:84:      ["--client-brand-primary"]: brand.primary || DEFAULTS.primary,
+src/hooks/useBrandKit.js:85:      ["--client-brand-secondary"]: brand.secondary || DEFAULTS.secondary,
+src/hooks/useBrandKit.js:86:      ["--client-brand-accent"]: brand.accent || DEFAULTS.accent,
+services/shf-agent-fabric/services/batch_import_service.py:11:    "clientops",
+services/shf-agent-fabric/services/batch_import_service.py:23:SHS_OPERATIONAL_SOURCE_TYPES = {"shs_spine", "clientops", "production_ops", "website_studio", "webmaker"}
+services/shf-agent-fabric/services/batch_import_service.py:344:                    "batch_id": "batch_clientops_001",
+services/shf-agent-fabric/services/batch_import_service.py:345:                    "batch_name": "ClientOps Export",
+services/shf-agent-fabric/services/batch_import_service.py:346:                    "source_system": "SHS ClientOps",
+services/shf-agent-fabric/services/batch_import_service.py:347:                    "source_system_type": "clientops",
+services/shf-agent-fabric/services/batch_import_service.py:350:                    "records": [{"source_id": "clientops-1", "canonical_type": "client_record"}],
+services/shf-agent-fabric/services/batch_import_service.py:351:                    "mapping_profile": "shs_clientops_record",
+services/shf-agent-fabric/services/batch_import_service.py:352:                    "source_metadata": {"source_name": "ClientOps"},
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:3:import { query } from "../../../db/client.js";
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:31:  "grade11-mechanical-hvac-thermal-airflow-interpretation": { slug: "mechanical-hvac-thermal-airflow-interpretation", activityType: PROOF_ACTIVITY_TYPE, domain: "mechanical-hvac", title: "Interpret synthetic thermal and airflow evidence", description: "Interpret modeled temperatures and airflow clues, distinguish evidence from assumptions, and document a safe escalation.", criteria: ["identifies intake and exhaust relationships", "uses relevant temperature and airflow evidence", "distinguishes evidence from assumption", "communicates a safe escalation"] },
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:58:  "grade12-cybersecurity-security-access-governance-analysis": { slug: "grade12-cybersecurity-security-access-governance-analysis", activityType: PROOF_ACTIVITY_TYPE, domain: "cybersecurity-security", title: "Analyze defensive access governance", description: "Interpret synthetic identities, roles, permissions, and lifecycle records using least-privilege and separation-of-duties reasoning without changing real accounts.", criteria: ["interprets identity, role, and permission relationships", "identifies stale or excessive access", "applies least-privilege and separation-of-duties reasoning", "preserves uncertainty", "documents an authorized recommendation"] },
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:65:  const organizationId = String(actor?.organization_id || actor?.active_organization_id || "").trim();
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:66:  const tenantId = String(actor?.tenant_id || `tenant:${organizationId}`).trim();
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:67:  if (!userId || !organizationId || tenantId !== `tenant:${organizationId}`) throw new Error("scope_missing");
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:68:  return { userId, organizationId, tenantId };
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:87:    const { userId, organizationId, tenantId } = scope(input.actor);
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:91:    const assignment = await this.dbQuery("SELECT specialization_id FROM program_specialization_assignments WHERE learner_id=$1 AND organization_id=$2 AND tenant_id=$3 AND program_id=$4 AND assignment_type='PRIMARY' AND status='ACTIVE'", [userId, organizationId, tenantId, "data-center-specialization-11"]);
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:95:      const course = await this.dbQuery("SELECT assignment_id FROM program_course_assignments WHERE learner_id=$1 AND organization_id=$2 AND tenant_id=$3 AND program_id='data-center-specialization-11' AND course_id=$4 AND specialization_id=$5 AND status='ACTIVE'", [userId, organizationId, tenantId, courseId, config.domain]);
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:98:    const resultId = `activity_result_${stableId(organizationId, userId, config.activityType, activityId)}`;
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:101:       (result_id, activity_type, activity_id, user_id, organization_id, tenant_id, result_status, result_json)
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:103:       ON CONFLICT (organization_id, user_id, activity_type, activity_id)
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:106:      [resultId, config.activityType, activityId, userId, organizationId, tenantId, JSON.stringify(input.result)],
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:113:    const { userId, organizationId, tenantId } = scope(input.actor);
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:114:    const result = await this.dbQuery(`SELECT * FROM prepare_prove_activity_results WHERE result_id=$1 AND user_id=$2 AND organization_id=$3 AND tenant_id=$4`, [input.sourceResultId, userId, organizationId, tenantId]);
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:116:    const evidenceId = `evidence_${stableId(organizationId, input.sourceResultId, input.criterion)}`;
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:119:       (evidence_id, source_domain, source_record_id, user_id, organization_id, tenant_id, activity_id, criterion, status, provenance_json)
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:121:       ON CONFLICT (organization_id, source_domain, source_record_id, criterion)
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:124:      [evidenceId, input.sourceResultId, userId, organizationId, tenantId, result.rows[0].activity_id, input.criterion, JSON.stringify({ source_result_id: input.sourceResultId, created_by: userId })],
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:130:    const { userId, organizationId, tenantId } = scope(actor);
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:131:    const result = await this.dbQuery(`SELECT * FROM prepare_prove_activity_results WHERE user_id=$1 AND organization_id=$2 AND tenant_id=$3 AND activity_id=$4`, [userId, organizationId, tenantId, activityId]);
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:133:    const evidence = source ? await this.dbQuery(`SELECT * FROM prepare_prove_evidence WHERE source_record_id=$1 AND user_id=$2 AND organization_id=$3 AND tenant_id=$4 ORDER BY created_at DESC, evidence_id DESC LIMIT 1`, [source.result_id, userId, organizationId, tenantId]) : { rows: [] };
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:135:    const decision = evidenceRow ? await this.dbQuery(`SELECT d.*, c.slug AS competency_slug, c.title AS competency_title FROM learner_competency_decisions d JOIN competency_definitions c ON c.competency_id=d.competency_id WHERE d.evidence_id=$1 AND d.user_id=$2 AND d.organization_id=$3 AND d.tenant_id=$4 ORDER BY d.reviewed_at DESC, d.decision_id DESC LIMIT 1`, [evidenceRow.evidence_id, userId, organizationId, tenantId]) : { rows: [] };
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:141:    const evidence = await this.dbQuery(`SELECT * FROM prepare_prove_evidence WHERE evidence_id=$1 AND organization_id=$2 AND tenant_id=$3`, [evidenceId, reviewer.organizationId, reviewer.tenantId]);
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:143:    const source = await this.dbQuery(`SELECT * FROM prepare_prove_activity_results WHERE result_id=$1 AND organization_id=$2 AND tenant_id=$3`, [evidence.rows[0].source_record_id, reviewer.organizationId, reviewer.tenantId]);
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:152:    const evidence = await this.dbQuery(`SELECT * FROM prepare_prove_evidence WHERE evidence_id=$1 AND organization_id=$2 AND tenant_id=$3`, [input.evidenceId, reviewer.organizationId, reviewer.tenantId]);
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:157:    const decisionId = `competency_decision_${stableId(reviewer.organizationId, competency.competency_id, input.evidenceId, String(competency.version))}`;
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:161:         (decision_id, competency_id, evidence_id, user_id, organization_id, tenant_id, decision, criteria_version, reviewer_user_id, reviewer_authority, provenance_json)
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:163:         ON CONFLICT (organization_id, competency_id, evidence_id, criteria_version)
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:166:        [decisionId, competency.competency_id, input.evidenceId, evidence.rows[0].user_id, reviewer.organizationId, reviewer.tenantId, input.decision, competency.version, reviewer.userId, JSON.stringify({ evidence_id: input.evidenceId, criteria_version: competency.version })],
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:175:        organization_id: reviewer.organizationId,
+services/shf-agent-fabric/services/operational_event_service.py:86:    tenant_id, organization_id = _scope_from_actor(actor)
+services/shf-agent-fabric/services/operational_event_service.py:90:        if event.get("tenant_id") == tenant_id and event.get("organization_id") == organization_id
+services/shf-agent-fabric/services/operational_event_service.py:105:    tenant_id, organization_id = _scope_from_actor(actor)
+services/shf-agent-fabric/services/operational_event_service.py:115:    existing = _find_duplicate(tenant_id, organization_id, producer_id, idempotency_key)
+services/shf-agent-fabric/services/operational_event_service.py:129:        "organization_id": organization_id,
+services/shf-agent-fabric/services/operational_event_service.py:161:            "organization_id": event["organization_id"],
+services/shf-agent-fabric/services/operational_event_service.py:191:        "idempotency_scope": "tenant_id + organization_id + producer_id + idempotency_key",
+services/shf-agent-fabric/services/operational_event_service.py:197:    organization_id = getattr(actor, "organization_id", None)
+services/shf-agent-fabric/services/operational_event_service.py:198:    if not organization_id:
+services/shf-agent-fabric/services/operational_event_service.py:199:        raise OperationalEventError("actor_missing_organization_scope")
+services/shf-agent-fabric/services/operational_event_service.py:200:    tenant_id = f"tenant:{organization_id}"
+services/shf-agent-fabric/services/operational_event_service.py:201:    return tenant_id, str(organization_id)
+services/shf-agent-fabric/services/operational_event_service.py:204:def _find_duplicate(tenant_id: str, organization_id: str, producer_id: str, idempotency_key: str) -> Dict[str, Any] | None:
+services/shf-agent-fabric/services/operational_event_service.py:208:            and event.get("organization_id") == organization_id
+services/shf-agent-fabric/services/operational_event_service.py:300:    required = {"commitment_id", "recipient_organization_id", "amount_minor", "currency", "lifecycle_status", "version"}
+services/shf-agent-fabric/services/operational_event_service.py:305:    if not str(event_payload.get("recipient_organization_id") or "").strip():
+services/shf-agent-fabric/services/operational_event_service.py:306:        raise OperationalEventError("invalid_funding_commitment_committed_payload", {"field": "recipient_organization_id"})
+src/utils/validateDataCenterCurriculumMap.js:104:      for (const career of specialization.careerRelationships || []) {
+src/utils/validateDataCenterCurriculumMap.js:106:          errors.push(`unknown canonical career relationship: ${specialization.specializationId}`);
+src/utils/validateDataCenterCurriculumMap.js:109:          errors.push(`invalid career relationship status: ${specialization.specializationId}`);
+src/utils/buildFundingPlan.js:21: *   steps: [{ id, program, action, docs: string[], contact?: string }],
+src/utils/buildFundingPlan.js:22: *   contacts: [{ program, urlHint?: string, phone?: string }],
+src/utils/buildFundingPlan.js:31:  const contacts = [];
+src/utils/buildFundingPlan.js:40:      action: `Contact your local workforce board and ask about Individual Training Accounts (ITAs) for approved programs.`,
+src/utils/buildFundingPlan.js:42:      contact: stateRes.oneStopLabel,
+src/utils/buildFundingPlan.js:44:    contacts.push({
+src/utils/buildFundingPlan.js:62:      contact: "VA Education Benefits",
+src/utils/buildFundingPlan.js:64:    contacts.push({
+src/utils/buildFundingPlan.js:78:      contact: stateGrant.label,
+src/utils/buildFundingPlan.js:80:    contacts.push({
+src/utils/buildFundingPlan.js:93:      contact: "County JFS / human services",
+src/utils/buildFundingPlan.js:95:    contacts.push({
+src/utils/buildFundingPlan.js:120:    contacts,
+src/utils/buildFundingPlan.js:148:function step({ program, action, docs = [], contact }) {
+src/utils/buildFundingPlan.js:154:    ...(contact ? { contact } : {}),
+apps/shs-api/src/domain/calendar-feed/repo/calendar-feed-token-repo.ts:4:import { query } from "../../../db/client.js";
+apps/shs-api/src/domain/calendar-feed/repo/calendar-feed-token-repo.ts:7:  organizationId: string;
+apps/shs-api/src/domain/calendar-feed/repo/calendar-feed-token-repo.ts:16:    organizationId: row.organization_id,
+apps/shs-api/src/domain/calendar-feed/repo/calendar-feed-token-repo.ts:27:  async upsert(organizationId: string, userId: string, tokenHash: string): Promise<CalendarFeedTokenRow> {
+apps/shs-api/src/domain/calendar-feed/repo/calendar-feed-token-repo.ts:29:      `INSERT INTO calendar_feed_tokens (organization_id, user_id, token_hash, created_at, revoked_at)
+apps/shs-api/src/domain/calendar-feed/repo/calendar-feed-token-repo.ts:31:       ON CONFLICT (organization_id, user_id)
+apps/shs-api/src/domain/calendar-feed/repo/calendar-feed-token-repo.ts:34:      [organizationId, userId, tokenHash],
+apps/shs-api/src/domain/calendar-feed/repo/calendar-feed-token-repo.ts:47:  async findForLearner(organizationId: string, userId: string): Promise<CalendarFeedTokenRow | null> {
+apps/shs-api/src/domain/calendar-feed/repo/calendar-feed-token-repo.ts:49:      `SELECT * FROM calendar_feed_tokens WHERE organization_id = $1 AND user_id = $2`,
+apps/shs-api/src/domain/calendar-feed/repo/calendar-feed-token-repo.ts:50:      [organizationId, userId],
+apps/shs-api/src/domain/calendar-feed/repo/calendar-feed-token-repo.ts:55:  async revoke(organizationId: string, userId: string): Promise<void> {
+apps/shs-api/src/domain/calendar-feed/repo/calendar-feed-token-repo.ts:57:      `UPDATE calendar_feed_tokens SET revoked_at = NOW() WHERE organization_id = $1 AND user_id = $2 AND revoked_at IS NULL`,
+apps/shs-api/src/domain/calendar-feed/repo/calendar-feed-token-repo.ts:58:      [organizationId, userId],
+apps/shs-api/src/domain/calendar-feed/service/calendar-feed-token-service.ts:19:  organization_id: string;
+apps/shs-api/src/domain/calendar-feed/service/calendar-feed-token-service.ts:29:  await repo.upsert(actor.organization_id, actor.user_id, hash(rawToken));
+apps/shs-api/src/domain/calendar-feed/service/calendar-feed-token-service.ts:34:  await repo.revoke(actor.organization_id, actor.user_id);
+apps/shs-api/src/domain/calendar-feed/service/calendar-feed-token-service.ts:45:  const row = await repo.findForLearner(actor.organization_id, actor.user_id);
+apps/shs-api/src/domain/calendar-feed/service/calendar-feed-token-service.ts:59:  return { organization_id: row.organizationId, user_id: row.userId };
+services/shf-agent-fabric/services/evidence_projection_service.py:49:    "organization_id",
+services/shf-agent-fabric/services/evidence_projection_service.py:114:    tenant_id, organization_id = operational_event_service._scope_from_actor(actor)
+services/shf-agent-fabric/services/evidence_projection_service.py:118:        if record.get("tenant_id") == tenant_id and record.get("organization_id") == organization_id
+services/shf-agent-fabric/services/evidence_projection_service.py:123:    tenant_id, organization_id = operational_event_service._scope_from_actor(actor)
+services/shf-agent-fabric/services/evidence_projection_service.py:127:        if record.get("tenant_id") == tenant_id and record.get("organization_id") == organization_id
+services/shf-agent-fabric/services/evidence_projection_service.py:142:                "claims", existing["truth_claim_id"], event["tenant_id"], event["organization_id"]
+services/shf-agent-fabric/services/evidence_projection_service.py:200:            (durable_repo.find_record_identity("claims", claim["claim_id"], event["tenant_id"], event["organization_id"]) or {}).get("record_id")
+services/shf-agent-fabric/services/evidence_projection_service.py:219:            "organization_id": event["organization_id"],
+services/shf-agent-fabric/services/evidence_projection_service.py:257:    tenant_id, organization_id = operational_event_service._scope_from_actor(actor)
+services/shf-agent-fabric/services/evidence_projection_service.py:258:    if event.get("tenant_id") != tenant_id or event.get("organization_id") != organization_id:
+services/shf-agent-fabric/services/evidence_projection_service.py:308:        "organization_id": event["organization_id"],
+services/shf-agent-fabric/services/evidence_projection_service.py:330:        truth_spine_service.check_organization_access(actor, existing.get("organization_id"))
+services/shf-agent-fabric/services/evidence_projection_service.py:343:            "organization_id": "browser_supplied_scope_ignored",
+services/shf-agent-fabric/services/evidence_projection_service.py:359:        truth_spine_service.check_organization_access(actor, existing.get("organization_id"))
+services/shf-agent-fabric/services/evidence_projection_service.py:367:            "client_id": event["organization_id"],
+services/shf-agent-fabric/services/evidence_projection_service.py:383:            "organization_id": "browser_supplied_scope_ignored",
+services/shf-agent-fabric/services/evidence_projection_service.py:426:        "organization_id": event["organization_id"],
+services/shf-agent-fabric/services/evidence_projection_service.py:471:            "recipient_organization_id": payload.get("recipient_organization_id"),
+services/shf-agent-fabric/fabric/funding/partner.py:66:            "Partners can fetch schemas to validate payloads client-side.",
+src/utils/grantNarrativeTemplate.js:28:## **2. Organizational Need**
+src/utils/grantNarrativeTemplate.js:37:- a clear organizational need,
+src/utils/grantNarrativeTemplate.js:136:- Provide a transparent ledger of organizational activity  
+services/shf-agent-fabric/services/metric_registry_service.py:16:REQUIRED_FIELDS = ("metric_id", "name", "description", "version", "status", "owner", "source_claim_types", "source_predicates", "formula_type", "formula", "numerator_definition", "denominator_definition", "filters", "population", "time_window", "time_zone", "unit", "rounding", "null_handling", "zero_denominator_behavior", "minimum_evidence", "source_verification_requirement", "claim_approval_requirement", "tenant_scope", "organization_scope", "public_eligibility", "small_population_suppression", "effective_from", "effective_to", "supersedes_metric_version", "lineage_output_requirement")
+services/shf-agent-fabric/services/metric_registry_service.py:65:def calculate_metric(metric_id: str, organization_id: str, period_start: str, period_end: str, actor: Any, public: bool = False, correlation_id: str | None = None) -> Dict[str, Any]:
+services/shf-agent-fabric/services/metric_registry_service.py:66:    if not organization_id or not getattr(actor, "organization_id", None) or actor.organization_id != organization_id: raise MetricCalculationError("scope_required")
+services/shf-agent-fabric/services/metric_registry_service.py:81:        elif claim.get("organization_id") != organization_id or claim.get("ownership_status") != "scoped": reason = "scope"
+services/shf-agent-fabric/services/metric_registry_service.py:120:    return {"metric_result_id": hashlib.sha256(f"{metric_id}:{definition['version']}:{organization_id}:{period_start}:{period_end}:{','.join(claim_ids)}".encode()).hexdigest(), "metric_id": metric_id, "metric_version": definition["version"], "organization_id": organization_id, "period_start": period_start, "period_end": period_end, "calculated_at": calculated_at, "data_through": period_end, "source_watermark": source_watermark, "value": len(included), "status": "OK" if included else "NO_DATA", "unit": definition["unit"], "numerator": len(included), "denominator": None, "population_count": len({c.get("subject_id") for c in included}), "input_claim_count": len(included), "excluded_claim_count": len(excluded), "exclusion_reasons": reasons, "source_claim_ids": claim_ids, "source_claim_versions": [c.get("version") for c in sorted(included, key=lambda c: c["claim_id"])], "source_evidence_ids": evidence_ids, "assignment_ids": assignment_ids, "curriculum_release_ids": release_ids, "definition_digest": hashlib.sha256(json.dumps(definition, sort_keys=True).encode()).hexdigest(), "verification_status": "verified", "public_eligibility": public, "suppression_status": "not_suppressed", "lineage_scope": {"organization_id": organization_id}, "warnings": [], "correlation_id": correlation_id}
+src/router/CivicRoutes.jsx:31:const OrganizationOnboarding = lazy(() => import("../../apps/shf-web/src/pages/operator/OrganizationOnboarding.jsx"));
+src/router/CivicRoutes.jsx:93:              organization-onboarding console used by authenticated
+src/router/CivicRoutes.jsx:95:          <Route path="operator/onboarding" element={<OrganizationOnboarding />} />
+apps/shs-api/src/domain/calendar-feed/service/ics-builder.ts:57:// calendar client updates this same event on re-sync rather than
+services/shf-agent-fabric/services/contract_runtime/core.py:58:    organization_id: str = ""
+services/shf-agent-fabric/services/contract_runtime/core.py:59:    client_id: str = ""
+services/shf-agent-fabric/services/contract_runtime/core.py:67:                role=str(session.get("role") or "client"),
+services/shf-agent-fabric/services/contract_runtime/core.py:69:                organization_id=str(session.get("organization_id") or ""),
+services/shf-agent-fabric/services/contract_runtime/core.py:70:                client_id=str(session.get("client_id") or ""),
+services/shf-agent-fabric/services/contract_runtime/core.py:72:        return cls(actor_id="usr_unknown", actor_type="human_operator", role="client")
+services/shf-agent-fabric/services/contract_runtime/core.py:77:    organization_id: str = ""
+services/shf-agent-fabric/services/contract_runtime/core.py:78:    client_id: str = ""
+services/shf-agent-fabric/services/contract_runtime/core.py:83:        for field_name in ("organization_id", "client_id", "program_id"):
+services/shf-agent-fabric/services/contract_runtime/core.py:107:    organization_id: str = ""
+services/shf-agent-fabric/services/contract_runtime/core.py:108:    client_id: str = ""
+services/shf-agent-fabric/services/contract_runtime/core.py:131:            "organization_id": self.organization_id,
+services/shf-agent-fabric/services/contract_runtime/core.py:132:            "client_id": self.client_id,
+src/router/AdminRoutes.jsx:175:        <Route path="/ops/reports/premium-preview/client-profile" element={protect("/ops/reports/premium-preview/client-profile", <ShsPremiumReportPreviewPage />, [SHS_SECURITY_PERMISSIONS.REPORTS_PREVIEW])} />
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:5:// accepts a write from an external calendar client, never creates an SHF
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:12:import { tenantIdForOrganization } from "../../../auth/tenant-context.js";
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:20:  const organizationId = req.user.active_organization_id || req.user.organization_id;
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:23:    organization_id: organizationId,
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:24:    active_organization_id: organizationId,
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:34:// (an external calendar client cannot send this app's session/dev-token
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:47:    organization_id: resolved.organization_id,
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:48:    active_organization_id: resolved.organization_id,
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:49:    tenant_id: tenantIdForOrganization(resolved.organization_id),
+apps/shs-api/src/domain/calendar-feed/api/routes.ts:94:  // identity. GET, not POST, because every external calendar client
+services/shf-agent-fabric/services/truth_history_service.py:70:    organization_id: Optional[str] = None,
+services/shf-agent-fabric/services/truth_history_service.py:95:        "organization_id": organization_id,
+services/shf-agent-fabric/services/truth_history_service.py:96:        "tenant_id": tenant_id if tenant_id is not None else organization_id,
+services/shf-agent-fabric/services/truth_history_service.py:131:def list_recent_history(limit: int = 100, organization_id: Optional[str] = None) -> List[Dict[str, Any]]:
+services/shf-agent-fabric/services/truth_history_service.py:144:            if organization_id is not None and event.get("organization_id") != organization_id:
+apps/shs-api/src/domain/accessibility-content/service/accessibility-content-service.ts:5:import { query } from "../../../db/client.js";
+apps/shs-api/src/domain/accessibility-content/service/accessibility-content-service.ts:15:function scope(actor: any) { return { organizationId: String(actor?.active_organization_id || actor?.organization_id || ""), tenantId: String(actor?.tenant_id || `tenant:${actor?.active_organization_id || actor?.organization_id || ""}`), userId: actor?.user_id || actor?.id || null }; }
+apps/shs-api/src/domain/accessibility-content/service/accessibility-content-service.ts:23:  if (type === "PUBLIC_ARTICLE" && id === "foundation-about") return { sourceType: type, sourceId: id, sourceVersion: "foundation-about-v1", sourceHash: createHash("sha256").update("foundation-about-v1").digest("hex"), ownerDomain: "foundation-public", visibility: "PUBLIC", language: "en", mimeType: "text/html", organizationId: null, tenantId: null, title: "About Silicon Heartland Foundation", blocks: [{ type: "paragraph", text: "Silicon Heartland Foundation helps young people learn, build, and connect to opportunity." }] };
+apps/shs-api/src/domain/accessibility-content/service/accessibility-content-service.ts:24:  const s = scope(actor); if (!s.organizationId) throw new AccessibilityContentError("AUTH_REQUIRED", "Authentication is required for this source.", 401);
+apps/shs-api/src/domain/accessibility-content/service/accessibility-content-service.ts:27:    const result = await query(`SELECT l.lesson_id, l.title, l.summary, l.content, l.revision, l.updated_at, l.organization_id, u.course_id, c.title AS course_title FROM curriculum_lessons l JOIN curriculum_units u ON u.unit_id=l.unit_id JOIN curriculum_courses c ON c.course_id=u.course_id WHERE l.lesson_id=$1 AND l.organization_id=$2`, [id, s.organizationId]);
+apps/shs-api/src/domain/accessibility-content/service/accessibility-content-service.ts:32:    return { sourceType: type, sourceId: id, sourceVersion, sourceHash: createHash("sha256").update(`${id}:${sourceVersion}:${title}:${contentText}`).digest("hex"), ownerDomain: "curriculum", visibility: "AUTHENTICATED", language: "en", mimeType: "application/json", organizationId: row.organization_id, tenantId: s.tenantId, title, blocks: [{ type: "heading", text: row.course_title || "Curriculum lesson" }, { type: "paragraph", text: title }, ...(contentText ? [{ type: "paragraph", text: contentText }] : [])] };
+apps/shs-api/src/domain/accessibility-content/service/accessibility-content-service.ts:36:    const result = await query(`SELECT document_instance_id, organization_id, tenant_id, title, state, content_hash, artifact_reference, artifact_mime_type FROM dgal_document_instances WHERE document_instance_id=$1 AND organization_id=$2 AND tenant_id=$3`, [id, s.organizationId, s.tenantId]);
+apps/shs-api/src/domain/accessibility-content/service/accessibility-content-service.ts:39:    return { sourceType: type, sourceId: id, sourceVersion: String(row.content_hash || `dgal:${id}`), sourceHash: row.content_hash || null, ownerDomain: "DGAL", visibility: "INTERNAL", language: "en", mimeType: row.artifact_mime_type || "application/octet-stream", organizationId: row.organization_id, tenantId: row.tenant_id, title: row.title, blocks: [{ type: "paragraph", text }] };
+apps/shs-api/src/domain/accessibility-content/service/accessibility-content-service.ts:45:function authorized(actor: any, source: any) { if (source.visibility === "PUBLIC") return true; const s = scope(actor); return Boolean(actor && s.organizationId === source.organizationId && s.tenantId === source.tenantId); }
+apps/shs-api/src/domain/accessibility-content/service/accessibility-content-service.ts:54:  const item = { representationId, sourceType: source.sourceType, sourceId: source.sourceId, sourceVersion: source.sourceVersion, representationType: type, status: "READY", language: source.language, mimeType: rendered.mimeType, generatedBy: "ax3-local-deterministic", generatedAt: new Date().toISOString(), validatedAt: new Date().toISOString(), validationStatus: "AUTOMATED_CHECKED", provenance: { sourceRef: `${source.sourceType}:${source.sourceId}`, sourceHash: source.sourceHash, transformationVersion: version, method: "deterministic-local-projection" }, storageRef: storageReference, accessPolicy: { visibility: source.visibility, organizationId: source.organizationId, tenantId: source.tenantId }, reuseKey, reused: false };
+services/shf-agent-fabric/tests/test_funding_manifest_signature_gate.py:6:from fastapi.testclient import TestClient
+services/shf-agent-fabric/tests/test_funding_manifest_signature_gate.py:9:client = TestClient(app)
+services/shf-agent-fabric/tests/test_funding_manifest_signature_gate.py:17:    r = client.get("/api/funding/manifest")
+src/utils/resumeSchema.js:8:  contact: { name: "", email: "", phone: "", city: "", links: [] }, // {label,url}
+src/utils/resumeSchema.js:10:  skills: [], // ["JavaScript", "ASL", "Customer Support"]
+src/companion/CompanionProvider.jsx:6:// runtime (this repo is a multi-page build, not a client-routed SPA).
+src/layouts/arcade/ArcadeAppShell.jsx:15:// DOM order can produce that; the sidebar-beside-header relationship has
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:6:from fastapi.testclient import TestClient
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:15:CLIENT = ("client@demo.shs", "demo-password")
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:45:def _login(client: TestClient) -> dict:
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:46:    response = client.post("/auth/login", json={"email": CLIENT[0], "password": CLIENT[1]}, headers={"Origin": ORIGIN})
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:68:        "organization_id": "browser-org",
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:77:    client = TestClient(app)
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:78:    identity = _login(client)
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:80:    ingested = client.post("/shf/ingestion/events", json=_payload(), headers=_headers(identity))
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:84:    assert event["organization_id"] == identity["organization_id"]
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:85:    assert event["tenant_id"] == f"tenant:{identity['organization_id']}"
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:87:    projected = client.post(f"/shf/ingestion/events/{event['event_id']}/truth-projection", json={}, headers=_headers(identity))
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:98:    assert evidence["organization_id"] == identity["organization_id"]
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:122:    client = TestClient(app)
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:123:    identity = _login(client)
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:124:    first = client.post("/shf/ingestion/events", json=_payload(), headers=_headers(identity))
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:125:    second = client.post("/shf/ingestion/events", json=_payload(payload={"status": "closed"}), headers=_headers(identity))
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:132:    assert client.post(f"/shf/ingestion/events/{event_id}/truth-projection", json={}, headers=_headers(identity)).status_code == 200
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:133:    replay = client.post(f"/shf/ingestion/events/{event_id}/truth-projection", json={}, headers=_headers(identity))
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:141:    client = TestClient(app)
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:142:    identity = _login(client)
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:143:    ingested = client.post("/shf/ingestion/events", json=_payload(), headers=_headers(identity))
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:145:    projected = client.post(f"/shf/ingestion/events/{event_id}/truth-projection", json={}, headers=_headers(identity))
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:149:    blocked = client.post(
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:158:    client = TestClient(app)
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:159:    identity = _login(client)
+services/shf-agent-fabric/tests/test_phase9_wave2_referral_ingestion.py:160:    response = client.post(
+services/shf-agent-fabric/services/truth_migration.py:7:predate the actor/organization/ownership_status/version fields introduced
+services/shf-agent-fabric/services/truth_migration.py:15:    to a real organization_id (a deliberate follow-up action, not
+services/shf-agent-fabric/services/truth_migration.py:69:    migrated["organization_id"] = None
+services/shf-agent-fabric/services/truth_migration.py:82:    migrated["organization_id"] = None
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:7:from fastapi.testclient import TestClient
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:20:def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> TestClient:
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:26:    return TestClient(app)
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:33:        "client_name": "Private Beta Client",
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:49:            "client_signoff": {"type": "client", "status": "approved", "owner": "Client"},
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:52:            "clientops_activation": {"owner": "ClientOps Owner", "status": "pending"},
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:58:def test_shs_launch_ledger_openapi_routes_exist(client: TestClient):
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:59:    paths = client.app.openapi().get("paths", {})
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:73:def test_health_readiness_and_empty_records(client: TestClient):
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:74:    health = client.get("/shs-launch-ledger/health")
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:79:    readiness = client.get("/shs-launch-ledger/readiness")
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:83:    records = client.get("/shs-launch-ledger/records")
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:88:def test_create_and_get_record(client: TestClient):
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:89:    response = client.post("/shs-launch-ledger/records", json=_ready_payload())
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:97:    fetched = client.get("/shs-launch-ledger/records/ledger_private_beta")
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:102:def test_missing_project_id_blocks(client: TestClient):
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:105:    response = client.post("/shs-launch-ledger/records", json=payload)
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:112:def test_private_beta_ready_can_be_computed(client: TestClient):
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:113:    response = client.post("/shs-launch-ledger/records", json=_ready_payload())
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:117:    assert any("client signoff" in blocker.lower() for blocker in gate["paid_launch_blockers"])
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:120:def test_paid_launch_ready_requires_hard_fields(client: TestClient):
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:121:    partial = client.post("/shs-launch-ledger/records", json=_ready_payload()).json()
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:124:    paid = client.post("/shs-launch-ledger/records", json=_paid_ready_payload())
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:129:    assert gate["clientops_activation_allowed"] is True
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:132:def test_signoff_endpoint_appends_audit_event(client: TestClient):
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:133:    client.post("/shs-launch-ledger/records", json=_ready_payload())
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:134:    response = client.post(
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:136:        json={"type": "client", "status": "approved", "owner": "Client"},
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:139:    assert response.json()["record"]["client_signoff"]["owner"] == "Client"
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:141:    audit = client.get("/shs-launch-ledger/audit")
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:146:def test_version_endpoint_appends_audit_event(client: TestClient):
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:147:    client.post("/shs-launch-ledger/records", json=_ready_payload())
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:148:    response = client.post(
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:155:    audit = client.get("/shs-launch-ledger/audit")
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:160:def test_recalculate_endpoint_appends_audit_event(client: TestClient):
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:161:    client.post("/shs-launch-ledger/records", json=_ready_payload())
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:162:    response = client.post("/shs-launch-ledger/records/ledger_private_beta/recalculate")
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:166:    audit = client.get("/shs-launch-ledger/audit")
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:171:def test_audit_endpoint_returns_events_with_safety_flags_false(client: TestClient):
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:172:    client.post("/shs-launch-ledger/records", json=_ready_payload())
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:173:    audit = client.get("/shs-launch-ledger/audit")
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:181:def test_no_shf_impact_mutation_authority_exists(client: TestClient):
+services/shf-agent-fabric/tests/test_shs_launch_ledger_routes.py:182:    response = client.post(
+services/shf-agent-fabric/tests/test_truth_public_population_postgres_runtime.py:17:    return type("Actor", (), {"user_id": "runtime-governance-actor", "role": "shs_admin", "organization_id": org, "tenant_id": tenant if tenant is not None else (f"runtime-tenant:{org}" if org else None)})()
+services/shf-agent-fabric/tests/test_truth_public_population_postgres_runtime.py:26:                cursor.execute("SELECT organization_id FROM organizations ORDER BY organization_id LIMIT 1")
+services/shf-agent-fabric/tests/test_truth_public_population_postgres_runtime.py:27:                organization_id = cursor.fetchone()[0]
+services/shf-agent-fabric/tests/test_truth_public_population_postgres_runtime.py:46:        "organization_id": organization_id, "ownership_status": "scoped", "source_ids": ["runtime-source"],
+services/shf-agent-fabric/tests/test_truth_public_population_postgres_runtime.py:52:    actor = _actor(organization_id, "runtime-tenant")
+services/shf-agent-fabric/tests/test_truth_public_population_postgres_runtime.py:54:    authority = authority_service.create_authority(global_actor, authority_service.AUTHORITY_TYPE, organization_id, "runtime-tenant")
+services/shf-agent-fabric/services/truth_public_population_service.py:40:    organization_id = getattr(actor, "organization_id", None)
+services/shf-agent-fabric/services/truth_public_population_service.py:41:    if organization_id and organization_id != claim.get("organization_id"):
+services/shf-agent-fabric/services/truth_public_population_service.py:42:        raise PublicPopulationEligibilityError("organization_scope_mismatch")
+services/shf-agent-fabric/services/truth_public_population_service.py:43:    if not organization_id and not truth_spine_service._actor_has_global_scope(actor):
+services/shf-agent-fabric/services/truth_public_population_service.py:44:        raise PublicPopulationEligibilityError("actor_missing_organization_scope")
+services/shf-agent-fabric/services/truth_public_population_service.py:48:    return tenant_id, claim.get("organization_id")
+services/shf-agent-fabric/services/truth_public_population_service.py:122:    tenant_id, organization_id = _scope(actor, claim)
+services/shf-agent-fabric/services/truth_public_population_service.py:130:        "organization_id": organization_id,
+services/shf-agent-fabric/services/truth_public_population_service.py:146:        organization_id=organization_id,
+services/shf-agent-fabric/services/truth_public_population_service.py:165:    tenant_id, organization_id = _scope(actor, claim)
+services/shf-agent-fabric/services/truth_public_population_service.py:166:    event = {**current, "event_type": "truth.public_population_revoked", "status": "PUBLIC_POPULATION_REVOKED", "revoked_by": getattr(actor, "user_id", ""), "revoked_at": _now(), "reason": reason, "version": int(current.get("version", 1)) + 1, "tenant_id": tenant_id, "organization_id": organization_id}
+services/shf-agent-fabric/services/truth_public_population_service.py:173:        organization_id=organization_id,
+services/shf-agent-fabric/services/truth_public_population_service.py:190:        if not (events and events[-1].get("status") == "PUBLIC_POPULATION_ELIGIBLE" and events[-1].get("organization_id") == claim.get("organization_id") and events[-1].get("predicate") == claim.get("predicate")):
+services/shf-agent-fabric/tests/test_event_webhook_routes.py:5:from fastapi.testclient import TestClient
+services/shf-agent-fabric/tests/test_event_webhook_routes.py:10:def _client() -> TestClient:
+services/shf-agent-fabric/tests/test_event_webhook_routes.py:11:    return TestClient(app)
+services/shf-agent-fabric/tests/test_event_webhook_routes.py:65:    client = _client()
+services/shf-agent-fabric/tests/test_event_webhook_routes.py:66:    health = client.get("/event-webhook/health")
+services/shf-agent-fabric/tests/test_event_webhook_routes.py:71:    schema = client.get("/event-webhook/schema").json()
+services/shf-agent-fabric/tests/test_event_webhook_routes.py:76:    summary = client.get("/event-webhook/summary").json()
+services/shf-agent-fabric/tests/test_event_webhook_routes.py:87:    readiness = client.get("/event-webhook/readiness").json()
+services/shf-agent-fabric/tests/test_event_webhook_routes.py:93:    client = _client()
+services/shf-agent-fabric/tests/test_event_webhook_routes.py:96:    result = client.post("/event-webhook/evaluate", json=payload).json()
+services/shf-agent-fabric/tests/test_event_webhook_routes.py:103:    client = _client()
+services/shf-agent-fabric/tests/test_event_webhook_routes.py:107:    result = client.post("/event-webhook/evaluate", json=payload).json()
+services/shf-agent-fabric/tests/test_event_webhook_routes.py:114:    client = _client()
+services/shf-agent-fabric/tests/test_event_webhook_routes.py:117:    result = client.post("/event-webhook/evaluate", json=payload).json()
+services/shf-agent-fabric/tests/test_event_webhook_routes.py:123:    client = _client()
+services/shf-agent-fabric/tests/test_event_webhook_routes.py:128:    result = client.post("/event-webhook/evaluate", json=payload).json()
+services/shf-agent-fabric/tests/test_event_webhook_routes.py:138:    client = _client()
+services/shf-agent-fabric/tests/test_event_webhook_routes.py:139:    result = client.post("/event-webhook/evaluate", json=_internal_event()).json()
+services/shf-agent-fabric/tests/test_event_webhook_routes.py:151:    client = _client()
+services/shf-agent-fabric/tests/test_event_webhook_routes.py:152:    result = client.post("/event-webhook/evaluate", json=_external_event()).json()
+services/shf-agent-fabric/tests/test_event_webhook_routes.py:164:    client = _client()
+services/shf-agent-fabric/tests/test_event_webhook_routes.py:167:    response = client.post(
+services/shf-agent-fabric/tests/test_event_webhook_routes.py:186:    client = _client()
+services/shf-agent-fabric/tests/test_event_webhook_routes.py:189:        reports = client.get("/reports/snapshot").json()
+services/shf-agent-fabric/tests/test_event_webhook_routes.py:190:        watchtower = client.get("/watchtower/summary").json()
+services/shf-agent-fabric/services/reporting_service.py:45:    metrics = [calculate_metric(metric_id, actor.organization_id, period_start, period_end, actor, public=public, correlation_id=correlation_id) for metric_id in definition["metric_ids"]]
+services/shf-agent-fabric/services/reporting_service.py:57:        "report_result_id": f"{definition['report_definition_id']}:v{definition['version']}:{period_start}:{period_end}:{actor.organization_id}",
+services/shf-agent-fabric/services/reporting_service.py:60:        "tenant_id": f"tenant:{actor.organization_id}",
+services/shf-agent-fabric/services/reporting_service.py:61:        "organization_id": actor.organization_id,
+services/shf-agent-fabric/services/reporting_service.py:70:        "lineage_reference": {"source_claim_ids": claim_ids, "source_claim_versions": claim_versions, "source_evidence_ids": evidence_ids, "assignment_ids": assignment_ids, "curriculum_release_ids": release_ids, "organization_id": actor.organization_id},
+apps/shs-api/src/domain/notifications/service/notification-service.ts:1:import { query } from "../../../db/client.js";
+apps/shs-api/src/domain/notifications/service/notification-service.ts:4:import { isOrganizationEntitled } from "./entitlement-resolver.js";
+apps/shs-api/src/domain/notifications/service/notification-service.ts:17:// checks isOrganizationEntitled() before persisting — fail-closed (no
+apps/shs-api/src/domain/notifications/service/notification-service.ts:18:// notification, not a wrong one) if the organization lacks that
+apps/shs-api/src/domain/notifications/service/notification-service.ts:21:// pass did not verify organization_service_entitlements is backfilled for
+apps/shs-api/src/domain/notifications/service/notification-service.ts:22:// every organization already relying on these ~19 already-working
+apps/shs-api/src/domain/notifications/service/notification-service.ts:27:// a permission-scoped audience (all users in a receiving organization who
+apps/shs-api/src/domain/notifications/service/notification-service.ts:43:// NCA-4 §9: resolves every user in `organizationId` who currently holds
+apps/shs-api/src/domain/notifications/service/notification-service.ts:49:async function usersWithPermissionInOrganization(organizationId: string, permissionName: string, db: Executor): Promise<string[]> {
+apps/shs-api/src/domain/notifications/service/notification-service.ts:50:  if (!organizationId || !permissionName) return [];
+apps/shs-api/src/domain/notifications/service/notification-service.ts:55:     WHERE m.organization_id = $1
+apps/shs-api/src/domain/notifications/service/notification-service.ts:59:    [organizationId, permissionName],
+apps/shs-api/src/domain/notifications/service/notification-service.ts:65:  "documentation.requirement.created": { type: "DOCUMENTATION_REQUIRED", title: "Document action required", message: "A document action is required in your organization workspace.", recipient: async (event) => String(event.originating_actor_id || event.payload?.recipient_user_id || "") || null, path: documentationPath },
+apps/shs-api/src/domain/notifications/service/notification-service.ts:86:      const result = await db.query("SELECT p.studio_learner_id AS user_id FROM projects p WHERE p.project_id=$1 AND p.organization_id=$2 AND p.tenant_id=$3", [event.payload?.project_id, event.organization_id, event.tenant_id]);
+apps/shs-api/src/domain/notifications/service/notification-service.ts:103:    recipient: async (event, db) => (await db.query("SELECT learner_id AS user_id FROM website_deployment_records WHERE deployment_id=$1 AND organization_id=$2 AND tenant_id=$3", [event.subject_id, event.organization_id, event.tenant_id])).rows[0]?.user_id || null,
+apps/shs-api/src/domain/notifications/service/notification-service.ts:108:    recipient: async (event, db) => (await db.query("SELECT learner_id AS user_id FROM website_deployment_records WHERE deployment_id=$1 AND organization_id=$2 AND tenant_id=$3", [event.subject_id, event.organization_id, event.tenant_id])).rows[0]?.user_id || null,
+apps/shs-api/src/domain/notifications/service/notification-service.ts:113:    recipient: async (event, db) => (await db.query("SELECT learner_id AS user_id FROM agent_registry_submissions WHERE submission_id=$1 AND organization_id=$2 AND tenant_id=$3", [event.subject_id, event.organization_id, event.tenant_id])).rows[0]?.user_id || null,
+apps/shs-api/src/domain/notifications/service/notification-service.ts:118:    recipient: async (event, db) => (await db.query("SELECT learner_id AS user_id FROM agent_registry_submissions WHERE submission_id=$1 AND organization_id=$2 AND tenant_id=$3", [event.subject_id, event.organization_id, event.tenant_id])).rows[0]?.user_id || null,
+apps/shs-api/src/domain/notifications/service/notification-service.ts:123:    recipient: async (event, db) => (await db.query("SELECT learner_id AS user_id FROM agent_registry_submissions WHERE submission_id=$1 AND organization_id=$2 AND tenant_id=$3", [event.subject_id, event.organization_id, event.tenant_id])).rows[0]?.user_id || null,
+apps/shs-api/src/domain/notifications/service/notification-service.ts:128:    recipient: async (event, db) => (await db.query("SELECT learner_id AS user_id FROM agent_registry_submissions WHERE submission_id=$1 AND organization_id=$2 AND tenant_id=$3", [event.subject_id, event.organization_id, event.tenant_id])).rows[0]?.user_id || null,
+apps/shs-api/src/domain/notifications/service/notification-service.ts:145:  // organization who holds `referrals.manage`, the same permission that
+apps/shs-api/src/domain/notifications/service/notification-service.ts:147:  // rather than a single named assignee. The receiving_organization_id is
+apps/shs-api/src/domain/notifications/service/notification-service.ts:152:    type: "CASE_REFERRAL_RECEIVED", title: "New referral received", message: "A new referral was created for your organization to review.",
+apps/shs-api/src/domain/notifications/service/notification-service.ts:154:      const details = await db.query("SELECT receiving_organization_id FROM referral_details WHERE case_id=$1", [event.subject_id]);
+apps/shs-api/src/domain/notifications/service/notification-service.ts:155:      const receivingOrganizationId = String(details.rows[0]?.receiving_organization_id || "");
+apps/shs-api/src/domain/notifications/service/notification-service.ts:156:      if (!receivingOrganizationId) return null;
+apps/shs-api/src/domain/notifications/service/notification-service.ts:157:      return usersWithPermissionInOrganization(receivingOrganizationId, "referrals.manage", db);
+apps/shs-api/src/domain/notifications/service/notification-service.ts:188:      const result = await db.query("SELECT requested_by AS user_id FROM arag_release_requests WHERE release_request_id=$1 AND organization_id=$2 AND tenant_id=$3", [event.subject_id, event.organization_id, event.tenant_id]);
+apps/shs-api/src/domain/notifications/service/notification-service.ts:196:      const result = await db.query("SELECT requested_by AS user_id FROM arag_release_requests WHERE release_request_id=$1 AND organization_id=$2 AND tenant_id=$3", [event.subject_id, event.organization_id, event.tenant_id]);
+apps/shs-api/src/domain/notifications/service/notification-service.ts:204:      const result = await db.query("SELECT requested_by AS user_id FROM arag_release_requests WHERE release_request_id=$1 AND organization_id=$2 AND tenant_id=$3", [event.subject_id, event.organization_id, event.tenant_id]);
+apps/shs-api/src/domain/notifications/service/notification-service.ts:212:      const result = await db.query("SELECT requested_by AS user_id FROM arag_release_requests WHERE release_request_id=$1 AND organization_id=$2 AND tenant_id=$3", [event.subject_id, event.organization_id, event.tenant_id]);

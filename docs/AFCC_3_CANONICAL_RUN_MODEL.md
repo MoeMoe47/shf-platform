@@ -567,3 +567,263 @@ Consequences, all replica-local:
 1. Add an SHS-owned migration for Fabric run authority, in the same Postgres: `fabric_plans` (status, approval decision), `fabric_run_events` (append-only), and `fabric_execution_claims` (`plan_id` PRIMARY KEY, `run_id`, actor, correlation, `lease_expires_at`, `released_at`).
 2. Claim = `INSERT … ON CONFLICT DO NOTHING`, or `UPDATE … WHERE lease_expires_at < now() - grace` for reclaim, in the **same transaction** as reading the plan status. Terminal close = the terminal event insert + `plan.status = DONE` + claim release in one transaction. A fencing token (claim version) is checked on every write.
 3. Keep the file claim as the development fallback. Flip `EXECUTION_SAFETY` to `DISTRIBUTED` only after the Postgres path is the production authority and a two-connection concurrency test proves it.
+
+## PHASE 5 — DISTRIBUTED RUN AUTHORITY
+
+Supersedes the Phase 4.1 "production blocker" **for the run authority** when the Postgres authority is active. Modules:
+- `fabric/run_authority.py` — mode selection and safety
+- `fabric/run_authority_pg.py` — transactions
+- `fabric/plan_store.py` — dispatch
+- `routers/runs_routes.py` — `_execute_pg` / `_execute_file`
+
+Migration: `apps/shs-api/migrations/149_fabric_run_authority.sql`.
+
+### Authority selection
+
+| Setting | Authority |
+| --- | --- |
+| `SHF_RUN_AUTHORITY_STORAGE=postgres` | shared Postgres run authority |
+| unset / `file` (non-production) | Phase 1–4 replica-local file stores |
+| production (`SHS_AUTH_ENV`/`ENVIRONMENT=production`) | **always Postgres**; no file fallback. Unreachable/unconfigured DB → **503 `RUN_AUTHORITY_UNAVAILABLE`** (fail closed) |
+
+This is the same convention as Truth Spine storage. Connection: `SHF_DATABASE_URL` (falls back to `DATABASE_URL`). In Azure it is already injected from Key Vault (`infra/azure/agent-fabric.tf`). **No production configuration was changed.**
+
+### Ownership and schema (migration 149, SHS-owned, forward-only, additive)
+
+| Table | Authority | Key facts |
+| --- | --- | --- |
+| `fabric_plans` | Plan Authority | `plan_id` PK; `status` CHECK (PLANNED/APPROVED/REJECTED/DONE); `approval_required`, `approved`, `creator_actor_id`, `creator_verification`, `tenant_id`, `organization_id`; `document` JSONB (full plan, same shape as before); `version`; `created_at`/`updated_at` |
+| `fabric_plan_decisions` | Approval Authority | `decision_id` PK; **UNIQUE(`plan_id`)** — decisions final at the DB level; `approver_actor_id`, `approver` JSONB identity projection, `reason`, `correlation_id`, scope, `decided_at` |
+| `fabric_execution_claims` | Execution Authority | `plan_id` PK; `run_id`, `claimed_by_actor_id`, `correlation_id`, `lease_started_at`, `lease_expires_at` (CHECK > start), **`claim_version`** (fencing token), `released_at`, `release_reason` |
+| `fabric_run_events` | Run Lifecycle Authority | `event_id` PK; `run_id`, `plan_id`, **UNIQUE(`run_id`, `seq`)**, `event_type`, `to_state`, `correlation_id`, `actor_id`, `reason_code`, scope, `event_at`, `payload` JSONB (the v4 event) |
+
+All tables reference `fabric_plans`, and all have scope indexes. Artifacts are referenced by id + sha256 only, with `storage: REPLICA_LOCAL_FILE`: the server path never enters the database. No secrets, session/CSRF tokens, or exception text are stored (tested by dumping every table).
+
+Migration verification:
+- the SHS runner applied 001 → 149 to a scratch database; re-run was a no-op; no drift;
+- the strict schema-integrity check found all 69 objects of migration 149 present; its single failure is pre-existing (migration 128, `ai_agent_tasks`);
+- the SHS migration/schema unit tests pass.
+
+Reversibility: the repository convention is forward-only (no down migrations exist). Rollback is operational: set `SHF_RUN_AUTHORITY_STORAGE=file` outside production; the tables can remain.
+
+### Transaction boundaries
+
+Lock order is always plan row → claim row.
+
+**Create plan:** `INSERT fabric_plans`.
+
+**Decide:**
+1. `SELECT plan FOR UPDATE`
+2. cross-org 404 → Policy B 403 `SELF_APPROVAL_DENIED` → state checks
+3. `INSERT decision … ON CONFLICT (plan_id) DO NOTHING` (no row → 409 `DECISION_ALREADY_RECORDED`)
+4. `UPDATE plan` (document + columns, version+1)
+
+**Begin execution (one transaction):**
+1. `SELECT plan FOR UPDATE`
+2. re-admit: org, not DONE (else idempotent), not rejected, attributable approval, pilot validation
+3. `INSERT claim … ON CONFLICT (plan_id) DO UPDATE … WHERE released_at IS NOT NULL OR lease_expires_at + 60s <= clock_timestamp() RETURNING`; no row → **409 `RUN_ALREADY_EXECUTING`**
+4. if a live-but-expired claim was taken over → `run.lease_expired` for the old run
+5. `run.execution_started` (seq 1)
+6. **COMMIT. No work starts before this commit.**
+
+**Work:** artifact steps, outside any transaction. The advisory deadline check uses the local clock.
+
+**Close execution (one transaction):**
+1. `SELECT plan FOR UPDATE`, `SELECT claim FOR UPDATE`
+2. if the run already has a terminal event → return it (idempotent close)
+3. **fence**: `owned` = same `run_id` + same `claim_version` + unreleased; `expired` by the **DB clock**. `COMPLETED` becomes `TIMED_OUT` (`reason_code: CLAIM_FENCED` when not owned) unless owned and unexpired.
+4. insert the terminal event (`run.completed` / `run.execution_failed` / `run.timed_out`)
+5. owned + completed → plan `DONE` (version+1)
+6. owned → release the claim (`released_at`, `release_reason` = outcome)
+7. **COMMIT**
+
+A terminal state never exists without its event, and a plan is never DONE without its release. A stale executor never commits COMPLETED and never touches a claim it no longer owns.
+
+### Lease / orphan recovery (Postgres)
+
+- Lease: `FABRIC_RUN_LEASE_SECONDS` (bounded 30–3600), computed by the DB (`clock_timestamp() + interval`).
+- Reclaim only through the conditional upsert above, after lease + 60 s grace. The old run keeps its `run.execution_started` and gains `run.lease_expired` (ORPHANED). It is never rewritten as FAILED or COMPLETED, and the replacement gets a new run id. `claim_version` increments.
+- A crash after the begin commit leaves EXECUTING + a held claim → ORPHANED after the lease → reclaimable after grace.
+
+### Legacy file-store strategy: **A — read-only legacy fallback**
+
+Audit (development repo, all git-ignored):
+- 39 plans (30 DONE, 9 PLANNED);
+- 28 v1 run events, 0 claims, 32 artifacts;
+- **none** with a verified creator or an attributable approval.
+
+In production the file stores are per-replica ephemeral disk, so no durable legacy data exists there.
+
+With the Postgres authority active:
+- all new plans, decisions, claims, and events go to Postgres only; files are never written (tested);
+- legacy JSONL runs and plan files stay **readable** in the projection, labelled `source.record_origin: LEGACY_FILE_STORE` (`execution_lease.scope: REPLICA_LOCAL`);
+- legacy plans are **not** approvable or executable through the shared authority (404). They carried no attributable creator/approver, and Phase 3 already refused their execution (`APPROVAL_NOT_ATTRIBUTABLE`).
+
+No dual-write, no migration job.
+
+### Execution safety
+
+| Level | File authority | Postgres authority |
+| --- | --- | --- |
+| Thread | YES | YES |
+| Process (shared store) | YES | YES |
+| Replica / distributed | **NO** | **YES** — proven with independent connections and independent application processes |
+
+With the Postgres authority, `execution_safety` reports:
+```
+level: DISTRIBUTED
+distributed_single_flight: GUARANTEED
+scope: SHARED_TRANSACTIONAL_STORE
+production_blocker: NONE
+artifact_storage: REPLICA_LOCAL   # Phase 6: SHARED_POSTGRES_RUN_ARTIFACTS
+```
+The file authority still reports `LOCAL` / `NOT_GUARANTEED`.
+
+Precise guarantee: at most one live claim per plan at any time, at most one COMPLETED per plan, and exactly one start event per claim. A second execution can start only after the first's lease + grace has expired. In that case the first executor, if still alive, is fenced: it can write only its own TIMED_OUT/FAILED, never COMPLETED, and cannot touch the plan or the new claim.
+
+### Artifact storage (Phase 5: remaining blocker — resolved for JSON run artifacts in Phase 6)
+
+Artifact bodies are still written to `ARTIFACTS_DIR` on the executing replica's ephemeral disk. The run authority is distributed; **artifact storage is not**:
+- `GET /artifacts/{id}` succeeds only on the replica that ran the step;
+- a restart loses the artifacts.
+
+Recorded as `artifact_storage: REPLICA_LOCAL`, and `ARTIFACT_STORAGE_REPLICA_LOCAL` in the safety constant. No blob storage was introduced.
+
+### Lifecycle states
+
+Unchanged from Phase 4: `APPROVAL_REQUIRED`, `APPROVED`, `APPROVAL_DENIED`, `EXECUTING`, `ORPHANED`, `COMPLETED`, `FAILED`, `TIMED_OUT`, plus `UNKNOWN`. Deferred: `REQUESTED`, `QUEUED`, `WAITING`, `RETRYING`, `CANCEL_REQUESTED`, `CANCELLED`, `REVOKED`.
+
+## PHASE 6 — SHARED ARTIFACT & EVIDENCE STORAGE
+
+Owner decision: **option A** — bounded JSON artifact bodies in the existing shared Postgres, committed with the run's terminal event.
+- Migration: `apps/shs-api/migrations/150_fabric_run_artifacts.sql`.
+- Modules: `fabric/run_authority_pg.py` (persistence, reads, verification, health), `routers/runs_routes.py` (executor), `routers/artifacts_routes.py` (retrieval), `fabric/command/live_operations.py` (projection).
+
+### Storage audit result
+
+No canonical shared body store exists anywhere in the platform:
+- SHS source ingestion (`local_private`), report files (`SHS_REPORT_STORAGE_ROOT`), certificates, and Fabric's `db/artifacts` all write to local disk;
+- Azure provisions Postgres only (no storage account, blob container, or volume);
+- there is no object-storage SDK and no `BYTEA`;
+- PR-2 / PR0-GAP-010 "Object/evidence/report storage" is **OPEN — BLOCKED — EXTERNAL DEPENDENCY**, and SYS-7A: "No S3/Azure Blob object-storage adapter is present."
+
+Option A adds no infrastructure: it uses the database Phase 5 already requires. It does **not** close PR0-GAP-010 for binaries, PDFs, or uploads; those still need the platform object store (option B).
+
+### Ownership
+
+| Record | Owner |
+| --- | --- |
+| Lifecycle references (artifact id, sha256, canonical ref, storage state on the terminal event) | Fabric Run Lifecycle Authority (`fabric_run_events`) |
+| Artifact metadata + body (`fabric_run_artifacts`) | Fabric Artifact/Evidence Authority |
+| Evidence / proof / Truth / Watchtower / LOO / report references | their own domains; referenced, never copied |
+| AFCC | owns nothing; reads safe projections |
+
+### Artifact record (`fabric_run_artifacts`)
+
+| Column | Purpose |
+| --- | --- |
+| `artifact_id` | primary key |
+| `canonical_ref` | `fabric-artifact:{artifact_id}`, UNIQUE — the stable reference for future Truth Spine / Watchtower / LOO / PDF reporting / forensics / evidence packages |
+| `run_id`, `plan_id` | run linkage (`plan_id` FK) |
+| `artifact_type` | e.g. `draft_artifact` |
+| `media_type` | CHECK `application/json` |
+| `content_hash` | sha256 hex, CHECK `^[0-9a-f]{64}$` |
+| `content_length` | bytes, CHECK 1..1 MiB |
+| `body_canonical` | the exact canonical JSON text |
+| `storage_provider` | CHECK `postgres_text` |
+| `completeness` | `COMPLETE`, or `PARTIAL` for failed/timed-out runs |
+| `retention_class` | `RUN_EVIDENCE` |
+| `created_by_actor_id` | verified executor |
+| `tenant_id`, `organization_id`, `correlation_id` | scope and chain |
+| `created_at` | DB clock |
+
+Indexes: run, scope, hash. No paths, credentials, or signed URLs are stored.
+
+### Hashing / integrity
+
+- Existing executor convention: `sha256(json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8"))`.
+- The exact hashed text is stored, so verification is byte-for-byte: recompute sha256 of `body_canonical`, then compare with `content_hash`, `content_length`, **and** the digest recorded on the run's terminal event. Any difference is `HASH_MISMATCH`.
+- The retrieval route refuses to serve a mismatched body (409 `ARTIFACT_INTEGRITY_FAILED`).
+- Hashes are integrity evidence only; they never authorize access.
+
+### Transaction / failure semantics
+
+In the Postgres authority, bodies are never written to the local filesystem. The executor holds them in memory and they persist **only inside the terminal transaction**: artifacts, then terminal event, then plan DONE, then claim release.
+
+| Case | Behavior |
+| --- | --- |
+| Execution succeeds, artifact persistence fails (DB error, over 1 MiB) | whole terminal transaction rolls back; a second transaction records `run.execution_failed` with `failure_code: EVIDENCE_STORAGE_FAILED`, artifact refs `storage_state: STORAGE_FAILED`, no rows, plan **not** DONE, claim released → 500 `EVIDENCE_STORAGE_FAILED`; retry allowed |
+| Persistence and the failure record both fail | nothing recorded; run stays `EXECUTING`, claim held → ORPHANED after lease. No state invented |
+| Artifacts committed but terminal fails | impossible — same transaction |
+| Executor crash during work | bodies were only in memory; **no orphan artifact rows can exist**; reclaim stores only the new run's artifacts |
+| Metadata exists but body missing | impossible — one row, `body_canonical NOT NULL`; a deleted row is reported `MISSING` / evidence `INCOMPLETE` |
+| Body exists but metadata write fails | impossible — same row |
+| Step failure / timeout | artifacts produced so far are stored `PARTIAL` with the FAILED/TIMED_OUT event (if that storage fails, the terminal is recorded without them, marked `STORAGE_FAILED`) |
+
+### Execution result vs evidence
+
+Kept separate:
+- `current_state` — the execution result.
+- `evidence` — `{status, artifact_count, durable_count, verified, storage}`.
+
+`evidence.status` values:
+
+| Status | Meaning |
+| --- | --- |
+| `DURABLE` | every referenced body is stored (and, on detail/evidence reads, verified) |
+| `NONE` | no artifacts |
+| `NOT_DURABLE` | file or legacy replica-local artifacts |
+| `STORAGE_FAILED` | persistence failed |
+| `INCOMPLETE` | a referenced row is missing |
+| `INTEGRITY_FAILED` | hash mismatch |
+
+Evidence is mandatory for this executor: its only work is producing artifacts. So `COMPLETED` is committed only together with its stored artifacts; there is no "completed but evidence pending" state. No new lifecycle states were added: `STORED` / `STORAGE_FAILED` / `MISSING` / `LEGACY_REPLICA_LOCAL` / `REPLICA_LOCAL` are artifact storage states in the evidence projection, not run states.
+
+### Multi-replica and restart
+
+Any instance with the shared database resolves `GET /artifacts/{id}` and the evidence projection, with the hash re-verified on read. Tested with separate OS processes:
+1. Replica A executes and exits;
+2. its filesystem is deleted;
+3. Replica B (fresh disk) retrieves the artifact, re-derives the recorded digest, and projects `COMPLETED` / `DURABLE` / `VERIFIED`;
+4. a restarted A with an empty disk does the same.
+
+Neither instance writes any local file.
+
+### Tenant / organization security
+
+`GET /artifacts/{id}` requires a session with `bos.governance.read` (no CSRF needed for GET).
+
+| Reader | Access |
+| --- | --- |
+| Global operator | all artifacts |
+| Organization-scoped reader | only rows whose `organization_id` equals their verified org **and** `tenant_id` equals `tenant:{org}` |
+
+- Out of scope, unknown, and guessed ids are indistinguishable (404).
+- Query/header scope hints are ignored.
+- No artifact mutation route exists (POST/PUT/PATCH/DELETE → 405).
+
+### Legacy local artifacts
+
+Replica-local files are labelled `LEGACY_REPLICA_LOCAL` (Postgres authority) or `REPLICA_LOCAL` (file authority), always `durable: false` and `verification_state: NOT_VERIFIABLE`. They are never imported: the files carry no scope, and their runs carry no verified approval, so there is no trustworthy migration path. In development they stay readable, and only by global operators. **In production they are never served** (404) and never written.
+
+### Storage readiness
+
+`GET /api/v1-command-center/agent-fabric/storage/artifacts` (bridged by SHS as `storage/artifacts`) runs a read-only catalog lookup (`to_regclass`). It never writes and never reads bodies.
+
+| State | Meaning |
+| --- | --- |
+| `AVAILABLE` | run authority + artifact store present |
+| `DEGRADED` | `ARTIFACT_STORE_MIGRATION_MISSING` or `RUN_AUTHORITY_MIGRATION_MISSING` |
+| `UNAVAILABLE` | database unreachable |
+| `NOT_CONFIGURED` | no DSN, or file authority (`REPLICA_LOCAL_FILE`, `durable: false`) |
+
+### Production deployment gates (fail closed)
+
+| Gate | Required before | If missing |
+| --- | --- | --- |
+| 1. Migration 149 | Fabric plan/run routes in production | 503 `RUN_AUTHORITY_UNAVAILABLE` / DB errors |
+| 2. Migration 150 | any run can complete in production | runs fail `EVIDENCE_STORAGE_FAILED` (never COMPLETED); storage readiness `DEGRADED` |
+
+There is **never** a fallback to replica-local artifact files in production (tested).
+
+Remaining platform gap: binary/report/upload storage (PR0-GAP-010, option B).

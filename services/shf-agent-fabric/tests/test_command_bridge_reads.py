@@ -43,9 +43,12 @@ BRIDGED = {
     "watchtower": "watchtower",
     "infrastructure": "infrastructure",
     "observability": "observability",
+    # AFCC-3 Phase 6: artifact storage readiness.
+    "storage/artifacts": "artifact_storage",
 }
 # Valid, truthful non-error states per kind (nothing seeded => not evaluated / not verified).
 EXPECTED_STATE = {
+    "artifact_storage": {"NOT_CONFIGURED"},  # file authority in this suite
     "watchtower": {"AVAILABLE", "NOT_YET_EVALUATED"},
     "infrastructure": {"AVAILABLE", "NOT_YET_VERIFIED"},
     "observability": {"AVAILABLE", "NOT_YET_VERIFIED"},
@@ -380,3 +383,14 @@ def test_live_run_detail_carries_phase2_lineage_blocks(client):
     assert run["domain_refs"]["truth_spine"]["state"] == "NOT_PUBLISHED"
     assert run["execution"]["model_invoked"] == "NOT_CAPTURED"
     assert run["failure_summary"] == "[redacted]"
+
+
+def test_run_artifact_viewer_read_is_allowlisted_get_only(client):
+    full = f"{BASE}/runs/rX/artifacts/draft_1"
+    assert is_command_read_path(full)
+    for bad in (f"{BASE}/runs/execute/artifacts/a1", f"{BASE}/runs/rX/artifacts/a1/body", f"{BASE}/runs/rX/artifacts/../x"):
+        assert not is_command_read_path(bad), bad
+    body = client.get(full, headers=_signed("GET", full)).json()
+    assert (body["kind"], body["read_only"], body["state"], body["reason_code"]) == ("run_artifact", True, "NOT_AVAILABLE", "ARTIFACT_NOT_IN_RUN")
+    for method in ("POST", "PUT", "PATCH", "DELETE"):
+        assert client.request(method, full, headers=_signed(method, full)).status_code in (401, 405)

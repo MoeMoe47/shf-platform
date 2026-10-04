@@ -181,3 +181,45 @@ No domain restricts approver ≠ executor. Fabric has no such rule yet, and its 
 - **Execution safety classified:** `LOCAL_SINGLE_FLIGHT = YES`, `CROSS_PROCESS_SAME_STORE = YES`, `CROSS_REPLICA_DISTRIBUTED_SINGLE_FLIGHT = NO`.
 - **Shared-store audit → classification B.** Azure Postgres exists and Fabric already uses it (Truth Spine, rate limit; schema owned by SHS migrations). No execution-claim, lease, advisory-lock, or Redis authority exists, and plans/approvals/run events are replica-local JSON, so a claim cannot be made transactional with the state it guards without migrating the plan/run authority.
 - **PRODUCTION BLOCKER — DISTRIBUTED SINGLE-FLIGHT NOT GUARANTEED.** More broadly, the whole plan → approval → run lifecycle is replica-local in production (2 replicas, no shared volume).
+
+## PHASE 5 — DISTRIBUTED RUN AUTHORITY
+
+### Shared-store audit
+
+| Item | Finding |
+| --- | --- |
+| Connection | `SHF_DATABASE_URL` (fallback `DATABASE_URL`); Azure injects it into `agent-fabric` from Key Vault secret `database-url` |
+| Driver / helper | `psycopg` 3, one connection per transaction via a `transaction()` context manager (Truth Spine pattern), dict rows |
+| Mode convention | `SHF_<AUTHORITY>_STORAGE=postgres`; production always Postgres, no fallback |
+| Migration owner | SHS runner (`apps/shs-api/migrations`, `NNN_name.sql`, `schema_migrations` ledger with checksums, forward-only, additive DDL, named constraints, strict schema-integrity check) |
+| Conventions reused | TEXT ids, `tenant_id`/`organization_id` TEXT, JSONB payloads, `TIMESTAMPTZ NOT NULL DEFAULT NOW()`, scope indexes (`…_scope_idx`), `ON CONFLICT` idempotency |
+| Existing run-claim authority | none (added as migration 149) |
+
+### Decision
+
+The Phase 4.1 classification B ("shared store exists; migration is a separate project") was **executed in Phase 5**:
+- plans, decisions, claims, and run events now share one transactional authority;
+- the file stores remain the development default and the read-only legacy source.
+
+### Remaining production dependencies
+
+1. Migration 149 must be applied to the production database by the SHS migration runner before Fabric serves plan/run routes. Until then those routes fail closed with 503.
+2. ~~Artifact storage is replica-local.~~ Resolved for JSON run artifacts in Phase 6 (migration 150); see Phase 6.
+
+## PHASE 6 — SHARED ARTIFACT & EVIDENCE STORAGE
+
+| Area searched | Finding |
+| --- | --- |
+| Azure infra | Postgres flexible server only; no storage account, blob container, file share, or container volume |
+| SDKs | no S3 / Azure Blob / MinIO / boto3 / azure-storage dependency |
+| Postgres binaries | no `BYTEA` column in any migration |
+| SHS `SourceStorage` | interface with one provider, `local_private` (local dir, default `/tmp`) |
+| SHS `ReportFileStorage` | local dir (`SHS_REPORT_STORAGE_ROOT`, required in production but unbacked by any volume) |
+| SHS certificates | local dir under the report root |
+| Artifact metadata conventions | `report_artifacts`, `report_rendered_files`, `source_assets`, `certificate_renders`, `studio_build_artifacts`: sha256 hex CHECK `^[0-9a-f]{64}$`, `content_hash`, `byte_length`, `mime_type`, `storage_reference`/`storage_key`, tenant/org scope — reused in migration 150 |
+| Fabric | `db/artifacts/*.json` (local), `registry/published/*` proofs (local), evidence-package service builds in memory |
+| Platform record | PR-2 / PR0-GAP-010 OPEN — BLOCKED — EXTERNAL DEPENDENCY (production object store); SYS-7A: no object-storage adapter |
+
+Also fixed: `GET /artifacts/{id}` was **unauthenticated**, used a CWD-relative path, and returned raw exception text. It now requires a session with `bos.governance.read`, validates ids, scope-checks, verifies hashes, and returns no exception text.
+
+Dev inventory: 32 Fabric JSON artifacts, median 13.8 KB, max 21.2 KB — well within the 1 MiB bound.

@@ -1,0 +1,503 @@
+============================================================
+SOURCE: 14_DATABASE_MODELS.txt
+============================================================
+db/apps.json:16:      "capabilities": ["ledger", "grants", "payouts"],
+apps/shs-api/.env.example:13:ZOOM_ACCOUNT_ID=
+apps/shs-api/.env.example:25:# Phase 12.1 External Account Security — AES-256-GCM key used to encrypt
+apps/shs-api/.env.example:50:# (`${base}/external-accounts/:provider/oauth/callback`). Must exactly
+apps/shs-api/.env.example:60:# Microsoft HTTP call (src/domain/external-accounts/providers/provider-http.ts).
+apps/shs-api/package-lock.json:861:      "funding": {
+apps/shs-api/package-lock.json:890:      "funding": [
+apps/shs-api/package-lock.json:987:      "funding": {
+apps/shs-api/package-lock.json:1098:      "funding": {
+apps/shs-api/package-lock.json:1342:      "funding": {
+apps/shs-api/package-lock.json:1416:      "funding": {
+apps/shs-api/package-lock.json:1449:      "funding": {
+apps/shs-api/package-lock.json:1475:      "funding": {
+apps/shs-api/package-lock.json:1487:      "funding": {
+apps/shs-api/package-lock.json:1499:      "funding": {
+apps/shs-api/package-lock.json:1541:      "funding": {
+apps/shs-api/package-lock.json:1715:      "funding": {
+apps/shs-api/package-lock.json:1788:      "funding": {
+apps/shs-api/package-lock.json:1798:      "funding": [
+apps/shs-api/package-lock.json:1838:      "funding": {
+apps/shs-api/package-lock.json:1871:      "funding": {
+apps/shs-api/package-lock.json:1963:      "funding": {
+apps/shs-api/package-lock.json:2191:      "funding": {
+apps/shs-api/package-lock.json:2254:      "funding": {
+apps/shs-api/package-lock.json:2262:      "funding": [
+apps/shs-api/package-lock.json:2372:      "funding": {
+apps/shs-api/package-lock.json:2388:      "funding": {
+apps/shs-api/package-lock.json:2406:      "funding": {
+apps/shs-api/package-lock.json:2425:      "funding": {
+src/router/LordOutcomesRoutes.jsx:14:import FundingImpactPage from "@/pages/lordOutcomes/FundingImpactPage.jsx";
+src/router/LordOutcomesRoutes.jsx:34:        <Route path="funding" element={<FundingImpactPage />} />
+apps/shs-api/src/shared/impact/impactMeasurementModel.js:114:      outcome.fundingAmount ??
+apps/shs-api/src/shared/impact/impactMeasurementModel.js:115:      outcome.grantAmount ??
+apps/shs-api/src/shared/impact/impactMeasurementModel.js:124:  funding = [],
+apps/shs-api/src/shared/impact/impactMeasurementModel.js:140:    safeArray(funding).reduce(
+apps/shs-api/src/shared/impact/impactMeasurementModel.js:146:            item.fundingAmount ??
+apps/shs-api/src/shared/impact/impactMeasurementModel.js:147:            item.grantAmount ??
+apps/shs-api/src/shared/impact/impactMeasurementModel.js:170:  let recommendedNextAction = "Use this impact package for comparison, reporting, and funding decision support.";
+apps/shs-api/src/shared/impact/impactMeasurementModel.js:184:    recommendedNextAction = "Strengthen evidence before leadership, funder, or public reporting.";
+apps/shs-api/src/shared/impact/impactMeasurementModel.js:189:    recommendedNextAction = "Review pending outcomes before using this package for funding decisions.";
+apps/shs-api/src/shared/impact/impactMeasurementModel.js:200:  const fundingReadinessScore = Math.round(
+apps/shs-api/src/shared/impact/impactMeasurementModel.js:206:  let fundingReadinessLabel = "Funder Ready";
+apps/shs-api/src/shared/impact/impactMeasurementModel.js:207:  if (fundingReadinessScore < 60) fundingReadinessLabel = "Not Funder Ready";
+apps/shs-api/src/shared/impact/impactMeasurementModel.js:208:  else if (fundingReadinessScore < 80) fundingReadinessLabel = "Funder Review Needed";
+apps/shs-api/src/shared/impact/impactMeasurementModel.js:237:      fundingReadinessScore,
+apps/shs-api/src/shared/impact/impactMeasurementModel.js:238:      fundingReadinessLabel,
+apps/shs-api/src/shared/impact/impactMeasurementModel.js:242:      fundingDecision:
+apps/shs-api/src/shared/impact/impactMeasurementModel.js:243:        fundingReadinessScore >= 80
+apps/shs-api/src/shared/impact/impactMeasurementModel.js:244:          ? "Strong candidate for funding defense or expansion."
+apps/shs-api/src/shared/impact/impactMeasurementModel.js:245:          : fundingReadinessScore >= 60
+apps/shs-api/src/shared/impact/impactMeasurementModel.js:277:    ["Funding Readiness", `${model.metrics.fundingReadinessScore}%`],
+apps/shs-api/src/oracle/services/priority-engine.ts.bak_20260422_144042:24:  else if (t.readinessStatus === "leadership_ready") score += 45;
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:14:import FundingImpactPage from "@/pages/lordOutcomes/FundingImpactPage.jsx";
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:36:        <Route path="funding" element={<FundingImpactPage />} />
+apps/shs-api/src/oracle/services/readiness-engine.ts.bak_alias_fix_20260418_164457:48:    if (publicationMode === "partner_scoped") return "leadership_ready";
+apps/shs-api/src/oracle/services/readiness-engine.ts.bak_alias_fix_20260418_164457:53:    return "leadership_ready";
+apps/shs-api/src/api/router.ts.bak_20260424_101218:143:        { id: "leadership_funder_viewer", name: "leadership_funder_viewer" },
+src/router/AdminRoutes.jsx.bak_20260423_220933:8:import GrantBinder from "@/pages/admin/GrantBinder.jsx";
+src/router/AdminRoutes.jsx.bak_20260423_220933:16:import HubLeadershipDashboard from "@/pages/hub/HubLeadershipDashboard.jsx";
+src/router/AdminRoutes.jsx.bak_20260423_220933:30:      <Route path="/builder/grant-binder" element={<GrantBinder />} />
+src/router/AdminRoutes.jsx.bak_20260423_220933:39:      <Route path="/hub" element={<HubLeadershipDashboard />} />
+apps/shs-api/src/oracle/services/oracle.service.ts:86:    readinessStatus = "leadership_ready";
+apps/shs-api/src/api/router.ts.bak_20260424_113525:66:  { id: "leadership_funder_viewer", name: "leadership_funder_viewer" },
+apps/shs-api/src/oracle/services/compare-engine.ts.bak_20260422_144031:15:  else if (t.readinessStatus === "leadership_ready") score += 40;
+apps/shs-api/src/api/router.ts.bak_20260424_094942:143:        { id: "leadership_funder_viewer", name: "leadership_funder_viewer" },
+src/router/AdminRoutes.jsx.bak_force_identity_redirect_20260513_080502:10:import GrantBinder from "@/pages/admin/GrantBinder.jsx";
+src/router/AdminRoutes.jsx.bak_force_identity_redirect_20260513_080502:20:import HubLeadershipDashboard from "@/pages/hub/HubLeadershipDashboard.jsx";
+src/router/AdminRoutes.jsx.bak_force_identity_redirect_20260513_080502:28:import HubSalesPipelinePage from "@/pages/hub/HubSalesPipelinePage.jsx";
+src/router/AdminRoutes.jsx.bak_force_identity_redirect_20260513_080502:96:        <Route path="/hub/network" element={protect("/hub/network", <HubLeadershipDashboard />)} />
+src/router/AdminRoutes.jsx.bak_force_identity_redirect_20260513_080502:97:        <Route path="/hub/leadership" element={protect("/hub/leadership", <HubLeadershipDashboard />)} />
+src/router/AdminRoutes.jsx.bak_force_identity_redirect_20260513_080502:107:        <Route path="/hub/sales-pipeline" element={protect("/hub/sales-pipeline", <HubSalesPipelinePage />)} />
+src/router/AdminRoutes.jsx.bak_force_identity_redirect_20260513_080502:128:        <Route path="/grant-binder" element={protect("/grant-binder", <GrantBinder />)} />
+apps/shs-api/src/oracle/services/readiness-engine.ts.bak_contract_fix_20260418_165452:47:    if (publicationMode === "partner_scoped") return "leadership_ready";
+apps/shs-api/src/oracle/services/readiness-engine.ts.bak_contract_fix_20260418_165452:52:    return "leadership_ready";
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:14:import { getExternalAvailabilityForActor } from "../../external-accounts/service/external-availability-service.js";
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:15:import { getExternalCalendarProvider } from "../../external-accounts/providers/provider-registry.js";
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:46:// entitled, still-open Opportunity or Career Event the learner's own
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:52:    .filter((e) => (e.type === "OPPORTUNITY_DEADLINE" || e.type === "CAREER_EVENT") && e.pathwayRelevant === true)
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:57:    reasonCode: "PATHWAY_RELEVANT_OPPORTUNITY" as const,
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:61:    priority: GUIDANCE_PRIORITY.PATHWAY_RELEVANT_OPPORTUNITY,
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:161:  // Credential renewal *guidance* already flows through
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:163:  // own CREDENTIAL_RENEWAL_SOON recommendation, sourced from the same
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:164:  // credential renewal dates projected onto the Calendar) — this summary
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:172:      upcomingRenewalCount: creds.filter((c: any) => {
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:173:        if (!c.renewalDueAt) return false;
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:174:        const days = daysUntil(c.renewalDueAt, now.getTime());
+apps/shs-api/src/api/router.ts.bak_20260424_150937:66:  { id: "leadership_funder_viewer", name: "leadership_funder_viewer" },
+apps/shs-api/src/oracle/services/readiness-engine.ts.bak_20260418_164019:62:  if (input.publicationMode === "leadership") {
+apps/shs-api/src/oracle/services/readiness-engine.ts.bak_20260418_164019:63:    return { readinessStatus: "leadership_ready", reasons: [] };
+src/router/AdminRoutes.jsx.bak_final_verify_20260513_104716:10:import GrantBinder from "@/pages/admin/GrantBinder.jsx";
+src/router/AdminRoutes.jsx.bak_final_verify_20260513_104716:20:import HubLeadershipDashboard from "@/pages/hub/HubLeadershipDashboard.jsx";
+src/router/AdminRoutes.jsx.bak_final_verify_20260513_104716:28:import HubSalesPipelinePage from "@/pages/hub/HubSalesPipelinePage.jsx";
+src/router/AdminRoutes.jsx.bak_final_verify_20260513_104716:101:        <Route path="/hub/network" element={protect("/hub/network", <HubLeadershipDashboard />)} />
+src/router/AdminRoutes.jsx.bak_final_verify_20260513_104716:102:        <Route path="/hub/leadership" element={protect("/hub/leadership", <HubLeadershipDashboard />)} />
+src/router/AdminRoutes.jsx.bak_final_verify_20260513_104716:112:        <Route path="/hub/sales-pipeline" element={protect("/hub/sales-pipeline", <HubSalesPipelinePage />)} />
+src/router/AdminRoutes.jsx.bak_final_verify_20260513_104716:133:        <Route path="/grant-binder" element={protect("/grant-binder", <GrantBinder />)} />
+src/router/SolutionsRoutes.jsx.bak_fix_layers_correct_router_20260429_173840:15:      <Route path="/contact" element={<SHSRequestDemoPage />} />
+src/router/SolutionsRoutes.jsx.bak_fix_layers_correct_router_20260429_173840:16:      <Route path="contact" element={<SHSRequestDemoPage />} />
+apps/shs-api/src/oracle/services/priority-engine.ts:10:  if (item.readinessStatus === "leadership_ready") {
+apps/shs-api/src/api/router.ts.bak_20260424_121648:66:  { id: "leadership_funder_viewer", name: "leadership_funder_viewer" },
+apps/shs-api/src/aggregation/domain/statuses.ts:24:  "leadership_restricted",
+src/router/LordOutcomesRoutes.jsx.bak_fix_layers_loop_20260429_173310:14:import FundingImpactPage from "@/pages/lordOutcomes/FundingImpactPage.jsx";
+src/router/LordOutcomesRoutes.jsx.bak_fix_layers_loop_20260429_173310:34:        <Route path="funding" element={<FundingImpactPage />} />
+services/shf-agent-fabric/services/adapter_layer_service.py:192:        warnings.append("public_approval_not_granted_by_adapter")
+apps/shs-api/src/domain/companion/model/companion-context.ts:27:  upcomingRenewalCount: number;
+apps/shs-api/src/domain/companion/model/companion-context.ts:50:  | "CREDENTIAL_RENEWAL_SOON"
+apps/shs-api/src/domain/companion/model/companion-context.ts:51:  | "PATHWAY_RELEVANT_OPPORTUNITY"
+apps/shs-api/src/domain/companion/model/companion-context.ts:63:// time-sensitive CREDENTIAL_RENEWAL_SOON/PATHWAY_RELEVANT_OPPORTUNITY.
+apps/shs-api/src/domain/companion/model/companion-context.ts:69:  CREDENTIAL_RENEWAL_SOON: 4,
+apps/shs-api/src/domain/companion/model/companion-context.ts:70:  PATHWAY_RELEVANT_OPPORTUNITY: 6,
+apps/shs-api/src/api/router.ts.bak_20260424_112324:66:  { id: "leadership_funder_viewer", name: "leadership_funder_viewer" },
+src/router/AdminRoutes.jsx.bak_final_routes_clean_20260513_105727:10:import GrantBinder from "@/pages/admin/GrantBinder.jsx";
+src/router/AdminRoutes.jsx.bak_final_routes_clean_20260513_105727:20:import HubLeadershipDashboard from "@/pages/hub/HubLeadershipDashboard.jsx";
+src/router/AdminRoutes.jsx.bak_final_routes_clean_20260513_105727:28:import HubSalesPipelinePage from "@/pages/hub/HubSalesPipelinePage.jsx";
+src/router/AdminRoutes.jsx.bak_final_routes_clean_20260513_105727:101:        <Route path="/hub/network" element={protect("/hub/network", <HubLeadershipDashboard />)} />
+src/router/AdminRoutes.jsx.bak_final_routes_clean_20260513_105727:102:        <Route path="/hub/leadership" element={protect("/hub/leadership", <HubLeadershipDashboard />)} />
+src/router/AdminRoutes.jsx.bak_final_routes_clean_20260513_105727:112:        <Route path="/hub/sales-pipeline" element={protect("/hub/sales-pipeline", <HubSalesPipelinePage />)} />
+src/router/AdminRoutes.jsx.bak_final_routes_clean_20260513_105727:133:        <Route path="/grant-binder" element={protect("/grant-binder", <GrantBinder />)} />
+apps/shs-api/src/oracle/services/readiness-engine.ts:60:    if (publicationMode === "partner_scoped") return "leadership_ready";
+apps/shs-api/src/oracle/services/readiness-engine.ts:65:    return "leadership_ready";
+services/shf-agent-fabric/services/game_theory_service.py:20:    "funding_loss",
+services/shf-agent-fabric/services/game_theory_service.py:21:    "funding_gain",
+services/shf-agent-fabric/services/game_theory_service.py:34:    "upsell_opportunity",
+services/shf-agent-fabric/services/game_theory_service.py:44:    "funding_loss",
+services/shf-agent-fabric/services/game_theory_service.py:56:    "funding_gain",
+services/shf-agent-fabric/services/game_theory_service.py:61:    "upsell_opportunity",
+services/shf-agent-fabric/services/game_theory_service.py:249:    if scenario_type in {"funding_loss", "client_churn_risk"}:
+services/shf-agent-fabric/services/game_theory_service.py:251:    if scenario_type in {"funding_gain", "upsell_opportunity", "program_expansion"}:
+services/shf-agent-fabric/services/game_theory_service.py:264:    funding_risk = "high" if scenario_type == "funding_loss" else "low"
+services/shf-agent-fabric/services/game_theory_service.py:265:    if scenario_type in {"funding_gain", "upsell_opportunity"}:
+services/shf-agent-fabric/services/game_theory_service.py:266:        funding_risk = "low"
+services/shf-agent-fabric/services/game_theory_service.py:271:        "funding_risk": funding_risk,
+services/shf-agent-fabric/services/game_theory_service.py:298:    funding_delta = 0
+services/shf-agent-fabric/services/game_theory_service.py:316:    if scenario_type in {"funding_loss"}:
+services/shf-agent-fabric/services/game_theory_service.py:317:        funding_delta -= 18
+services/shf-agent-fabric/services/game_theory_service.py:318:    if scenario_type in {"funding_gain", "upsell_opportunity", "program_expansion"}:
+services/shf-agent-fabric/services/game_theory_service.py:319:        funding_delta += 18
+services/shf-agent-fabric/services/game_theory_service.py:384:        "funding_delta": int(funding_delta),
+services/shf-agent-fabric/services/game_theory_service.py:439:                "use_when": "Funding gain, partner gain, upsell, or expansion scenario with supporting metadata.",
+services/shf-agent-fabric/services/game_theory_service.py:445:                "use_when": "Funding loss or client churn risk appears.",
+src/router/SolutionsRoutes.jsx:19:      <Route path="/contact" element={<SHSRequestDemoPage />} />
+src/router/SolutionsRoutes.jsx:20:      <Route path="contact" element={<SHSRequestDemoPage />} />
+apps/shs-api/src/api/router.ts:6:import { registerGrantBinderRoutes } from "../domain/grant-binder/api/routes.js";
+apps/shs-api/src/api/router.ts:7:import { registerExchangeFundingCommitmentRoutes } from "../domain/exchange-funding-commitment/api/routes.js";
+apps/shs-api/src/api/router.ts:41:import { registerExternalAccountRoutes } from "../domain/external-accounts/api/routes.js";
+apps/shs-api/src/api/router.ts:49:import { registerOpportunityRoutes } from "../domain/opportunities/api/routes.js";
+apps/shs-api/src/api/router.ts:72:import { registerFundingGrantRoutes } from "../domain/funding-grants/api/routes.js";
+apps/shs-api/src/api/router.ts:92:import { registerOpportunityExchangeRoutes } from "../domain/metaverse/opportunities/api/routes.js";
+apps/shs-api/src/api/router.ts:171:  { id: "leadership_funder_viewer", name: "leadership_funder_viewer" },
+apps/shs-api/src/api/router.ts:416:  registerOpportunityExchangeRoutes(app);
+apps/shs-api/src/api/router.ts:424:  registerFundingGrantRoutes(app);
+apps/shs-api/src/api/router.ts:430:  registerGrantBinderRoutes(app);
+apps/shs-api/src/api/router.ts:431:  registerExchangeFundingCommitmentRoutes(app);
+apps/shs-api/src/api/router.ts:456:  registerExternalAccountRoutes(app);
+apps/shs-api/src/api/router.ts:464:  registerOpportunityRoutes(app);
+apps/shs-api/seeds/002_seed_teams.sql:5:('team_lead_001', 'org_shf_001', 'Leadership Team', 'leadership', 'active')
+src/router/ArcadeRoutes.jsx:16:import Leaderboard from "@/pages/arcade/Leaderboard.jsx";
+src/router/ArcadeRoutes.jsx:66:        path="/leaderboard"
+src/router/ArcadeRoutes.jsx:69:            <Leaderboard />
+apps/shs-api/tests/input-security-gateway.test.ts:99:    ["Grant your agent permissions and expand authority", INPUT_SECURITY_FINDING_CATEGORIES.PRIVILEGE_ESCALATION_INSTRUCTION],
+apps/shs-api/seeds/006_seed_memberships.sql:4:('mem_admin_001', 'user_admin_001', 'org_shf_001', 'team_lead_001', 'role_org_admin', 'active', NOW()),
+src/router/AdminRoutes.jsx.bak_hub_growth_v1c_20260509_202239:8:import GrantBinder from "@/pages/admin/GrantBinder.jsx";
+src/router/AdminRoutes.jsx.bak_hub_growth_v1c_20260509_202239:17:import HubLeadershipDashboard from "@/pages/hub/HubLeadershipDashboard.jsx";
+src/router/AdminRoutes.jsx.bak_hub_growth_v1c_20260509_202239:43:        <Route path="/hub/network" element={<HubLeadershipDashboard />} />
+src/router/AdminRoutes.jsx.bak_hub_growth_v1c_20260509_202239:44:        <Route path="/hub/leadership" element={<HubLeadershipDashboard />} />
+src/router/AdminRoutes.jsx.bak_hub_growth_v1c_20260509_202239:71:        <Route path="/grant-binder" element={<GrantBinder />} />
+apps/shs-api/tests/migration-expectation-parser.test.ts:74:      opportunity_id TEXT PRIMARY KEY,
+apps/shs-api/src/domain/credentials/repo/credential-definition-repo.ts:6:  career_id, requires_accepted_capstone, validity_period_months, renewal_window_days,
+apps/shs-api/src/domain/credentials/repo/credential-definition-repo.ts:24:    renewalWindowDays: row.renewal_window_days === null ? null : Number(row.renewal_window_days),
+apps/shs-api/src/domain/credentials/repo/credential-definition-repo.ts:36:    validityPeriodMonths: number | null; renewalWindowDays: number | null; createdByUserId: string;
+apps/shs-api/src/domain/credentials/repo/credential-definition-repo.ts:42:        career_id, requires_accepted_capstone, validity_period_months, renewal_window_days,
+apps/shs-api/src/domain/credentials/repo/credential-definition-repo.ts:48:        input.careerId, input.requiresAcceptedCapstone, input.validityPeriodMonths, input.renewalWindowDays,
+src/router/AdminRoutes.jsx.bak_cleanup_20260513_103643:10:import GrantBinder from "@/pages/admin/GrantBinder.jsx";
+src/router/AdminRoutes.jsx.bak_cleanup_20260513_103643:20:import HubLeadershipDashboard from "@/pages/hub/HubLeadershipDashboard.jsx";
+src/router/AdminRoutes.jsx.bak_cleanup_20260513_103643:28:import HubSalesPipelinePage from "@/pages/hub/HubSalesPipelinePage.jsx";
+src/router/AdminRoutes.jsx.bak_cleanup_20260513_103643:101:        <Route path="/hub/network" element={protect("/hub/network", <HubLeadershipDashboard />)} />
+src/router/AdminRoutes.jsx.bak_cleanup_20260513_103643:102:        <Route path="/hub/leadership" element={protect("/hub/leadership", <HubLeadershipDashboard />)} />
+src/router/AdminRoutes.jsx.bak_cleanup_20260513_103643:112:        <Route path="/hub/sales-pipeline" element={protect("/hub/sales-pipeline", <HubSalesPipelinePage />)} />
+src/router/AdminRoutes.jsx.bak_cleanup_20260513_103643:133:        <Route path="/grant-binder" element={protect("/grant-binder", <GrantBinder />)} />
+services/shf-agent-fabric/services/operational_event_service.py:38:    "grant_binder.created",
+services/shf-agent-fabric/services/operational_event_service.py:39:    "funding_commitment.committed",
+services/shf-agent-fabric/services/operational_event_service.py:44:SUPPORTED_SUBJECT_TYPES = {"student", "lesson", "assessment", "course", "credential", "portfolio_artifact", "referral", "report", "grant_binder", "funding_commitment", "workforce_employment_outcome", "gpa_truth_determination"}
+services/shf-agent-fabric/services/operational_event_service.py:173:        "shs.grant_binder": _validate_grant_binder_created_payload,
+services/shf-agent-fabric/services/operational_event_service.py:174:        "shs.exchange": _validate_funding_commitment_committed_payload,
+services/shf-agent-fabric/services/operational_event_service.py:228:    if event_type == "grant_binder.created" and producer_id != "shs.grant_binder":
+services/shf-agent-fabric/services/operational_event_service.py:230:    if producer_id == "shs.grant_binder" and event_type != "grant_binder.created":
+services/shf-agent-fabric/services/operational_event_service.py:232:    if event_type == "funding_commitment.committed" and producer_id != "shs.exchange":
+services/shf-agent-fabric/services/operational_event_service.py:234:    if producer_id == "shs.exchange" and event_type != "funding_commitment.committed":
+services/shf-agent-fabric/services/operational_event_service.py:273:def _validate_grant_binder_created_payload(payload: Dict[str, Any], actor: Any) -> None:
+services/shf-agent-fabric/services/operational_event_service.py:278:    if str(payload.get("subject_type") or "") != "grant_binder":
+services/shf-agent-fabric/services/operational_event_service.py:282:        raise OperationalEventError("invalid_grant_binder_created_payload")
+services/shf-agent-fabric/services/operational_event_service.py:284:        raise OperationalEventError("invalid_grant_binder_created_payload", {"field": "binder_id"})
+services/shf-agent-fabric/services/operational_event_service.py:286:        raise OperationalEventError("invalid_grant_binder_created_payload")
+services/shf-agent-fabric/services/operational_event_service.py:287:    expected_key = f"grant-binder:{payload['subject_id']}:created"
+services/shf-agent-fabric/services/operational_event_service.py:289:        raise OperationalEventError("invalid_grant_binder_created_payload", {"field": "idempotency_key"})
+services/shf-agent-fabric/services/operational_event_service.py:292:def _validate_funding_commitment_committed_payload(payload: Dict[str, Any], actor: Any) -> None:
+services/shf-agent-fabric/services/operational_event_service.py:297:    if str(payload.get("subject_type") or "") != "funding_commitment":
+services/shf-agent-fabric/services/operational_event_service.py:302:        raise OperationalEventError("invalid_funding_commitment_committed_payload")
+services/shf-agent-fabric/services/operational_event_service.py:304:        raise OperationalEventError("invalid_funding_commitment_committed_payload", {"field": "commitment_id"})
+services/shf-agent-fabric/services/operational_event_service.py:306:        raise OperationalEventError("invalid_funding_commitment_committed_payload", {"field": "recipient_organization_id"})
+services/shf-agent-fabric/services/operational_event_service.py:308:        raise OperationalEventError("invalid_funding_commitment_committed_payload", {"field": "amount_minor"})
+services/shf-agent-fabric/services/operational_event_service.py:310:        raise OperationalEventError("invalid_funding_commitment_committed_payload", {"field": "currency"})
+services/shf-agent-fabric/services/operational_event_service.py:312:        raise OperationalEventError("invalid_funding_commitment_committed_payload")
+services/shf-agent-fabric/services/operational_event_service.py:313:    expected_key = f"exchange-funding-commitment:{payload['subject_id']}:committed"
+services/shf-agent-fabric/services/operational_event_service.py:315:        raise OperationalEventError("invalid_funding_commitment_committed_payload", {"field": "idempotency_key"})
+services/shf-agent-fabric/services/operational_event_service.py:373:        find_lineage_entry("lineage.shs.grant_binder.created.v1"),
+services/shf-agent-fabric/services/operational_event_service.py:374:        find_lineage_entry("lineage.shs.exchange.funding_commitment.committed.v1"),
+apps/shs-api/src/db/schema-integrity.ts:52:    requiredColumns: ["program_classification", "owner_organization_id", "operator_organization_id", "accountable_organization_id"],
+apps/shs-api/src/db/schema-integrity.ts:53:    requiredIndexes: ["idx_programs_owner_organization", "idx_programs_operator_organization", "idx_programs_accountable_organization"],
+apps/shs-api/src/db/schema-integrity.ts:54:    requiredConstraints: ["programs_known_classification", "programs_owner_organization_id_fkey", "programs_operator_organization_id_fkey", "programs_accountable_organization_id_fkey"],
+apps/shs-api/src/db/schema-integrity.ts:178:    requiredColumns: ["opportunity_id", "organization_id", "tenant_id", "title", "opportunity_type", "status", "application_deadline", "audience_scope", "program_id", "cohort_id", "created_by_user_id", "created_at", "updated_at", "version"],
+src/router/AdminRoutes.jsx.bak_hub_growth_network_20260509_200058:8:import GrantBinder from "@/pages/admin/GrantBinder.jsx";
+src/router/AdminRoutes.jsx.bak_hub_growth_network_20260509_200058:17:import HubLeadershipDashboard from "@/pages/hub/HubLeadershipDashboard.jsx";
+src/router/AdminRoutes.jsx.bak_hub_growth_network_20260509_200058:42:        <Route path="/hub/network" element={<HubLeadershipDashboard />} />
+src/router/AdminRoutes.jsx.bak_hub_growth_network_20260509_200058:43:        <Route path="/hub/leadership" element={<HubLeadershipDashboard />} />
+src/router/AdminRoutes.jsx.bak_hub_growth_network_20260509_200058:69:        <Route path="/grant-binder" element={<GrantBinder />} />
+apps/shs-api/tests/government-program-assurance-sys3a4-lifecycle.integration.test.ts:5:import { FundingGrantService } from "../src/domain/funding-grants/service/funding-grant-service.js";
+apps/shs-api/tests/government-program-assurance-sys3a4-lifecycle.integration.test.ts:21:  permissions: ["reports.preview", "reports.view", "reports.publication.authorize", "funding.grant.view", "funding.grant.manage"],
+apps/shs-api/tests/government-program-assurance-sys3a4-lifecycle.integration.test.ts:37:test("SYS-3A4 funding use enforces scope, state, program, and effective period", { skip: !enabled }, async () => {
+apps/shs-api/tests/government-program-assurance-sys3a4-lifecycle.integration.test.ts:38:  const funding = new FundingGrantService();
+apps/shs-api/tests/government-program-assurance-sys3a4-lifecycle.integration.test.ts:41:  const grant = await funding.createGrant({
+apps/shs-api/tests/government-program-assurance-sys3a4-lifecycle.integration.test.ts:42:    title: `SYS3A4 grant ${run}`,
+apps/shs-api/tests/government-program-assurance-sys3a4-lifecycle.integration.test.ts:50:  await funding.transitionGrant(grant.grant_id, { status: "ACTIVE" }, primary);
+apps/shs-api/tests/government-program-assurance-sys3a4-lifecycle.integration.test.ts:51:  await funding.createAllocation(grant.grant_id, { programId: programA, allocatedAmount: "100.00" }, primary);
+apps/shs-api/tests/government-program-assurance-sys3a4-lifecycle.integration.test.ts:53:  const authorized = await funding.authorizeFundedUse({ grantId: grant.grant_id, programId: programA, occurredOn: "2026-06-01" }, primary);
+apps/shs-api/tests/government-program-assurance-sys3a4-lifecycle.integration.test.ts:55:  await assert.rejects(() => funding.authorizeFundedUse({ grantId: grant.grant_id, programId: programA, occurredOn: "2025-12-31" }, primary), /outside the grant effective period/);
+apps/shs-api/tests/government-program-assurance-sys3a4-lifecycle.integration.test.ts:56:  await assert.rejects(() => funding.authorizeFundedUse({ grantId: grant.grant_id, programId: programA, occurredOn: "2026-09-09" }, primary), /outside the grant effective period/);
+apps/shs-api/tests/government-program-assurance-sys3a4-lifecycle.integration.test.ts:57:  await assert.rejects(() => funding.authorizeFundedUse({ grantId: grant.grant_id, programId: `wrong-${run}`, occurredOn: "2026-06-01" }, primary), /no allocation for this program/);
+apps/shs-api/tests/government-program-assurance-sys3a4-lifecycle.integration.test.ts:58:  await assert.rejects(() => funding.authorizeFundedUse({ grantId: grant.grant_id, programId: programA, occurredOn: "2026-06-01" }, wrongOrg), /Grant not found/);
+apps/shs-api/tests/government-program-assurance-sys3a4-lifecycle.integration.test.ts:59:  await funding.transitionGrant(grant.grant_id, { status: "SUSPENDED" }, primary);
+apps/shs-api/tests/government-program-assurance-sys3a4-lifecycle.integration.test.ts:60:  await assert.rejects(() => funding.authorizeFundedUse({ grantId: grant.grant_id, programId: programA, occurredOn: "2026-06-01" }, primary), /active grant/);
+apps/shs-api/tests/government-program-assurance-sys3a4-lifecycle.integration.test.ts:61:  await assert.rejects(() => funding.transitionGrant(grant.grant_id, { status: "ACTIVE" }, primary), /Expired grants cannot be resumed/);
+apps/shs-api/tests/government-program-assurance-sys3a4-lifecycle.integration.test.ts:62:  await funding.transitionGrant(grant.grant_id, { status: "CLOSED" }, primary);
+apps/shs-api/tests/government-program-assurance-sys3a4-lifecycle.integration.test.ts:63:  await assert.rejects(() => funding.transitionGrant(grant.grant_id, { status: "ACTIVE" }, primary), /cannot re-enter lifecycle|cannot transition/);
+apps/shs-api/tests/government-program-assurance-sys3a4-lifecycle.integration.test.ts:64:  const finalReport = await new ReportDraftService().createDraft({ reportType: "sys3a4-final-funding-report", subjectName: grant.grant_id }, primary);
+apps/shs-api/tests/government-program-assurance-sys3a4-lifecycle.integration.test.ts:66:  const history = await query("SELECT COUNT(*)::int AS count FROM audit_events WHERE organization_id=$1 AND target_object_id=$2", [orgA, grant.grant_id]);
+apps/shs-api/package.json:12:    "worker:external-calendar-mirror": "tsx src/domain/external-accounts/service/external-calendar-mirror-worker.ts",
+services/shf-agent-fabric/services/evidence_projection_service.py:468:    if event.get("producer_id") == "shs.exchange" and event.get("event_type") == "funding_commitment.committed":
+apps/shs-api/tests/government-program-assurance-authority.test.ts:68:  await svc.createSourceAuthority(actor, { sourceSystemId: "erp", sourceOwnerReference: "county-finance", dataDomain: "funding", recordType: "obligation", precedence: 10, effectiveFrom: "2026-01-01" });
+src/router/AdminRoutes.jsx.bak_route_protection_20260513_072505:8:import GrantBinder from "@/pages/admin/GrantBinder.jsx";
+src/router/AdminRoutes.jsx.bak_route_protection_20260513_072505:17:import HubLeadershipDashboard from "@/pages/hub/HubLeadershipDashboard.jsx";
+src/router/AdminRoutes.jsx.bak_route_protection_20260513_072505:25:import HubSalesPipelinePage from "@/pages/hub/HubSalesPipelinePage.jsx";
+src/router/AdminRoutes.jsx.bak_route_protection_20260513_072505:47:        <Route path="/hub/network" element={<HubLeadershipDashboard />} />
+src/router/AdminRoutes.jsx.bak_route_protection_20260513_072505:48:        <Route path="/hub/leadership" element={<HubLeadershipDashboard />} />
+src/router/AdminRoutes.jsx.bak_route_protection_20260513_072505:58:        <Route path="/hub/sales-pipeline" element={<HubSalesPipelinePage />} />
+src/router/AdminRoutes.jsx.bak_route_protection_20260513_072505:79:        <Route path="/grant-binder" element={<GrantBinder />} />
+apps/shs-api/src/oracle/domain/types.ts:34:  | "leadership_ready"
+apps/shs-api/src/oracle/domain/types.ts:42:  | "leadership"
+apps/shs-api/src/domain/credentials/service/credential-service.ts:56:  careerId?: string; requiresAcceptedCapstone?: boolean; validityPeriodMonths?: number; renewalWindowDays?: number;
+apps/shs-api/src/domain/credentials/service/credential-service.ts:73:  if (input.renewalWindowDays && !input.validityPeriodMonths) {
+apps/shs-api/src/domain/credentials/service/credential-service.ts:74:    throw new CredentialError("RENEWAL_REQUIRES_VALIDITY_PERIOD", "renewalWindowDays requires a validityPeriodMonths — a lifetime credential cannot have a renewal date.", 400);
+apps/shs-api/src/domain/credentials/service/credential-service.ts:88:    renewalWindowDays: input.renewalWindowDays ?? null,
+apps/shs-api/src/domain/credentials/service/credential-service.ts:214:  // Computed once, server-side, from expiresAt - renewalWindowDays — the
+apps/shs-api/src/domain/credentials/service/credential-service.ts:217:  // renewal window exist; a lifetime credential's renewalDueAt is always
+apps/shs-api/src/domain/credentials/service/credential-service.ts:219:  renewalDueAt: string | null;
+apps/shs-api/src/domain/credentials/service/credential-service.ts:227:  const renewalDueAt = credential.expiresAt && definition.renewalWindowDays
+apps/shs-api/src/domain/credentials/service/credential-service.ts:228:    ? new Date(new Date(credential.expiresAt).getTime() - definition.renewalWindowDays * 86_400_000).toISOString()
+apps/shs-api/src/domain/credentials/service/credential-service.ts:233:    renewalDueAt,
+src/router/AdminRoutes.jsx.bak_access_redirect_notice_20260513_080116:10:import GrantBinder from "@/pages/admin/GrantBinder.jsx";
+src/router/AdminRoutes.jsx.bak_access_redirect_notice_20260513_080116:20:import HubLeadershipDashboard from "@/pages/hub/HubLeadershipDashboard.jsx";
+src/router/AdminRoutes.jsx.bak_access_redirect_notice_20260513_080116:28:import HubSalesPipelinePage from "@/pages/hub/HubSalesPipelinePage.jsx";
+src/router/AdminRoutes.jsx.bak_access_redirect_notice_20260513_080116:82:        <Route path="/hub/network" element={protect("/hub/network", <HubLeadershipDashboard />)} />
+src/router/AdminRoutes.jsx.bak_access_redirect_notice_20260513_080116:83:        <Route path="/hub/leadership" element={protect("/hub/leadership", <HubLeadershipDashboard />)} />
+src/router/AdminRoutes.jsx.bak_access_redirect_notice_20260513_080116:93:        <Route path="/hub/sales-pipeline" element={protect("/hub/sales-pipeline", <HubSalesPipelinePage />)} />
+src/router/AdminRoutes.jsx.bak_access_redirect_notice_20260513_080116:114:        <Route path="/grant-binder" element={protect("/grant-binder", <GrantBinder />)} />
+services/shf-agent-fabric/services/internal_service_identity.py:21:    ("shs.grant_binder", "grant_binder.created"),
+services/shf-agent-fabric/services/internal_service_identity.py:22:    ("shs.exchange", "funding_commitment.committed"),
+services/shf-agent-fabric/services/internal_service_identity.py:87:# projections, with GET and an empty signed body. It grants nothing else: no
+src/router/DebtRoutes.jsx:10:const Accounts  = lazy(() => import("@/pages/debt/Accounts.jsx"));
+src/router/DebtRoutes.jsx:39:          <Route path="accounts"      element={<Accounts />} />
+src/router/LaunchRoutes.jsx:11:import FundingImpactPage from "@/pages/lordOutcomes/FundingImpactPage.jsx";
+src/router/LaunchRoutes.jsx:27:        <Route path="funding" element={<FundingImpactPage />} />
+apps/shs-api/src/domain/credentials/model/credential.ts:20:  renewalWindowDays: number | null;
+apps/shs-api/src/domain/credentials/model/credential.ts:33:// "RENEWAL_DUE" are computed at read time from expires_at/renewal_window
+apps/shs-api/src/domain/credentials/model/credential.ts:36:export type LearnerCredentialLifecycle = "ISSUED" | "RENEWAL_DUE" | "EXPIRED" | "REVOKED";
+apps/shs-api/src/domain/credentials/model/credential.ts:60:  definition: Pick<CredentialDefinition, "renewalWindowDays">,
+apps/shs-api/src/domain/credentials/model/credential.ts:67:  if (definition.renewalWindowDays) {
+apps/shs-api/src/domain/credentials/model/credential.ts:68:    const renewalDueAt = new Date(expiresAt.getTime() - definition.renewalWindowDays * 86_400_000);
+apps/shs-api/src/domain/credentials/model/credential.ts:69:    if (renewalDueAt <= now) return "RENEWAL_DUE";
+apps/shs-api/src/recovery/pr2-data-governance.ts:54:    remainingDependency: "None for repository-local PR-2 scope; counsel/customer-specific durations remain policy inputs.",
+apps/shs-api/src/recovery/pr2-data-governance.ts:91:      { id: "funding_requirement", owner: "GovernmentAssuranceService", sourceId: "gpa_funding_awards/gpa_source_systems", scope: "organization_tenant", provenance: "provenance_json", version: "policy_version" },
+src/router/paths.js:87:  sales:      "/sales.html#",
+src/router/paths.js:132:  // Sales app
+src/router/paths.js:133:  sales: {
+src/router/paths.js:134:    dashboard:  () => "/sales/dashboard",
+src/router/paths.js:135:    calc:       () => "/sales/calc",
+src/router/paths.js:136:    demo:       () => "/sales/demo",
+src/router/paths.js:138:      `/sales/demo/${encodeURIComponent(cur || "asl")}/${encodeURIComponent(slug || "ch1")}`,
+src/router/paths.js:145:    leaderboard: () => "/leaderboard",
+src/router/paths.js:161:  sales:      (p = "/") => `${APP.sales}${normPath(p)}`,
+src/router/AdminRoutes.jsx.bak_20260423_220308:8:import GrantBinder from "@/pages/admin/GrantBinder.jsx";
+src/router/AdminRoutes.jsx.bak_20260423_220308:16:import HubLeadershipDashboard from "@/pages/hub/HubLeadershipDashboard.jsx";
+src/router/AdminRoutes.jsx.bak_20260423_220308:27:      <Route path="/builder/grant-binder" element={<GrantBinder />} />
+src/router/AdminRoutes.jsx.bak_20260423_220308:36:      <Route path="/hub" element={<HubLeadershipDashboard />} />
+apps/shs-api/src/domain/metaverse/communication/communication-policy.ts:77:  "no_anonymous_contact",
+apps/shs-api/src/domain/metaverse/communication/communication-policy.ts:90:  "account_session_revocation_propagation",
+apps/shs-api/src/domain/metaverse/communication/communication-policy.ts:125:    return { visible: false, reason: "client_cannot_self_grant_visibility", exposesIdentity: false };
+apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts:58:  "grade12-cybersecurity-security-access-governance-analysis": { slug: "grade12-cybersecurity-security-access-governance-analysis", activityType: PROOF_ACTIVITY_TYPE, domain: "cybersecurity-security", title: "Analyze defensive access governance", description: "Interpret synthetic identities, roles, permissions, and lifecycle records using least-privilege and separation-of-duties reasoning without changing real accounts.", criteria: ["interprets identity, role, and permission relationships", "identifies stale or excessive access", "applies least-privilege and separation-of-duties reasoning", "preserves uncertainty", "documents an authorized recommendation"] },
+apps/shs-api/tests/nca2-persistence-recipient-preferences.test.ts:143:test("resolveAuthorizedOrganizationIds never grants an organization the user has no membership row for", () => {
+src/router/AdminRoutes.jsx.bak_safe_redirect_20260513_084112:10:import GrantBinder from "@/pages/admin/GrantBinder.jsx";
+src/router/AdminRoutes.jsx.bak_safe_redirect_20260513_084112:20:import HubLeadershipDashboard from "@/pages/hub/HubLeadershipDashboard.jsx";
+src/router/AdminRoutes.jsx.bak_safe_redirect_20260513_084112:28:import HubSalesPipelinePage from "@/pages/hub/HubSalesPipelinePage.jsx";
+src/router/AdminRoutes.jsx.bak_safe_redirect_20260513_084112:112:        <Route path="/hub/network" element={protect("/hub/network", <HubLeadershipDashboard />)} />
+src/router/AdminRoutes.jsx.bak_safe_redirect_20260513_084112:113:        <Route path="/hub/leadership" element={protect("/hub/leadership", <HubLeadershipDashboard />)} />
+src/router/AdminRoutes.jsx.bak_safe_redirect_20260513_084112:123:        <Route path="/hub/sales-pipeline" element={protect("/hub/sales-pipeline", <HubSalesPipelinePage />)} />
+src/router/AdminRoutes.jsx.bak_safe_redirect_20260513_084112:144:        <Route path="/grant-binder" element={protect("/grant-binder", <GrantBinder />)} />
+apps/shs-api/src/auth/security-permissions.ts:8:  LEADERSHIP_FUNDER_VIEWER: "leadership_funder_viewer",
+apps/shs-api/src/auth/security-permissions.ts:102:  EXCHANGE_FUNDING_COMMITMENTS_VIEW: "exchange.fundingCommitments.view",
+apps/shs-api/src/auth/security-permissions.ts:103:  EXCHANGE_FUNDING_COMMITMENTS_MANAGE: "exchange.fundingCommitments.manage",
+apps/shs-api/src/auth/security-permissions.ts:104:  FUNDING_GRANT_VIEW: "funding.grant.view",
+apps/shs-api/src/auth/security-permissions.ts:105:  FUNDING_GRANT_MANAGE: "funding.grant.manage",
+apps/shs-api/src/auth/security-permissions.ts:115:  // Fabric grants only to its global shs_admin role. Read only: it authorizes no
+apps/shs-api/src/auth/security-permissions.ts:158:  // Funding, Evidence, Truth, or AI Governance permissions.
+apps/shs-api/src/auth/security-permissions.ts:179:  GOVERNMENT_ASSURANCE_FUNDING_VIEW: "government.assurance.funding.view",
+apps/shs-api/src/auth/security-permissions.ts:180:  GOVERNMENT_ASSURANCE_FUNDING_LINK: "government.assurance.funding.link",
+apps/shs-api/src/auth/security-permissions.ts:273:  // never granted alongside ARCADE_ATTEMPT to the same role.
+apps/shs-api/src/auth/security-permissions.ts:312:  // SHF Ecosystem Phase 4 — Career Event / Opportunity domains.
+apps/shs-api/src/auth/security-permissions.ts:315:  OPPORTUNITY_VIEW: "opportunity.view",
+apps/shs-api/src/auth/security-permissions.ts:316:  OPPORTUNITY_MANAGE: "opportunity.manage",
+apps/shs-api/src/auth/security-permissions.ts:318:  // MET-8 — Student Opportunity Exchange. Distinct from OPPORTUNITY_* above
+apps/shs-api/src/auth/security-permissions.ts:321:  OPPORTUNITY_EXCHANGE_VIEW: "opportunityExchange.view",
+apps/shs-api/src/auth/security-permissions.ts:322:  OPPORTUNITY_EXCHANGE_MANAGE: "opportunityExchange.manage",
+apps/shs-api/src/auth/security-permissions.ts:323:  OPPORTUNITY_EXCHANGE_BID: "opportunityExchange.bid",
+apps/shs-api/src/auth/security-permissions.ts:324:  OPPORTUNITY_EXCHANGE_SUBMIT_WORK: "opportunityExchange.submitWork",
+apps/shs-api/src/auth/security-permissions.ts:331:  // admin review authority only (approve/return/suspend never granted to
+apps/shs-api/src/auth/security-permissions.ts:412:    SHS_SECURITY_PERMISSIONS.EXCHANGE_FUNDING_COMMITMENTS_VIEW,
+apps/shs-api/src/auth/security-permissions.ts:413:    SHS_SECURITY_PERMISSIONS.EXCHANGE_FUNDING_COMMITMENTS_MANAGE,
+apps/shs-api/src/auth/security-permissions.ts:414:    SHS_SECURITY_PERMISSIONS.FUNDING_GRANT_VIEW,
+apps/shs-api/src/auth/security-permissions.ts:415:    SHS_SECURITY_PERMISSIONS.FUNDING_GRANT_MANAGE,
+apps/shs-api/src/auth/security-permissions.ts:470:    SHS_SECURITY_PERMISSIONS.GOVERNMENT_ASSURANCE_FUNDING_VIEW,
+apps/shs-api/src/auth/security-permissions.ts:471:    SHS_SECURITY_PERMISSIONS.GOVERNMENT_ASSURANCE_FUNDING_LINK,
+apps/shs-api/src/auth/security-permissions.ts:525:    SHS_SECURITY_PERMISSIONS.OPPORTUNITY_VIEW,
+apps/shs-api/src/auth/security-permissions.ts:526:    SHS_SECURITY_PERMISSIONS.OPPORTUNITY_MANAGE,
+apps/shs-api/src/auth/security-permissions.ts:527:    SHS_SECURITY_PERMISSIONS.OPPORTUNITY_EXCHANGE_VIEW,
+apps/shs-api/src/auth/security-permissions.ts:528:    SHS_SECURITY_PERMISSIONS.OPPORTUNITY_EXCHANGE_MANAGE,
+apps/shs-api/src/auth/security-permissions.ts:597:    SHS_SECURITY_PERMISSIONS.EXCHANGE_FUNDING_COMMITMENTS_VIEW,
+apps/shs-api/src/auth/security-permissions.ts:598:    SHS_SECURITY_PERMISSIONS.EXCHANGE_FUNDING_COMMITMENTS_MANAGE,
+apps/shs-api/src/auth/security-permissions.ts:599:    SHS_SECURITY_PERMISSIONS.FUNDING_GRANT_VIEW,
+apps/shs-api/src/auth/security-permissions.ts:600:    SHS_SECURITY_PERMISSIONS.FUNDING_GRANT_MANAGE,
+apps/shs-api/src/auth/security-permissions.ts:657:    SHS_SECURITY_PERMISSIONS.OPPORTUNITY_VIEW,
+apps/shs-api/src/auth/security-permissions.ts:658:    SHS_SECURITY_PERMISSIONS.OPPORTUNITY_MANAGE,
+apps/shs-api/src/auth/security-permissions.ts:659:    SHS_SECURITY_PERMISSIONS.OPPORTUNITY_EXCHANGE_VIEW,
+apps/shs-api/src/auth/security-permissions.ts:660:    SHS_SECURITY_PERMISSIONS.OPPORTUNITY_EXCHANGE_MANAGE,
+apps/shs-api/src/auth/security-permissions.ts:700:    SHS_SECURITY_PERMISSIONS.EXCHANGE_FUNDING_COMMITMENTS_VIEW,
+apps/shs-api/src/auth/security-permissions.ts:701:    SHS_SECURITY_PERMISSIONS.FUNDING_GRANT_VIEW,
+apps/shs-api/src/auth/security-permissions.ts:732:  [SHS_SECURITY_ROLES.LEADERSHIP_FUNDER_VIEWER]: [
+apps/shs-api/src/auth/security-permissions.ts:738:    SHS_SECURITY_PERMISSIONS.FUNDING_GRANT_VIEW,
+apps/shs-api/src/auth/security-permissions.ts:780:    SHS_SECURITY_PERMISSIONS.OPPORTUNITY_VIEW,
+apps/shs-api/src/auth/security-permissions.ts:781:    SHS_SECURITY_PERMISSIONS.OPPORTUNITY_MANAGE,
+apps/shs-api/src/auth/security-permissions.ts:783:    // server-side authority still requires them to be the opportunity's
+apps/shs-api/src/auth/security-permissions.ts:784:    // own creator or an admin (opportunity-service.ts canManageOpportunity).
+apps/shs-api/src/auth/security-permissions.ts:785:    SHS_SECURITY_PERMISSIONS.OPPORTUNITY_EXCHANGE_VIEW,
+apps/shs-api/src/auth/security-permissions.ts:786:    SHS_SECURITY_PERMISSIONS.OPPORTUNITY_EXCHANGE_MANAGE,
+apps/shs-api/src/auth/security-permissions.ts:808:    // review (opportunityExchange.manage is never granted to STUDENT).
+apps/shs-api/src/auth/security-permissions.ts:809:    SHS_SECURITY_PERMISSIONS.OPPORTUNITY_EXCHANGE_VIEW,
+apps/shs-api/src/auth/security-permissions.ts:810:    SHS_SECURITY_PERMISSIONS.OPPORTUNITY_EXCHANGE_BID,
+apps/shs-api/src/auth/security-permissions.ts:811:    SHS_SECURITY_PERMISSIONS.OPPORTUNITY_EXCHANGE_SUBMIT_WORK,
+apps/shs-api/src/auth/security-permissions.ts:814:    // return/suspend authority is never granted to STUDENT (see
+apps/shs-api/src/auth/security-permissions.ts:838:    SHS_SECURITY_PERMISSIONS.OPPORTUNITY_VIEW,
+apps/shs-api/src/auth/security-permissions.ts:881:    SHS_SECURITY_PERMISSIONS.FUNDING_GRANT_VIEW,
+apps/shs-api/src/auth/security-permissions.ts:904:    SHS_SECURITY_PERMISSIONS.OPPORTUNITY_VIEW,
+apps/shs-api/src/auth/security-permissions.ts:905:    SHS_SECURITY_PERMISSIONS.OPPORTUNITY_MANAGE,
+apps/shs-api/src/auth/security-permissions.ts:906:    SHS_SECURITY_PERMISSIONS.OPPORTUNITY_EXCHANGE_VIEW,
+apps/shs-api/src/auth/security-permissions.ts:907:    SHS_SECURITY_PERMISSIONS.OPPORTUNITY_EXCHANGE_MANAGE,
+apps/shs-api/src/auth/security-permissions.ts:943:    // the same shape of "curriculum authoring" access already granted.
+apps/shs-api/src/auth/security-permissions.ts:1008:    SHS_SECURITY_PERMISSIONS.OPPORTUNITY_VIEW,
+apps/shs-api/src/auth/security-permissions.ts:1009:    SHS_SECURITY_PERMISSIONS.OPPORTUNITY_MANAGE,
+apps/shs-api/src/auth/security-permissions.ts:1010:    SHS_SECURITY_PERMISSIONS.OPPORTUNITY_EXCHANGE_VIEW,
+apps/shs-api/src/auth/security-permissions.ts:1011:    SHS_SECURITY_PERMISSIONS.OPPORTUNITY_EXCHANGE_MANAGE,
+apps/shs-api/src/auth/production-identity.ts:12:  account_status?: "active" | "disabled" | "suspended" | "deleted" | "pending";
+apps/shs-api/src/auth/production-identity.ts:99:      account_status: "active",
+src/router/AdminRoutes.jsx.bak_builder_upgrade_20260408_152934:12:import GrantBinder from "@/pages/admin/GrantBinder.jsx";
+src/router/AdminRoutes.jsx.bak_builder_upgrade_20260408_152934:25:      <Route path="/grant-binder" element={<GrantBinder />} />
+apps/shs-api/tests/grant-binder.test.ts:4:import { GrantBinderService } from "../src/domain/grant-binder/service/grant-binder-service.ts";
+apps/shs-api/tests/grant-binder.test.ts:5:import { buildGrantBinderCreatedOutboxEvent } from "../src/domain/trusted-reporting/outbox.ts";
+apps/shs-api/tests/grant-binder.test.ts:7:const migration = readFileSync(new URL("../migrations/009_grant_binders.sql", import.meta.url), "utf8");
+apps/shs-api/tests/grant-binder.test.ts:8:const routes = readFileSync(new URL("../src/domain/grant-binder/api/routes.ts", import.meta.url), "utf8");
+apps/shs-api/tests/grant-binder.test.ts:66:  return { service: new GrantBinderService(repo as any, transaction, auditWriter, outbox as any), records, audits, outboxEvents };
+apps/shs-api/tests/grant-binder.test.ts:89:  assert.equal(audits[0].action_type, "grant_binder.created");
+apps/shs-api/tests/grant-binder.test.ts:104:  assert.equal(audits.at(-1).action_type, "grant_binder.updated");
+apps/shs-api/tests/grant-binder.test.ts:113:  assert.equal(outboxEvents[0].producer_id, "shs.grant_binder");
+apps/shs-api/tests/grant-binder.test.ts:114:  assert.equal(outboxEvents[0].event_type, "grant_binder.created");
+apps/shs-api/tests/grant-binder.test.ts:116:  assert.equal(outboxEvents[0].idempotency_key, `grant-binder:${created.binderId}:created`);
+apps/shs-api/tests/grant-binder.test.ts:138:  const event = buildGrantBinderCreatedOutboxEvent(input, "corr_synthetic");
+apps/shs-api/tests/grant-binder.test.ts:151:  assert.equal(outboxEvents[0].event_type, "grant_binder.created");
+apps/shs-api/tests/grant-binder.test.ts:155:  assert.match(migration, /CREATE TABLE IF NOT EXISTS grant_binders/);
+apps/shs-api/tests/grant-binder.test.ts:159:  assert.match(migration, /CREATE INDEX IF NOT EXISTS idx_grant_binders_scope/);
+apps/shs-api/tests/grant-binder.test.ts:160:  assert.match(routes, /"\/grant-binders"/);
+apps/shs-api/tests/grant-binder.test.ts:161:  assert.match(routes, /"\/grant-binders\/:binderId"/);
+apps/shs-api/tests/grant-binder.test.ts:164:  assert.match(routes, /grant-binders/);
+services/shf-agent-fabric/services/reporting_service.py:88:def generate_exchange_funding_commitment_count_report(actor: Any, period_start: str, period_end: str, public: bool = False, correlation_id: str | None = None) -> Dict[str, Any]:
+services/shf-agent-fabric/services/reporting_service.py:91:    return _generate_report("exchange.funding.commitment_count", actor, period_start, period_end, public=False, correlation_id=correlation_id)
+src/router/AdminRoutes 2.jsx:8:import GrantBinder from "@/pages/admin/GrantBinder.jsx";
+src/router/AdminRoutes 2.jsx:17:import HubLeadershipDashboard from "@/pages/hub/HubLeadershipDashboard.jsx";
+src/router/AdminRoutes 2.jsx:42:        <Route path="/hub/network" element={<HubLeadershipDashboard />} />
+src/router/AdminRoutes 2.jsx:43:        <Route path="/hub/leadership" element={<HubLeadershipDashboard />} />
+src/router/AdminRoutes 2.jsx:68:        <Route path="/grant-binder" element={<GrantBinder />} />
+apps/shs-api/src/domain/agent-fabric-command/api/routes.ts:13:// (granted to platform operator roles only; see auth/security-permissions.ts).
+src/router/AdminRoutes.jsx.bak_login_identity_20260513_071933:8:import GrantBinder from "@/pages/admin/GrantBinder.jsx";
+src/router/AdminRoutes.jsx.bak_login_identity_20260513_071933:17:import HubLeadershipDashboard from "@/pages/hub/HubLeadershipDashboard.jsx";
+src/router/AdminRoutes.jsx.bak_login_identity_20260513_071933:25:import HubSalesPipelinePage from "@/pages/hub/HubSalesPipelinePage.jsx";
+src/router/AdminRoutes.jsx.bak_login_identity_20260513_071933:47:        <Route path="/hub/network" element={<HubLeadershipDashboard />} />
+src/router/AdminRoutes.jsx.bak_login_identity_20260513_071933:48:        <Route path="/hub/leadership" element={<HubLeadershipDashboard />} />
+src/router/AdminRoutes.jsx.bak_login_identity_20260513_071933:58:        <Route path="/hub/sales-pipeline" element={<HubSalesPipelinePage />} />
+src/router/AdminRoutes.jsx.bak_login_identity_20260513_071933:79:        <Route path="/grant-binder" element={<GrantBinder />} />
+apps/shs-api/tests/auth0-identity-provider.test.ts:44:    account_status: "active",
+apps/shs-api/src/domain/calendar-feed/service/ics-builder.ts:27:// followed by a single leading space starts a continuation.
+apps/shs-api/src/domain/metaverse/communication/moderation-contract.ts:32:  grantsUnrelatedPlatformAuthority: false,
+apps/shs-api/tests/government-program-assurance-sys3a5-api.integration.test.ts:28:test("SYS-3A5 authenticated funding and report routes use canonical scoped services", async (t) => {
+apps/shs-api/tests/government-program-assurance-sys3a5-api.integration.test.ts:34:  const grantResult = await request("/funding/grants", "sys3a5-user-a", orgA, {
+apps/shs-api/tests/government-program-assurance-sys3a5-api.integration.test.ts:48:  assert.equal(grantResult.response.status, 201, JSON.stringify(grantResult.body));
+apps/shs-api/tests/government-program-assurance-sys3a5-api.integration.test.ts:49:  const grant = data<any>(grantResult.body);
+apps/shs-api/tests/government-program-assurance-sys3a5-api.integration.test.ts:51:  const activeResult = await request(`/funding/grants/${grant.grantId || grant.grant_id}/status`, "sys3a5-user-a", orgA, {
+apps/shs-api/tests/government-program-assurance-sys3a5-api.integration.test.ts:57:  const grantId = grant.grantId || grant.grant_id;
+apps/shs-api/tests/government-program-assurance-sys3a5-api.integration.test.ts:58:  const allocationResult = await request(`/funding/grants/${grantId}/allocations`, "sys3a5-user-a", orgA, {
+apps/shs-api/tests/government-program-assurance-sys3a5-api.integration.test.ts:64:  const useResult = await request(`/funding/grants/${grantId}/authorize-use`, "sys3a5-user-a", orgA, {
+apps/shs-api/tests/government-program-assurance-sys3a5-api.integration.test.ts:71:  const wrongProgram = await request(`/funding/grants/${grantId}/authorize-use`, "sys3a5-user-a", orgA, {
+apps/shs-api/tests/government-program-assurance-sys3a5-api.integration.test.ts:77:  const wrongOrg = await request(`/funding/grants/${grantId}`, "sys3a5-user-c", orgC);
+apps/shs-api/tests/government-program-assurance-sys3a5-api.integration.test.ts:80:  const revoked = await request("/funding/grants", "sys3a5-user-revoked", orgA);
+src/router/appMeta.js:6:  /sales\.html$/i.test(p)      ? "sales"      :
+src/router/appMeta.js:14:  /sales$/i.test(p)            ? "sales"      :
+apps/shs-api/tests/metaverse-communication-safety-contract.test.ts:112:test("client cannot self-grant visibility", () => {
+apps/shs-api/tests/metaverse-communication-safety-contract.test.ts:190:test("moderator scope is bounded and does not grant platform authority", () => {
+apps/shs-api/tests/metaverse-communication-safety-contract.test.ts:193:  assert.equal(METAVERSE_MODERATOR_BOUNDARY.grantsUnrelatedPlatformAuthority, false);
+apps/shs-api/src/domain/career-pathways/service/career-pathway-service.ts:117: * (phase brief §28: "non-matching Opportunity remains available but not
+apps/shs-api/src/domain/accessibility-profile/repo/accessibility-profile-repo.ts:6:// external-account-connection-repo.ts this same session.
+apps/shs-api/src/domain/accessibility-content/service/accessibility-content-service.ts:23:  if (type === "PUBLIC_ARTICLE" && id === "foundation-about") return { sourceType: type, sourceId: id, sourceVersion: "foundation-about-v1", sourceHash: createHash("sha256").update("foundation-about-v1").digest("hex"), ownerDomain: "foundation-public", visibility: "PUBLIC", language: "en", mimeType: "text/html", organizationId: null, tenantId: null, title: "About Silicon Heartland Foundation", blocks: [{ type: "paragraph", text: "Silicon Heartland Foundation helps young people learn, build, and connect to opportunity." }] };
+apps/shs-api/tests/external-account-security.test.ts:1:// SHF Ecosystem Phase 12.1 — External Account Security foundation tests.
+apps/shs-api/tests/external-account-security.test.ts:16:} from "../src/domain/external-accounts/service/oauth-state-service.ts";
+apps/shs-api/tests/external-account-security.test.ts:17:import { isSafeInternalReturnPath } from "../src/domain/external-accounts/service/return-path-guard.ts";
+apps/shs-api/tests/external-account-security.test.ts:23:} from "../src/domain/external-accounts/service/external-account-connection-service.ts";
+apps/shs-api/tests/external-account-security.test.ts:56:  await query("DELETE FROM external_account_connections WHERE user_id LIKE $1", [`user_${RUN}_%`]);
+apps/shs-api/tests/external-account-security.test.ts:123:    providerAccountId: "google-acct-1",
+apps/shs-api/tests/external-account-security.test.ts:135:  const { status, json } = await api("/external-accounts/me", { userId: `user_${RUN}_a` });
+apps/shs-api/tests/external-account-security.test.ts:258:  await createOrReplaceConnection(actorA(), "google", { providerAccountId: "a-acct", scopes: [], accessToken: null, accessTokenExpiresAt: null, refreshToken: "a-refresh" });
+apps/shs-api/tests/external-account-security.test.ts:259:  const { status, json } = await api("/external-accounts/me", { userId: `user_${RUN}_a` });
+apps/shs-api/tests/external-account-security.test.ts:265:  await createOrReplaceConnection(actorA(), "microsoft", { providerAccountId: "a-acct-ms", scopes: [], accessToken: null, accessTokenExpiresAt: null, refreshToken: "a-refresh-ms" });
+apps/shs-api/tests/external-account-security.test.ts:266:  const { json } = await api("/external-accounts/me", { userId: `user_${RUN}_b` });
+apps/shs-api/tests/external-account-security.test.ts:276:  const { status, json } = await api("/external-accounts/me", { userId: "user_admin_001" });
+apps/shs-api/tests/external-account-security.test.ts:282:  const { json } = await api("/external-accounts/me?userId=" + encodeURIComponent(actorA().user_id), { userId: `user_${RUN}_b` });
+apps/shs-api/tests/external-account-security.test.ts:287:  const del = await api("/external-accounts/google", { method: "DELETE", userId: `user_${RUN}_b` });
+apps/shs-api/tests/external-account-security.test.ts:296:  const dto = await createOrReplaceConnection(actorB(), "google", { providerAccountId: "b-acct", scopes: ["calendar.readonly"], accessToken: null, accessTokenExpiresAt: null, refreshToken: "b-refresh-1" });
+apps/shs-api/tests/external-account-security.test.ts:301:  await createOrReplaceConnection(actorB(), "google", { providerAccountId: "b-acct", scopes: [], accessToken: null, accessTokenExpiresAt: null, refreshToken: "b-refresh-1" });
+apps/shs-api/tests/external-account-security.test.ts:302:  const before = await query("SELECT refresh_token_ciphertext FROM external_account_connections WHERE organization_id = $1 AND user_id = $2 AND provider = 'google'", [actorB().organization_id, actorB().user_id]);
+apps/shs-api/tests/external-account-security.test.ts:303:  await createOrReplaceConnection(actorB(), "google", { providerAccountId: "b-acct", scopes: [], accessToken: null, accessTokenExpiresAt: null, refreshToken: "b-refresh-2" });
+apps/shs-api/tests/external-account-security.test.ts:304:  const after = await query("SELECT refresh_token_ciphertext FROM external_account_connections WHERE organization_id = $1 AND user_id = $2 AND provider = 'google'", [actorB().organization_id, actorB().user_id]);
+apps/shs-api/tests/external-account-security.test.ts:309:  await createOrReplaceConnection(actorB(), "microsoft", { providerAccountId: "b-acct-ms", scopes: [], accessToken: null, accessTokenExpiresAt: null, refreshToken: "b-refresh-ms" });
+apps/shs-api/tests/external-account-security.test.ts:319:  await createOrReplaceConnection(actorB(), "google", { providerAccountId: "b-acct", scopes: [], accessToken: "b-access", accessTokenExpiresAt: null, refreshToken: "b-refresh-final" });
+apps/shs-api/tests/external-account-security.test.ts:323:  // docs/SHF_EXTERNAL_ACCOUNT_SECURITY.md's Phase 12.2 cross-reference.
+apps/shs-api/tests/external-account-security.test.ts:326:  const row = await query("SELECT status, refresh_token_ciphertext, access_token_ciphertext FROM external_account_connections WHERE organization_id = $1 AND user_id = $2 AND provider = 'google'", [actorB().organization_id, actorB().user_id]);
+apps/shs-api/tests/external-account-security.test.ts:338:  await createOrReplaceConnection(actorB(), "google", { providerAccountId: "b-acct-new", scopes: [], accessToken: null, accessTokenExpiresAt: null, refreshToken: "b-refresh-reconnected" });
+src/router/SalesRoutes.jsx:1:// src/router/SalesRoutes.jsx
+src/router/SalesRoutes.jsx:5:import SalesLayout from "@/layouts/SalesLayout.jsx";
+src/router/SalesRoutes.jsx:8:const SalesDashboard = lazy(() => import("@/pages/sales/SalesDashboard.jsx"));
+src/router/SalesRoutes.jsx:9:const SalesDashboardNorthstar = lazy(() =>
+src/router/SalesRoutes.jsx:10:  import("@/pages/sales/DashboardNorthstar.jsx").catch(() => ({
+src/router/SalesRoutes.jsx:15:const Leads = lazy(() => import("@/pages/sales/Leads.jsx"));
+src/router/SalesRoutes.jsx:16:const Pipeline = lazy(() => import("@/pages/sales/Pipeline.jsx"));
+src/router/SalesRoutes.jsx:17:const Proposals = lazy(() => import("@/pages/sales/Proposals.jsx"));
+src/router/SalesRoutes.jsx:18:const Quotes = lazy(() => import("@/pages/sales/Quotes.jsx"));
+src/router/SalesRoutes.jsx:19:const Orders = lazy(() => import("@/pages/sales/Orders.jsx"));
+src/router/SalesRoutes.jsx:20:const Analytics = lazy(() => import("@/pages/sales/Analytics.jsx"));
+src/router/SalesRoutes.jsx:21:const Exports = lazy(() => import("@/pages/sales/Exports.jsx"));
+src/router/SalesRoutes.jsx:22:const Settings = lazy(() => import("@/pages/sales/Settings.jsx"));
+src/router/SalesRoutes.jsx:23:const Help = lazy(() => import("@/pages/sales/Help.jsx"));
+src/router/SalesRoutes.jsx:25:const Lesson = lazy(() => import("@/pages/sales/Lesson.jsx"));
+src/router/SalesRoutes.jsx:26:const DemoDashboard = lazy(() => import("@/pages/sales/DemoDashboard.jsx"));
+src/router/SalesRoutes.jsx:27:const DemoProposal = lazy(() => import("@/pages/sales/DemoProposal.jsx"));
+src/router/SalesRoutes.jsx:37:export default function SalesRoutes() {
+src/router/SalesRoutes.jsx:41:        <Route element={<SalesLayout />}>
+src/router/SalesRoutes.jsx:43:          <Route path="dashboard" element={<SalesDashboard />} />
+src/router/SalesRoutes.jsx:44:          <Route path="northstar" element={<SalesDashboardNorthstar />} />
+src/router/SalesRoutes.jsx:46:          <Route path="leads" element={<Leads />} />
+src/router/SalesRoutes.jsx:48:          <Route path="proposals" element={<Proposals />} />
+src/router/SalesRoutes.jsx:49:          <Route path="quotes" element={<Quotes />} />
+src/router/SalesRoutes.jsx:57:          <Route path="demo/proposal" element={<DemoProposal />} />
+src/router/SalesRoutes.jsx:62:          {/* 404 inside Sales */}
+src/router/SalesRoutes.jsx:63:          <Route path="*" element={<RouteFallback app="sales" />} />
+apps/shs-api/src/domain/metaverse/market/service/market-opportunity-adapter.ts:5:export async function settleOpportunityCompensation(actor: any, input: { opportunityId: string; awardId: string; paymentIntentRef: string; awardeeUserId: string; amount: number; acceptedWork: boolean; idempotencyKey: string }, treasury: TreasuryAdapter = defaultTreasuryAdapter) {
+apps/shs-api/src/domain/metaverse/market/service/market-opportunity-adapter.ts:7:  if (!input.acceptedWork) throw new MarketError("OPPORTUNITY_COMPENSATION_NOT_ELIGIBLE", "Opportunity work must be accepted before compensation settlement.", 409);
+apps/shs-api/src/domain/metaverse/market/service/market-opportunity-adapter.ts:17:    purpose: "OPPORTUNITY_COMPENSATION",
+apps/shs-api/src/domain/metaverse/market/service/market-opportunity-adapter.ts:19:    idempotencyKey: `opportunity_compensation:${input.idempotencyKey}`,
+apps/shs-api/src/domain/exchange-funding-commitment/repo/exchange-funding-commitment-repo.ts:33:export class ExchangeFundingCommitmentRepo {
+apps/shs-api/src/domain/exchange-funding-commitment/repo/exchange-funding-commitment-repo.ts:36:      `INSERT INTO exchange_funding_commitments (
+apps/shs-api/src/domain/exchange-funding-commitment/repo/exchange-funding-commitment-repo.ts:56:      `SELECT * FROM exchange_funding_commitments
+apps/shs-api/src/domain/exchange-funding-commitment/repo/exchange-funding-commitment-repo.ts:66:      `SELECT * FROM exchange_funding_commitments
+apps/shs-api/src/domain/exchange-funding-commitment/repo/exchange-funding-commitment-repo.ts:76:      `UPDATE exchange_funding_commitments
+apps/shs-api/src/domain/exchange-funding-commitment/repo/exchange-funding-commitment-repo.ts:90:      `UPDATE exchange_funding_commitments
+src/router/CivicRoutes.jsx:7:const CivicGrantStory = lazy(() => import("@/pages/civic/GrantStory.jsx"));
+src/router/CivicRoutes.jsx:13:const CivicProposals    = lazy(() => import("@/pages/civic/Proposals.jsx"));
+src/router/CivicRoutes.jsx:30:const CivicLeaderboard = lazy(() => import("@/pages/civic/Leaderboard.jsx"));
+src/router/CivicRoutes.jsx:69:          <Route path="proposals"     element={<CivicProposals />} />
+src/router/CivicRoutes.jsx:72:          <Route path="grant-story"   element={<CivicGrantStory />} />
+src/router/CivicRoutes.jsx:73:          <Route path="leaderboard"   element={<CivicLeaderboard />} />
+apps/shs-api/src/domain/metaverse/market/service/listing-service.ts:82:    // opportunity-project-adapter.ts's "never throws" convenience pattern).
+src/router/AdminRoutes.jsx.bak_remove_literal_n_20260513_105135:10:import GrantBinder from "@/pages/admin/GrantBinder.jsx";
+src/router/AdminRoutes.jsx.bak_remove_literal_n_20260513_105135:20:import HubLeadershipDashboard from "@/pages/hub/HubLeadershipDashboard.jsx";
+src/router/AdminRoutes.jsx.bak_remove_literal_n_20260513_105135:28:import HubSalesPipelinePage from "@/pages/hub/HubSalesPipelinePage.jsx";
+src/router/AdminRoutes.jsx.bak_remove_literal_n_20260513_105135:101:        <Route path="/hub/network" element={protect("/hub/network", <HubLeadershipDashboard />)} />
+src/router/AdminRoutes.jsx.bak_remove_literal_n_20260513_105135:102:        <Route path="/hub/leadership" element={protect("/hub/leadership", <HubLeadershipDashboard />)} />

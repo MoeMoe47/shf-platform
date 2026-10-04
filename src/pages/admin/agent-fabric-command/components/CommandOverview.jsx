@@ -52,7 +52,14 @@ function RecentOperationsLane({ projection, onOpen, related }) {
   const runs = isDataState(projection.state) ? projection.data.runs : [];
   const visible = showAll ? runs : runs.slice(0, RUN_PREVIEW);
   return (
-    <Lane id="operations" eyebrow="Run ledger" title="Recent operations" className="afcc-lane--operations" related={related}>
+    <Lane
+      id="operations"
+      eyebrow="Run ledger"
+      title="Recent operations"
+      className="afcc-lane--operations"
+      related={related}
+      actions={<Link className="afcc-text-link" to="/agent-fabric/command/operations">Open Live Operations</Link>}
+    >
       <p className="afcc-quiet">
         Recorded run events, newest first. Events carry kind and outcome only; no live run state is published.
       </p>
@@ -230,7 +237,12 @@ function AgentFleetLane({ health, readiness, onOpen, related }) {
       title="Agent fleet"
       className="afcc-lane--agents"
       related={related}
-      actions={<DetailButton onClick={(e) => onOpen({ type: "agents" }, e.currentTarget)}>Fleet detail</DetailButton>}
+      actions={
+        <span className="afcc-lane-links">
+          <DetailButton onClick={(e) => onOpen({ type: "agents" }, e.currentTarget)}>Fleet detail</DetailButton>
+          <Link className="afcc-text-link" to="/agent-fabric/command/operations">Runs in Live Operations</Link>
+        </span>
+      }
     >
       {hs ? (
         <Distribution

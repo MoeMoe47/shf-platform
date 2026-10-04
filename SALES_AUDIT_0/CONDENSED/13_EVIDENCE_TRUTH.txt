@@ -1,0 +1,503 @@
+============================================================
+SOURCE: 13_EVIDENCE_TRUTH.txt
+============================================================
+apps/shs-api/src/server.ts:40:  credentials: true,
+services/shf-agent-fabric/auth/routes.py:34:        record_auth_event("login_failure", result="failed", reason="invalid_credentials", ip=ip, user_agent=request.headers.get("user-agent", ""))
+services/_graveyard/shf-agent-fabric-backups-manual/main.py.20260116T200843Z:40:    allow_credentials=True,
+src/utils/creditEngine.js:92:          delta = rule.weights[ev.meta.outcome] ?? 0;
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:5:// Intelligence, Journey Milestones, Career Pathway, and Credentials —
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:18:import * as credentialService from "../../credentials/service/credential-service.js";
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:87:// which is exactly why real Google/Microsoft credentials are never
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:94:  const [calendarResult, journeyResult, pathwayResult, credentialsResult] = await Promise.allSettled([
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:98:    credentialService.listCredentialsForActor(actor as any),
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:105:  if (credentialsResult.status === "rejected") unavailableSources.push("credentials");
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:108:    throw new CompanionContextHardFailureError([calendarResult, journeyResult, pathwayResult, credentialsResult]);
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:161:  // Credential renewal *guidance* already flows through
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:163:  // own CREDENTIAL_RENEWAL_SOON recommendation, sourced from the same
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:164:  // credential renewal dates projected onto the Calendar) — this summary
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:165:  // is presentation-only context (e.g. "you hold N credentials"), not a
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:167:  let credentialSummary = null;
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:168:  if (credentialsResult.status === "fulfilled") {
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:169:    const creds = credentialsResult.value.filter((c: any) => c.lifecycle !== "REVOKED");
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:170:    credentialSummary = {
+apps/shs-api/src/domain/companion/service/companion-context-service.ts:187:    credentials: credentialSummary,
+services/shf-agent-fabric/auth/permissions.py:36:# Truth Spine permissions (Truth Spine security remediation).
+services/shf-agent-fabric/auth/permissions.py:40:# evidence or unilaterally publish institutional Truth - see
+services/shf-agent-fabric/auth/permissions.py:41:# services/truth_spine_service.py and routers/truth_routes.py for the
+services/shf-agent-fabric/auth/permissions.py:83:SHF_EVIDENCE_CREATE = "shf.evidence.create"
+services/shf-agent-fabric/auth/permissions.py:84:SHF_EVIDENCE_READ = "shf.evidence.read"
+services/shf-agent-fabric/auth/permissions.py:93:    SHF_EVIDENCE_CREATE,
+services/shf-agent-fabric/auth/permissions.py:94:    SHF_EVIDENCE_READ,
+services/shf-agent-fabric/auth/permissions.py:104:# roles may propose evidence and claims for their own organization, but
+services/shf-agent-fabric/auth/permissions.py:105:# cannot verify their own evidence or unilaterally publish it.
+services/shf-agent-fabric/auth/permissions.py:146:    SHF_EVIDENCE_CREATE,
+services/shf-agent-fabric/auth/permissions.py:147:    SHF_EVIDENCE_READ,
+services/shf-agent-fabric/auth/permissions.py:174:    """Only ROLE_SHS_ADMIN has cross-organization Truth Spine authority."""
+services/shf-report-engine/src/sections/executive.js:13:      <tr><td>Credential Attainment</td><td>${m.credential_rate ?? "—"}</td><td>${m.wioa_source ?? "—"}</td></tr>
+src/router/LordOutcomesRoutes.jsx:1:// src/router/LordOutcomesRoutes.jsx
+src/router/LordOutcomesRoutes.jsx:8:import LordOutcomesLayout from "@/layouts/LordOutcomesLayout.jsx";
+src/router/LordOutcomesRoutes.jsx:10:import LordOutcomesHome from "@/pages/lordOutcomes/LordOutcomesHome.jsx";
+src/router/LordOutcomesRoutes.jsx:11:import StateOutcomesPage from "@/pages/lordOutcomes/StateOutcomesPage.jsx";
+src/router/LordOutcomesRoutes.jsx:12:import ProgramOutcomesPage from "@/pages/lordOutcomes/ProgramOutcomesPage.jsx";
+src/router/LordOutcomesRoutes.jsx:13:import EmployerImpactPage from "@/pages/lordOutcomes/EmployerImpactPage.jsx";
+src/router/LordOutcomesRoutes.jsx:14:import FundingImpactPage from "@/pages/lordOutcomes/FundingImpactPage.jsx";
+src/router/LordOutcomesRoutes.jsx:17:import PilotLauncherPage from "@/pages/lordOutcomes/PilotLauncher.jsx";
+src/router/LordOutcomesRoutes.jsx:18:import ActivePilotsPage from "@/pages/lordOutcomes/pilots/ActivePilots.jsx";
+src/router/LordOutcomesRoutes.jsx:19:import PilotTemplatesPage from "@/pages/lordOutcomes/pilots/PilotTemplates.jsx";
+src/router/LordOutcomesRoutes.jsx:20:// import "@/styles/lordOutcomes.dym.css";
+src/router/LordOutcomesRoutes.jsx:21:// import "@/styles/lordOutcomes.scaffold.css";
+src/router/LordOutcomesRoutes.jsx:22:// import "@/styles/lordOutcomes.theme.css";
+src/router/LordOutcomesRoutes.jsx:23:// import "@/styles/lordOutcomes.header.locked.css";
+src/router/LordOutcomesRoutes.jsx:25:export default function LordOutcomesRoutes() {
+src/router/LordOutcomesRoutes.jsx:28:<Route element={<LordOutcomesLayout />}>
+src/router/LordOutcomesRoutes.jsx:29:        <Route index element={<LordOutcomesHome />} />
+src/router/LordOutcomesRoutes.jsx:31:        <Route path="states" element={<StateOutcomesPage />} />
+src/router/LordOutcomesRoutes.jsx:32:        <Route path="programs" element={<ProgramOutcomesPage />} />
+apps/shs-api/src/domain/companion/model/companion-context.ts:6:// Milestones, Career Pathway, and Credentials, and derives a bounded,
+apps/shs-api/src/domain/companion/model/companion-context.ts:25:export interface CompanionCredentialSummary {
+apps/shs-api/src/domain/companion/model/companion-context.ts:50:  | "CREDENTIAL_RENEWAL_SOON"
+apps/shs-api/src/domain/companion/model/companion-context.ts:63:// time-sensitive CREDENTIAL_RENEWAL_SOON/PATHWAY_RELEVANT_OPPORTUNITY.
+apps/shs-api/src/domain/companion/model/companion-context.ts:69:  CREDENTIAL_RENEWAL_SOON: 4,
+apps/shs-api/src/domain/companion/model/companion-context.ts:87:  credentials: CompanionCredentialSummary | null;
+apps/shs-api/src/domain/companion/model/companion-context.ts:94:export const COMPANION_SOURCES = ["calendar", "journey", "pathway", "credentials"] as const;
+services/shf-agent-fabric/services/data_approval_service.py:11:READY_DATA_VERIFICATION_STATUSES = {"ready_for_truth_spine", "ready", "verified_ready"}
+services/shf-agent-fabric/services/data_approval_service.py:15:    "Data Approval does not verify truth, override Truth Spine, override Oracle, directly publish public-approved records, or mutate SHF Impact Data Spine.",
+services/shf-agent-fabric/services/data_approval_service.py:38:    truth = candidate.get("truth_spine") if isinstance(candidate.get("truth_spine"), dict) else {}
+services/shf-agent-fabric/services/data_approval_service.py:40:        candidate.get("truth_spine_status")
+services/shf-agent-fabric/services/data_approval_service.py:80:def _has_evidence(candidate: Dict[str, Any]) -> bool:
+services/shf-agent-fabric/services/data_approval_service.py:81:    evidence_refs = candidate.get("evidence_refs")
+services/shf-agent-fabric/services/data_approval_service.py:82:    evidence = candidate.get("evidence")
+services/shf-agent-fabric/services/data_approval_service.py:83:    return (isinstance(evidence_refs, list) and len(evidence_refs) > 0) or bool(evidence)
+services/shf-agent-fabric/services/data_approval_service.py:98:    has_evidence: bool,
+services/shf-agent-fabric/services/data_approval_service.py:116:    if has_evidence:
+services/shf-agent-fabric/services/data_approval_service.py:131:    has_evidence = _has_evidence(candidate)
+services/shf-agent-fabric/services/data_approval_service.py:140:        warnings.append("missing_truth_spine_status")
+services/shf-agent-fabric/services/data_approval_service.py:141:        blockers.append("missing_truth_spine_status")
+services/shf-agent-fabric/services/data_approval_service.py:143:        warnings.append("truth_spine_not_verified_or_supported")
+services/shf-agent-fabric/services/data_approval_service.py:144:        blockers.append("truth_spine_not_verified_or_supported")
+services/shf-agent-fabric/services/data_approval_service.py:159:    if not has_evidence:
+services/shf-agent-fabric/services/data_approval_service.py:160:        warnings.append("missing_evidence")
+services/shf-agent-fabric/services/data_approval_service.py:169:        has_evidence,
+services/shf-agent-fabric/services/data_approval_service.py:180:        and has_evidence
+services/shf-agent-fabric/services/data_approval_service.py:187:        recommended_action = "complete_truth_oracle_evidence_review_before_gateway"
+services/shf-agent-fabric/services/data_approval_service.py:204:        "truth_spine_status": truth_status,
+services/shf-agent-fabric/services/data_approval_service.py:258:            "truth_spine_status",
+services/shf-agent-fabric/services/data_approval_service.py:280:                    "truth_spine_status": "verified",
+services/shf-agent-fabric/services/data_approval_service.py:282:                    "data_verification_status": "ready_for_truth_spine",
+services/shf-agent-fabric/services/data_approval_service.py:283:                    "evidence_refs": [{"ref_id": "evidence_1", "uri": "local://evidence.csv"}],
+services/shf-agent-fabric/services/data_approval_service.py:284:                    "provenance": {"source_id": "source_1", "uri": "local://evidence.csv"},
+services/shf-agent-fabric/services/data_approval_service.py:291:                    "truth_spine_status": "verified",
+services/shf-agent-fabric/services/data_approval_service.py:293:                    "evidence_refs": [{"ref_id": "evidence_2", "uri": "local://program.csv"}],
+services/shf-agent-fabric/services/data_approval_service.py:302:                    "evidence_refs": [],
+services/shf-agent-fabric/auth/store.py:22:    # auth/permissions.py and services/truth_spine_service.py for how this
+services/shf-agent-fabric/auth/store.py:23:    # is used to enforce Truth Spine tenant isolation. Added for the Truth
+services/shf-agent-fabric/auth/store.py:45:    # isolation tests (Truth Spine remediation) rather than only testing
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:1:// src/router/LordOutcomesRoutes.jsx
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:8:import LordOutcomesLayout from "@/layouts/LordOutcomesLayout.jsx";
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:10:import LordOutcomesHome from "@/pages/lordOutcomes/LordOutcomesHome.jsx";
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:11:import StateOutcomesPage from "@/pages/lordOutcomes/StateOutcomesPage.jsx";
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:12:import ProgramOutcomesPage from "@/pages/lordOutcomes/ProgramOutcomesPage.jsx";
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:13:import EmployerImpactPage from "@/pages/lordOutcomes/EmployerImpactPage.jsx";
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:14:import FundingImpactPage from "@/pages/lordOutcomes/FundingImpactPage.jsx";
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:17:import PilotLauncherPage from "@/pages/lordOutcomes/PilotLauncher.jsx";
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:18:import ActivePilotsPage from "@/pages/lordOutcomes/pilots/ActivePilots.jsx";
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:19:import PilotTemplatesPage from "@/pages/lordOutcomes/pilots/PilotTemplates.jsx";
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:21:// import "@/styles/lordOutcomes.dym.css";
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:22:// import "@/styles/lordOutcomes.scaffold.css";
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:23:// import "@/styles/lordOutcomes.theme.css";
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:24:// import "@/styles/lordOutcomes.header.locked.css";
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:26:export default function LordOutcomesRoutes() {
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:30:      <Route element={<LordOutcomesLayout />}>
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:31:        <Route index element={<LordOutcomesHome />} />
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:33:        <Route path="states" element={<StateOutcomesPage />} />
+src/router/LordOutcomesRoutes.jsx.bak_remove_bad_layers_route_20260429_173840:34:        <Route path="programs" element={<ProgramOutcomesPage />} />
+src/utils/recommendPlans.js:231:    pathway: p, // embed for UI (modules, firstCredential, etc.)
+src/utils/recommendPlans.js:245:  // Credential step
+src/utils/recommendPlans.js:246:  if (p.firstCredential?.name) {
+src/utils/recommendPlans.js:247:    steps.push({ type: "exam", title: `Sit for ${p.firstCredential.name}` });
+services/shf-report-engine/inputs/report-data.json:16:    "credential_rate": "TBD",
+services/shf-agent-fabric/services/game_theory_service.py:11:from services.truth_spine_service import build_truth_package
+services/shf-agent-fabric/services/game_theory_service.py:188:        "insufficient_evidence_count": decisions.get("insufficient_evidence", 0),
+services/shf-agent-fabric/services/game_theory_service.py:256:        return "coordinate_stakeholders_with_verified_evidence"
+services/shf-agent-fabric/services/game_theory_service.py:342:    if oracle["disputed_count"] or oracle["insufficient_evidence_count"]:
+services/shf-agent-fabric/services/game_theory_service.py:343:        risk += (oracle["disputed_count"] * 10) + (oracle["insufficient_evidence_count"] * 8)
+services/shf-agent-fabric/services/game_theory_service.py:345:        confidence_bonus -= (oracle["disputed_count"] * 10) + (oracle["insufficient_evidence_count"] * 8)
+services/shf-agent-fabric/services/game_theory_service.py:381:        "expected_outcome_delta": int(expected_delta),
+services/shf-agent-fabric/services/game_theory_service.py:392:        "evidence_summary": {
+services/shf-agent-fabric/services/game_theory_service.py:405:            "insufficient_evidence_count": oracle["insufficient_evidence_count"],
+services/shf-agent-fabric/services/game_theory_service.py:440:                "boundary": "Reports still require Truth Spine readiness and public approval.",
+services/shf-agent-fabric/services/game_theory_service.py:446:                "boundary": "Strategic prediction only; Oracle decides evidence support.",
+services/shf-agent-fabric/services/game_theory_service.py:449:                "strategy_id": "coordinate_stakeholders_with_verified_evidence",
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:2:import { LearnerCredential } from "../model/credential.js";
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:5:  learner_credential_id, credential_definition_id, learner_user_id, organization_id,
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:7:  verification_id, credential_version, issuance_key, provenance_json, verification_hash,
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:11:function rowToLearnerCredential(row: any): LearnerCredential {
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:13:    id: row.learner_credential_id,
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:14:    credentialDefinitionId: row.credential_definition_id,
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:24:    credentialVersion: Number(row.credential_version || 1),
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:33:export class LearnerCredentialRepo {
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:35:    id: string; credentialDefinitionId: string; learnerUserId: string; organizationId: string;
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:38:  }, executor: { query: (sql: string, params?: unknown[]) => Promise<any> } = { query }): Promise<LearnerCredential> {
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:40:      `INSERT INTO learner_credentials (
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:41:        learner_credential_id, credential_definition_id, learner_user_id, organization_id, tenant_id,
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:42:        status, expires_at, issued_by_user_id, verification_id, credential_version,
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:46:      [input.id, input.credentialDefinitionId, input.learnerUserId, input.organizationId, input.tenantId, input.expiresAt, input.issuedByUserId, input.verificationId, input.issuanceKey, JSON.stringify(input.provenance), input.verificationHash],
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:48:    return rowToLearnerCredential(res.rows[0]);
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:51:  async getById(id: string): Promise<LearnerCredential | null> {
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:52:    const res = await query(`SELECT ${COLUMNS} FROM learner_credentials WHERE learner_credential_id=$1`, [id]);
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:53:    return res.rows[0] ? rowToLearnerCredential(res.rows[0]) : null;
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:56:  async hasActiveIssuance(credentialDefinitionId: string, learnerUserId: string, executor: { query: (sql: string, params?: unknown[]) => Promise<any> } = { query }): Promise<boolean> {
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:58:      "SELECT 1 FROM learner_credentials WHERE credential_definition_id=$1 AND learner_user_id=$2 AND status='ISSUED' LIMIT 1",
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:59:      [credentialDefinitionId, learnerUserId],
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:64:  async listForLearner(organizationId: string, learnerUserId: string): Promise<LearnerCredential[]> {
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:66:      `SELECT ${COLUMNS} FROM learner_credentials WHERE organization_id=$1 AND learner_user_id=$2 ORDER BY issued_at DESC`,
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:69:    return res.rows.map(rowToLearnerCredential);
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:72:  async listForOrganization(organizationId: string): Promise<LearnerCredential[]> {
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:73:    const res = await query(`SELECT ${COLUMNS} FROM learner_credentials WHERE organization_id=$1 ORDER BY issued_at DESC`, [organizationId]);
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:74:    return res.rows.map(rowToLearnerCredential);
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:77:  async revoke(id: string, organizationId: string, revokedByUserId: string, executor: { query: (sql: string, params?: unknown[]) => Promise<any> } = { query }): Promise<LearnerCredential | null> {
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:79:      `UPDATE learner_credentials SET status='REVOKED', revoked_at=NOW(), revoked_by_user_id=$3, updated_at=NOW()
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:80:       WHERE learner_credential_id=$1 AND organization_id=$2 AND status='ISSUED'
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:84:    return res.rows[0] ? rowToLearnerCredential(res.rows[0]) : null;
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:87:  async getByVerificationId(verificationId: string): Promise<LearnerCredential | null> {
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:88:    const res = await query(`SELECT ${COLUMNS} FROM learner_credentials WHERE verification_id=$1`, [verificationId]);
+apps/shs-api/src/domain/credentials/repo/learner-credential-repo.ts:89:    return res.rows[0] ? rowToLearnerCredential(res.rows[0]) : null;
+services/shf-report-engine/inputs/report-data.json.bak_20260222_231543:17:    "credential_rate": "TBD",
+services/shf-agent-fabric/services/operator_contracts_service.py:42:        "outcome_type": body["outcome_type"],
+services/shf-agent-fabric/services/operator_contracts_service.py:81:def list_contracts(status=None, pool_id=None, outcome_type=None):
+services/shf-agent-fabric/services/operator_contracts_service.py:88:    if outcome_type:
+services/shf-agent-fabric/services/operator_contracts_service.py:89:        items = [x for x in items if x.get("outcome_type") == outcome_type]
+src/router/CurriculumRoutes.jsx:43:const CareerPortfolio = lazy(() => import("@/pages/career/Portfolio.jsx"));
+src/router/CurriculumRoutes.jsx:127:          <Route path="asl/portfolio" element={<CareerPortfolio />} />
+src/router/CurriculumRoutes.jsx:137:          <Route path="instructor/prove/:evidenceId" element={<PrepareProveReview />} />
+src/utils/binderMerge.js:17:    headline: log.outcome || log.notes || "",
+src/utils/binderMerge.js:29:    headline: log.summary || log.outcome || "",
+services/shf-agent-fabric/services/operational_telemetry.py:10:SAFE_METADATA_KEYS = {"request_id", "correlation_id", "route_class", "outcome", "reason", "count", "status_code", "limiter_class", "migration_state", "threshold", "observed", "worker_state", "component", "producer_reference", "event_class", "backend", "duration_ms"}
+services/shf-agent-fabric/services/operational_telemetry.py:25:def emit_operational_telemetry(*, event_name: str, severity: str, component: str, category: str, outcome: str, metadata: dict[str, Any] | None = None) -> dict[str, Any]:
+services/shf-agent-fabric/services/operational_telemetry.py:26:    event = {"event_name": event_name, "severity": severity, "component": component, "category": category, "timestamp": datetime.now(timezone.utc).isoformat(), "outcome": outcome, "metadata": _safe_metadata(metadata)}
+services/shf-agent-fabric/services/operational_telemetry.py:28:        key = f"{component}:{event_name}:{outcome}"
+apps/shs-api/src/domain/credentials/repo/certificate-repo.ts:16:  evidenceReferences: unknown[];
+apps/shs-api/src/domain/credentials/repo/certificate-repo.ts:48:    evidenceReferences: row.evidence_references_json || [],
+apps/shs-api/src/domain/credentials/repo/certificate-repo.ts:69:  evidence_references_json, status, verification_reference, certificate_serial,
+apps/shs-api/src/domain/credentials/repo/certificate-repo.ts:79:       issued_at, qualification_reference, evidence_references_json, status,
+apps/shs-api/src/domain/credentials/repo/certificate-repo.ts:86:      JSON.stringify(input.evidenceReferences || []), input.verificationReference, input.certificateSerial,
+services/shf-agent-fabric/services/truth_public_population_postgres_repository.py:128:    safe = {key: value for key, value in metadata.items() if key not in {"claim_text", "subject_id", "evidence_ids", "source_ids"}}
+apps/shs-api/src/domain/credentials/repo/credential-definition-repo.ts:2:import { CredentialDefinition } from "../model/credential.js";
+apps/shs-api/src/domain/credentials/repo/credential-definition-repo.ts:5:  credential_definition_id, slug, name, credential_type, issuing_authority, description,
+apps/shs-api/src/domain/credentials/repo/credential-definition-repo.ts:11:function rowToDefinition(row: any): CredentialDefinition {
+apps/shs-api/src/domain/credentials/repo/credential-definition-repo.ts:13:    id: row.credential_definition_id,
+apps/shs-api/src/domain/credentials/repo/credential-definition-repo.ts:16:    credentialType: row.credential_type,
+apps/shs-api/src/domain/credentials/repo/credential-definition-repo.ts:32:export class CredentialDefinitionRepo {
+apps/shs-api/src/domain/credentials/repo/credential-definition-repo.ts:34:    id: string; slug: string; name: string; credentialType: string; issuingAuthority: string;
+apps/shs-api/src/domain/credentials/repo/credential-definition-repo.ts:38:  }): Promise<CredentialDefinition> {
+apps/shs-api/src/domain/credentials/repo/credential-definition-repo.ts:40:      `INSERT INTO credential_definitions (
+apps/shs-api/src/domain/credentials/repo/credential-definition-repo.ts:41:        credential_definition_id, slug, name, credential_type, issuing_authority, description,
+apps/shs-api/src/domain/credentials/repo/credential-definition-repo.ts:47:        input.id, input.slug, input.name, input.credentialType, input.issuingAuthority, input.description,
+apps/shs-api/src/domain/credentials/repo/credential-definition-repo.ts:56:  async getById(id: string): Promise<CredentialDefinition | null> {
+apps/shs-api/src/domain/credentials/repo/credential-definition-repo.ts:57:    const res = await query(`SELECT ${COLUMNS} FROM credential_definitions WHERE credential_definition_id=$1`, [id]);
+apps/shs-api/src/domain/credentials/repo/credential-definition-repo.ts:61:  async getBySlug(slug: string): Promise<CredentialDefinition | null> {
+apps/shs-api/src/domain/credentials/repo/credential-definition-repo.ts:62:    const res = await query(`SELECT ${COLUMNS} FROM credential_definitions WHERE slug=$1`, [slug]);
+apps/shs-api/src/domain/credentials/repo/credential-definition-repo.ts:66:  async listActive(): Promise<CredentialDefinition[]> {
+apps/shs-api/src/domain/credentials/repo/credential-definition-repo.ts:67:    const res = await query(`SELECT ${COLUMNS} FROM credential_definitions WHERE status='active' ORDER BY name ASC`);
+src/router/LordOutcomesRoutes.jsx.bak_fix_layers_loop_20260429_173310:1:// src/router/LordOutcomesRoutes.jsx
+src/router/LordOutcomesRoutes.jsx.bak_fix_layers_loop_20260429_173310:8:import LordOutcomesLayout from "@/layouts/LordOutcomesLayout.jsx";
+src/router/LordOutcomesRoutes.jsx.bak_fix_layers_loop_20260429_173310:10:import LordOutcomesHome from "@/pages/lordOutcomes/LordOutcomesHome.jsx";
+src/router/LordOutcomesRoutes.jsx.bak_fix_layers_loop_20260429_173310:11:import StateOutcomesPage from "@/pages/lordOutcomes/StateOutcomesPage.jsx";
+src/router/LordOutcomesRoutes.jsx.bak_fix_layers_loop_20260429_173310:12:import ProgramOutcomesPage from "@/pages/lordOutcomes/ProgramOutcomesPage.jsx";
+src/router/LordOutcomesRoutes.jsx.bak_fix_layers_loop_20260429_173310:13:import EmployerImpactPage from "@/pages/lordOutcomes/EmployerImpactPage.jsx";
+src/router/LordOutcomesRoutes.jsx.bak_fix_layers_loop_20260429_173310:14:import FundingImpactPage from "@/pages/lordOutcomes/FundingImpactPage.jsx";
+src/router/LordOutcomesRoutes.jsx.bak_fix_layers_loop_20260429_173310:17:import PilotLauncherPage from "@/pages/lordOutcomes/PilotLauncher.jsx";
+src/router/LordOutcomesRoutes.jsx.bak_fix_layers_loop_20260429_173310:18:import ActivePilotsPage from "@/pages/lordOutcomes/pilots/ActivePilots.jsx";
+src/router/LordOutcomesRoutes.jsx.bak_fix_layers_loop_20260429_173310:19:import PilotTemplatesPage from "@/pages/lordOutcomes/pilots/PilotTemplates.jsx";
+src/router/LordOutcomesRoutes.jsx.bak_fix_layers_loop_20260429_173310:20:// import "@/styles/lordOutcomes.dym.css";
+src/router/LordOutcomesRoutes.jsx.bak_fix_layers_loop_20260429_173310:21:// import "@/styles/lordOutcomes.scaffold.css";
+src/router/LordOutcomesRoutes.jsx.bak_fix_layers_loop_20260429_173310:22:// import "@/styles/lordOutcomes.theme.css";
+src/router/LordOutcomesRoutes.jsx.bak_fix_layers_loop_20260429_173310:23:// import "@/styles/lordOutcomes.header.locked.css";
+src/router/LordOutcomesRoutes.jsx.bak_fix_layers_loop_20260429_173310:25:export default function LordOutcomesRoutes() {
+src/router/LordOutcomesRoutes.jsx.bak_fix_layers_loop_20260429_173310:28:      <Route element={<LordOutcomesLayout />}>
+src/router/LordOutcomesRoutes.jsx.bak_fix_layers_loop_20260429_173310:29:        <Route index element={<LordOutcomesHome />} />
+src/router/LordOutcomesRoutes.jsx.bak_fix_layers_loop_20260429_173310:31:        <Route path="states" element={<StateOutcomesPage />} />
+src/router/LordOutcomesRoutes.jsx.bak_fix_layers_loop_20260429_173310:32:        <Route path="programs" element={<ProgramOutcomesPage />} />
+services/shf-agent-fabric/services/operational_event_service.py:34:    "credential.earned",
+services/shf-agent-fabric/services/operational_event_service.py:35:    "portfolio.artifact.created",
+services/shf-agent-fabric/services/operational_event_service.py:44:SUPPORTED_SUBJECT_TYPES = {"student", "lesson", "assessment", "course", "credential", "portfolio_artifact", "referral", "report", "grant_binder", "funding_commitment", "workforce_employment_outcome", "gpa_truth_determination"}
+services/shf-agent-fabric/services/operational_event_service.py:109:        emit_operational_telemetry(event_name="operational_event_rejected", severity="INFO", component="agent_fabric", category="INGESTION", outcome="EXPECTED_DOMAIN_REJECTION", metadata={"reason": exc.reason})
+services/shf-agent-fabric/services/operational_event_service.py:117:        emit_operational_telemetry(event_name="operational_event_idempotent_replay", severity="INFO", component="agent_fabric", category="INGESTION", outcome="SUCCESS", metadata={"reason": "existing_idempotency_key"})
+services/shf-agent-fabric/services/operational_event_service.py:135:        "evidence_references": payload.get("evidence_references") or [],
+services/shf-agent-fabric/services/operational_event_service.py:148:        emit_operational_telemetry(event_name="operational_event_persistence_failed", severity="CRITICAL", component="agent_fabric", category="INGESTION", outcome="SYSTEM_FAILURE", metadata={"reason": "operational_event_write_failed"})
+services/shf-agent-fabric/services/operational_event_service.py:150:    emit_operational_telemetry(event_name="operational_event_accepted", severity="INFO", component="agent_fabric", category="INGESTION", outcome="SUCCESS", metadata={"event_class": event_type})
+services/shf-agent-fabric/services/operational_event_service.py:248:    if payload.get("evidence_references") is not None and not isinstance(payload.get("evidence_references"), list):
+services/shf-agent-fabric/services/operational_event_service.py:249:        raise OperationalEventError("invalid_event_schema", {"field": "evidence_references"})
+services/shf-agent-fabric/services/operational_event_service.py:323:    if str(payload.get("subject_type") or "") != "workforce_employment_outcome":
+services/shf-agent-fabric/services/operational_event_service.py:326:    required = {"outcome_id", "participant_ref", "outcome_type", "employment_started_at", "verification_source_type", "lifecycle_status", "version"}
+services/shf-agent-fabric/services/operational_event_service.py:330:    if str(event_payload.get("outcome_id") or "") != str(payload.get("subject_id") or ""):
+services/shf-agent-fabric/services/operational_event_service.py:331:        raise OperationalEventError("invalid_employment_started_verified_payload", {"field": "outcome_id"})
+services/shf-agent-fabric/services/operational_event_service.py:334:    if event_payload.get("outcome_type") != "EMPLOYMENT_STARTED" or event_payload.get("lifecycle_status") != "verified":
+services/shf-agent-fabric/services/operational_event_service.py:343:    expected_key = f"workforce-employment-outcome:{payload['subject_id']}:verified"
+services/shf-agent-fabric/services/operational_event_service.py:354:    required = {"determination_id", "truth_fact_id", "claim_reference", "verification_reference", "provenance_reference", "truth_spine_authority", "truth_spine_status", "lifecycle_status"}
+services/shf-agent-fabric/services/operational_event_service.py:359:    if event_payload.get("truth_spine_authority") != "shs-truth-spine-v1" or event_payload.get("truth_spine_status") != "PENDING_TRUTH_SPINE_INGESTION" or event_payload.get("lifecycle_status") != "accepted":
+services/shf-agent-fabric/services/truth_spine_service.py:13:from services import truth_spine_postgres_repository as durable_repo
+services/shf-agent-fabric/services/truth_spine_service.py:29:# --- Truth Spine security remediation additions -----------------------------
+services/shf-agent-fabric/services/truth_spine_service.py:38:# mutation until explicitly reviewed. See docs/TRUTH_SPINE_SECURITY.md.
+services/shf-agent-fabric/services/truth_spine_service.py:45:    "occurred_at", "evidence_ids", "source_ids", "lineage_id",
+services/shf-agent-fabric/services/truth_spine_service.py:54:    "subject_id", "predicate", "occurred_at", "evidence_ids", "lineage_id",
+services/shf-agent-fabric/services/truth_spine_service.py:98:    """Raised when an actor lacks scope authority over a Truth Spine record.
+services/shf-agent-fabric/services/truth_spine_service.py:255:    that a record exists - see docs/TRUTH_SPINE_SECURITY.md)."""
+services/shf-agent-fabric/services/truth_spine_service.py:370:    if not isinstance(claim.get("evidence_ids"), list) or not isinstance(claim.get("source_ids"), list):
+services/shf-agent-fabric/services/truth_spine_service.py:479:        "evidence_type": _clean_string(payload.get("evidence_type") or (existing or {}).get("evidence_type") or "document"),
+services/shf-agent-fabric/services/truth_spine_service.py:587:        "evidence_ids": _clean_optional_string_list(payload.get("evidence_ids", (existing or {}).get("evidence_ids", []))),
+services/shf-agent-fabric/services/truth_spine_service.py:917:        "issued_by": "shs-truth-spine-v1",
+services/shf-agent-fabric/services/truth_spine_service.py:981:            "actor": claim.get("created_by") or "shs-truth-spine-v1",
+services/shf-agent-fabric/services/truth_spine_service.py:982:            "summary": "Claim entered Truth Spine.",
+services/shf-agent-fabric/services/truth_spine_service.py:990:            "actor": source.get("created_by") or "shs-truth-spine-v1",
+services/shf-agent-fabric/services/truth_spine_service.py:992:            "summary": "Source attached to Truth Spine evidence registry.",
+services/shf-agent-fabric/services/truth_spine_service.py:999:                "actor": source.get("verified_by") or "shs-truth-spine-v1",
+services/shf-agent-fabric/services/truth_spine_service.py:1008:            "actor": claim.get("approved_by") or claim.get("created_by") or "shs-truth-spine-v1",
+services/shf-agent-fabric/services/truth_spine_service.py:1016:            "actor": "shs-truth-spine-v1",
+services/shf-agent-fabric/services/truth_spine_service.py:1027:            "actor": claim.get("approved_by") or "shs-truth-spine-v1",
+services/shf-agent-fabric/services/truth_spine_service.py:1034:            "actor": "shs-truth-spine-v1",
+services/shf-agent-fabric/services/truth_spine_service.py:1088:        "canonical_rule": "Truth Spine verifies what is true. Oracle decides what evidence supports. Watchtower observes coverage and risk. LOO ranks outcomes. Reports communicate only verified/readiness-approved information.",
+services/shf-agent-fabric/services/truth_spine_service.py:1409:                message="Claim app_id/system_id is not registered in the Truth Spine federation registry.",
+services/shf-agent-fabric/services/truth_spine_service.py:1447:                suggested_fix="Remove public approval until Truth Spine verification passes.",
+services/shf-agent-fabric/services/truth_spine_service.py:1504:                message="Source system_id is not registered in the Truth Spine federation registry.",
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:13:import { CredentialActor, CredentialError } from "./credential-service.js";
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:21:function scope(actor: CredentialActor) {
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:22:  if (!actor.user_id || !actor.organization_id) throw new CredentialError("SCOPE_MISSING", "Actor organization/user is required.", 403);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:25:function assertPermission(actor: CredentialActor, permission: string) {
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:26:  if (!hasPermission(actor.permissions, permission)) throw new CredentialError("FORBIDDEN", `Missing permission: ${permission}.`, 403);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:41:  evidenceReferences: unknown[];
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:51:    throw new CredentialError(String(error?.message || "CERTIFICATE_PROFILE_INVALID"), "Certificate profile resolution failed closed.", 400);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:55:async function resolveTarget(actor: CredentialActor, learnerUserId: string) {
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:57:  if (!isAdminTier(actor.roles) && learnerUserId !== current.userId) throw new CredentialError("LEARNER_SCOPE_FORBIDDEN", "Learner certificate scope is not authorized.", 403);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:59:  if (!learner.rows[0]) throw new CredentialError("LEARNER_NOT_FOUND", "Learner not found in this organization.", 404);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:65:export async function evaluateCertificateEligibility(actor: CredentialActor, input: any): Promise<CertificateEligibility> {
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:66:  assertPermission(actor, SHS_SECURITY_PERMISSIONS.CREDENTIAL_VIEW);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:72:    return { eligible: completion.completed, state: completion.completed ? "ELIGIBLE" : completion.status === "BLOCKED" ? "BLOCKED" : "INCOMPLETE", reason: completion.reason, profileKey: profile.profileKey, profileVersion: profile.version, qualificationReference: completion.completed ? `program-completion:${completion.programCompletionId}` : null, evidenceReferences: completion.evidenceReferences, completionState: completion.status, completionReference: completion.programCompletionId };
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:75:  if (!courseReference) throw new CredentialError("COURSE_REQUIRED", "A canonical course reference is required.", 400);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:77:  if (!course.rows[0]) throw new CredentialError("COURSE_NOT_FOUND", "Canonical course not found in this organization.", 404);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:81:  if (!release.rows[0] || !lessons.length) return { eligible: false, state: "BLOCKED", reason: "COURSE_COMPLETION_AUTHORITY_UNAVAILABLE", profileKey: profile.profileKey, profileVersion: profile.version, qualificationReference: null, evidenceReferences: [] };
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:85:  if (requiredIds.length !== lessons.length) return { eligible: false, state: "BLOCKED", reason: "COURSE_COMPLETION_AUTHORITY_UNAVAILABLE", profileKey: profile.profileKey, profileVersion: profile.version, qualificationReference: null, evidenceReferences: [] };
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:88:  const evidenceReferences = completed.rows.map((row: any) => ({ type: "lesson-completion", id: `${courseReference}:${row.lesson_id}`, completedAt: row.completed_at }));
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:90:  return { eligible: missing.length === 0, state: missing.length ? "INCOMPLETE" : "ELIGIBLE", reason: missing.length ? "REQUIRED_LESSONS_INCOMPLETE" : "COURSE_COMPLETION_VERIFIED", profileKey: profile.profileKey, profileVersion: profile.version, qualificationReference, evidenceReferences };
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:99:export async function issueCertificate(actor: CredentialActor, input: any): Promise<IssuedCertificate> {
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:100:  assertPermission(actor, SHS_SECURITY_PERMISSIONS.CREDENTIAL_ISSUE);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:103:  if (!learnerUserId) throw new CredentialError("LEARNER_REQUIRED", "Learner is required.", 400);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:106:  if (!eligibility.eligible || !eligibility.qualificationReference) throw new CredentialError("CERTIFICATE_NOT_ELIGIBLE", eligibility.reason, 403);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:117:    return certificateRepo.create({ certificateId, learnerUserId, organizationId: current.organizationId, tenantId: current.tenantId, canonicalProgramReference: profile.canonicalProgramReference, courseReference: profile.canonicalReferenceMode === "COURSE_INPUT" ? String(input.courseReference || input.course_reference) : null, certificateType: profile.certificateType, profileKey: profile.profileKey, profileVersion: profile.version, issuerReference: profile.issuerReference, issuedAt, qualificationReference: eligibility.qualificationReference, evidenceReferences: eligibility.evidenceReferences, verificationReference, certificateSerial: serial, templateKey: profile.templateKey, templateVersion: profile.templateVersion, sourceVersions: { qualification: eligibility.qualificationReference }, presentationSnapshot: snapshot, contentHash }, db);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:121:async function authorizedCertificate(actor: CredentialActor, id: string) {
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:122:  assertPermission(actor, SHS_SECURITY_PERMISSIONS.CREDENTIAL_VIEW);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:129:export async function listCertificates(actor: CredentialActor) { assertPermission(actor, SHS_SECURITY_PERMISSIONS.CREDENTIAL_VIEW); const current = scope(actor); return certificateRepo.listForActor(current.organizationId, current.userId, isAdminTier(actor.roles)); }
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:130:export async function getCertificate(actor: CredentialActor, id: string) { return authorizedCertificate(actor, id); }
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:132:export async function renderIssuedCertificate(actor: CredentialActor, id: string, format: "HTML" | "PDF") {
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:133:  const item = await authorizedCertificate(actor, id); if (!item) throw new CredentialError("CERTIFICATE_NOT_FOUND", "Certificate not found.", 404);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:140:  const target = path.resolve(storageRoot(), reference); if (!target.startsWith(path.resolve(storageRoot()) + path.sep)) throw new CredentialError("CERTIFICATE_STORAGE_INVALID", "Certificate storage reference is invalid.", 500);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:146:export async function downloadRenderedCertificate(actor: CredentialActor, id: string, renderId: string) {
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:147:  const item = await authorizedCertificate(actor, id); if (!item) throw new CredentialError("CERTIFICATE_NOT_FOUND", "Certificate not found.", 404);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:148:  const render = await certificateRepo.getRender(renderId, id); if (!render || render.organization_id !== item.organizationId || render.tenant_id !== item.tenantId) throw new CredentialError("CERTIFICATE_RENDER_NOT_FOUND", "Certificate rendition not found.", 404);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:149:  const root = path.resolve(storageRoot()); const target = path.resolve(root, render.storage_reference); if (!target.startsWith(root + path.sep)) throw new CredentialError("CERTIFICATE_STORAGE_INVALID", "Certificate storage reference is invalid.", 500);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:150:  const bytes = await readFile(target); if (createHash("sha256").update(bytes).digest("hex") !== render.content_hash) throw new CredentialError("CERTIFICATE_HASH_MISMATCH", "Certificate rendition integrity check failed.", 500);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:155:export async function emailIssuedCertificate(actor: CredentialActor, id: string) {
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:156:  const item = await authorizedCertificate(actor, id); if (!item) throw new CredentialError("CERTIFICATE_NOT_FOUND", "Certificate not found.", 404);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:157:  if (item.status !== "ISSUED") throw new CredentialError("CERTIFICATE_NOT_DELIVERABLE", "Only an issued certificate may be emailed.", 409);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:164:  await certificateOutbox.enqueue({ producer_id: "shs-api.credentials", event_type: "certificate.email.requested", schema_version: "1.0", subject_type: "issued_certificate", subject_id: item.certificateId, organization_id: item.organizationId, originating_actor_id: actor.user_id, originating_actor_type: "user", tenant_id: item.tenantId, occurred_at: new Date().toISOString(), idempotency_key: `certificate.email.requested:${item.certificateId}:${rendered.hash}:${email}`, correlation_id: `certificate-delivery:${item.certificateId}`, payload: { certificate_id: item.certificateId, certificate_reference: item.certificateSerial, recipient_reference: email, attachment_hash: rendered.hash, template_key: item.profileKey }, destination: "email-provider" });
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:174:export async function revokeIssuedCertificate(actor: CredentialActor, id: string, reason?: string) { assertPermission(actor, SHS_SECURITY_PERMISSIONS.CREDENTIAL_REVOKE); const item = await authorizedCertificate(actor, id); if (!item) throw new CredentialError("CERTIFICATE_NOT_FOUND", "Certificate not found.", 404); return certificateRepo.updateStatus(id, actor.organization_id, "REVOKED", actor.user_id, reason || "Revoked by authorized credential authority"); }
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:176:export async function replaceIssuedCertificate(actor: CredentialActor, id: string) {
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:177:  assertPermission(actor, SHS_SECURITY_PERMISSIONS.CREDENTIAL_ISSUE); const item = await authorizedCertificate(actor, id); if (!item) throw new CredentialError("CERTIFICATE_NOT_FOUND", "Certificate not found.", 404); if (item.status !== "ISSUED") throw new CredentialError("CERTIFICATE_NOT_REPLACEABLE", "Only an issued certificate can be replaced.", 409);
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:181:export async function recordDelivery(actor: CredentialActor, id: string, channel: "DOWNLOAD" | "PRINT_ACTION" | "EMAIL", status: "REQUESTED" | "DELIVERED" | "FAILED", recipientReference?: string, failureReason?: string, providerMessageReference?: string) { const item = await authorizedCertificate(actor, id); if (!item) throw new CredentialError("CERTIFICATE_NOT_FOUND", "Certificate not found.", 404); return certificateRepo.addDeliveryEvent({ deliveryId: `certificate_delivery_${randomUUID()}`, certificateId: id, organizationId: item.organizationId, tenantId: item.tenantId, channel, recipientReference, requestedByUserId: actor.user_id, status, failureReason, providerMessageReference }); }
+apps/shs-api/src/domain/credentials/service/certificate-service.ts:183:export async function learnerEmail(actor: CredentialActor, id: string) { const item = await authorizedCertificate(actor, id); if (!item) throw new CredentialError("CERTIFICATE_NOT_FOUND", "Certificate not found.", 404); const result = await query("SELECT email FROM users WHERE user_id=$1 AND organization_id=$2", [item.learnerUserId, item.organizationId]); return result.rows[0]?.email || null; }
+src/utils/pathwaySchema.js:25:const firstCredentialSchema = z
+src/utils/pathwaySchema.js:27:    name: z.string().min(1, "firstCredential.name required"),
+src/utils/pathwaySchema.js:70:    firstCredential: firstCredentialSchema.optional(),
+services/shf-agent-fabric/services/evidence_projection_service.py:12:from services import operational_event_service, truth_spine_service
+services/shf-agent-fabric/services/evidence_projection_service.py:13:from services import truth_spine_postgres_repository as durable_repo
+services/shf-agent-fabric/services/evidence_projection_service.py:18:EVIDENCE_DB_DIR = Path(os.getenv("SHF_EVIDENCE_DB_DIR", str(SERVICE_ROOT / "db" / "reporting")))
+services/shf-agent-fabric/services/evidence_projection_service.py:19:EVIDENCE_PATH = EVIDENCE_DB_DIR / "evidence.jsonl"
+services/shf-agent-fabric/services/evidence_projection_service.py:20:PROJECTION_RESULTS_PATH = EVIDENCE_DB_DIR / "truth_projection_results.jsonl"
+services/shf-agent-fabric/services/evidence_projection_service.py:21:EVIDENCE_STORAGE_BACKEND = "postgres_truth_spine_records" if durable_repo.is_postgres_mode() else "jsonl_repository_abstraction"
+services/shf-agent-fabric/services/evidence_projection_service.py:22:EVIDENCE_STORAGE_DURABILITY_CLASS = "durable_append_only" if durable_repo.is_postgres_mode() else "development_only"
+services/shf-agent-fabric/services/evidence_projection_service.py:23:EVIDENCE_PRODUCTION_DURABILITY_APPROVED = durable_repo.is_postgres_mode()
+services/shf-agent-fabric/services/evidence_projection_service.py:24:EVIDENCE_DEPLOYMENT_REQUIREMENT = (
+services/shf-agent-fabric/services/evidence_projection_service.py:25:    "PostgreSQL Truth Spine persistence is selected; production deployment still requires retention controls, backup/restore, and monitoring."
+services/shf-agent-fabric/services/evidence_projection_service.py:28:    "Evidence JSONL is a repository abstraction/development implementation and is not approved production persistence; "
+services/shf-agent-fabric/services/evidence_projection_service.py:29:    "production deployment requires an owner-approved durable evidence store, retention controls, backup/restore, and monitoring."
+services/shf-agent-fabric/services/evidence_projection_service.py:34:    "EVIDENCE_ONLY",
+services/shf-agent-fabric/services/evidence_projection_service.py:72:    EVIDENCE_DB_DIR.mkdir(parents=True, exist_ok=True)
+services/shf-agent-fabric/services/evidence_projection_service.py:73:    for path in (EVIDENCE_PATH, PROJECTION_RESULTS_PATH):
+services/shf-agent-fabric/services/evidence_projection_service.py:95:def _append_evidence(record: Dict[str, Any]) -> None:
+services/shf-agent-fabric/services/evidence_projection_service.py:97:        durable_repo.append_record(EVIDENCE_PATH.name, record)
+services/shf-agent-fabric/services/evidence_projection_service.py:100:    with EVIDENCE_PATH.open("a", encoding="utf-8") as handle:
+services/shf-agent-fabric/services/evidence_projection_service.py:113:def list_evidence_for_actor(actor: Any) -> List[Dict[str, Any]]:
+services/shf-agent-fabric/services/evidence_projection_service.py:117:        for record in _read_jsonl(EVIDENCE_PATH)
+services/shf-agent-fabric/services/evidence_projection_service.py:140:        if durable_repo.is_postgres_mode() and existing.get("truth_claim_id") and not existing.get("truth_spine_record_id"):
+services/shf-agent-fabric/services/evidence_projection_service.py:145:                existing = {**existing, "truth_spine_record_id": identity["record_id"]}
+services/shf-agent-fabric/services/evidence_projection_service.py:155:            evidence_id=None,
+services/shf-agent-fabric/services/evidence_projection_service.py:165:        evidence = _ensure_evidence_record(event, lineage)
+services/shf-agent-fabric/services/evidence_projection_service.py:167:        _record_failure(event, lineage, "evidence_write_failed", retryable=True)
+services/shf-agent-fabric/services/evidence_projection_service.py:173:            metadata={"event_id": event["event_id"], "reason": "evidence_write_failed"},
+services/shf-agent-fabric/services/evidence_projection_service.py:175:        raise ProjectionError("evidence_write_failed", status_code=503, retryable=True) from exc
+services/shf-agent-fabric/services/evidence_projection_service.py:178:        source = _ensure_truth_source(evidence, lineage, actor)
+services/shf-agent-fabric/services/evidence_projection_service.py:179:        claim = _ensure_truth_claim(event, evidence, lineage, source, actor)
+services/shf-agent-fabric/services/evidence_projection_service.py:181:        _record_failure(event, lineage, "truth_write_failed", retryable=True, evidence_id=evidence["evidence_id"])
+services/shf-agent-fabric/services/evidence_projection_service.py:195:        evidence_id=evidence["evidence_id"],
+services/shf-agent-fabric/services/evidence_projection_service.py:199:        truth_spine_record_id=(
+services/shf-agent-fabric/services/evidence_projection_service.py:214:            "evidence_id": evidence["evidence_id"],
+services/shf-agent-fabric/services/evidence_projection_service.py:225:def evidence_storage_status() -> Dict[str, Any]:
+services/shf-agent-fabric/services/evidence_projection_service.py:227:        "backend": EVIDENCE_STORAGE_BACKEND,
+services/shf-agent-fabric/services/evidence_projection_service.py:228:        "durability_class": EVIDENCE_STORAGE_DURABILITY_CLASS,
+services/shf-agent-fabric/services/evidence_projection_service.py:229:        "production_ready": EVIDENCE_PRODUCTION_DURABILITY_APPROVED,
+services/shf-agent-fabric/services/evidence_projection_service.py:230:        "approved_production_persistence_boundary": EVIDENCE_PRODUCTION_DURABILITY_APPROVED,
+services/shf-agent-fabric/services/evidence_projection_service.py:231:        "path": str(EVIDENCE_PATH),
+services/shf-agent-fabric/services/evidence_projection_service.py:233:        "deployment_requirement": EVIDENCE_DEPLOYMENT_REQUIREMENT,
+services/shf-agent-fabric/services/evidence_projection_service.py:288:def _existing_evidence_for_event(event_id: str) -> Dict[str, Any] | None:
+services/shf-agent-fabric/services/evidence_projection_service.py:289:    for evidence in _read_jsonl(EVIDENCE_PATH):
+services/shf-agent-fabric/services/evidence_projection_service.py:290:        if evidence.get("operational_event_id") == event_id:
+services/shf-agent-fabric/services/evidence_projection_service.py:291:            return evidence
+services/shf-agent-fabric/services/evidence_projection_service.py:295:def _ensure_evidence_record(event: Dict[str, Any], lineage: Dict[str, Any]) -> Dict[str, Any]:
+services/shf-agent-fabric/services/evidence_projection_service.py:296:    existing = _existing_evidence_for_event(event["event_id"])
+services/shf-agent-fabric/services/evidence_projection_service.py:299:    evidence = {
+services/shf-agent-fabric/services/evidence_projection_service.py:300:        "evidence_id": _stable_id("evd", event["event_id"]),
+services/shf-agent-fabric/services/evidence_projection_service.py:301:        "evidence_type": lineage["evidence_type"],
+services/shf-agent-fabric/services/evidence_projection_service.py:313:        "metadata": _permitted_evidence_metadata(event, lineage),
+services/shf-agent-fabric/services/evidence_projection_service.py:317:        "storage_classification": "truth_spine_owned_durable" if EVIDENCE_PRODUCTION_DURABILITY_APPROVED else "repository_abstraction_development_only",
+services/shf-agent-fabric/services/evidence_projection_service.py:318:        "storage_backend": EVIDENCE_STORAGE_BACKEND,
+services/shf-agent-fabric/services/evidence_projection_service.py:319:        "storage_durability_class": EVIDENCE_STORAGE_DURABILITY_CLASS,
+services/shf-agent-fabric/services/evidence_projection_service.py:320:        "production_durability_approved": EVIDENCE_PRODUCTION_DURABILITY_APPROVED,
+services/shf-agent-fabric/services/evidence_projection_service.py:322:    _append_evidence(evidence)
+services/shf-agent-fabric/services/evidence_projection_service.py:323:    return evidence
+services/shf-agent-fabric/services/evidence_projection_service.py:326:def _ensure_truth_source(evidence: Dict[str, Any], lineage: Dict[str, Any], actor: Any) -> Dict[str, Any]:
+services/shf-agent-fabric/services/evidence_projection_service.py:327:    source_id = _stable_id("src", evidence["evidence_id"])
+services/shf-agent-fabric/services/evidence_projection_service.py:328:    existing = truth_spine_service.get_source(source_id)
+services/shf-agent-fabric/services/evidence_projection_service.py:330:        truth_spine_service.check_organization_access(actor, existing.get("organization_id"))
+services/shf-agent-fabric/services/evidence_projection_service.py:332:    return truth_spine_service.create_source(
+services/shf-agent-fabric/services/evidence_projection_service.py:337:            "title": f"{lineage['truth_predicate']} evidence",
+services/shf-agent-fabric/services/evidence_projection_service.py:338:            "uri": f"evidence://{evidence['evidence_id']}",
+services/shf-agent-fabric/services/evidence_projection_service.py:339:            "evidence_type": evidence["evidence_type"],
+services/shf-agent-fabric/services/evidence_projection_service.py:351:    evidence: Dict[str, Any],
+services/shf-agent-fabric/services/evidence_projection_service.py:357:    existing = truth_spine_service.get_claim(claim_id)
+services/shf-agent-fabric/services/evidence_projection_service.py:359:        truth_spine_service.check_organization_access(actor, existing.get("organization_id"))
+services/shf-agent-fabric/services/evidence_projection_service.py:361:            raise ProjectionError("truth_claim_missing_evidence_source", status_code=409)
+services/shf-agent-fabric/services/evidence_projection_service.py:363:    claim = truth_spine_service.create_claim(
+services/shf-agent-fabric/services/evidence_projection_service.py:372:            "evidence_ids": [evidence["evidence_id"]],
+services/shf-agent-fabric/services/evidence_projection_service.py:389:        raise ProjectionError("truth_claim_missing_evidence_source", status_code=409)
+services/shf-agent-fabric/services/evidence_projection_service.py:398:    evidence_id: str | None,
+services/shf-agent-fabric/services/evidence_projection_service.py:403:    truth_spine_record_id: str | None = None,
+services/shf-agent-fabric/services/evidence_projection_service.py:407:        "evidence_id": evidence_id,
+services/shf-agent-fabric/services/evidence_projection_service.py:411:        "truth_spine_record_id": truth_spine_record_id,
+services/shf-agent-fabric/services/evidence_projection_service.py:416:        "evidence_id": evidence_id,
+services/shf-agent-fabric/services/evidence_projection_service.py:420:        "truth_spine_record_id": truth_spine_record_id,
+services/shf-agent-fabric/services/evidence_projection_service.py:429:        "storage_backend": EVIDENCE_STORAGE_BACKEND,
+services/shf-agent-fabric/services/evidence_projection_service.py:430:        "storage_durability_class": EVIDENCE_STORAGE_DURABILITY_CLASS,
+services/shf-agent-fabric/services/evidence_projection_service.py:431:        "production_durability_approved": EVIDENCE_PRODUCTION_DURABILITY_APPROVED,
+services/shf-agent-fabric/services/evidence_projection_service.py:442:    evidence_id: str | None = None,
+services/shf-agent-fabric/services/evidence_projection_service.py:448:        evidence_id=evidence_id,
+services/shf-agent-fabric/services/evidence_projection_service.py:458:def _permitted_evidence_metadata(event: Dict[str, Any], lineage: Dict[str, Any]) -> Dict[str, Any]:
+services/shf-agent-fabric/services/evidence_projection_service.py:462:        "evidence_reference_count": len(event.get("evidence_references") or []),
+services/shf-agent-fabric/services/evidence_projection_service.py:480:            "outcome_id": payload.get("outcome_id"),
+services/shf-agent-fabric/services/evidence_projection_service.py:483:            "outcome_type": payload.get("outcome_type"),
+services/shf-agent-fabric/services/evidence_projection_service.py:488:            "outcome_fact_scope": "employment_started_only_not_retention_wage_or_impact",
+services/shf-agent-fabric/pytest.ini:3:    integrity: funding/outcomes integrity & determinism checks
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:9:    onboarding_evidence,
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:16:RUNTIME_OWNER_CLOSURE_EVIDENCE_CONTRACT = "package_h.batch03.runtime_owner_closure.evidence.v1"
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:19:AUTHORIZED_EVIDENCE_REQUIREMENTS = ("EM-1-001", "EM-1-002", "EM-1-003", "EM-1-004")
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:20:DETERMINISTIC_EVIDENCE_STATE = "PHASE_6_EVIDENCE_READY_FOR_CERTIFICATION_REVIEW"
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:35:    "EVIDENCE_TRACE_MISSING",
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:38:    "EVIDENCE_REQUIREMENT_UNAUTHORIZED",
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:68:class EvidenceEnvelopeInput:
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:72:    evidence_requirement_id: str
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:78:    epl_evidence_id: str
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:127:    if not declaration.readiness_evidence:
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:128:        issues.append(_issue("OWNER_READINESS_NOT_PROVEN", "readiness evidence is required before activation review", "readiness_evidence"))
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:130:    evidence = onboarding_evidence(declaration, issues)
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:140:        "evidence_references": evidence.get("evidence_references", []),
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:141:        "owner_onboarding_evidence": evidence,
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:189:def produce_evidence_trust_envelope(input_record: EvidenceEnvelopeInput) -> ExtensionKernelResult:
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:195:    if input_record.evidence_requirement_id not in AUTHORIZED_EVIDENCE_REQUIREMENTS:
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:196:        issues.append(_issue("EVIDENCE_REQUIREMENT_UNAUTHORIZED", "evidence requirement is not part of EM-1", "evidence_requirement_id"))
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:197:    if not input_record.epl_evidence_id.startswith("P6-EV-"):
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:198:        issues.append(_issue("EPL_MAPPING_MISSING", "Phase 6 evidence must map to EPL-1 evidence id", "epl_evidence_id"))
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:201:            issues.append(_issue("EVIDENCE_TRACE_MISSING", f"{field_name} is required", field_name))
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:209:        "schema_version": RUNTIME_OWNER_CLOSURE_EVIDENCE_CONTRACT,
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:213:        "evidence_requirement_id": input_record.evidence_requirement_id,
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:214:        "epl_evidence_id": input_record.epl_evidence_id,
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:220:        "certification_state": DETERMINISTIC_EVIDENCE_STATE if not issues else "BLOCKED",
+services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py:224:    return _result(not issues, "EVIDENCE_ENVELOPE_READY" if not issues else "BLOCKED", issues, envelope)
+services/shf-agent-fabric/services/audit_verification_service.py:14:    "evidence_package",
+services/shf-agent-fabric/services/audit_verification_service.py:30:    "evidence_package",
+services/shf-agent-fabric/services/audit_verification_service.py:42:    "Audit Verification does not verify truth, create Truth Spine claims, public-approve data, override Truth Spine, override Oracle, publish reports, replace Watchtower, or mutate SHF Impact Data Spine.",
+services/shf-agent-fabric/services/audit_verification_service.py:110:    if _refs(event.get("evidence_refs")):
+services/shf-agent-fabric/services/audit_verification_service.py:131:    evidence_refs = _refs(event.get("evidence_refs"))
+services/shf-agent-fabric/services/audit_verification_service.py:157:    if not source_refs and not evidence_refs:
+services/shf-agent-fabric/services/audit_verification_service.py:158:        warnings.append("missing_source_or_evidence_refs")
+services/shf-agent-fabric/services/audit_verification_service.py:198:        "evidence_refs": evidence_refs,
+services/shf-agent-fabric/services/audit_verification_service.py:266:            "evidence_refs",
+services/shf-agent-fabric/services/audit_verification_service.py:303:                    "layer": "Truth Spine",
+services/shf-agent-fabric/services/audit_verification_service.py:304:                    "actor": "truth_spine_service",
+services/shf-agent-fabric/services/audit_verification_service.py:309:                    "evidence_refs": [{"ref_id": "evidence_001", "uri": "local://evidence.json"}],
+src/utils/validateDataCenterCurriculumMap.js:29:    if (!Array.isArray(course.learningOutcomes) || course.learningOutcomes.length === 0) errors.push(`learningOutcomes required: ${course.courseId}`);
+src/utils/validateDataCenterCurriculumMap.js:98:      for (const candidate of specialization.futureEvidenceCandidates || []) {
+src/utils/validateDataCenterCurriculumMap.js:99:        if (candidate.status !== "PLANNED ONLY") errors.push(`future evidence candidate must be planned only: ${specialization.specializationId}`);
+src/utils/validateDataCenterCurriculumMap.js:101:      for (const credential of specialization.credentialAlignments || []) {
+src/utils/validateDataCenterCurriculumMap.js:102:        if (credential.status !== "NOT ISSUED / PLANNED") errors.push(`credential alignment must remain planned: ${specialization.specializationId}`);
+src/utils/validateDataCenterCurriculumMap.js:120:    if (!String(architecture.boundaries?.competencyStatus || "").startsWith("IMPLEMENTED: generic evidence and competency review foundation")) errors.push("competency ownership must remain canonical and scoped");
+src/utils/validateDataCenterCurriculumMap.js:121:    if (architecture.boundaries?.credentialStatus !== "DEFERRED: planning and potential alignment only; nothing is issued") errors.push("credential issuance must remain deferred");
+src/utils/validateDataCenterCurriculumMap.js:155:      if (!Array.isArray(branch.candidateEvidence) || branch.candidateEvidence.length === 0) errors.push(`Grade 12 candidate evidence required: ${branch.specializationId}`);
+src/utils/validateDataCenterCurriculumMap.js:166:    if (!grade12?.ownership || grade12.ownership.decision !== "MODEL_C_HYBRID_PROJECT_TEAM_SUBMISSION_PREPARE_PROVE_INDIVIDUAL_PROOF" || grade12.ownership.teamSubmissionOwner !== "FUTURE_GENERIC_PROJECT_DOMAIN" || grade12.ownership.individualProofOwner !== "GENERIC_PREPARE_PROVE_RESULT_EVIDENCE_REVIEW" || grade12.ownership.noDuplicateStore !== true) errors.push("Grade 12 capstone ownership must remain generic hybrid ownership");
+src/utils/validateDataCenterCurriculumMap.js:168:    if (grade12?.completionContract?.credentialRelation !== "No credential, license, apprenticeship hour, or certificate is issued by curriculum completion.") errors.push("Grade 12 completion must not issue credentials or apprenticeship facts");
+src/utils/validateDataCenterCurriculumMap.js:171:    if (!["NON_EXECUTABLE", "REFERENCE_SLICE_ONLY_OTHER_CONTENT_NON_EXECUTABLE"].includes(grade12?.boundaries?.grade12Content) || grade12?.boundaries?.capstone !== "NON_EXECUTABLE" || grade12?.boundaries?.credentials !== "DEFERRED" || grade12?.boundaries?.readiness !== "DEFERRED" || grade12?.boundaries?.employerAccess !== "DENIED_BY_DEFAULT" || grade12?.boundaries?.portfolio !== "PROJECTION_ONLY") errors.push("Grade 12 boundaries must preserve bounded execution, privacy, credential, readiness, and portfolio limits");
+src/router/DebtRoutes.jsx:2:const Portfolio = lazy(() => import("@/pages/debt/Portfolio.jsx"));
+src/router/DebtRoutes.jsx:49:          <Route path="portfolio" element={<Portfolio />} />
+services/shf-agent-fabric/infra/sql/001_outcome_schema.sql:2:-- SHF Outcome Infrastructure: Outcome Data Schema (Postgres)
+services/shf-agent-fabric/infra/sql/001_outcome_schema.sql:82:-- 3) Sessions & Attendance (Engagement Evidence)
+services/shf-agent-fabric/infra/sql/001_outcome_schema.sql:123:  evidence         jsonb NULL,                         -- optional proof metadata
+services/shf-agent-fabric/infra/sql/001_outcome_schema.sql:128:-- 5) Outcome Events (Modular Outcomes)
+services/shf-agent-fabric/infra/sql/001_outcome_schema.sql:130:CREATE TABLE outcome_events (
+services/shf-agent-fabric/infra/sql/001_outcome_schema.sql:131:  outcome_event_id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+services/shf-agent-fabric/infra/sql/001_outcome_schema.sql:133:  outcome_type     text NOT NULL,                      -- e.g., job_placement, certification_earned, housing_placed
+services/shf-agent-fabric/infra/sql/001_outcome_schema.sql:134:  outcome_date     date NOT NULL,
+services/shf-agent-fabric/infra/sql/001_outcome_schema.sql:135:  outcome_value    numeric NULL,                       -- wage, score, etc. (optional)
+services/shf-agent-fabric/infra/sql/001_outcome_schema.sql:136:  outcome_unit     text NULL,                          -- "USD/hr", "certificate", etc.
+services/shf-agent-fabric/infra/sql/001_outcome_schema.sql:142:CREATE INDEX idx_outcome_events_enrollment ON outcome_events(enrollment_id);
+services/shf-agent-fabric/infra/sql/001_outcome_schema.sql:143:CREATE INDEX idx_outcome_events_type_date ON outcome_events(outcome_type, outcome_date);
+services/shf-agent-fabric/infra/sql/001_outcome_schema.sql:146:-- 6) Verification (Outcome Verification Layer)
+services/shf-agent-fabric/infra/sql/001_outcome_schema.sql:150:  outcome_event_id uuid NOT NULL REFERENCES outcome_events(outcome_event_id) ON DELETE CASCADE,
+services/shf-agent-fabric/infra/sql/001_outcome_schema.sql:155:  evidence         jsonb NULL,                         -- links, docs metadata, signatures, etc.
+services/shf-agent-fabric/infra/sql/001_outcome_schema.sql:159:CREATE INDEX idx_verification_outcome ON verification_events(outcome_event_id);
+services/shf-agent-fabric/infra/sql/001_outcome_schema.sql:292:-- 14) Outcome Funding Engine (Simulation + Contract Models)
+src/utils/northstarAdapter.js:48:        "Uploaded Portfolio Artifact",
+src/utils/northstarAdapter.js:55:          { to: "/portfolio", label: "View Portfolio" },
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:26:OWNER_ONBOARDING_EVIDENCE_CONTRACT = "owner_onboarding.evidence.v1"
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:50:_SECRET_MARKERS = ("secret", "token", "password", "api_key", "apikey", "credential")
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:101:    evidence_contract: str = OWNER_ONBOARDING_EVIDENCE_CONTRACT
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:104:    readiness_evidence: tuple[str, ...] = ()
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:107:    evidence_references: tuple[str, ...] = ()
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:122:            "evidence_contract": self.evidence_contract,
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:125:            "readiness_evidence": list(self.readiness_evidence),
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:128:            "evidence_references": list(self.evidence_references),
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:237:        if not field_name.startswith("evidence_references") and _has_private_marker(value):
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:240:            issues.append(_issue("SECRET_FIELD_DECLARED", "onboarding declarations and evidence cannot expose secrets", field_name))
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:245:    if not declaration.readiness_evidence:
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:246:        issues.append(_issue("READINESS_NOT_PROVEN", "readiness_evidence is required", "readiness_evidence"))
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:248:    evidence = onboarding_evidence(declaration, issues)
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:253:        payload=evidence,
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:289:            provenance=declaration.evidence_references,
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:295:            policy_refs=(OWNER_ONBOARDING_EVIDENCE_CONTRACT,),
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:304:                "readiness_evidence": list(declaration.readiness_evidence),
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:320:def onboarding_evidence(declaration: OwnerOnboardingDeclaration, issues: tuple[ExtensionKernelIssue, ...] | list[ExtensionKernelIssue]) -> dict[str, Any]:
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:323:        "schema_version": OWNER_ONBOARDING_EVIDENCE_CONTRACT,
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:331:        "readiness_status": "READY" if declaration.readiness_evidence and not issue_codes else "NOT_READY",
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:334:        "evidence_references": list(declaration.evidence_references),
+services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py:362:            "evidence": onboarding_evidence(declaration, ()),
+apps/shs-api/src/domain/credentials/service/credential-service.ts:1:// SHF Ecosystem Phase 7 — Credential eligibility, issuance, revocation.
+apps/shs-api/src/domain/credentials/service/credential-service.ts:4:// isEligibleForCredential() is a pure read — it never creates a row.
+apps/shs-api/src/domain/credentials/service/credential-service.ts:5:// Only issueCredential() creates canonical achievement truth, and it
+apps/shs-api/src/domain/credentials/service/credential-service.ts:14:import { CredentialDefinitionRepo } from "../repo/credential-definition-repo.js";
+apps/shs-api/src/domain/credentials/service/credential-service.ts:15:import { LearnerCredentialRepo } from "../repo/learner-credential-repo.js";
+apps/shs-api/src/domain/credentials/service/credential-service.ts:16:import { CredentialDefinition, LearnerCredential, deriveLearnerCredentialLifecycle } from "../model/credential.js";
+apps/shs-api/src/domain/credentials/service/credential-service.ts:19:const definitionRepo = new CredentialDefinitionRepo();
+apps/shs-api/src/domain/credentials/service/credential-service.ts:20:const learnerCredentialRepo = new LearnerCredentialRepo();
+apps/shs-api/src/domain/credentials/service/credential-service.ts:31:export class CredentialError extends Error {
+apps/shs-api/src/domain/credentials/service/credential-service.ts:34:    this.name = "CredentialError";
+apps/shs-api/src/domain/credentials/service/credential-service.ts:38:export interface CredentialActor {
+apps/shs-api/src/domain/credentials/service/credential-service.ts:45:function scope(actor: CredentialActor) {
+apps/shs-api/src/domain/credentials/service/credential-service.ts:48:  if (!organizationId || !userId) throw new CredentialError("SCOPE_MISSING", "Actor organization/user is required.", 403);
+apps/shs-api/src/domain/credentials/service/credential-service.ts:52:// --- Credential Definition (global reference data) ---

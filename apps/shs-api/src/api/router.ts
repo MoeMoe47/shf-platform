@@ -70,6 +70,7 @@ import { registerServiceCatalogRoutes } from "../domain/service-catalog/api/rout
 import { registerServiceAgreementRoutes } from "../domain/service-agreements/api/routes.js";
 import { registerOrganizationOnboardingRoutes } from "../domain/organization-onboarding/api/routes.js";
 import { registerFundingGrantRoutes } from "../domain/funding-grants/api/routes.js";
+import { registerSalesRoutes } from "../domain/sales/api/routes.js";
 import { registerImpactAttributionRoutes } from "../domain/impact-attribution/api/routes.js";
 import { registerAiGovernanceRoutes } from "../domain/ai-governance/api/routes.js";
 import { registerInputSecurityRoutes } from "../domain/input-security/api/routes.js";
@@ -422,6 +423,7 @@ app.post("/auth/login", async (req: any, res: any) => {
   registerServiceAgreementRoutes(app);
   registerOrganizationOnboardingRoutes(app);
   registerFundingGrantRoutes(app);
+  registerSalesRoutes(app);
   registerImpactAttributionRoutes(app);
   registerCareerRoutes(app);
   registerCaseRoutes(app);

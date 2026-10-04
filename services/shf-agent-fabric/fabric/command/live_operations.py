@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from fabric.command.sanitize import REDACTED, sanitize, safe_reason_code
-from fabric.run_claims import EXECUTION_SAFETY
+from fabric import run_authority
 from fabric.run_lifecycle import (
     APPROVAL_REQUIRED,
     APPROVED,
@@ -54,9 +54,13 @@ def _now_iso() -> str:
 
 
 def _source(extra: Dict[str, Any] | None = None) -> Dict[str, Any]:
+    postgres = run_authority.is_postgres()
     base = {
-        "authority": "Agent Fabric run ledger and plan store",
-        "stores": ["db/runs/events.jsonl", "db/plans/*.json"],
+        "authority": "Agent Fabric shared run authority" if postgres else "Agent Fabric run ledger and plan store",
+        "stores": ["postgres:fabric_plans", "postgres:fabric_plan_decisions", "postgres:fabric_execution_claims",
+                   "postgres:fabric_run_events", "legacy-read-only:db/runs/events.jsonl", "legacy-read-only:db/plans/*.json"]
+        if postgres else ["db/runs/events.jsonl", "db/plans/*.json"],
+        "run_authority": run_authority.storage_mode(),
         "projection": "live_operations",
         "read_only": True,
     }
@@ -89,8 +93,28 @@ def _plans_dir() -> Path:
     return plan_store.PLANS_DIR
 
 
+LEGACY_FILE_STORE = "LEGACY_FILE_STORE"
+POSTGRES_RUN_AUTHORITY = "POSTGRES_RUN_AUTHORITY"
+REPLICA_LOCAL_FILE_STORE = "REPLICA_LOCAL_FILE_STORE"
+
+
 def _read_events() -> Tuple[List[Dict[str, Any]], int]:
-    """Parsed run events in file order, plus the count of malformed lines."""
+    """Run events plus the count of malformed legacy lines.
+
+    Postgres authority: its events, then the replica's legacy JSONL events,
+    read-only and marked LEGACY_FILE_STORE (never written again). File
+    authority: the JSONL log as before.
+    """
+    file_events, malformed = _read_file_events()
+    if not run_authority.is_postgres():
+        return [dict(e, _record_origin=REPLICA_LOCAL_FILE_STORE) for e in file_events], malformed
+    from fabric import run_authority_pg
+
+    db_events = [dict(e, _record_origin=POSTGRES_RUN_AUTHORITY) for e in run_authority_pg.read_events()]
+    return db_events + [dict(e, _record_origin=LEGACY_FILE_STORE) for e in file_events], malformed
+
+
+def _read_file_events() -> Tuple[List[Dict[str, Any]], int]:
     path = _runs_log_path()
     if not path.is_file():
         return [], 0
@@ -112,9 +136,20 @@ def _read_events() -> Tuple[List[Dict[str, Any]], int]:
 
 
 def _load_plan(plan_id: Optional[str]) -> Optional[Dict[str, Any]]:
-    # Read-only: never uses plan_store helpers, which create directories.
     if not is_valid_id(plan_id):
         return None
+    if run_authority.is_postgres():
+        from fabric import run_authority_pg
+
+        plan = run_authority_pg.load_plan(plan_id)
+        if plan is not None:
+            return plan
+        # Fall through: a legacy run may reference a legacy plan file.
+    return _load_file_plan(plan_id)
+
+
+def _load_file_plan(plan_id: str) -> Optional[Dict[str, Any]]:
+    # Read-only: never uses plan_store helpers, which create directories.
     path = _plans_dir() / f"{plan_id}.json"
     if not path.is_file():
         return None
@@ -126,6 +161,16 @@ def _load_plan(plan_id: Optional[str]) -> Optional[Dict[str, Any]]:
 
 
 def _recent_plans(limit: int) -> List[Dict[str, Any]]:
+    if run_authority.is_postgres():
+        from fabric import run_authority_pg
+
+        db_plans = [dict(p, _record_origin=POSTGRES_RUN_AUTHORITY) for p in run_authority_pg.list_recent_plans(limit)]
+        legacy = [dict(p, _record_origin=LEGACY_FILE_STORE) for p in _recent_file_plans(limit)]
+        return (db_plans + legacy)[: max(0, int(limit))]
+    return [dict(p, _record_origin=REPLICA_LOCAL_FILE_STORE) for p in _recent_file_plans(limit)]
+
+
+def _recent_file_plans(limit: int) -> List[Dict[str, Any]]:
     directory = _plans_dir()
     if not directory.is_dir():
         return []
@@ -229,17 +274,70 @@ def _run_ref(events: List[Dict[str, Any]], *keys: str) -> str:
     return value if is_valid_id(value) else REDACTED
 
 
-def _artifact_refs(events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    refs = []
+def _artifact_view(run_id: str, events: List[Dict[str, Any]], *, verify: bool, metadata: Optional[Dict[str, Dict[str, Any]]] = None) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
+    """AFCC-3 Phase 6: per-artifact storage + verification state, and the run's
+    evidence status. Evidence is DURABLE only when every referenced body is in
+    the shared artifact store (and, when verified, hashes match). Never exposes
+    bodies, paths or storage internals."""
+    origin = _record_origin(events)
+    rows: Dict[str, Dict[str, Any]] = {}
+    if origin == POSTGRES_RUN_AUTHORITY:
+        from fabric import run_authority_pg
+
+        if verify:
+            rows = {r["artifact_id"]: r for r in run_authority_pg.artifacts_for_run(run_id)}
+        else:
+            rows = metadata if metadata is not None else run_authority_pg.artifact_metadata_for_runs([run_id])
+    views: List[Dict[str, Any]] = []
     for event in events:
         for artifact in event.get("artifacts") or []:
             if not isinstance(artifact, dict):
                 continue
-            refs.append({
-                "artifact_id": artifact.get("artifactId") or artifact.get("artifact_id") or NOT_CAPTURED,
-                "sha256": artifact.get("sha256") or NOT_CAPTURED,
-            })
-    return refs
+            artifact_id = artifact.get("artifactId") or artifact.get("artifact_id") or NOT_CAPTURED
+            recorded_hash = artifact.get("sha256") or NOT_CAPTURED
+            view = {"artifact_id": artifact_id, "sha256": recorded_hash, "canonical_ref": NOT_CAPTURED, "type": NOT_CAPTURED,
+                    "size": NOT_CAPTURED, "created_at": NOT_CAPTURED, "completeness": NOT_CAPTURED}
+            if origin == POSTGRES_RUN_AUTHORITY:
+                row = rows.get(artifact_id)
+                if artifact.get("storage_state") == "STORAGE_FAILED":
+                    state, verification = "STORAGE_FAILED", NOT_APPLICABLE
+                elif row is None:
+                    state, verification = "MISSING", NOT_APPLICABLE
+                else:
+                    state = "STORED"
+                    if verify:
+                        verification = run_authority_pg.verify_artifact_row(row, expected_hash=recorded_hash)
+                    else:
+                        verification = "HASH_RECORDED" if row["content_hash"] == recorded_hash else "HASH_MISMATCH"
+                    view.update(canonical_ref=row["canonical_ref"], type=row["artifact_type"], size=row["content_length"],
+                                created_at=row["created_at"].astimezone(timezone.utc).isoformat(), completeness=row["completeness"])
+            else:
+                state = "LEGACY_REPLICA_LOCAL" if origin == LEGACY_FILE_STORE else "REPLICA_LOCAL"
+                verification = "NOT_VERIFIABLE"
+            view.update(storage_state=state, verification_state=verification, durable=state == "STORED")
+            views.append(view)
+    states = {v["storage_state"] for v in views}
+    checks = {v["verification_state"] for v in views}
+    if not views:
+        status = "NONE"
+    elif "HASH_MISMATCH" in checks:
+        status = "INTEGRITY_FAILED"
+    elif "STORAGE_FAILED" in states:
+        status = "STORAGE_FAILED"
+    elif "MISSING" in states:
+        status = "INCOMPLETE"
+    elif states == {"STORED"}:
+        status = "DURABLE"
+    else:
+        status = "NOT_DURABLE"
+    evidence = {
+        "status": status,
+        "artifact_count": len(views),
+        "durable_count": sum(1 for v in views if v["durable"]),
+        "verified": verify and status == "DURABLE" and checks <= {"VERIFIED"},
+        "storage": "FABRIC_RUN_ARTIFACTS" if origin == POSTGRES_RUN_AUTHORITY else "REPLICA_LOCAL_FILE",
+    }
+    return views, evidence
 
 
 # ------------------------------------------------------------------ projections
@@ -382,15 +480,25 @@ def _correlation(events: List[Dict[str, Any]], plan: Optional[Dict[str, Any]]) -
 
 
 def _execution_safety() -> Dict[str, str]:
-    """Operator-facing guarantee of the execution claim. Never implies distributed safety."""
+    """Operator-facing guarantee of the active run authority.
+    DISTRIBUTED only when the shared Postgres authority is in use."""
+    safety = run_authority.execution_safety()
     return {
-        "level": EXECUTION_SAFETY["level"],
-        "local_single_flight": EXECUTION_SAFETY["local_single_flight"],
-        "distributed_single_flight": EXECUTION_SAFETY["distributed_single_flight"],
-        "scope": "REPLICA_LOCAL",
-        "production_blocker": EXECUTION_SAFETY["production_blocker"],
-        "summary": EXECUTION_SAFETY["summary"],
+        "level": safety["level"],
+        "local_single_flight": safety["local_single_flight"],
+        "distributed_single_flight": safety["distributed_single_flight"],
+        "scope": "SHARED_TRANSACTIONAL_STORE" if safety["level"] == "DISTRIBUTED" else "REPLICA_LOCAL",
+        "production_blocker": safety["production_blocker"],
+        "artifact_storage": safety["artifact_storage"],
+        "summary": safety["summary"],
     }
+
+
+def _record_origin(records: List[Dict[str, Any]]) -> str:
+    origins = {r.get("_record_origin") for r in records if r.get("_record_origin")}
+    if len(origins) == 1:
+        return origins.pop()
+    return "MIXED" if origins else NOT_CAPTURED
 
 
 def _execution_lease(events: List[Dict[str, Any]], state: str) -> Dict[str, Any]:
@@ -412,8 +520,8 @@ def _execution_lease(events: List[Dict[str, Any]], state: str) -> Dict[str, Any]
         "lease_seconds": seconds if isinstance(seconds, int) and not isinstance(seconds, bool) else NOT_CAPTURED,
         "heartbeat": "NOT_SUPPORTED",
         "orphan_recorded": any(event_state_claim(e) == "ORPHANED" for e in events),
-        # Lease, orphan and timeout facts come from this replica's store only.
-        "scope": "REPLICA_LOCAL",
+        # Shared only when the run's events live in the Postgres run authority.
+        "scope": "SHARED_TRANSACTIONAL_STORE" if _record_origin(events) == POSTGRES_RUN_AUTHORITY else "REPLICA_LOCAL",
         "evaluated_at": _now_iso(),
     }
 
@@ -568,7 +676,8 @@ def _plan_run_index(groups: Dict[str, List[Dict[str, Any]]]) -> Dict[str, List[s
     return index
 
 
-def _run_from_events(run_id: str, events: List[Dict[str, Any]], plan_runs: Dict[str, List[str]]) -> Dict[str, Any]:
+def _run_from_events(run_id: str, events: List[Dict[str, Any]], plan_runs: Dict[str, List[str]], *, verify: bool = False,
+                     artifact_metadata: Optional[Dict[str, Dict[str, Any]]] = None) -> Dict[str, Any]:
     plan_ids = sorted({p for p in (_event_plan_id(e) for e in events) if p})
     plan_id = plan_ids[-1] if len(plan_ids) == 1 else None
     plan = _load_plan(plan_id)
@@ -591,6 +700,7 @@ def _run_from_events(run_id: str, events: List[Dict[str, Any]], plan_runs: Dict[
     watchtower_refs = _refs(events, "watchtower_refs", "watchtowerRefs")
     loo_refs = _refs(events, "loo_refs", "looRefs")
     failed = state in {"FAILED", "TIMED_OUT"}
+    artifacts, evidence = _artifact_view(run_id, events, verify=verify, metadata=artifact_metadata)
 
     run = {
         "run_id": run_id,
@@ -638,7 +748,9 @@ def _run_from_events(run_id: str, events: List[Dict[str, Any]], plan_runs: Dict[
         "retry_count": retry["retry_count"],
         "parent_run_id": retry["parent_run_id"],
         "evidence_refs": evidence_refs,
-        "artifact_refs": _artifact_refs(events),
+        # Execution result (current_state) and evidence durability are separate facts.
+        "artifact_refs": artifacts,
+        "evidence": evidence,
         "proof_refs": proof_refs,
         "report_refs": report_refs,
         "policy_decision_refs": _refs(events, "policy_decision_refs", "policyDecisionRefs"),
@@ -653,7 +765,7 @@ def _run_from_events(run_id: str, events: List[Dict[str, Any]], plan_runs: Dict[
         },
         "dependency_run_ids": [r for r in _refs(events, "dependency_run_ids", "dependencyRunIds") if RUN_ID_RE.match(r)],
         "event_count": len(events),
-        "source": _source({"record_type": "run_event"}),
+        "source": _source({"record_type": "run_event", "record_origin": _record_origin(events)}),
         "freshness": {"last_updated": ts or NOT_CAPTURED, "captured_at": ts or NOT_CAPTURED, "threshold": "NOT_DEFINED"},
     }
     return sanitize(run)
@@ -705,6 +817,7 @@ def _run_from_plan(plan: Dict[str, Any]) -> Dict[str, Any]:
         "parent_run_id": NOT_CAPTURED,
         "evidence_refs": [],
         "artifact_refs": [],
+        "evidence": {"status": "NONE", "artifact_count": 0, "durable_count": 0, "verified": False, "storage": NOT_APPLICABLE},
         "proof_refs": [],
         "report_refs": [],
         "policy_decision_refs": [],
@@ -719,7 +832,7 @@ def _run_from_plan(plan: Dict[str, Any]) -> Dict[str, Any]:
         },
         "dependency_run_ids": [],
         "event_count": 0,
-        "source": _source({"record_type": "plan"}),
+        "source": _source({"record_type": "plan", "record_origin": plan.get("_record_origin") or NOT_CAPTURED}),
         "freshness": {"last_updated": created_at, "captured_at": created_at, "threshold": "NOT_DEFINED"},
     })
 
@@ -735,7 +848,12 @@ def _snapshot() -> Tuple[Dict[str, List[Dict[str, Any]]], Dict[str, List[str]], 
 def _runs(limit: int = 25) -> Tuple[List[Dict[str, Any]], Dict[str, int]]:
     groups, plan_runs, quality = _snapshot()
     ordered = sorted(groups.items(), key=lambda item: (_event_ts(item[1][-1]) or "", item[0]), reverse=True)
-    runs = [_run_from_events(rid, evs, plan_runs) for rid, evs in ordered]
+    metadata = None
+    if run_authority.is_postgres():
+        from fabric import run_authority_pg
+
+        metadata = run_authority_pg.artifact_metadata_for_runs([rid for rid, _ in ordered])  # one query, no bodies
+    runs = [_run_from_events(rid, evs, plan_runs, artifact_metadata=metadata) for rid, evs in ordered]
     for plan in _recent_plans(limit):
         # Plans without a run are still live operational intent.
         if plan.get("planId") in plan_runs:
@@ -762,7 +880,7 @@ def run_detail_projection(run_id: str) -> Dict[str, Any]:
     rid = _safe_run_id(run_id)
     groups, plan_runs, _ = _snapshot()
     if rid in groups:
-        return sanitize({"source": _source(), "state": "AVAILABLE", "run": _run_from_events(rid, groups[rid], plan_runs), "execution_safety": _execution_safety()})
+        return sanitize({"source": _source(), "state": "AVAILABLE", "run": _run_from_events(rid, groups[rid], plan_runs, verify=True), "execution_safety": _execution_safety()})
     return sanitize({"source": _source(), "state": "NOT_AVAILABLE", "reason_code": "RUN_NOT_FOUND", "run_id": rid})
 
 
@@ -789,6 +907,7 @@ def run_evidence_projection(run_id: str) -> Dict[str, Any]:
     evidence = {
         "evidence_refs": run.get("evidence_refs") or [],
         "artifact_refs": run.get("artifact_refs") or [],
+        "evidence_status": run.get("evidence") or {},
         "proof_refs": run.get("proof_refs") or [],
         "report_refs": run.get("report_refs") or [],
         "truth_refs": run.get("truth_refs") or [],
@@ -819,3 +938,81 @@ def run_dependencies_projection(run_id: str) -> Dict[str, Any]:
         "retry_lineage": run.get("retry_lineage") or {},
         "correlation_id": run.get("correlation_id") or NOT_CAPTURED,
     })
+
+
+def artifact_storage_projection() -> Dict[str, Any]:
+    """AFCC-3 Phase 6: artifact storage readiness. Side-effect free: a catalog
+    lookup only (no writes, no artifact bodies read, no verification run)."""
+    if not run_authority.is_postgres():
+        return sanitize({
+            "source": _source({"record_type": "artifact_storage"}),
+            "state": "NOT_CONFIGURED",
+            "reason_code": "SHARED_ARTIFACT_STORE_NOT_ACTIVE",
+            "artifact_storage": "REPLICA_LOCAL_FILE",
+            "durable": False,
+            "check": "NONE",
+            "checked_at": _now_iso(),
+        })
+    from fabric import run_authority_pg
+
+    health = run_authority_pg.storage_health()
+    return sanitize({
+        "source": _source({"record_type": "artifact_storage"}),
+        "state": health["state"],
+        "reason_code": health["reason_code"],
+        "artifact_storage": "FABRIC_RUN_ARTIFACTS",
+        "durable": health["state"] == "AVAILABLE",
+        "check": "READ_ONLY_CATALOG_LOOKUP",
+        "checked_at": _now_iso(),
+    })
+
+
+def run_artifact_projection(run_id: str, artifact_id: str) -> Dict[str, Any]:
+    """AFCC-3 Phase 7: one artifact of one run, for the read-only Live Operations
+    viewer. The artifact must be referenced by that run's own events (an id alone
+    reveals nothing). The body is returned only when it verifies against both its
+    stored digest and the run's recorded digest; legacy replica-local bodies are
+    returned only outside production and marked untrusted. Bodies pass the
+    sanitizer; no path, storage key or credential is included."""
+    rid = _safe_run_id(run_id)
+    aid = str(artifact_id or "").strip()
+    if not is_valid_id(aid):
+        raise ValueError("INVALID_ARTIFACT_ID")
+    groups, _, _ = _snapshot()
+    events = groups.get(rid, [])
+    views, _ = _artifact_view(rid, events, verify=True) if events else ([], {})
+    view = next((v for v in views if v["artifact_id"] == aid), None)
+    base = {"source": _source({"record_type": "run_artifact", "record_origin": _record_origin(events) if events else NOT_CAPTURED}), "run_id": rid, "artifact_id": aid}
+    if view is None:
+        return sanitize({**base, "state": "NOT_AVAILABLE", "reason_code": "ARTIFACT_NOT_IN_RUN"})
+    metadata = {k: view[k] for k in ("artifact_id", "sha256", "canonical_ref", "type", "size", "created_at", "completeness", "storage_state", "verification_state", "durable")}
+    body: Any = None
+    trust = "NOT_AVAILABLE"
+    if view["storage_state"] == "STORED" and view["verification_state"] == "VERIFIED":
+        from fabric import run_authority_pg
+
+        row = run_authority_pg.get_artifact(aid)
+        if row is not None and row["run_id"] == rid and run_authority_pg.verify_artifact_row(row, expected_hash=view["sha256"]) == "VERIFIED":
+            body, trust = json.loads(row["body_canonical"]), "VERIFIED"
+        else:
+            trust = "INTEGRITY_FAILED"
+    elif view["verification_state"] == "HASH_MISMATCH":
+        trust = "INTEGRITY_FAILED"  # body withheld
+    elif view["storage_state"] in {"LEGACY_REPLICA_LOCAL", "REPLICA_LOCAL"}:
+        trust = "NOT_TRUSTED_REPLICA_LOCAL"
+        from auth.config import is_production
+
+        if not is_production():
+            path = _artifacts_dir() / f"{aid}.json"
+            try:
+                body = json.loads(path.read_text(encoding="utf-8")) if path.is_file() else None
+            except (OSError, ValueError):
+                body = None
+    return sanitize({**base, "state": "AVAILABLE", "artifact": metadata, "trust": trust, "body": body,
+                     "body_available": body is not None})
+
+
+def _artifacts_dir() -> Path:
+    import routers.runs_routes as runs_routes
+
+    return runs_routes.ARTIFACTS_DIR

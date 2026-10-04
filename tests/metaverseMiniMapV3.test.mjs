@@ -23,7 +23,7 @@ test("MINIMAP V3 — the canonical top-view map asset still exists, unmodified (
 // 2. Collapsed / compact / expanded states work.
 test("MINIMAP V3 — the City Map supports three persisted states (collapsed/compact/expanded), not just a boolean toggle", () => {
   assert.match(miniMapSource, /const MAP_STATES = \["collapsed", "compact", "expanded"\];/);
-  assert.match(miniMapSource, /className=\{`met-minimap met-citymap met-citymap--\$\{mapState\}`\}/);
+  assert.match(miniMapSource, /className=\{`met-minimap met-citymap met-citymap--\$\{effectiveMapState\}/);
   assert.match(cssSource, /\.met-minimap\.met-citymap--collapsed\s*\{/);
   assert.match(cssSource, /\.met-minimap\.met-citymap--compact\s*\{/);
   assert.match(cssSource, /\.met-minimap\.met-citymap--expanded\s*\{/);

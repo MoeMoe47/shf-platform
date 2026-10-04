@@ -1,0 +1,301 @@
+import React, { useEffect, useState } from "react";
+import PermissionGuard from "@/auth/PermissionGuard";
+import MetaverseMiniMap from "@/components/metaverse/MetaverseMiniMap.jsx";
+import { METAVERSE_DISTRICTS } from "@/system/metaverse/metaverseNavigationModel.js";
+import { getCityOrchestration } from "@/system/metaverse/metaverseOrchestrationClient.js";
+import "./metaverse-operations-command-center.css";
+
+const OPERATING_MODES = [
+  { id: "MANUAL", label: "Admin" },
+  { id: "AI_ASSISTED", label: "AI Assisted" },
+  { id: "AI_SUPERVISED", label: "AI Supervised" },
+  { id: "AI_SIMULATION", label: "AI Simulation" },
+];
+
+const SYSTEM_LAYERS = [
+  { label: "Living City", status: "CONNECTED" },
+  { label: "Traffic", status: "FOUNDATION" },
+  { label: "Weather", status: "CONNECTED" },
+  { label: "Missions", status: "CONNECTED" },
+  { label: "Simulations", status: "CONNECTED" },
+  { label: "Civic", status: "CONNECTED" },
+  { label: "Agents", status: "INTEGRATION" },
+  { label: "Fire / EMS / 911", status: "NOT CONNECTED" },
+  { label: "Utilities", status: "NOT CONNECTED" },
+  { label: "Marine / Aviation", status: "PARTIAL" },
+];
+
+function statusClass(status) {
+  return status.toLowerCase().replaceAll(" ", "-").replaceAll("/", "-");
+}
+
+function CommandCenterSurface() {
+  const [mode, setMode] = useState("MANUAL");
+  const [orchestration, setOrchestration] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+
+    getCityOrchestration()
+      .then((data) => {
+        if (!cancelled) {
+          setOrchestration(data);
+          setError("");
+        }
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          setError(err?.message || "Metaverse orchestration is unavailable.");
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const cityEvents = Array.isArray(orchestration?.city_events)
+    ? orchestration.city_events
+    : [];
+
+  const pulses = Array.isArray(orchestration?.district_pulses)
+    ? orchestration.district_pulses
+    : [];
+
+  const briefingItems = Array.isArray(orchestration?.briefing?.items)
+    ? orchestration.briefing.items
+    : [];
+
+  const activeMode =
+    OPERATING_MODES.find((item) => item.id === mode) || OPERATING_MODES[0];
+
+  return (
+    <main className="mocc">
+      <header className="mocc__header">
+        <div>
+          <p className="mocc__eyebrow">
+            SILICON HEARTLAND METAVERSE
+          </p>
+          <h1>Operations &amp; Orchestration Command Center</h1>
+          <p className="mocc__doctrine">
+            Separate authorities. Shared coordination. One living city.
+          </p>
+        </div>
+
+        <div className="mocc__control-status">
+          <span className="mocc__control-label">ACTIVE CONTROLLER</span>
+          <strong>{activeMode.label}</strong>
+          <span className="mocc__read-only">MOCC-1 · READ ONLY</span>
+        </div>
+      </header>
+
+      <nav className="mocc__topnav" aria-label="MOCC sections">
+        {[
+          "Overview",
+          "Live City",
+          "Digital Twin",
+          "Operations",
+          "Incidents",
+          "Missions",
+          "Scenarios",
+          "Schedule",
+          "Dependencies",
+          "Replay",
+          "Systems",
+          "Agents",
+          "Testing",
+          "Audit",
+          "Admin",
+        ].map((item) => (
+          <button
+            key={item}
+            type="button"
+            className={item === "Overview" ? "is-active" : ""}
+          >
+            {item}
+          </button>
+        ))}
+      </nav>
+
+      <section className="mocc__modebar">
+        <div className="mocc__mode-options">
+          <span>OPERATIONS CONTROL</span>
+
+          {OPERATING_MODES.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              className={mode === item.id ? "is-active" : ""}
+              onClick={() => setMode(item.id)}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+
+        <button
+          type="button"
+          className="mocc__human-control"
+          onClick={() => setMode("MANUAL")}
+        >
+          Take Human Control
+        </button>
+      </section>
+
+      <section className="mocc__workspace">
+        <aside className="mocc__left">
+          <div className="mocc__panel-heading">
+            <span>SYSTEM LAYERS</span>
+            <small>Authority status</small>
+          </div>
+
+          <div className="mocc__system-list">
+            {SYSTEM_LAYERS.map((system) => (
+              <div className="mocc__system-row" key={system.label}>
+                <span>{system.label}</span>
+                <small className={`mocc__status mocc__status--${statusClass(system.status)}`}>
+                  {system.status}
+                </small>
+              </div>
+            ))}
+          </div>
+        </aside>
+
+        <section className="mocc__center">
+          <div className="mocc__panel-heading">
+            <div>
+              <span>DIGITAL TWIN</span>
+              <small>Canonical Quick Map foundation</small>
+            </div>
+
+            <span className="mocc__live-state">
+              {loading ? "CONNECTING" : error ? "SOURCE DEGRADED" : "LIVE READ"}
+            </span>
+          </div>
+
+          <div className="mocc__map-frame">
+            <MetaverseMiniMap
+              currentDistrictId={null}
+              youAreHereDistrictId={null}
+              pulses={pulses}
+              destinations={[]}
+              onTravel={() => {}}
+              districts={METAVERSE_DISTRICTS}
+              presenceCounts={[]}
+              events={cityEvents}
+              opportunityCountsByDistrict={{}}
+              civicActive={Boolean(orchestration?.civic_state)}
+              activeRoomParticipants={null}
+              reducedMotion={false}
+              onSelectDistrict={() => {}}
+            />
+          </div>
+
+          {error ? (
+            <div className="mocc__source-warning">
+              Orchestration source unavailable: {error}
+            </div>
+          ) : null}
+        </section>
+
+        <aside className="mocc__right">
+          <div className="mocc__panel-heading">
+            <span>LIVE OPERATIONS</span>
+            <small>Read projections only</small>
+          </div>
+
+          <div className="mocc__metric-grid">
+            <div>
+              <strong>{cityEvents.length}</strong>
+              <span>City Events</span>
+            </div>
+
+            <div>
+              <strong>{pulses.length}</strong>
+              <span>District Pulses</span>
+            </div>
+
+            <div>
+              <strong>{briefingItems.length}</strong>
+              <span>Briefing Items</span>
+            </div>
+          </div>
+
+          <div className="mocc__event-list">
+            {cityEvents.length === 0 ? (
+              <p className="mocc__empty">
+                No city events are currently published.
+              </p>
+            ) : (
+              cityEvents.slice(0, 6).map((event, index) => (
+                <article
+                  key={event.event_id || event.id || index}
+                  className="mocc__event"
+                >
+                  <strong>
+                    {event.title ||
+                      event.event_type ||
+                      event.type ||
+                      "City event"}
+                  </strong>
+
+                  <span>
+                    {event.status || event.state || "Published"}
+                  </span>
+                </article>
+              ))
+            )}
+          </div>
+        </aside>
+      </section>
+
+      <section className="mocc__timeline">
+        <div className="mocc__panel-heading">
+          <span>OPERATIONS TIMELINE</span>
+          <small>MOCC projection · source authorities preserved</small>
+        </div>
+
+        <div className="mocc__timeline-track">
+          {cityEvents.length === 0 ? (
+            <span>No operational events currently published.</span>
+          ) : (
+            cityEvents.slice(0, 8).map((event, index) => (
+              <div
+                className="mocc__timeline-event"
+                key={event.event_id || event.id || index}
+              >
+                <span className="mocc__timeline-dot" />
+                <strong>
+                  {event.title ||
+                    event.event_type ||
+                    event.type ||
+                    "Event"}
+                </strong>
+              </div>
+            ))
+          )}
+        </div>
+      </section>
+
+      <footer className="mocc__footer">
+        <span>MOCC-1 · Command Surface Foundation</span>
+        <span>
+          Admin / AI modes are display-state only. No operational command is executed.
+        </span>
+      </footer>
+    </main>
+  );
+}
+
+export default function MetaverseOperationsCommandCenter() {
+  return (
+    <PermissionGuard permissions={["operations.awareness.read"]}>
+      <CommandCenterSurface />
+    </PermissionGuard>
+  );
+}

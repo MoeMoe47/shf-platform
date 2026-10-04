@@ -238,3 +238,19 @@ def read_run_dependencies(run_id: str, access=Depends(require_command_read)):
 
     body = _fleet_read("run_dependencies", lambda: run_dependencies_projection(run_id))
     return _envelope("run_dependencies", access, body) if body is not None else _projection_failure("run_dependencies")
+
+
+@router.get("/storage/artifacts")
+def read_artifact_storage(access=Depends(require_command_read)):
+    from fabric.command.live_operations import artifact_storage_projection
+
+    body = _fleet_read("artifact_storage", artifact_storage_projection)
+    return _envelope("artifact_storage", access, body) if body is not None else _projection_failure("artifact_storage")
+
+
+@router.get("/runs/{run_id}/artifacts/{artifact_id}")
+def read_run_artifact(run_id: str, artifact_id: str, access=Depends(require_command_read)):
+    from fabric.command.live_operations import run_artifact_projection
+
+    body = _fleet_read("run_artifact", lambda: run_artifact_projection(run_id, artifact_id))
+    return _envelope("run_artifact", access, body) if body is not None else _projection_failure("run_artifact")

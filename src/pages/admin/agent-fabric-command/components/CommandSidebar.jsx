@@ -26,13 +26,26 @@ function Unavailable({ label, why }) {
   );
 }
 
-function SectionItem({ section, onNavigate }) {
-  if (section.status === "CURRENT") {
+function SectionItem({ section, current, onNavigate }) {
+  // AFCC-3 Phase 7: the sidebar is shared by the topology page ("command") and
+  // Live Operations ("live"); the entry for the page being shown is current.
+  if (section.id === current) {
     return (
       <li>
         <Link className="afcc-nav-link is-current" to={section.route} aria-current="page">{section.label}</Link>
       </li>
     );
+  }
+  if (section.status === "CURRENT") {
+    return (
+      <li>
+        <Link className="afcc-nav-link" to={section.route}>{section.label}<span className="afcc-nav-note">Topology view</span></Link>
+      </li>
+    );
+  }
+  if (current !== "command" && (section.status === "IN_PAGE" || section.status === "NOT_AVAILABLE")) {
+    // Topology regions and not-yet-available sections are listed on the topology page only.
+    return null;
   }
   if (section.status === "IN_PAGE") {
     return (
@@ -77,7 +90,7 @@ function AuthorityItem({ id }) {
   return <Unavailable label={label} why={dest.reason} />;
 }
 
-export default function CommandSidebar({ collapsible, open, onToggle }) {
+export default function CommandSidebar({ collapsible, open, onToggle, current = "command" }) {
   const listId = "afcc-section-list";
   return (
     <nav className={`afcc-sections${collapsible ? " is-collapsible" : ""}${open ? " is-open" : ""}`} aria-label="Command Center sections">
@@ -95,7 +108,7 @@ export default function CommandSidebar({ collapsible, open, onToggle }) {
         <p className="afcc-sections-title" id="afcc-nav-primary">Command</p>
         <ul className="afcc-sections-list" aria-labelledby="afcc-nav-primary">
           {COMMAND_SECTIONS.map((section) => (
-            <SectionItem key={section.id} section={section} onNavigate={collapsible ? onToggle : undefined} />
+            <SectionItem key={section.id} section={section} current={current} onNavigate={collapsible ? onToggle : undefined} />
           ))}
         </ul>
         <p className="afcc-sections-title" id="afcc-nav-authorities">Ecosystem authorities</p>

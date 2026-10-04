@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { COMMAND_ENDPOINTS, GAP, KNOWN_DATA_GAPS, SOURCE_STATE } from "../commandContracts.js";
 import { derivePosture } from "../commandAdapters.js";
 import { failureLayerLabel, formatAge, formatTimestamp, isDataState, POSTURE_COPY, VERDICT_TONE } from "../commandPresentation.js";
@@ -627,7 +628,28 @@ function sourceKeysFor(selection) {
   }
 }
 
-function OverviewView({ selection, snapshot, model, onSelect }) {
+// AFCC-3 Phase 7: the hub, run events and the fleet hand off to Live Operations
+// for per-run state, timeline and evidence. Navigation only.
+function LiveOperationsHandoff({ selection }) {
+  const relevant = (selection.type === "node" && selection.key === HUB_ID) || ["run", "agent", "agents"].includes(selection.type);
+  if (!relevant) return null;
+  return (
+    <p className="afcc-quiet afcc-fine">
+      <Link className="afcc-text-link" to="/agent-fabric/command/operations">Open in Live Operations</Link> for run state, timeline and evidence.
+    </p>
+  );
+}
+
+function OverviewView(props) {
+  return (
+    <>
+      <OverviewDetail {...props} />
+      <LiveOperationsHandoff selection={props.selection} />
+    </>
+  );
+}
+
+function OverviewDetail({ selection, snapshot, model, onSelect }) {
   switch (selection.type) {
     case "node": return <NodeOverview node={NODE_BY_ID[selection.key]} info={model.statusById[selection.key]} snapshot={snapshot} model={model} onSelect={onSelect} />;
     case "posture": return <PostureDetail snapshot={snapshot} />;

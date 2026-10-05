@@ -117,9 +117,34 @@ function harness(repo = new MemoryRepo()) {
 
 test("3C create product succeeds and audits material mutation", async () => {
   const { service, auditEvents } = harness();
-  const created = await service.createProduct(product(), actor);
+  const created = await service.createProduct(product({
+    readiness: "YELLOW",
+    readinessReason: "audited evidence note",
+    readinessAuthority: "curriculum-authority",
+    sellability: "PILOT",
+    sellabilityReason: "controlled pilot only",
+    sellabilityAuthority: "curriculum-authority",
+    sourceAuthorities: [sourceAuthority],
+  }), actor);
   assert.equal(created.commercial_family, "DATA_CENTER");
+  assert.equal(created.readiness_authority, "curriculum-authority");
+  assert.deepEqual(created.readiness_evidence_references[0], {
+    ...sourceAuthority,
+    sourceAuthorityId: undefined,
+    sourceLastVerifiedAt: undefined,
+    sourceVersion: undefined,
+  });
+  assert.equal(created.sellability_authority, "curriculum-authority");
   assert.equal(auditEvents.at(-1).action_type, "commercial_product_registry.product_created");
+});
+
+test("carried review gate status does not fabricate a review timestamp", async () => {
+  const { service, repo } = harness();
+  const created = await service.createProduct(product(), actor);
+  await service.manageReviewGate(created.commercial_product_id, {
+    gateType: "LEGAL", status: "PENDING", reference: "audit-mapping", reason: "preserved pending state",
+  }, actor);
+  assert.equal(repo.gates[0].reviewed_at, null);
 });
 
 test("3C invalid product input is rejected", async () => {

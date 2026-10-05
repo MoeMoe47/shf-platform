@@ -34,19 +34,19 @@ export class PostgresCommercialProductRegistryRepo implements CommercialProductR
       `INSERT INTO commercial_products (
         commercial_product_id, canonical_name, display_name, slug, commercial_family,
         subfamily, product_type, description, short_description, version, status,
-        lifecycle_state, readiness, readiness_reason, readiness_authority,
+        lifecycle_state, readiness, readiness_reason, readiness_authority, readiness_evidence_references,
         sellability, sellability_reason, sellability_authority,
         selling_entity, delivery_entity, partner_required, partner_type,
-        joint_structure_required, pricing_status, margin_status,
+        joint_structure_required, entity_review_flags, pricing_status, margin_status,
         commission_eligible_status, renewal_model, last_verified_at,
         created_by, updated_by
       ) VALUES (
         $1,$2,$3,$4,$5,$6,$7,$8,$9,COALESCE($10,1),COALESCE($11,'ACTIVE'),
-        COALESCE($12,'DISCOVERED'),COALESCE($13,'UNKNOWN'),$14,$15,
-        COALESCE($16,'NEEDS_REVIEW'),$17,$18,
-        COALESCE($19,'UNKNOWN'),COALESCE($20,'UNKNOWN'),COALESCE($21,false),$22,
-        COALESCE($23,false),COALESCE($24,'NOT_DEFINED'),COALESCE($25,'NOT_DEFINED'),
-        COALESCE($26,'UNKNOWN'),COALESCE($27,'UNKNOWN'),$28,$29,$30
+        COALESCE($12,'DISCOVERED'),COALESCE($13,'UNKNOWN'),$14,$15,$16::jsonb,
+        COALESCE($17,'NEEDS_REVIEW'),$18,$19,
+        COALESCE($20,'UNKNOWN'),COALESCE($21,'UNKNOWN'),COALESCE($22,false),$23,
+        COALESCE($24,false),$25::jsonb,COALESCE($26,'NOT_DEFINED'),COALESCE($27,'NOT_DEFINED'),
+        COALESCE($28,'UNKNOWN'),COALESCE($29,'UNKNOWN'),$30,$31,$32
       )
       RETURNING *`,
       [
@@ -54,12 +54,12 @@ export class PostgresCommercialProductRegistryRepo implements CommercialProductR
         input.commercial_family, input.subfamily || null, input.product_type,
         input.description || null, input.short_description || null, input.version || null,
         input.status || null, input.lifecycle_state || null, input.readiness || null,
-        input.readiness_reason || null, input.readiness_authority || null,
+        input.readiness_reason || null, input.readiness_authority || null, json(input.readiness_evidence_references),
         input.sellability || null, input.sellability_reason || null,
         input.sellability_authority || null, input.selling_entity || null,
         input.delivery_entity || null, input.partner_required ?? null, input.partner_type || null,
-        input.joint_structure_required ?? null, input.pricing_status || null,
-        input.margin_status || null, input.commission_eligible_status || null,
+        input.joint_structure_required ?? null, json(input.entity_review_flags),
+        input.pricing_status || null, input.margin_status || null, input.commission_eligible_status || null,
         input.renewal_model || null, input.last_verified_at || null, input.created_by || null,
         input.updated_by || input.created_by || null,
       ],

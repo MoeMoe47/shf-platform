@@ -6,6 +6,7 @@ import {
   COMMERCIAL_FAMILIES,
   COMMERCIAL_FORMS,
   COMMERCIAL_PRODUCT_REGISTRY_AUTHORITY,
+  ENTITY_REVIEW_FLAGS,
   COMMERCIAL_VIABILITY_STATUSES,
   COMMISSION_ELIGIBILITY_STATUSES,
   FUNDING_CATEGORIES,
@@ -250,6 +251,8 @@ export class CommercialProductRegistryService {
     const sellability = enumValue(input?.sellability ?? input?.sellabilityStatus, SELLABILITY_STATUSES, "sellability", false) || "NEEDS_REVIEW";
     const sellingEntity = enumValue(input?.sellingEntity ?? input?.selling_entity, ["SHF", "SHS", "PARTNER", "JOINT_STRUCTURE_REVIEW_REQUIRED", "UNKNOWN"] as const, "sellingEntity", false) || "UNKNOWN";
     const deliveryEntity = enumValue(input?.deliveryEntity ?? input?.delivery_entity, ["SHF", "SHS", "PARTNER", "JOINT_STRUCTURE_REVIEW_REQUIRED", "UNKNOWN"] as const, "deliveryEntity", false) || "UNKNOWN";
+    const entityReviewFlags = stringArray(input?.entityReviewFlags ?? input?.entity_review_flags, "entityReviewFlags");
+    for (const flag of entityReviewFlags) enumValue(flag, ENTITY_REVIEW_FLAGS, "entityReviewFlags");
     const sources = (input?.sourceAuthorities ?? input?.source_authorities ?? []).map(sourceAuthority);
     const buyers = stringArray(input?.buyerCompatibility ?? input?.buyer_compatibility, "buyerCompatibility");
     for (const buyer of buyers) enumValue(buyer, BUYER_TYPES, "buyerCompatibility");
@@ -272,13 +275,17 @@ export class CommercialProductRegistryService {
         lifecycle_state: lifecycle,
         readiness,
         readiness_reason: text(input?.readinessReason ?? input?.readiness_reason, "readinessReason", false, 1000),
+        readiness_authority: text(input?.readinessAuthority ?? input?.readiness_authority, "readinessAuthority", false, 240),
+        readiness_evidence_references: sources,
         sellability,
         sellability_reason: text(input?.sellabilityReason ?? input?.sellability_reason, "sellabilityReason", false, 1000),
+        sellability_authority: text(input?.sellabilityAuthority ?? input?.sellability_authority, "sellabilityAuthority", false, 240),
         selling_entity: sellingEntity,
         delivery_entity: deliveryEntity,
         partner_required: input?.partnerRequired === true || input?.partner_required === true,
         partner_type: text(input?.partnerType ?? input?.partner_type, "partnerType", false, 160),
         joint_structure_required: input?.jointStructureRequired === true || input?.joint_structure_required === true,
+        entity_review_flags: entityReviewFlags as any,
         pricing_status: "NOT_DEFINED",
         margin_status: "NOT_DEFINED",
         commission_eligible_status: "UNKNOWN",
@@ -362,7 +369,9 @@ export class CommercialProductRegistryService {
       authority: text(input?.authority, "authority", false, 200),
       reference: text(input?.reference, "reference", false, 300),
       reason: text(input?.reason, "reason", false, 1000),
-      reviewed_at: text(input?.reviewedAt ?? input?.reviewed_at, "reviewedAt", false, 80) || new Date().toISOString(),
+      reviewed_at: input?.reviewedAt === undefined && input?.reviewed_at === undefined
+        ? null
+        : text(input?.reviewedAt ?? input?.reviewed_at, "reviewedAt", false, 80),
       expires_at: text(input?.expiresAt ?? input?.expires_at, "expiresAt", false, 80),
       stale_after: text(input?.staleAfter ?? input?.stale_after, "staleAfter", false, 80),
     }, executor));

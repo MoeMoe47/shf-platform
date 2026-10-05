@@ -2,6 +2,7 @@ import type {
   BuyerType,
   CommercialFamily,
   CommercialForm,
+  EntityReviewFlag,
   CommercialProductType,
   EntityClassification,
   ProductIdentityStatus,
@@ -46,6 +47,7 @@ export type CommercialProductCore = {
   readiness?: ReadinessState;
   readiness_reason?: string | null;
   readiness_authority?: string | null;
+  readiness_evidence_references?: unknown;
   sellability?: SellabilityStatus;
   sellability_reason?: string | null;
   sellability_authority?: string | null;
@@ -54,6 +56,7 @@ export type CommercialProductCore = {
   partner_required?: boolean;
   partner_type?: string | null;
   joint_structure_required?: boolean;
+  entity_review_flags?: readonly EntityReviewFlag[];
   pricing_status?: string;
   margin_status?: string;
   commission_eligible_status?: string;

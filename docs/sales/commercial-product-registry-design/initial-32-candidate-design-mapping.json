@@ -1,0 +1,2465 @@
+{
+  "design_id": "SHU-COMMERCIAL-PRODUCT-REGISTRY-DESIGN-2",
+  "source_inventory": "docs/sales/commercial-catalog-audit/commercial-candidate-inventory.json",
+  "generated_from_audit_id": "SHU-COMMERCIAL-CATALOG-AUDIT-1",
+  "mapping_scope": "design_validation_not_seed_data",
+  "preserved_summary_counts": {
+    "total_candidates": 32,
+    "by_family": {
+      "CORE_EDUCATION": 5,
+      "CAREER_WORKFORCE": 2,
+      "DATA_CENTER": 2,
+      "HEALTHCARE_WORKFORCE": 1,
+      "FIRE_PUBLIC_SAFETY": 1,
+      "INFRASTRUCTURE_WORKFORCE": 1,
+      "LOGISTICS_SUPPLY_CHAIN": 1,
+      "APPRENTICESHIP_WBL": 2,
+      "AVIATION": 1,
+      "CREATOR_MEDIA_SHNN": 1,
+      "LEARNING_GAMING": 2,
+      "METAVERSE": 3,
+      "CIVIC_FINANCIAL_CAPABILITY": 2,
+      "INSTITUTIONAL_TECH_SHS": 5,
+      "ASSURANCE_VERIFICATION_REPORTING": 3
+    },
+    "sellability": {
+      "SELL_NOW": 0,
+      "PILOT": 10,
+      "DEVELOP": 12,
+      "NOT_SELLABLE": 4,
+      "NEEDS_REVIEW": 6
+    },
+    "readiness": {
+      "GREEN": 0,
+      "YELLOW": 10,
+      "RED": 4,
+      "BLUE": 0,
+      "UNKNOWN": 18
+    }
+  },
+  "computed_summary_counts": {
+    "total_candidates": 32,
+    "sellability": {
+      "PILOT": 10,
+      "DEVELOP": 12,
+      "NEEDS_REVIEW": 6,
+      "NOT_SELLABLE": 4
+    },
+    "readiness": {
+      "YELLOW": 10,
+      "UNKNOWN": 18,
+      "RED": 4
+    }
+  },
+  "candidates": [
+    {
+      "audit_candidate_id": "cc-001",
+      "commercial_product_id": "cp_data_center_and_ai_infrastructure_curriculum_pathway",
+      "canonical_name": "Data Center & AI Infrastructure Curriculum Pathway",
+      "display_name": "Data Center & AI Infrastructure Curriculum Pathway",
+      "slug": "data-center-and-ai-infrastructure-curriculum-pathway",
+      "commercial_family": "DATA_CENTER",
+      "subfamily": "curriculum_pathway",
+      "product_type": "CONTENT_LICENSE",
+      "commercial_forms": [
+        "PER_COHORT_LICENSE",
+        "PER_INSTITUTION_LICENSE",
+        "GRANT_SUPPORTED",
+        "TRAINING"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "curriculum-domain / career-pathways domain",
+          "source_repository": "SHRV1",
+          "source_paths": [
+            "src/content/lessons/data-center-*-student/",
+            "src/content/curriculum/data-center-pathway-map.json",
+            "docs/career/records/DATA_CENTER_AI_INFRASTRUCTURE.pathway-record.json"
+          ],
+          "source_status": "FOUND",
+          "source_provenance": "168 Data Center lesson files and pathway audit exist; validation status is NOT REVIEWED and credentials/WBL are not operational."
+        }
+      ],
+      "raw_buyer_types": [
+        "K-12 schools",
+        "school districts",
+        "career-tech organizations",
+        "youth programs"
+      ],
+      "buyer_types": [
+        "K12_SCHOOL",
+        "SCHOOL_DISTRICT",
+        "CAREER_TECH",
+        "YOUTH_PROGRAM"
+      ],
+      "selling_entity": "JOINT_STRUCTURE_REVIEW_REQUIRED",
+      "delivery_entity": "SHF",
+      "readiness": "YELLOW",
+      "sellability_status": "PILOT",
+      "lifecycle_state": "PILOT_READY",
+      "funding_relationship_status": "POTENTIAL",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "POTENTIAL",
+      "review_gates": {
+        "commercial_readiness": "PENDING",
+        "legal": "UNKNOWN",
+        "tax": "UNKNOWN",
+        "regulatory": "PENDING",
+        "procurement": "UNKNOWN",
+        "funding": "PENDING",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "PENDING",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "UNKNOWN"
+      },
+      "dependencies": [
+        "curriculum import decision",
+        "buyer/license authority",
+        "accessibility verification",
+        "support model"
+      ],
+      "blockers": [
+        "controlled_pilot_only",
+        "production_commercial_authority_missing"
+      ],
+      "evidence_notes": "168 Data Center lesson files and pathway audit exist; validation status is NOT REVIEWED and credentials/WBL are not operational.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-002",
+      "commercial_product_id": "cp_data_center_employer_validation_package",
+      "canonical_name": "Data Center Employer Validation Package",
+      "display_name": "Data Center Employer Validation Package",
+      "slug": "data-center-employer-validation-package",
+      "commercial_family": "DATA_CENTER",
+      "subfamily": "employer_validation",
+      "product_type": "PROFESSIONAL_SERVICE",
+      "commercial_forms": [
+        "ASSESSMENT",
+        "PROFESSIONAL_SERVICE",
+        "EMPLOYER_SUPPORTED"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "career-pathways documentation",
+          "source_repository": "SHRV1",
+          "source_paths": [
+            "docs/career/data-center-employer-validation/",
+            "docs/career/DATA_CENTER_PATHWAY_PILOT_AUDIT_V1.md"
+          ],
+          "source_status": "FOUND",
+          "source_provenance": "Outreach and validation package artifacts exist, but no validation outcome is present."
+        }
+      ],
+      "raw_buyer_types": [
+        "data center operators",
+        "career-tech organizations",
+        "employers"
+      ],
+      "buyer_types": [
+        "DATA_CENTER_OPERATOR",
+        "CAREER_TECH",
+        "EMPLOYER"
+      ],
+      "selling_entity": "SHS",
+      "delivery_entity": "SHS",
+      "readiness": "YELLOW",
+      "sellability_status": "PILOT",
+      "lifecycle_state": "PILOT_READY",
+      "funding_relationship_status": "POTENTIAL",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "POTENTIAL",
+      "review_gates": {
+        "commercial_readiness": "PENDING",
+        "legal": "PENDING",
+        "tax": "UNKNOWN",
+        "regulatory": "UNKNOWN",
+        "procurement": "UNKNOWN",
+        "funding": "UNKNOWN",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "PENDING",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "UNKNOWN"
+      },
+      "dependencies": [
+        "reviewer workflow",
+        "partner contracting",
+        "scope control"
+      ],
+      "blockers": [
+        "controlled_pilot_only",
+        "production_commercial_authority_missing"
+      ],
+      "evidence_notes": "Outreach and validation package artifacts exist, but no validation outcome is present.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-003",
+      "commercial_product_id": "cp_curriculum_catalog_course_authoring_infrastructure",
+      "canonical_name": "Curriculum Catalog / Course Authoring Infrastructure",
+      "display_name": "Curriculum Catalog / Course Authoring Infrastructure",
+      "slug": "curriculum-catalog-course-authoring-infrastructure",
+      "commercial_family": "CORE_EDUCATION",
+      "subfamily": "curriculum_platform",
+      "product_type": "SOFTWARE_LICENSE",
+      "commercial_forms": [
+        "SUBSCRIPTION",
+        "PER_INSTITUTION_LICENSE",
+        "IMPLEMENTATION_FEE",
+        "SUPPORT"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "curriculum-catalog domain",
+          "source_repository": "SHRV1",
+          "source_paths": [
+            "apps/shs-api/src/domain/curriculum-catalog/",
+            "apps/shs-api/migrations/059_curriculum_catalog.sql"
+          ],
+          "source_status": "FOUND",
+          "source_provenance": "Domain has canonical course/unit/lesson/release structures; commercial terms are absent."
+        }
+      ],
+      "raw_buyer_types": [
+        "schools",
+        "school districts",
+        "colleges",
+        "training providers"
+      ],
+      "buyer_types": [
+        "K12_SCHOOL",
+        "SCHOOL_DISTRICT",
+        "COLLEGE",
+        "TRAINING_PROVIDER"
+      ],
+      "selling_entity": "SHS",
+      "delivery_entity": "SHS",
+      "readiness": "UNKNOWN",
+      "sellability_status": "DEVELOP",
+      "lifecycle_state": "DEFINED",
+      "funding_relationship_status": "INSTITUTIONAL_PURCHASING",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "POTENTIAL",
+      "review_gates": {
+        "commercial_readiness": "UNKNOWN",
+        "legal": "PENDING",
+        "tax": "UNKNOWN",
+        "regulatory": "UNKNOWN",
+        "procurement": "PENDING",
+        "funding": "UNKNOWN",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "PENDING",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "UNKNOWN"
+      },
+      "dependencies": [
+        "commercial packaging",
+        "tenant onboarding",
+        "SLA/support",
+        "pricing authority"
+      ],
+      "blockers": [
+        "packaging_authority_support_or_review_missing"
+      ],
+      "evidence_notes": "Domain has canonical course/unit/lesson/release structures; commercial terms are absent.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-004",
+      "commercial_product_id": "cp_asl_curriculum_collection",
+      "canonical_name": "ASL Curriculum Collection",
+      "display_name": "ASL Curriculum Collection",
+      "slug": "asl-curriculum-collection",
+      "commercial_family": "CORE_EDUCATION",
+      "subfamily": "lesson_collection",
+      "product_type": "CONTENT_LICENSE",
+      "commercial_forms": [
+        "PER_COHORT_LICENSE",
+        "PER_INSTITUTION_LICENSE",
+        "TRAINING"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "static curriculum content",
+          "source_repository": "SHRV1",
+          "source_paths": [
+            "src/content/lessons/asl-master/",
+            "src/content/lessons/asl-student/",
+            "src/content/lessons/asl-instructor/"
+          ],
+          "source_status": "FOUND",
+          "source_provenance": "Large static ASL lesson collection exists; no commercial definition found."
+        }
+      ],
+      "raw_buyer_types": [
+        "schools",
+        "youth programs",
+        "after-school providers"
+      ],
+      "buyer_types": [
+        "K12_SCHOOL",
+        "YOUTH_PROGRAM",
+        "AFTER_SCHOOL_PROVIDER"
+      ],
+      "selling_entity": "JOINT_STRUCTURE_REVIEW_REQUIRED",
+      "delivery_entity": "UNKNOWN",
+      "readiness": "UNKNOWN",
+      "sellability_status": "NEEDS_REVIEW",
+      "lifecycle_state": "REVIEW",
+      "funding_relationship_status": "POTENTIAL",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "UNKNOWN",
+      "review_gates": {
+        "commercial_readiness": "UNKNOWN",
+        "legal": "PENDING",
+        "tax": "UNKNOWN",
+        "regulatory": "UNKNOWN",
+        "procurement": "UNKNOWN",
+        "funding": "UNKNOWN",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "PENDING",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "UNKNOWN"
+      },
+      "dependencies": [
+        "content ownership review",
+        "instructional review",
+        "delivery/support model"
+      ],
+      "blockers": [
+        "authority_entity_legal_tax_regulatory_or_funding_review_required"
+      ],
+      "evidence_notes": "Large static ASL lesson collection exists; no commercial definition found.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-005",
+      "commercial_product_id": "cp_educator_professional_development_bundle",
+      "canonical_name": "Educator Professional Development Bundle",
+      "display_name": "Educator Professional Development Bundle",
+      "slug": "educator-professional-development-bundle",
+      "commercial_family": "CORE_EDUCATION",
+      "subfamily": "professional_development",
+      "product_type": "TRAINING",
+      "commercial_forms": [
+        "TRAINING",
+        "PROFESSIONAL_SERVICE",
+        "PER_COHORT_LICENSE"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "store seed/demo data",
+          "source_repository": "SHRV1",
+          "source_paths": [
+            "src/data/catalogOfferings.js"
+          ],
+          "source_status": "PARTIAL",
+          "source_provenance": "Store catalog row exists but file explicitly labels all entries seed/demonstration data."
+        }
+      ],
+      "raw_buyer_types": [
+        "schools",
+        "school districts",
+        "educators"
+      ],
+      "buyer_types": [
+        "K12_SCHOOL",
+        "SCHOOL_DISTRICT",
+        "TRAINING_PROVIDER"
+      ],
+      "selling_entity": "UNKNOWN",
+      "delivery_entity": "UNKNOWN",
+      "readiness": "UNKNOWN",
+      "sellability_status": "DEVELOP",
+      "lifecycle_state": "DEFINED",
+      "funding_relationship_status": "POTENTIAL",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "POTENTIAL",
+      "review_gates": {
+        "commercial_readiness": "UNKNOWN",
+        "legal": "PENDING",
+        "tax": "UNKNOWN",
+        "regulatory": "UNKNOWN",
+        "procurement": "UNKNOWN",
+        "funding": "UNKNOWN",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "UNKNOWN",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "UNKNOWN"
+      },
+      "dependencies": [
+        "real curriculum record",
+        "trainer capacity",
+        "scope and outcomes"
+      ],
+      "blockers": [
+        "packaging_authority_support_or_review_missing"
+      ],
+      "evidence_notes": "Store catalog row exists but file explicitly labels all entries seed/demonstration data.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-006",
+      "commercial_product_id": "cp_summer_stem_camp_after_school_tech_explorer_package",
+      "canonical_name": "Summer STEM Camp / After-School Tech Explorer Package",
+      "display_name": "Summer STEM Camp / After-School Tech Explorer Package",
+      "slug": "summer-stem-camp-after-school-tech-explorer-package",
+      "commercial_family": "CORE_EDUCATION",
+      "subfamily": "program_package",
+      "product_type": "PROGRAM_PACKAGE",
+      "commercial_forms": [
+        "PER_COHORT_LICENSE",
+        "GRANT_SUPPORTED",
+        "SPONSORSHIP",
+        "TRAINING"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "program seed / metaverse simulation package refs",
+          "source_repository": "SHRV1",
+          "source_paths": [
+            "apps/shs-api/seeds/007_seed_programs.sql",
+            "apps/shs-api/src/domain/metaverse/simulations/registry/simulation-registry.ts"
+          ],
+          "source_status": "PARTIAL",
+          "source_provenance": "Seed program and packageIds appear; no full operating model or commercial offer."
+        }
+      ],
+      "raw_buyer_types": [
+        "summer programs",
+        "after-school providers",
+        "libraries",
+        "youth programs"
+      ],
+      "buyer_types": [
+        "SUMMER_PROGRAM",
+        "AFTER_SCHOOL_PROVIDER",
+        "LIBRARY",
+        "YOUTH_PROGRAM"
+      ],
+      "selling_entity": "JOINT_STRUCTURE_REVIEW_REQUIRED",
+      "delivery_entity": "UNKNOWN",
+      "readiness": "UNKNOWN",
+      "sellability_status": "DEVELOP",
+      "lifecycle_state": "DEFINED",
+      "funding_relationship_status": "POTENTIAL",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "POTENTIAL",
+      "review_gates": {
+        "commercial_readiness": "UNKNOWN",
+        "legal": "PENDING",
+        "tax": "UNKNOWN",
+        "regulatory": "UNKNOWN",
+        "procurement": "UNKNOWN",
+        "funding": "PENDING",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "UNKNOWN",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "UNKNOWN"
+      },
+      "dependencies": [
+        "program authority",
+        "staffing",
+        "curriculum map",
+        "youth safety policy"
+      ],
+      "blockers": [
+        "packaging_authority_support_or_review_missing"
+      ],
+      "evidence_notes": "Seed program and packageIds appear; no full operating model or commercial offer.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-007",
+      "commercial_product_id": "cp_career_center_career_pathways_platform",
+      "canonical_name": "Career Center / Career Pathways Platform",
+      "display_name": "Career Center / Career Pathways Platform",
+      "slug": "career-center-career-pathways-platform",
+      "commercial_family": "CAREER_WORKFORCE",
+      "subfamily": "career_navigation",
+      "product_type": "SOFTWARE_LICENSE",
+      "commercial_forms": [
+        "SUBSCRIPTION",
+        "PER_INSTITUTION_LICENSE",
+        "IMPLEMENTATION_FEE",
+        "SUPPORT"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "career domains",
+          "source_repository": "SHRV1",
+          "source_paths": [
+            "src/router/CareerRoutes.jsx",
+            "apps/shs-api/src/domain/career-pathways/",
+            "docs/career/"
+          ],
+          "source_status": "FOUND",
+          "source_provenance": "Career routes and backend pathway services exist; product packaging does not."
+        }
+      ],
+      "raw_buyer_types": [
+        "schools",
+        "workforce boards",
+        "American Job Centers",
+        "career-tech organizations"
+      ],
+      "buyer_types": [
+        "K12_SCHOOL",
+        "WORKFORCE_BOARD",
+        "AMERICAN_JOB_CENTER",
+        "CAREER_TECH"
+      ],
+      "selling_entity": "SHS",
+      "delivery_entity": "SHS",
+      "readiness": "UNKNOWN",
+      "sellability_status": "DEVELOP",
+      "lifecycle_state": "DEFINED",
+      "funding_relationship_status": "POTENTIAL",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "POTENTIAL",
+      "review_gates": {
+        "commercial_readiness": "UNKNOWN",
+        "legal": "UNKNOWN",
+        "tax": "UNKNOWN",
+        "regulatory": "UNKNOWN",
+        "procurement": "PENDING",
+        "funding": "PENDING",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "PENDING",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "UNKNOWN"
+      },
+      "dependencies": [
+        "buyer mapping",
+        "support model",
+        "data governance",
+        "pricing"
+      ],
+      "blockers": [
+        "packaging_authority_support_or_review_missing"
+      ],
+      "evidence_notes": "Career routes and backend pathway services exist; product packaging does not.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-008",
+      "commercial_product_id": "cp_career_portfolio_credential_projection_package",
+      "canonical_name": "Career Portfolio / Credential Projection Package",
+      "display_name": "Career Portfolio / Credential Projection Package",
+      "slug": "career-portfolio-credential-projection-package",
+      "commercial_family": "CAREER_WORKFORCE",
+      "subfamily": "portfolio_credentials",
+      "product_type": "ADD_ON",
+      "commercial_forms": [
+        "ADD_ON",
+        "PER_STUDENT_LICENSE",
+        "PER_INSTITUTION_LICENSE"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "portfolio and credentials domains",
+          "source_repository": "SHRV1",
+          "source_paths": [
+            "apps/shs-api/src/domain/portfolio/",
+            "apps/shs-api/src/domain/credentials/",
+            "docs/SHF_CREDENTIAL_ARCHITECTURE.md"
+          ],
+          "source_status": "PARTIAL",
+          "source_provenance": "Portfolio and credentials services exist, but Data Center evidence cannot currently become portfolio artifact and credential issuance is not fully operational."
+        }
+      ],
+      "raw_buyer_types": [
+        "schools",
+        "career-tech organizations",
+        "employers"
+      ],
+      "buyer_types": [
+        "K12_SCHOOL",
+        "CAREER_TECH",
+        "EMPLOYER"
+      ],
+      "selling_entity": "JOINT_STRUCTURE_REVIEW_REQUIRED",
+      "delivery_entity": "SHS",
+      "readiness": "UNKNOWN",
+      "sellability_status": "DEVELOP",
+      "lifecycle_state": "DEFINED",
+      "funding_relationship_status": "POTENTIAL",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "POTENTIAL",
+      "review_gates": {
+        "commercial_readiness": "UNKNOWN",
+        "legal": "PENDING",
+        "tax": "UNKNOWN",
+        "regulatory": "PENDING",
+        "procurement": "UNKNOWN",
+        "funding": "UNKNOWN",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "UNKNOWN",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "UNKNOWN"
+      },
+      "dependencies": [
+        "credential authority",
+        "evidence-source intake",
+        "QR verification policy"
+      ],
+      "blockers": [
+        "packaging_authority_support_or_review_missing"
+      ],
+      "evidence_notes": "Portfolio and credentials services exist, but Data Center evidence cannot currently become portfolio artifact and credential issuance is not fully operational.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-009",
+      "commercial_product_id": "cp_employer_workforce_incentive_intelligence",
+      "canonical_name": "Employer Workforce Incentive Intelligence",
+      "display_name": "Employer Workforce Incentive Intelligence",
+      "slug": "employer-workforce-incentive-intelligence",
+      "commercial_family": "APPRENTICESHIP_WBL",
+      "subfamily": "funding_intelligence",
+      "product_type": "ADVISORY_SERVICE",
+      "commercial_forms": [
+        "ASSESSMENT",
+        "PROFESSIONAL_SERVICE",
+        "IMPLEMENTATION_FEE"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "sales orchestration / external workforce authorities required",
+          "source_repository": "SHF-Next",
+          "source_paths": [
+            "/Users/mikeslate/shf-next/docs/sales/EMPLOYER_WORKFORCE_INCENTIVE_ARCHITECTURE_V1.md",
+            "/Users/mikeslate/shf-next/src/domain/sales/services/employerReimbursementEstimator.ts"
+          ],
+          "source_status": "FOUND",
+          "source_provenance": "Architecture explicitly separates potential rate, verified program rate, approved contractual rate, claim approval, and payment."
+        }
+      ],
+      "raw_buyer_types": [
+        "employers",
+        "workforce boards",
+        "apprenticeship sponsors"
+      ],
+      "buyer_types": [
+        "EMPLOYER",
+        "WORKFORCE_BOARD",
+        "APPRENTICESHIP_SPONSOR"
+      ],
+      "selling_entity": "SHS",
+      "delivery_entity": "SHS",
+      "readiness": "YELLOW",
+      "sellability_status": "PILOT",
+      "lifecycle_state": "PILOT_READY",
+      "funding_relationship_status": "REVIEW_REQUIRED",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "POTENTIAL",
+      "review_gates": {
+        "commercial_readiness": "PENDING",
+        "legal": "PENDING",
+        "tax": "UNKNOWN",
+        "regulatory": "PENDING",
+        "procurement": "UNKNOWN",
+        "funding": "PENDING",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "PENDING",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "UNKNOWN"
+      },
+      "dependencies": [
+        "local policy sources",
+        "registered apprenticeship status source",
+        "claim/payment authority"
+      ],
+      "blockers": [
+        "controlled_pilot_only",
+        "production_commercial_authority_missing"
+      ],
+      "evidence_notes": "Architecture explicitly separates potential rate, verified program rate, approved contractual rate, claim approval, and payment.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-010",
+      "commercial_product_id": "cp_apprenticeship_work_based_learning_opportunity_matching",
+      "canonical_name": "Apprenticeship / Work-Based Learning Opportunity Matching",
+      "display_name": "Apprenticeship / Work-Based Learning Opportunity Matching",
+      "slug": "apprenticeship-work-based-learning-opportunity-matching",
+      "commercial_family": "APPRENTICESHIP_WBL",
+      "subfamily": "opportunity_matching",
+      "product_type": "SERVICE",
+      "commercial_forms": [
+        "PROFESSIONAL_SERVICE",
+        "EMPLOYER_SUPPORTED",
+        "GRANT_SUPPORTED"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "opportunities / career-events domains",
+          "source_repository": "SHRV1",
+          "source_paths": [
+            "apps/shs-api/src/domain/opportunities/",
+            "apps/shs-api/src/domain/career-events/",
+            "apps/shs-api/migrations/046_career_events_opportunities_foundation.sql"
+          ],
+          "source_status": "PARTIAL",
+          "source_provenance": "Opportunity domain exists, but no Data Center WBL route or Registered Apprenticeship authority was found."
+        }
+      ],
+      "raw_buyer_types": [
+        "employers",
+        "workforce boards",
+        "schools",
+        "apprenticeship sponsors"
+      ],
+      "buyer_types": [
+        "EMPLOYER",
+        "WORKFORCE_BOARD",
+        "K12_SCHOOL",
+        "APPRENTICESHIP_SPONSOR"
+      ],
+      "selling_entity": "JOINT_STRUCTURE_REVIEW_REQUIRED",
+      "delivery_entity": "PARTNER",
+      "readiness": "UNKNOWN",
+      "sellability_status": "DEVELOP",
+      "lifecycle_state": "DEFINED",
+      "funding_relationship_status": "REVIEW_REQUIRED",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "POTENTIAL",
+      "review_gates": {
+        "commercial_readiness": "UNKNOWN",
+        "legal": "PENDING",
+        "tax": "UNKNOWN",
+        "regulatory": "PENDING",
+        "procurement": "UNKNOWN",
+        "funding": "PENDING",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "UNKNOWN",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "PENDING"
+      },
+      "dependencies": [
+        "partner agreements",
+        "registered apprenticeship authority",
+        "eligibility/placement workflow"
+      ],
+      "blockers": [
+        "packaging_authority_support_or_review_missing"
+      ],
+      "evidence_notes": "Opportunity domain exists, but no Data Center WBL route or Registered Apprenticeship authority was found.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-011",
+      "commercial_product_id": "cp_healthcare_workforce_pathway_concepts",
+      "canonical_name": "Healthcare Workforce Pathway Concepts",
+      "display_name": "Healthcare Workforce Pathway Concepts",
+      "slug": "healthcare-workforce-pathway-concepts",
+      "commercial_family": "HEALTHCARE_WORKFORCE",
+      "subfamily": "career_pathway_concepts",
+      "product_type": "PATHWAY_CONCEPT",
+      "commercial_forms": [
+        "UNKNOWN",
+        "PARTNER_DELIVERED"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "career-pathway fixture data",
+          "source_repository": "SHRV1",
+          "source_paths": [
+            "src/data/career-pathways.json"
+          ],
+          "source_status": "PARTIAL",
+          "source_provenance": "CNA/STNA and phlebotomy entries appear in career-pathways fixture data; no regulated training authority found."
+        }
+      ],
+      "raw_buyer_types": [
+        "healthcare employers",
+        "hospitals",
+        "nursing facilities",
+        "training providers"
+      ],
+      "buyer_types": [
+        "HEALTHCARE_EMPLOYER",
+        "HOSPITAL",
+        "NURSING_FACILITY",
+        "TRAINING_PROVIDER"
+      ],
+      "selling_entity": "UNKNOWN",
+      "delivery_entity": "PARTNER",
+      "readiness": "UNKNOWN",
+      "sellability_status": "NEEDS_REVIEW",
+      "lifecycle_state": "REVIEW",
+      "funding_relationship_status": "POTENTIAL",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "UNKNOWN",
+      "review_gates": {
+        "commercial_readiness": "UNKNOWN",
+        "legal": "PENDING",
+        "tax": "UNKNOWN",
+        "regulatory": "PENDING",
+        "procurement": "UNKNOWN",
+        "funding": "UNKNOWN",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "UNKNOWN",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "PENDING"
+      },
+      "dependencies": [
+        "state/licensure authority",
+        "clinical partner",
+        "curriculum and instructor authority"
+      ],
+      "blockers": [
+        "authority_entity_legal_tax_regulatory_or_funding_review_required"
+      ],
+      "evidence_notes": "CNA/STNA and phlebotomy entries appear in career-pathways fixture data; no regulated training authority found.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-012",
+      "commercial_product_id": "cp_fire_and_public_safety_readiness_concepts",
+      "canonical_name": "Fire & Public Safety Readiness Concepts",
+      "display_name": "Fire & Public Safety Readiness Concepts",
+      "slug": "fire-and-public-safety-readiness-concepts",
+      "commercial_family": "FIRE_PUBLIC_SAFETY",
+      "subfamily": "not_found_family",
+      "product_type": "NOT_FOUND",
+      "commercial_forms": [
+        "UNKNOWN"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "UNKNOWN",
+          "source_repository": "SHRV1 + SHF-Next",
+          "source_paths": [
+            "keyword scan: fire/firefighter/EMS/public safety"
+          ],
+          "source_status": "NOT_FOUND",
+          "source_provenance": "No Fire & Emergency Services Initiative, firefighter readiness, EMS, or station simulation offering found in live evidence."
+        }
+      ],
+      "raw_buyer_types": [
+        "fire departments",
+        "public-safety agencies"
+      ],
+      "buyer_types": [
+        "FIRE_DEPARTMENT",
+        "PUBLIC_SAFETY_AGENCY"
+      ],
+      "selling_entity": "UNKNOWN",
+      "delivery_entity": "PARTNER",
+      "readiness": "RED",
+      "sellability_status": "NOT_SELLABLE",
+      "lifecycle_state": "DISCOVERED",
+      "funding_relationship_status": "NOT_FOUND",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "UNKNOWN",
+      "review_gates": {
+        "commercial_readiness": "BLOCKED",
+        "legal": "UNKNOWN",
+        "tax": "UNKNOWN",
+        "regulatory": "PENDING",
+        "procurement": "UNKNOWN",
+        "funding": "UNKNOWN",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "BLOCKED",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "PENDING"
+      },
+      "dependencies": [
+        "state training/certification authority",
+        "department partner"
+      ],
+      "blockers": [
+        "not_sellable_from_audit"
+      ],
+      "evidence_notes": "No Fire & Emergency Services Initiative, firefighter readiness, EMS, or station simulation offering found in live evidence.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-013",
+      "commercial_product_id": "cp_infrastructure_public_works_utilities_concepts",
+      "canonical_name": "Infrastructure / Public Works / Utilities Concepts",
+      "display_name": "Infrastructure / Public Works / Utilities Concepts",
+      "slug": "infrastructure-public-works-utilities-concepts",
+      "commercial_family": "INFRASTRUCTURE_WORKFORCE",
+      "subfamily": "simulations_and_career_concepts",
+      "product_type": "SIMULATION_PACKAGE",
+      "commercial_forms": [
+        "CONTENT_LICENSE",
+        "CUSTOM_DEVELOPMENT",
+        "SPONSORSHIP"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "metaverse simulation registry / career fixtures",
+          "source_repository": "SHRV1",
+          "source_paths": [
+            "apps/shs-api/src/domain/metaverse/simulations/registry/simulation-registry.ts",
+            "src/data/career-pathways.json"
+          ],
+          "source_status": "PARTIAL",
+          "source_provenance": "Civic budget/infrastructure simulation and utilities-like career concepts exist; no public works curriculum/product."
+        }
+      ],
+      "raw_buyer_types": [
+        "municipalities",
+        "utilities",
+        "contractors",
+        "schools"
+      ],
+      "buyer_types": [
+        "MUNICIPALITY",
+        "UTILITY",
+        "CONTRACTOR",
+        "K12_SCHOOL"
+      ],
+      "selling_entity": "JOINT_STRUCTURE_REVIEW_REQUIRED",
+      "delivery_entity": "SHS",
+      "readiness": "UNKNOWN",
+      "sellability_status": "DEVELOP",
+      "lifecycle_state": "DEFINED",
+      "funding_relationship_status": "POTENTIAL",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "POTENTIAL",
+      "review_gates": {
+        "commercial_readiness": "UNKNOWN",
+        "legal": "PENDING",
+        "tax": "UNKNOWN",
+        "regulatory": "UNKNOWN",
+        "procurement": "PENDING",
+        "funding": "UNKNOWN",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "UNKNOWN",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "UNKNOWN"
+      },
+      "dependencies": [
+        "curriculum authority",
+        "partner review",
+        "simulation packaging"
+      ],
+      "blockers": [
+        "packaging_authority_support_or_review_missing"
+      ],
+      "evidence_notes": "Civic budget/infrastructure simulation and utilities-like career concepts exist; no public works curriculum/product.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-014",
+      "commercial_product_id": "cp_logistics_coordinator_supply_chain_concepts",
+      "canonical_name": "Logistics Coordinator / Supply Chain Concepts",
+      "display_name": "Logistics Coordinator / Supply Chain Concepts",
+      "slug": "logistics-coordinator-supply-chain-concepts",
+      "commercial_family": "LOGISTICS_SUPPLY_CHAIN",
+      "subfamily": "career_concepts",
+      "product_type": "PATHWAY_CONCEPT",
+      "commercial_forms": [
+        "UNKNOWN",
+        "EMPLOYER_SUPPORTED"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "career-pathway fixture data",
+          "source_repository": "SHRV1",
+          "source_paths": [
+            "src/data/career-pathways.json"
+          ],
+          "source_status": "PARTIAL",
+          "source_provenance": "Logistics Coordinator appears as fixture pathway; no freight simulation, employer pipeline, or program package found."
+        }
+      ],
+      "raw_buyer_types": [
+        "logistics employers",
+        "workforce boards",
+        "schools"
+      ],
+      "buyer_types": [
+        "LOGISTICS_EMPLOYER",
+        "WORKFORCE_BOARD",
+        "K12_SCHOOL"
+      ],
+      "selling_entity": "UNKNOWN",
+      "delivery_entity": "UNKNOWN",
+      "readiness": "UNKNOWN",
+      "sellability_status": "NEEDS_REVIEW",
+      "lifecycle_state": "REVIEW",
+      "funding_relationship_status": "POTENTIAL",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "UNKNOWN",
+      "review_gates": {
+        "commercial_readiness": "UNKNOWN",
+        "legal": "PENDING",
+        "tax": "UNKNOWN",
+        "regulatory": "UNKNOWN",
+        "procurement": "UNKNOWN",
+        "funding": "UNKNOWN",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "UNKNOWN",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "UNKNOWN"
+      },
+      "dependencies": [
+        "curriculum",
+        "employer validation",
+        "simulation assets"
+      ],
+      "blockers": [
+        "authority_entity_legal_tax_regulatory_or_funding_review_required"
+      ],
+      "evidence_notes": "Logistics Coordinator appears as fixture pathway; no freight simulation, employer pipeline, or program package found.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-015",
+      "commercial_product_id": "cp_aviation_uas_career_concepts",
+      "canonical_name": "Aviation / UAS Career Concepts",
+      "display_name": "Aviation / UAS Career Concepts",
+      "slug": "aviation-uas-career-concepts",
+      "commercial_family": "AVIATION",
+      "subfamily": "not_found_family",
+      "product_type": "NOT_FOUND",
+      "commercial_forms": [
+        "UNKNOWN"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "UNKNOWN",
+          "source_repository": "SHRV1 + SHF-Next",
+          "source_paths": [
+            "keyword scan: aviation/UAS/pilot/aircraft/airport"
+          ],
+          "source_status": "NOT_FOUND",
+          "source_provenance": "No aviation, UAS, pilot, aircraft maintenance, avionics, or airport operations candidate found."
+        }
+      ],
+      "raw_buyer_types": [
+        "aviation employers",
+        "airports",
+        "schools"
+      ],
+      "buyer_types": [
+        "EMPLOYER",
+        "ENTERPRISE",
+        "K12_SCHOOL"
+      ],
+      "selling_entity": "UNKNOWN",
+      "delivery_entity": "PARTNER",
+      "readiness": "RED",
+      "sellability_status": "NOT_SELLABLE",
+      "lifecycle_state": "DISCOVERED",
+      "funding_relationship_status": "NOT_FOUND",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "UNKNOWN",
+      "review_gates": {
+        "commercial_readiness": "BLOCKED",
+        "legal": "UNKNOWN",
+        "tax": "UNKNOWN",
+        "regulatory": "PENDING",
+        "procurement": "UNKNOWN",
+        "funding": "UNKNOWN",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "BLOCKED",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "PENDING"
+      },
+      "dependencies": [
+        "aviation authority",
+        "partner",
+        "curriculum"
+      ],
+      "blockers": [
+        "not_sellable_from_audit"
+      ],
+      "evidence_notes": "No aviation, UAS, pilot, aircraft maintenance, avionics, or airport operations candidate found.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-016",
+      "commercial_product_id": "cp_creator_media_shnn_concepts",
+      "canonical_name": "Creator / Media / SHNN Concepts",
+      "display_name": "Creator / Media / SHNN Concepts",
+      "slug": "creator-media-shnn-concepts",
+      "commercial_family": "CREATOR_MEDIA_SHNN",
+      "subfamily": "not_found_family",
+      "product_type": "NOT_FOUND",
+      "commercial_forms": [
+        "SPONSORSHIP",
+        "UNKNOWN"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "UNKNOWN",
+          "source_repository": "SHRV1 + SHF-Next",
+          "source_paths": [
+            "keyword scan: podcast/streaming/broadcast/journalism/SHNN"
+          ],
+          "source_status": "NOT_FOUND",
+          "source_provenance": "No SHNN/media studio product, newsroom workflow, or sponsorship inventory found."
+        }
+      ],
+      "raw_buyer_types": [
+        "schools",
+        "youth programs",
+        "sponsors"
+      ],
+      "buyer_types": [
+        "K12_SCHOOL",
+        "YOUTH_PROGRAM",
+        "FOUNDATION",
+        "PHILANTHROPY",
+        "EMPLOYER"
+      ],
+      "selling_entity": "UNKNOWN",
+      "delivery_entity": "UNKNOWN",
+      "readiness": "RED",
+      "sellability_status": "NOT_SELLABLE",
+      "lifecycle_state": "DISCOVERED",
+      "funding_relationship_status": "NOT_FOUND",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "UNKNOWN",
+      "review_gates": {
+        "commercial_readiness": "BLOCKED",
+        "legal": "PENDING",
+        "tax": "UNKNOWN",
+        "regulatory": "UNKNOWN",
+        "procurement": "UNKNOWN",
+        "funding": "UNKNOWN",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "BLOCKED",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "UNKNOWN"
+      },
+      "dependencies": [
+        "program definition",
+        "IP/copyright policy",
+        "media ethics policy"
+      ],
+      "blockers": [
+        "not_sellable_from_audit"
+      ],
+      "evidence_notes": "No SHNN/media studio product, newsroom workflow, or sponsorship inventory found.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-017",
+      "commercial_product_id": "cp_learning_arcade_institutional_license",
+      "canonical_name": "Learning Arcade Institutional License",
+      "display_name": "Learning Arcade Institutional License",
+      "slug": "learning-arcade-institutional-license",
+      "commercial_family": "LEARNING_GAMING",
+      "subfamily": "learning_arcade",
+      "product_type": "SOFTWARE_LICENSE",
+      "commercial_forms": [
+        "PER_INSTITUTION_LICENSE",
+        "SUBSCRIPTION",
+        "PER_STUDENT_LICENSE",
+        "SUPPORT"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "arcade domain",
+          "source_repository": "SHRV1",
+          "source_paths": [
+            "apps/shs-api/src/domain/arcade/",
+            "src/router/ArcadeRoutes.jsx",
+            "src/data/arcade.js"
+          ],
+          "source_status": "FOUND",
+          "source_provenance": "Backend Arcade activity/attempt/result authority exists and preserves mastery boundaries; front-end sample games are not all authoritative."
+        }
+      ],
+      "raw_buyer_types": [
+        "schools",
+        "youth programs",
+        "after-school providers"
+      ],
+      "buyer_types": [
+        "K12_SCHOOL",
+        "YOUTH_PROGRAM",
+        "AFTER_SCHOOL_PROVIDER"
+      ],
+      "selling_entity": "SHS",
+      "delivery_entity": "SHS",
+      "readiness": "YELLOW",
+      "sellability_status": "PILOT",
+      "lifecycle_state": "PILOT_READY",
+      "funding_relationship_status": "POTENTIAL",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "POTENTIAL",
+      "review_gates": {
+        "commercial_readiness": "PENDING",
+        "legal": "PENDING",
+        "tax": "UNKNOWN",
+        "regulatory": "UNKNOWN",
+        "procurement": "UNKNOWN",
+        "funding": "UNKNOWN",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "PENDING",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "UNKNOWN"
+      },
+      "dependencies": [
+        "game catalog authority",
+        "school buyer package",
+        "support/entitlements"
+      ],
+      "blockers": [
+        "controlled_pilot_only",
+        "production_commercial_authority_missing"
+      ],
+      "evidence_notes": "Backend Arcade activity/attempt/result authority exists and preserves mastery boundaries; front-end sample games are not all authoritative.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-018",
+      "commercial_product_id": "cp_classic_arcade_sponsored_tournaments",
+      "canonical_name": "Classic Arcade / Sponsored Tournaments",
+      "display_name": "Classic Arcade / Sponsored Tournaments",
+      "slug": "classic-arcade-sponsored-tournaments",
+      "commercial_family": "LEARNING_GAMING",
+      "subfamily": "classic_arcade",
+      "product_type": "SPONSORSHIP",
+      "commercial_forms": [
+        "SPONSORSHIP",
+        "EVENT_SPONSORSHIP",
+        "UNKNOWN"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "front-end demo/game surfaces",
+          "source_repository": "SHRV1",
+          "source_paths": [
+            "src/pages/arcade/ClassicalArcadeRoom.jsx",
+            "src/data/arcade.js"
+          ],
+          "source_status": "PARTIAL",
+          "source_provenance": "Classic arcade surfaces exist, but commercial tournament/sponsorship structures do not."
+        }
+      ],
+      "raw_buyer_types": [
+        "sponsors",
+        "schools",
+        "youth programs"
+      ],
+      "buyer_types": [
+        "FOUNDATION",
+        "PHILANTHROPY",
+        "EMPLOYER",
+        "K12_SCHOOL",
+        "YOUTH_PROGRAM"
+      ],
+      "selling_entity": "JOINT_STRUCTURE_REVIEW_REQUIRED",
+      "delivery_entity": "UNKNOWN",
+      "readiness": "UNKNOWN",
+      "sellability_status": "NEEDS_REVIEW",
+      "lifecycle_state": "REVIEW",
+      "funding_relationship_status": "SPONSORSHIP",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "POTENTIAL",
+      "review_gates": {
+        "commercial_readiness": "UNKNOWN",
+        "legal": "PENDING",
+        "tax": "PENDING",
+        "regulatory": "UNKNOWN",
+        "procurement": "UNKNOWN",
+        "funding": "UNKNOWN",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "UNKNOWN",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "UNKNOWN"
+      },
+      "dependencies": [
+        "sponsorship policy",
+        "game rights",
+        "event operations"
+      ],
+      "blockers": [
+        "authority_entity_legal_tax_regulatory_or_funding_review_required"
+      ],
+      "evidence_notes": "Classic arcade surfaces exist, but commercial tournament/sponsorship structures do not.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-019",
+      "commercial_product_id": "cp_metaverse_access_license",
+      "canonical_name": "Metaverse Access License",
+      "display_name": "Metaverse Access License",
+      "slug": "metaverse-access-license",
+      "commercial_family": "METAVERSE",
+      "subfamily": "access_license",
+      "product_type": "ACCESS_LICENSE",
+      "commercial_forms": [
+        "PER_INSTITUTION_LICENSE",
+        "SUBSCRIPTION",
+        "ENTERPRISE_CONTRACT"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "metaverse-experience-orchestration",
+          "source_repository": "SHRV1",
+          "source_paths": [
+            "apps/shs-api/src/domain/metaverse/",
+            "src/system/metaverse/",
+            "src/pages/metaverse/"
+          ],
+          "source_status": "FOUND",
+          "source_provenance": "City registry and metaverse runtime exist with explicit authority boundaries; many destinations are registry-only/planned."
+        }
+      ],
+      "raw_buyer_types": [
+        "schools",
+        "districts",
+        "youth programs",
+        "enterprise businesses"
+      ],
+      "buyer_types": [
+        "K12_SCHOOL",
+        "SCHOOL_DISTRICT",
+        "YOUTH_PROGRAM",
+        "ENTERPRISE"
+      ],
+      "selling_entity": "SHS",
+      "delivery_entity": "SHS",
+      "readiness": "YELLOW",
+      "sellability_status": "PILOT",
+      "lifecycle_state": "PILOT_READY",
+      "funding_relationship_status": "INSTITUTIONAL_PURCHASING",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "POTENTIAL",
+      "review_gates": {
+        "commercial_readiness": "PENDING",
+        "legal": "PENDING",
+        "tax": "UNKNOWN",
+        "regulatory": "UNKNOWN",
+        "procurement": "PENDING",
+        "funding": "UNKNOWN",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "PENDING",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "UNKNOWN"
+      },
+      "dependencies": [
+        "entitlement packaging",
+        "support/SLA",
+        "privacy/accessibility review",
+        "content scope"
+      ],
+      "blockers": [
+        "controlled_pilot_only",
+        "production_commercial_authority_missing"
+      ],
+      "evidence_notes": "City registry and metaverse runtime exist with explicit authority boundaries; many destinations are registry-only/planned.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-020",
+      "commercial_product_id": "cp_metaverse_simulation_content_license",
+      "canonical_name": "Metaverse Simulation Content License",
+      "display_name": "Metaverse Simulation Content License",
+      "slug": "metaverse-simulation-content-license",
+      "commercial_family": "METAVERSE",
+      "subfamily": "content_license",
+      "product_type": "CONTENT_LICENSE",
+      "commercial_forms": [
+        "CONTENT_LICENSE",
+        "PER_COHORT_LICENSE",
+        "CUSTOM_DEVELOPMENT"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "metaverse simulation registry",
+          "source_repository": "SHRV1",
+          "source_paths": [
+            "apps/shs-api/src/domain/metaverse/simulations/registry/simulation-registry.ts"
+          ],
+          "source_status": "FOUND",
+          "source_provenance": "10 active simulations, including 4 flagship simulations, exist; completion is evidence-candidate/practice only."
+        }
+      ],
+      "raw_buyer_types": [
+        "schools",
+        "workforce boards",
+        "employers"
+      ],
+      "buyer_types": [
+        "K12_SCHOOL",
+        "WORKFORCE_BOARD",
+        "EMPLOYER"
+      ],
+      "selling_entity": "SHS",
+      "delivery_entity": "SHS",
+      "readiness": "YELLOW",
+      "sellability_status": "PILOT",
+      "lifecycle_state": "PILOT_READY",
+      "funding_relationship_status": "POTENTIAL",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "POTENTIAL",
+      "review_gates": {
+        "commercial_readiness": "PENDING",
+        "legal": "PENDING",
+        "tax": "UNKNOWN",
+        "regulatory": "UNKNOWN",
+        "procurement": "UNKNOWN",
+        "funding": "UNKNOWN",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "PENDING",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "UNKNOWN"
+      },
+      "dependencies": [
+        "simulation packaging",
+        "learning objectives",
+        "evidence boundaries",
+        "support model"
+      ],
+      "blockers": [
+        "controlled_pilot_only",
+        "production_commercial_authority_missing"
+      ],
+      "evidence_notes": "10 active simulations, including 4 flagship simulations, exist; completion is evidence-candidate/practice only.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-021",
+      "commercial_product_id": "cp_metaverse_branded_destination_sponsorship",
+      "canonical_name": "Metaverse Branded Destination / Sponsorship",
+      "display_name": "Metaverse Branded Destination / Sponsorship",
+      "slug": "metaverse-branded-destination-sponsorship",
+      "commercial_family": "METAVERSE",
+      "subfamily": "sponsorship",
+      "product_type": "SPONSORSHIP",
+      "commercial_forms": [
+        "SPONSORSHIP",
+        "CUSTOM_DEVELOPMENT",
+        "ENTERPRISE_CONTRACT"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "metaverse registry / enterprise components",
+          "source_repository": "SHRV1",
+          "source_paths": [
+            "apps/shs-api/src/domain/metaverse/registry/city-registry.ts",
+            "src/components/metaverse/enterprise/"
+          ],
+          "source_status": "PARTIAL",
+          "source_provenance": "Enterprise/metaverse components exist; no sponsorship authority or tax treatment exists."
+        }
+      ],
+      "raw_buyer_types": [
+        "employers",
+        "foundations",
+        "enterprise businesses"
+      ],
+      "buyer_types": [
+        "EMPLOYER",
+        "FOUNDATION",
+        "ENTERPRISE"
+      ],
+      "selling_entity": "REQUIRES_LEGAL_REVIEW",
+      "delivery_entity": "JOINT_STRUCTURE_REVIEW_REQUIRED",
+      "readiness": "UNKNOWN",
+      "sellability_status": "NEEDS_REVIEW",
+      "lifecycle_state": "REVIEW",
+      "funding_relationship_status": "SPONSORSHIP",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "POTENTIAL",
+      "review_gates": {
+        "commercial_readiness": "UNKNOWN",
+        "legal": "PENDING",
+        "tax": "PENDING",
+        "regulatory": "UNKNOWN",
+        "procurement": "UNKNOWN",
+        "funding": "UNKNOWN",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "UNKNOWN",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "UNKNOWN"
+      },
+      "dependencies": [
+        "sponsorship policy",
+        "brand safety",
+        "SHF/SHS entity decision"
+      ],
+      "blockers": [
+        "authority_entity_legal_tax_regulatory_or_funding_review_required"
+      ],
+      "evidence_notes": "Enterprise/metaverse components exist; no sponsorship authority or tax treatment exists.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-022",
+      "commercial_product_id": "cp_shf_civic_civic_learning_simulations",
+      "canonical_name": "SHF Civic / Civic Learning Simulations",
+      "display_name": "SHF Civic / Civic Learning Simulations",
+      "slug": "shf-civic-civic-learning-simulations",
+      "commercial_family": "CIVIC_FINANCIAL_CAPABILITY",
+      "subfamily": "civic_simulation",
+      "product_type": "CONTENT_LICENSE",
+      "commercial_forms": [
+        "PER_COHORT_LICENSE",
+        "GRANT_SUPPORTED",
+        "SPONSORSHIP"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "shf-civic / metaverse-experience-orchestration",
+          "source_repository": "SHRV1",
+          "source_paths": [
+            "apps/shs-api/src/domain/shf-civic/",
+            "src/router/CivicRoutes.jsx",
+            "apps/shs-api/src/domain/metaverse/simulations/registry/simulation-registry.ts"
+          ],
+          "source_status": "FOUND",
+          "source_provenance": "Civic routes and bounded budget simulation exist; no real government authority is transferred."
+        }
+      ],
+      "raw_buyer_types": [
+        "schools",
+        "municipalities",
+        "libraries",
+        "youth programs"
+      ],
+      "buyer_types": [
+        "K12_SCHOOL",
+        "MUNICIPALITY",
+        "LIBRARY",
+        "YOUTH_PROGRAM"
+      ],
+      "selling_entity": "JOINT_STRUCTURE_REVIEW_REQUIRED",
+      "delivery_entity": "SHF",
+      "readiness": "YELLOW",
+      "sellability_status": "PILOT",
+      "lifecycle_state": "PILOT_READY",
+      "funding_relationship_status": "POTENTIAL",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "POTENTIAL",
+      "review_gates": {
+        "commercial_readiness": "PENDING",
+        "legal": "PENDING",
+        "tax": "UNKNOWN",
+        "regulatory": "UNKNOWN",
+        "procurement": "PENDING",
+        "funding": "UNKNOWN",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "PENDING",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "UNKNOWN"
+      },
+      "dependencies": [
+        "civic authority scope",
+        "curriculum package",
+        "buyer mapping"
+      ],
+      "blockers": [
+        "controlled_pilot_only",
+        "production_commercial_authority_missing"
+      ],
+      "evidence_notes": "Civic routes and bounded budget simulation exist; no real government authority is transferred.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-023",
+      "commercial_product_id": "cp_financial_capability_treasury_debt_simulations",
+      "canonical_name": "Financial Capability / Treasury / Debt Simulations",
+      "display_name": "Financial Capability / Treasury / Debt Simulations",
+      "slug": "financial-capability-treasury-debt-simulations",
+      "commercial_family": "CIVIC_FINANCIAL_CAPABILITY",
+      "subfamily": "financial_capability",
+      "product_type": "LEARNING_PACKAGE",
+      "commercial_forms": [
+        "SPONSORSHIP",
+        "PER_COHORT_LICENSE",
+        "GRANT_SUPPORTED"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "treasury/debt/credit/civic surfaces",
+          "source_repository": "SHRV1",
+          "source_paths": [
+            "src/router/TreasuryRoutes.jsx",
+            "src/router/DebtRoutes.jsx",
+            "src/router/CreditRoutes.jsx",
+            "src/content/civic-lessons.js"
+          ],
+          "source_status": "PARTIAL",
+          "source_provenance": "Treasury, Debt, Credit and Civic surfaces exist; commercial learning package not defined."
+        }
+      ],
+      "raw_buyer_types": [
+        "schools",
+        "banks",
+        "credit unions",
+        "foundations",
+        "libraries"
+      ],
+      "buyer_types": [
+        "K12_SCHOOL",
+        "BANK",
+        "CREDIT_UNION",
+        "FOUNDATION",
+        "LIBRARY"
+      ],
+      "selling_entity": "JOINT_STRUCTURE_REVIEW_REQUIRED",
+      "delivery_entity": "SHF",
+      "readiness": "UNKNOWN",
+      "sellability_status": "DEVELOP",
+      "lifecycle_state": "DEFINED",
+      "funding_relationship_status": "SPONSORSHIP",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "POTENTIAL",
+      "review_gates": {
+        "commercial_readiness": "UNKNOWN",
+        "legal": "PENDING",
+        "tax": "PENDING",
+        "regulatory": "UNKNOWN",
+        "procurement": "UNKNOWN",
+        "funding": "UNKNOWN",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "UNKNOWN",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "UNKNOWN"
+      },
+      "dependencies": [
+        "canonical curriculum records",
+        "financial education review",
+        "Treasury/Debt authority boundaries"
+      ],
+      "blockers": [
+        "packaging_authority_support_or_review_missing"
+      ],
+      "evidence_notes": "Treasury, Debt, Credit and Civic surfaces exist; commercial learning package not defined.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-024",
+      "commercial_product_id": "cp_service_catalog_organization_entitlements",
+      "canonical_name": "Service Catalog / Organization Entitlements",
+      "display_name": "Service Catalog / Organization Entitlements",
+      "slug": "service-catalog-organization-entitlements",
+      "commercial_family": "INSTITUTIONAL_TECH_SHS",
+      "subfamily": "entitlement_platform",
+      "product_type": "SOFTWARE_LICENSE",
+      "commercial_forms": [
+        "SUBSCRIPTION",
+        "PER_INSTITUTION_LICENSE",
+        "SUPPORT",
+        "IMPLEMENTATION_FEE"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "service-catalog and organization-service-entitlement domains",
+          "source_repository": "SHRV1",
+          "source_paths": [
+            "apps/shs-api/migrations/084_service_catalog_entitlements.sql",
+            "apps/shs-api/src/domain/service-catalog/"
+          ],
+          "source_status": "FOUND",
+          "source_provenance": "Active canonical services exist: curriculum, reporting, project_studio, truth_evidence, career_workforce; they are services, not commercial products."
+        }
+      ],
+      "raw_buyer_types": [
+        "institutions",
+        "network organizations",
+        "enterprise businesses"
+      ],
+      "buyer_types": [
+        "ENTERPRISE",
+        "COMMUNITY_ORGANIZATION"
+      ],
+      "selling_entity": "SHS",
+      "delivery_entity": "SHS",
+      "readiness": "YELLOW",
+      "sellability_status": "PILOT",
+      "lifecycle_state": "PILOT_READY",
+      "funding_relationship_status": "INSTITUTIONAL_PURCHASING",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "POTENTIAL",
+      "review_gates": {
+        "commercial_readiness": "PENDING",
+        "legal": "PENDING",
+        "tax": "UNKNOWN",
+        "regulatory": "UNKNOWN",
+        "procurement": "PENDING",
+        "funding": "UNKNOWN",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "PENDING",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "UNKNOWN"
+      },
+      "dependencies": [
+        "commercial product registry",
+        "pricing authority",
+        "contract terms",
+        "support/SLA"
+      ],
+      "blockers": [
+        "controlled_pilot_only",
+        "production_commercial_authority_missing"
+      ],
+      "evidence_notes": "Active canonical services exist: curriculum, reporting, project_studio, truth_evidence, career_workforce; they are services, not commercial products.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-025",
+      "commercial_product_id": "cp_studio_student_project_workspace",
+      "canonical_name": "Studio / Student Project Workspace",
+      "display_name": "Studio / Student Project Workspace",
+      "slug": "studio-student-project-workspace",
+      "commercial_family": "INSTITUTIONAL_TECH_SHS",
+      "subfamily": "studio_platform",
+      "product_type": "SOFTWARE_LICENSE",
+      "commercial_forms": [
+        "SUBSCRIPTION",
+        "PER_INSTITUTION_LICENSE",
+        "IMPLEMENTATION_FEE",
+        "SUPPORT"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "studio domain",
+          "source_repository": "SHRV1",
+          "source_paths": [
+            "apps/shs-api/src/domain/studio/",
+            "src/router/CurriculumRoutes.jsx",
+            "docs/STUDIO_V1_PLUS_PHASE_8_CREDENTIAL_INTEGRATION_V1.md"
+          ],
+          "source_status": "FOUND",
+          "source_provenance": "Studio project, team, release, credential/evidence integrations exist; no commercial product record."
+        }
+      ],
+      "raw_buyer_types": [
+        "schools",
+        "training providers",
+        "enterprise businesses"
+      ],
+      "buyer_types": [
+        "K12_SCHOOL",
+        "TRAINING_PROVIDER",
+        "ENTERPRISE"
+      ],
+      "selling_entity": "SHS",
+      "delivery_entity": "SHS",
+      "readiness": "YELLOW",
+      "sellability_status": "PILOT",
+      "lifecycle_state": "PILOT_READY",
+      "funding_relationship_status": "INSTITUTIONAL_PURCHASING",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "POTENTIAL",
+      "review_gates": {
+        "commercial_readiness": "PENDING",
+        "legal": "PENDING",
+        "tax": "UNKNOWN",
+        "regulatory": "UNKNOWN",
+        "procurement": "UNKNOWN",
+        "funding": "UNKNOWN",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "PENDING",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "UNKNOWN"
+      },
+      "dependencies": [
+        "commercial packaging",
+        "support model",
+        "privacy/terms",
+        "pricing"
+      ],
+      "blockers": [
+        "controlled_pilot_only",
+        "production_commercial_authority_missing"
+      ],
+      "evidence_notes": "Studio project, team, release, credential/evidence integrations exist; no commercial product record.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-026",
+      "commercial_product_id": "cp_agent_fabric_governed_ai_workforce_package",
+      "canonical_name": "Agent Fabric / Governed AI Workforce Package",
+      "display_name": "Agent Fabric / Governed AI Workforce Package",
+      "slug": "agent-fabric-governed-ai-workforce-package",
+      "commercial_family": "INSTITUTIONAL_TECH_SHS",
+      "subfamily": "ai_agent_package",
+      "product_type": "AI_AGENT_PACKAGE",
+      "commercial_forms": [
+        "ASSESSMENT",
+        "IMPLEMENTATION_FEE",
+        "MANAGED_SERVICE",
+        "SUPPORT",
+        "CUSTOM_DEVELOPMENT"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "agent fabric / governance docs",
+          "source_repository": "SHRV1",
+          "source_paths": [
+            "docs/AGENT_CANONICAL_WORKFORCE_CAPABILITY_MATRIX_V1.md",
+            "docs/AGENT_FABRIC_REALITY_SCAN_V1.md",
+            "src/data/agents/",
+            "infra/azure/agent-fabric.tf"
+          ],
+          "source_status": "FOUND",
+          "source_provenance": "Agent Fabric docs, UI/data, and Azure infrastructure exist; commercial package not defined."
+        }
+      ],
+      "raw_buyer_types": [
+        "enterprise businesses",
+        "government agencies",
+        "institutions"
+      ],
+      "buyer_types": [
+        "ENTERPRISE",
+        "STATE_AGENCY"
+      ],
+      "selling_entity": "SHS",
+      "delivery_entity": "SHS",
+      "readiness": "UNKNOWN",
+      "sellability_status": "DEVELOP",
+      "lifecycle_state": "DEFINED",
+      "funding_relationship_status": "COMMERCIAL_SHS_REVENUE",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "POTENTIAL",
+      "review_gates": {
+        "commercial_readiness": "UNKNOWN",
+        "legal": "PENDING",
+        "tax": "UNKNOWN",
+        "regulatory": "UNKNOWN",
+        "procurement": "PENDING",
+        "funding": "UNKNOWN",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "PENDING",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "UNKNOWN"
+      },
+      "dependencies": [
+        "production scope",
+        "security review",
+        "support/SLA",
+        "pricing"
+      ],
+      "blockers": [
+        "packaging_authority_support_or_review_missing"
+      ],
+      "evidence_notes": "Agent Fabric docs, UI/data, and Azure infrastructure exist; commercial package not defined.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-027",
+      "commercial_product_id": "cp_operational_ai_readiness_assessment",
+      "canonical_name": "Operational / AI Readiness Assessment",
+      "display_name": "Operational / AI Readiness Assessment",
+      "slug": "operational-ai-readiness-assessment",
+      "commercial_family": "INSTITUTIONAL_TECH_SHS",
+      "subfamily": "assessment",
+      "product_type": "ASSESSMENT",
+      "commercial_forms": [
+        "ASSESSMENT",
+        "PROFESSIONAL_SERVICE",
+        "IMPLEMENTATION_FEE"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "operations/readiness surfaces",
+          "source_repository": "SHRV1 + SHF-Next",
+          "source_paths": [
+            "apps/shs-api/src/observability/pr6-operational-readiness.js",
+            "/Users/mikeslate/shf-next/src/data/opsReadiness.ts",
+            "/Users/mikeslate/shf-next/src/pages/ops/OpsCommandOverview.tsx"
+          ],
+          "source_status": "PARTIAL",
+          "source_provenance": "Operational readiness surfaces exist; no canonical assessment product found."
+        }
+      ],
+      "raw_buyer_types": [
+        "institutions",
+        "enterprise businesses",
+        "government agencies"
+      ],
+      "buyer_types": [
+        "ENTERPRISE",
+        "STATE_AGENCY"
+      ],
+      "selling_entity": "SHS",
+      "delivery_entity": "SHS",
+      "readiness": "UNKNOWN",
+      "sellability_status": "DEVELOP",
+      "lifecycle_state": "DEFINED",
+      "funding_relationship_status": "COMMERCIAL_SHS_REVENUE",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "POTENTIAL",
+      "review_gates": {
+        "commercial_readiness": "UNKNOWN",
+        "legal": "PENDING",
+        "tax": "UNKNOWN",
+        "regulatory": "UNKNOWN",
+        "procurement": "UNKNOWN",
+        "funding": "UNKNOWN",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "UNKNOWN",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "UNKNOWN"
+      },
+      "dependencies": [
+        "assessment instrument",
+        "scoring authority",
+        "deliverable template",
+        "pricing"
+      ],
+      "blockers": [
+        "packaging_authority_support_or_review_missing"
+      ],
+      "evidence_notes": "Operational readiness surfaces exist; no canonical assessment product found.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-028",
+      "commercial_product_id": "cp_website_studio_templates_web_builder",
+      "canonical_name": "Website Studio Templates / Web Builder",
+      "display_name": "Website Studio Templates / Web Builder",
+      "slug": "website-studio-templates-web-builder",
+      "commercial_family": "INSTITUTIONAL_TECH_SHS",
+      "subfamily": "web_builder",
+      "product_type": "SOFTWARE_LICENSE",
+      "commercial_forms": [
+        "SUBSCRIPTION",
+        "CUSTOM_DEVELOPMENT",
+        "IMPLEMENTATION_FEE",
+        "SUPPORT"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "SHF-Next studio template surfaces",
+          "source_repository": "SHF-Next",
+          "source_paths": [
+            "/Users/mikeslate/shf-next/src/data/websiteStudioTemplateData.ts",
+            "/Users/mikeslate/shf-next/src/pages/studio/WebsiteStudioTemplates.tsx"
+          ],
+          "source_status": "PARTIAL",
+          "source_provenance": "Template browser data/pages exist in SHF-Next; commercial authority and production delivery not established."
+        }
+      ],
+      "raw_buyer_types": [
+        "small businesses",
+        "nonprofits",
+        "community organizations",
+        "schools"
+      ],
+      "buyer_types": [
+        "ENTERPRISE",
+        "NONPROFIT",
+        "COMMUNITY_ORGANIZATION",
+        "K12_SCHOOL"
+      ],
+      "selling_entity": "SHS",
+      "delivery_entity": "SHS",
+      "readiness": "UNKNOWN",
+      "sellability_status": "NEEDS_REVIEW",
+      "lifecycle_state": "REVIEW",
+      "funding_relationship_status": "COMMERCIAL_SHS_REVENUE",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "POTENTIAL",
+      "review_gates": {
+        "commercial_readiness": "UNKNOWN",
+        "legal": "PENDING",
+        "tax": "UNKNOWN",
+        "regulatory": "UNKNOWN",
+        "procurement": "UNKNOWN",
+        "funding": "UNKNOWN",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "UNKNOWN",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "UNKNOWN"
+      },
+      "dependencies": [
+        "production hosting path",
+        "template rights",
+        "support model",
+        "pricing"
+      ],
+      "blockers": [
+        "authority_entity_legal_tax_regulatory_or_funding_review_required"
+      ],
+      "evidence_notes": "Template browser data/pages exist in SHF-Next; commercial authority and production delivery not established.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-029",
+      "commercial_product_id": "cp_civicsure_government_program_assurance",
+      "canonical_name": "CivicSure / Government Program Assurance",
+      "display_name": "CivicSure / Government Program Assurance",
+      "slug": "civicsure-government-program-assurance",
+      "commercial_family": "ASSURANCE_VERIFICATION_REPORTING",
+      "subfamily": "assurance_platform",
+      "product_type": "SOFTWARE_LICENSE",
+      "commercial_forms": [
+        "SUBSCRIPTION",
+        "ENTERPRISE_CONTRACT",
+        "IMPLEMENTATION_FEE",
+        "SUPPORT"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "government-assurance domain",
+          "source_repository": "SHRV1",
+          "source_paths": [
+            "apps/shs-api/src/domain/government-assurance/",
+            "apps/shf-web/src/services/government-assurance-client.js",
+            "apps/shf-web/src/styles/civicsure*.css"
+          ],
+          "source_status": "FOUND",
+          "source_provenance": "Government assurance, claim verification, funding lineage, source scope, reconciliation, monitoring, pilot reporting domains exist."
+        }
+      ],
+      "raw_buyer_types": [
+        "municipalities",
+        "counties",
+        "state agencies",
+        "nonprofits",
+        "funders"
+      ],
+      "buyer_types": [
+        "MUNICIPALITY",
+        "COUNTY",
+        "STATE_AGENCY",
+        "NONPROFIT",
+        "FOUNDATION",
+        "PHILANTHROPY"
+      ],
+      "selling_entity": "SHS",
+      "delivery_entity": "SHS",
+      "readiness": "YELLOW",
+      "sellability_status": "PILOT",
+      "lifecycle_state": "PILOT_READY",
+      "funding_relationship_status": "INSTITUTIONAL_PURCHASING",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "POTENTIAL",
+      "review_gates": {
+        "commercial_readiness": "PENDING",
+        "legal": "PENDING",
+        "tax": "UNKNOWN",
+        "regulatory": "UNKNOWN",
+        "procurement": "PENDING",
+        "funding": "UNKNOWN",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "PENDING",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "UNKNOWN"
+      },
+      "dependencies": [
+        "buyer scope",
+        "contracting",
+        "verification authority boundaries",
+        "pricing"
+      ],
+      "blockers": [
+        "controlled_pilot_only",
+        "production_commercial_authority_missing"
+      ],
+      "evidence_notes": "Government assurance, claim verification, funding lineage, source scope, reconciliation, monitoring, pilot reporting domains exist.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-030",
+      "commercial_product_id": "cp_trusted_reporting_impact_reporting_package",
+      "canonical_name": "Trusted Reporting / Impact Reporting Package",
+      "display_name": "Trusted Reporting / Impact Reporting Package",
+      "slug": "trusted-reporting-impact-reporting-package",
+      "commercial_family": "ASSURANCE_VERIFICATION_REPORTING",
+      "subfamily": "reporting_package",
+      "product_type": "REPORTING_PACKAGE",
+      "commercial_forms": [
+        "SUBSCRIPTION",
+        "PROFESSIONAL_SERVICE",
+        "MANAGED_SERVICE",
+        "SUPPORT"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "reporting domain",
+          "source_repository": "SHRV1",
+          "source_paths": [
+            "apps/shs-api/src/domain/reporting/",
+            "docs/SHF_TRUSTED_REPORTING_TARGET_ARCHITECTURE.md",
+            "docs/SHF_REPORTING_SURFACE_REGISTRY.v1.json"
+          ],
+          "source_status": "FOUND",
+          "source_provenance": "Reporting services and trusted reporting docs exist; Store catalog's Advanced Impact Reporting card is seed/demo only."
+        }
+      ],
+      "raw_buyer_types": [
+        "nonprofits",
+        "funders",
+        "government agencies",
+        "institutions"
+      ],
+      "buyer_types": [
+        "NONPROFIT",
+        "FOUNDATION",
+        "PHILANTHROPY",
+        "STATE_AGENCY",
+        "ENTERPRISE"
+      ],
+      "selling_entity": "SHS",
+      "delivery_entity": "SHS",
+      "readiness": "UNKNOWN",
+      "sellability_status": "DEVELOP",
+      "lifecycle_state": "DEFINED",
+      "funding_relationship_status": "POTENTIAL",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "POTENTIAL",
+      "review_gates": {
+        "commercial_readiness": "UNKNOWN",
+        "legal": "PENDING",
+        "tax": "UNKNOWN",
+        "regulatory": "UNKNOWN",
+        "procurement": "PENDING",
+        "funding": "UNKNOWN",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "PENDING",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "UNKNOWN"
+      },
+      "dependencies": [
+        "report authority",
+        "buyer-specific templates",
+        "support/SLA",
+        "pricing"
+      ],
+      "blockers": [
+        "packaging_authority_support_or_review_missing"
+      ],
+      "evidence_notes": "Reporting services and trusted reporting docs exist; Store catalog's Advanced Impact Reporting card is seed/demo only.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-031",
+      "commercial_product_id": "cp_evidence_engine_verification_readiness_package",
+      "canonical_name": "Evidence Engine / Verification Readiness Package",
+      "display_name": "Evidence Engine / Verification Readiness Package",
+      "slug": "evidence-engine-verification-readiness-package",
+      "commercial_family": "ASSURANCE_VERIFICATION_REPORTING",
+      "subfamily": "evidence_verification",
+      "product_type": "PROFESSIONAL_SERVICE",
+      "commercial_forms": [
+        "ASSESSMENT",
+        "PROFESSIONAL_SERVICE",
+        "MANAGED_SERVICE"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "verified-evidence / data-verification domains",
+          "source_repository": "SHRV1",
+          "source_paths": [
+            "docs/EVIDENCE_PACKAGE_LAYER_V1.md",
+            "docs/DATA_VERIFICATION_LAYER_V1.md",
+            "apps/shs-api/src/domain/verified-evidence/"
+          ],
+          "source_status": "FOUND",
+          "source_provenance": "Evidence Package and Data Verification layers exist and explicitly do not become Truth Spine."
+        }
+      ],
+      "raw_buyer_types": [
+        "funders",
+        "nonprofits",
+        "government agencies",
+        "institutions"
+      ],
+      "buyer_types": [
+        "FOUNDATION",
+        "PHILANTHROPY",
+        "NONPROFIT",
+        "STATE_AGENCY",
+        "ENTERPRISE"
+      ],
+      "selling_entity": "SHS",
+      "delivery_entity": "SHS",
+      "readiness": "UNKNOWN",
+      "sellability_status": "DEVELOP",
+      "lifecycle_state": "DEFINED",
+      "funding_relationship_status": "POTENTIAL",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "UNKNOWN",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "POTENTIAL",
+      "review_gates": {
+        "commercial_readiness": "UNKNOWN",
+        "legal": "PENDING",
+        "tax": "UNKNOWN",
+        "regulatory": "UNKNOWN",
+        "procurement": "PENDING",
+        "funding": "UNKNOWN",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "PENDING",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "UNKNOWN"
+      },
+      "dependencies": [
+        "service definition",
+        "authority-safe workflow",
+        "pricing"
+      ],
+      "blockers": [
+        "packaging_authority_support_or_review_missing"
+      ],
+      "evidence_notes": "Evidence Package and Data Verification layers exist and explicitly do not become Truth Spine.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    },
+    {
+      "audit_candidate_id": "cc-032",
+      "commercial_product_id": "cp_shf_v1_community_programs",
+      "canonical_name": "SHF V1 Community Programs",
+      "display_name": "SHF V1 Community Programs",
+      "slug": "shf-v1-community-programs",
+      "commercial_family": "CORE_EDUCATION",
+      "subfamily": "foundation_programs",
+      "product_type": "PROGRAM_CONCEPTS",
+      "commercial_forms": [
+        "GRANT_SUPPORTED",
+        "SPONSORSHIP",
+        "UNKNOWN"
+      ],
+      "source_authorities": [
+        {
+          "source_authority_type": "SHF V1 audit docs",
+          "source_repository": "SHF-Next",
+          "source_paths": [
+            "/Users/mikeslate/shf-next/docs/shf-v1-audit/SHF_V1_MASTER_LAYER_AND_PROGRAM_INVENTORY.json",
+            "/Users/mikeslate/shf-next/docs/shf-v1-audit/SHF_V1_EVIDENCE_AND_COMPLETION_MATRIX.md"
+          ],
+          "source_status": "PARTIAL",
+          "source_provenance": "SHF-Next audit says mandatory SHF V1 layers/programs do not yet form a complete evidence-backed, verified, reportable, fundable delivery chain."
+        }
+      ],
+      "raw_buyer_types": [
+        "nonprofits",
+        "community organizations",
+        "funders"
+      ],
+      "buyer_types": [
+        "NONPROFIT",
+        "COMMUNITY_ORGANIZATION",
+        "FOUNDATION",
+        "PHILANTHROPY"
+      ],
+      "selling_entity": "SHF",
+      "delivery_entity": "SHF",
+      "readiness": "RED",
+      "sellability_status": "NOT_SELLABLE",
+      "lifecycle_state": "DISCOVERED",
+      "funding_relationship_status": "POTENTIAL",
+      "pricing_status": "NOT_DEFINED",
+      "margin_status": "UNKNOWN",
+      "commission_eligible_status": "NOT_ELIGIBLE",
+      "renewal_model": "UNKNOWN",
+      "expansion_status": "UNKNOWN",
+      "review_gates": {
+        "commercial_readiness": "BLOCKED",
+        "legal": "PENDING",
+        "tax": "PENDING",
+        "regulatory": "UNKNOWN",
+        "procurement": "UNKNOWN",
+        "funding": "PENDING",
+        "delivery_capacity": "UNKNOWN",
+        "evidence_readiness": "UNKNOWN",
+        "support_readiness": "UNKNOWN",
+        "pricing_readiness": "UNKNOWN",
+        "margin_readiness": "UNKNOWN",
+        "entitlement_readiness": "UNKNOWN",
+        "partner_readiness": "UNKNOWN"
+      },
+      "dependencies": [
+        "operating model",
+        "evidence",
+        "participant/consent",
+        "funding model"
+      ],
+      "blockers": [
+        "not_sellable_from_audit"
+      ],
+      "evidence_notes": "SHF-Next audit says mandatory SHF V1 layers/programs do not yet form a complete evidence-backed, verified, reportable, fundable delivery chain.",
+      "design_mapping_note": "Design validation only; not production seed data and not a sellability upgrade."
+    }
+  ]
+}

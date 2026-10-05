@@ -1,0 +1,70 @@
+{
+  "design_id": "SHU-COMMERCIAL-PRODUCT-REGISTRY-DESIGN-2",
+  "readiness_states": {
+    "RED": {
+      "meaning": "Do not sell; missing, blocked, not found, concept-only, or materially unsafe for commercialization.",
+      "sellability_defaults": ["NOT_SELLABLE"],
+      "promotion_requires": ["source_authority", "blocker_resolution", "review_gate_evidence"]
+    },
+    "YELLOW": {
+      "meaning": "Controlled pilot only; implementation evidence exists but production commercial authority is incomplete.",
+      "sellability_defaults": ["PILOT"],
+      "promotion_requires": ["pilot_scope", "source_authority", "legal_entity_review", "support_model", "pricing_path"]
+    },
+    "GREEN": {
+      "meaning": "Production sellable when required product, source, legal/entity, pricing, support, entitlement, delivery, and evidence controls are approved.",
+      "sellability_defaults": ["SELL_NOW"],
+      "promotion_requires": ["approved_required_gates", "active_or_approved_pricing", "current_source_verification"]
+    },
+    "BLUE": {
+      "meaning": "Strategic or enterprise ready; production sellable plus enterprise support, governance, renewal, expansion, reporting, and scale controls.",
+      "sellability_defaults": ["SELL_NOW"],
+      "promotion_requires": ["green_requirements", "enterprise_support", "scale_controls", "renewal_expansion_controls"]
+    },
+    "UNKNOWN": {
+      "meaning": "Insufficient evidence to determine readiness.",
+      "sellability_defaults": ["DEVELOP", "NEEDS_REVIEW"],
+      "promotion_requires": ["evidence_discovery", "source_authority_assignment"]
+    }
+  },
+  "sellability_states": {
+    "SELL_NOW": "Sales may sell under approved commercial controls.",
+    "PILOT": "Controlled pilot only; no broad sales.",
+    "DEVELOP": "Legitimate candidate requiring packaging, authority, support, review, or governance work.",
+    "NOT_SELLABLE": "Should not be sold; may exist as guard record.",
+    "NEEDS_REVIEW": "Potential exists, but entity, legal, tax, regulatory, funding, or authority review blocks classification."
+  },
+  "review_gate_states": ["NOT_REQUIRED", "PENDING", "APPROVED", "BLOCKED", "STALE", "UNKNOWN"],
+  "pricing_statuses": ["NOT_DEFINED", "DRAFT", "UNDER_REVIEW", "APPROVED", "ACTIVE", "EXPIRED", "BLOCKED"],
+  "lifecycle": [
+    "DISCOVERED",
+    "DEFINED",
+    "REVIEW",
+    "PILOT_READY",
+    "PILOT_ACTIVE",
+    "SALES_READY",
+    "ACTIVE",
+    "SUSPENDED",
+    "SUNSET",
+    "RETIRED"
+  ],
+  "lifecycle_transitions": [
+    { "from": "DISCOVERED", "to": "DEFINED", "requires": ["canonical_identity", "initial_source_reference"] },
+    { "from": "DEFINED", "to": "REVIEW", "requires": ["review_scope"] },
+    { "from": "REVIEW", "to": "PILOT_READY", "requires": ["pilot_authority", "required_pilot_gates"] },
+    { "from": "PILOT_READY", "to": "PILOT_ACTIVE", "requires": ["pilot_start_authority"] },
+    { "from": "PILOT_ACTIVE", "to": "SALES_READY", "requires": ["pilot_evidence", "production_gate_review"] },
+    { "from": "SALES_READY", "to": "ACTIVE", "requires": ["sellability_approval", "pricing_reference", "support_and_entitlement_controls"] },
+    { "from": "ACTIVE", "to": "SUSPENDED", "requires": ["blocker_or_stale_authority"] },
+    { "from": "SUSPENDED", "to": "ACTIVE", "requires": ["blocker_resolution", "fresh_approval"] },
+    { "from": "ACTIVE", "to": "SUNSET", "requires": ["sunset_approval", "customer_obligation_plan"] },
+    { "from": "SUNSET", "to": "RETIRED", "requires": ["retirement_approval", "archive_provenance"] }
+  ],
+  "hard_rules": [
+    "No manual UI toggle is sufficient for readiness promotion.",
+    "No gate may be marked APPROVED without authority.",
+    "Funding compatibility is not eligibility.",
+    "Recruiting alone is not product revenue or commission.",
+    "Solution Builder must not recommend blocked or unsellable products."
+  ]
+}

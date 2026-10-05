@@ -1,0 +1,45 @@
+{
+  "design_id": "SHU-COMMERCIAL-PRODUCT-REGISTRY-DESIGN-2",
+  "relationship_record": {
+    "required_fields": [
+      "relationship_id",
+      "from_commercial_product_id",
+      "to_commercial_product_id",
+      "relationship_type",
+      "direction",
+      "cardinality",
+      "required_status",
+      "authority_reference",
+      "status"
+    ],
+    "field_notes": {
+      "from_commercial_product_id": "Source product for the directed relationship.",
+      "to_commercial_product_id": "Target product for the directed relationship.",
+      "authority_reference": "Required for operational use; recommendation-only relationships may remain REVIEW_REQUIRED."
+    }
+  },
+  "relationship_types": {
+    "STANDALONE_PRODUCT": { "direction": "self", "cycle_allowed": false },
+    "BASE_PRODUCT": { "direction": "base_to_dependent", "cycle_allowed": false },
+    "ADD_ON": { "direction": "add_on_to_base", "cycle_allowed": false },
+    "BUNDLE_COMPONENT": { "direction": "bundle_to_component", "cycle_allowed": false },
+    "PREREQUISITE": { "direction": "dependent_to_required", "cycle_allowed": false },
+    "OPTIONAL_MODULE": { "direction": "base_to_optional_module", "cycle_allowed": false },
+    "UPSELL": { "direction": "starting_product_to_target", "cycle_allowed": true },
+    "CROSS_SELL": { "direction": "starting_product_to_target", "cycle_allowed": true },
+    "RENEWAL": { "direction": "original_to_renewal", "cycle_allowed": false },
+    "EXPANSION": { "direction": "original_to_expansion", "cycle_allowed": true },
+    "SPONSORSHIP_ASSOCIATION": { "direction": "product_to_sponsorship", "cycle_allowed": true },
+    "PARTNER_REQUIRED": { "direction": "product_to_partner_dependency", "cycle_allowed": false },
+    "FUNDING_SUPPORTED": { "direction": "product_to_funding_reference", "cycle_allowed": true },
+    "REPLACES": { "direction": "replacement_to_replaced", "cycle_allowed": false },
+    "SUPERSEDES": { "direction": "successor_to_predecessor", "cycle_allowed": false }
+  },
+  "cardinality": ["ONE_TO_ONE", "ONE_TO_MANY", "MANY_TO_ONE", "MANY_TO_MANY"],
+  "required_statuses": ["REQUIRED", "OPTIONAL", "REVIEW_REQUIRED", "BLOCKED", "UNKNOWN"],
+  "status_values": ["DRAFT", "ACTIVE", "STALE", "RETIRED", "BLOCKED"],
+  "cycle_controls": {
+    "acyclic_required_for": ["PREREQUISITE", "REPLACES", "SUPERSEDES", "ADD_ON", "BUNDLE_COMPONENT"],
+    "recommendation_edges_do_not_imply": ["entitlement", "sellability", "funding_eligibility", "pricing", "commission"]
+  }
+}

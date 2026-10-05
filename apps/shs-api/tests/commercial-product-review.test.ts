@@ -85,3 +85,12 @@ test("required authority and source-gap matrices exist and builder has no databa
   const builder = await readFile(path.join(repoRoot, "apps/shs-api/scripts/build-commercial-product-review-manifest.mjs"), "utf8");
   assert.doesNotMatch(builder, /DATABASE_URL|new Pool|INSERT INTO|\.query\(/);
 });
+
+test("4C adds no API route, runtime seed, migration seed, or production-onboarding execution path", async () => {
+  const migration = await readFile(path.join(repoRoot, "apps/shs-api/migrations/155_commercial_product_human_review_history.sql"), "utf8");
+  const service = await readFile(path.join(repoRoot, "apps/shs-api/src/domain/commercial-product-registry/review/commercial-product-review-service.ts"), "utf8");
+  const router = await readFile(path.join(repoRoot, "apps/shs-api/src/api/router.ts"), "utf8");
+  assert.doesNotMatch(migration, /INSERT\s+INTO\s+commercial_products|INSERT\s+INTO\s+commercial_product_review_decisions|INSERT\s+INTO\s+commercial_product_source_resolutions/i);
+  assert.doesNotMatch(service, /onboard|createProduct|updateReadiness|updateSellability/i);
+  assert.doesNotMatch(router, /commercial-product-review|review-decisions|source-resolutions/i);
+});

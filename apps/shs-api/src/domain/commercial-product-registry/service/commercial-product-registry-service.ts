@@ -101,7 +101,6 @@ const GOVERNED_UPDATE_FIELDS = [
 export const COMMERCIAL_PRODUCT_REGISTRY_CAPABILITY_CONTRACT: Record<string, CommercialProductGovernanceCapability> = {
   createProduct: "commercial_product.create",
   updateDescriptiveMetadata: "commercial_product.edit",
-  transitionLifecycle: "commercial_product.retire",
   reviewReadiness: "commercial_product.review_readiness",
   reviewSellability: "commercial_product.review_sellability",
   manageReviewGate: "commercial_product.edit",
@@ -116,6 +115,8 @@ export const COMMERCIAL_PRODUCT_REGISTRY_CAPABILITY_CONTRACT: Record<string, Com
   updateRenewalExpansionMetadata: "commercial_product.edit",
   updateSocialSellingMetadata: "commercial_product.review_sponsorship",
   updateGovernanceState: "commercial_product.review_pricing",
+  transitionLifecycle: "commercial_product.transition_lifecycle",
+  retireProduct: "commercial_product.retire",
   readSalesProductModel: "commercial_product.read",
 };
 
@@ -311,8 +312,8 @@ export class CommercialProductRegistryService {
 
   async transitionLifecycle(commercialProductId: string, toState: ProductLifecycleState, input: any, actor: Actor) {
     const scope = scopeFromActor(actor, input);
-    requireCapability(actor, COMMERCIAL_PRODUCT_REGISTRY_CAPABILITY_CONTRACT.transitionLifecycle);
     if (!isProductLifecycleState(toState)) throw new CommercialProductRegistryServiceError("COMMERCIAL_PRODUCT_LIFECYCLE_INVALID");
+    requireCapability(actor, toState === "RETIRED" ? COMMERCIAL_PRODUCT_REGISTRY_CAPABILITY_CONTRACT.retireProduct : COMMERCIAL_PRODUCT_REGISTRY_CAPABILITY_CONTRACT.transitionLifecycle);
     const reason = text(input?.reason, "reason", true, 1000);
     return this.transaction(async (executor: ProductRegistryExecutor) => {
       const previous = await this.requireProduct(commercialProductId, executor);
@@ -390,6 +391,109 @@ export class CommercialProductRegistryService {
 
   listSourceAuthorities(commercialProductId: string, executor?: ProductRegistryExecutor) {
     return this.repo.listSourceAuthorities(commercialProductId, executor);
+  }
+
+  getProductById(commercialProductId: string, actor?: Actor) {
+    if (actor) requireCapability(actor, COMMERCIAL_PRODUCT_REGISTRY_CAPABILITY_CONTRACT.readSalesProductModel);
+    return this.repo.getProductById(commercialProductId);
+  }
+
+  getProductBySlug(slug: string, actor?: Actor) {
+    if (actor) requireCapability(actor, COMMERCIAL_PRODUCT_REGISTRY_CAPABILITY_CONTRACT.readSalesProductModel);
+    return this.repo.getProductBySlug(slug);
+  }
+
+  listProducts(actor?: Actor) {
+    if (actor) requireCapability(actor, COMMERCIAL_PRODUCT_REGISTRY_CAPABILITY_CONTRACT.readSalesProductModel);
+    return this.repo.listProducts();
+  }
+
+  listBuyers(commercialProductId: string) {
+    return this.repo.listBuyers(commercialProductId);
+  }
+
+  listCommercialForms(commercialProductId: string) {
+    return this.repo.listCommercialForms(commercialProductId);
+  }
+
+  listReviewGates(commercialProductId: string) {
+    return this.repo.listGates(commercialProductId);
+  }
+
+  listFundingRelationships(commercialProductId: string) {
+    return this.repo.listFundingRelationships(commercialProductId);
+  }
+
+  listEntitlements(commercialProductId: string) {
+    return this.repo.listEntitlements(commercialProductId);
+  }
+
+  getRegulatedProgramMetadata(commercialProductId: string) {
+    return this.repo.getRegulatedProgramMetadata(commercialProductId);
+  }
+
+  getImplementationSupport(commercialProductId: string) {
+    return this.repo.getImplementationSupport(commercialProductId);
+  }
+
+  getRenewalExpansion(commercialProductId: string) {
+    return this.repo.getRenewalExpansion(commercialProductId);
+  }
+
+  getSocialSelling(commercialProductId: string) {
+    return this.repo.getSocialSelling(commercialProductId);
+  }
+
+  getGovernanceState(commercialProductId: string) {
+    return this.repo.getGovernanceState(commercialProductId);
+  }
+
+  async getProductDetail(commercialProductId: string, actor?: Actor) {
+    if (actor) requireCapability(actor, COMMERCIAL_PRODUCT_REGISTRY_CAPABILITY_CONTRACT.readSalesProductModel);
+    const product = await this.repo.getProductById(commercialProductId);
+    if (!product) return null;
+    const [
+      sourceAuthorities,
+      buyers,
+      commercialForms,
+      reviewGates,
+      relationships,
+      fundingRelationships,
+      entitlements,
+      regulatedProgram,
+      implementationSupport,
+      renewalExpansion,
+      socialSelling,
+      governanceState,
+    ] = await Promise.all([
+      this.repo.listSourceAuthorities(commercialProductId),
+      this.repo.listBuyers(commercialProductId),
+      this.repo.listCommercialForms(commercialProductId),
+      this.repo.listGates(commercialProductId),
+      this.repo.listRelationships(commercialProductId),
+      this.repo.listFundingRelationships(commercialProductId),
+      this.repo.listEntitlements(commercialProductId),
+      this.repo.getRegulatedProgramMetadata(commercialProductId),
+      this.repo.getImplementationSupport(commercialProductId),
+      this.repo.getRenewalExpansion(commercialProductId),
+      this.repo.getSocialSelling(commercialProductId),
+      this.repo.getGovernanceState(commercialProductId),
+    ]);
+    return {
+      product,
+      sourceAuthorities,
+      buyers,
+      commercialForms,
+      reviewGates,
+      relationships,
+      fundingRelationships,
+      entitlements,
+      regulatedProgram,
+      implementationSupport,
+      renewalExpansion,
+      socialSelling,
+      governanceState,
+    };
   }
 
   async addBuyerCompatibility(commercialProductId: string, buyerType: BuyerType, input: any, actor: Actor) {
@@ -656,6 +760,9 @@ export class CommercialProductRegistryService {
     if (gateType === "REGULATORY") return "commercial_product.review_regulatory";
     if (gateType === "PRICING") return "commercial_product.review_pricing";
     if (gateType === "MARGIN") return "commercial_product.review_margin";
+    if (gateType === "COMMISSION") return "commercial_product.review_commission";
+    if (gateType === "PARTNER") return "commercial_product.review_sponsorship";
+    if (gateType === "COMMERCIAL_READINESS") return "commercial_product.review_readiness";
     return COMMERCIAL_PRODUCT_REGISTRY_CAPABILITY_CONTRACT.manageReviewGate;
   }
 

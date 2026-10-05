@@ -48,7 +48,7 @@ export type ReadinessState = typeof READINESS_STATES[number];
 export const SELLABILITY_STATUSES = ["SELL_NOW", "PILOT", "DEVELOP", "NOT_SELLABLE", "NEEDS_REVIEW"] as const;
 export type SellabilityStatus = typeof SELLABILITY_STATUSES[number];
 
-export const REVIEW_GATE_TYPES = ["COMMERCIAL_READINESS", "LEGAL", "TAX", "REGULATORY", "PROCUREMENT", "FUNDING", "DELIVERY_CAPACITY", "EVIDENCE", "SUPPORT", "PRICING", "MARGIN", "ENTITLEMENT", "PARTNER"] as const;
+export const REVIEW_GATE_TYPES = ["COMMERCIAL_READINESS", "LEGAL", "TAX", "REGULATORY", "PROCUREMENT", "FUNDING", "DELIVERY_CAPACITY", "EVIDENCE", "SUPPORT", "PRICING", "MARGIN", "COMMISSION", "ENTITLEMENT", "PARTNER"] as const;
 export type ReviewGateType = typeof REVIEW_GATE_TYPES[number];
 
 export const REVIEW_GATE_STATUSES = ["NOT_REQUIRED", "PENDING", "APPROVED", "BLOCKED", "STALE", "UNKNOWN"] as const;
@@ -175,6 +175,7 @@ export const GOVERNANCE_CAPABILITIES = [
   "commercial_product.review_margin",
   "commercial_product.review_commission",
   "commercial_product.review_sponsorship",
+  "commercial_product.transition_lifecycle",
   "commercial_product.retire",
 ] as const;
 export type CommercialProductGovernanceCapability = typeof GOVERNANCE_CAPABILITIES[number];
@@ -506,4 +507,3 @@ export function assertNoCommissionCalculation(value: unknown) {
   if (!isRecord(value)) return;
   if ("commissionAmount" in value || "commissionRate" in value || "calculatedCommission" in value) throw new Error("COMMISSION_CALCULATION_NOT_ALLOWED");
 }
-

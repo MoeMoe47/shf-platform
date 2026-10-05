@@ -140,6 +140,14 @@ test("3C valid lifecycle transition succeeds and invalid transition is rejected"
   const created = await service.createProduct(product(), actor);
   assert.equal((await service.transitionLifecycle(created.commercial_product_id, "DEFINED", { reason: "defined" }, actor)).lifecycle_state, "DEFINED");
   await assert.rejects(() => service.transitionLifecycle(created.commercial_product_id, "ACTIVE", { reason: "skip" }, actor), /TRANSITION_REJECTED/);
+  await assert.rejects(
+    () => service.transitionLifecycle(created.commercial_product_id, "RETIRED", { reason: "retire" }, { ...actor, capabilities: ["commercial_product.transition_lifecycle"] }),
+    /commercial_product\.retire/,
+  );
+  await assert.rejects(
+    () => service.transitionLifecycle(created.commercial_product_id, "REVIEW", { reason: "review" }, { ...actor, capabilities: ["commercial_product.retire"] }),
+    /commercial_product\.transition_lifecycle/,
+  );
 });
 
 test("3C readiness review requires provenance and sellability preserves blocker and reason", async () => {
@@ -158,6 +166,11 @@ test("3C approved review gate requires credible authority or reference", async (
   const created = await service.createProduct(product(), actor);
   await assert.rejects(() => service.manageReviewGate(created.commercial_product_id, { gateType: "LEGAL", status: "APPROVED" }, actor), /APPROVAL_AUTHORITY/);
   assert.equal((await service.manageReviewGate(created.commercial_product_id, { gateType: "LEGAL", status: "APPROVED", authority: "legal" }, actor)).status, "APPROVED");
+  await assert.rejects(
+    () => service.manageReviewGate(created.commercial_product_id, { gateType: "COMMISSION", status: "APPROVED", authority: "commission-board" }, { ...actor, capabilities: ["commercial_product.edit"] }),
+    /commercial_product\.review_commission/,
+  );
+  assert.equal((await service.manageReviewGate(created.commercial_product_id, { gateType: "COMMISSION", status: "APPROVED", authority: "commission-board" }, actor)).gate_type, "COMMISSION");
 });
 
 test("3C funding compatibility cannot become eligibility and source authority is validated", async () => {

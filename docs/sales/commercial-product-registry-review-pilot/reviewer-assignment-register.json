@@ -1,0 +1,19 @@
+{
+  "register_id": "SHU-COMMERCIAL-PRODUCT-REGISTRY-4E-ASSIGNMENTS",
+  "status": "TEMPLATE_ONLY",
+  "test_fixture_assignments_are_in_disposable_acceptance_only": true,
+  "candidate_scope_is_enforced_by_api": false,
+  "assignments": [],
+  "assignment_schema": {
+    "reviewer_actor_id": "canonical user_id; required when an authorized operator provisions a real reviewer",
+    "reviewer_org_id": "canonical active organization_id",
+    "reviewer_profile": "one profile_id from reviewer-provisioning-plan.json",
+    "assigned_gate_types": "must be a subset of profile allowed_gate_types; source resolution uses profile operation",
+    "assigned_candidate_ids": "operational routing only until API-level candidate assignment enforcement exists",
+    "effective_at": "UTC instant; Identity membership effective_from remains authoritative",
+    "expires_at": "UTC instant; Identity membership effective_to is checked on production lookup, but current assignment API has no expiry input",
+    "assigned_by": "canonical actor_user_id from Identity administration",
+    "assignment_reference": "auditable Identity membership/role assignment reference",
+    "status": "PLANNED | ACTIVE | REVOKED | EXPIRED"
+  }
+}

@@ -34,6 +34,21 @@ function rejectUnexpected(input: any, allowed: readonly string[]) {
   if (unexpected.length) throw new CommercialProductReviewError("REVIEW_INPUT_FIELD_FORBIDDEN", `Unsupported review fields: ${unexpected.join(", ")}`);
 }
 
+function assertExpectedVersion(expectedVersion: unknown, latest: any, stream: string) {
+  if (expectedVersion === undefined) return;
+  if (!Number.isSafeInteger(expectedVersion) || expectedVersion !== (latest?.version || 0)) {
+    throw new CommercialProductReviewError(`${stream}_SUPERSESSION_CONFLICT`, "The review stream changed; reload its latest version.", 409);
+  }
+}
+
+function rejectFundingEligibilitySemantics(input: any) {
+  if (input.gateType !== "FUNDING") return;
+  const text = [input.decisionReason, input.authorityReference, ...(input.evidenceReferences || [])].filter(Boolean).join(" ");
+  if (/customer\s+(is\s+)?eligible|eligible\s+customer|grant\s+(award|approved|approval|guaranteed)|award\s+guaranteed|reimbursement\s+guaranteed|funding\s+guaranteed/i.test(text)) {
+    throw new CommercialProductReviewError("FUNDING_ELIGIBILITY_NOT_REGISTRY_AUTHORITY", "Funding review records product compatibility only; customer eligibility and awards are outside Product Registry authority.");
+  }
+}
+
 export class CommercialProductReviewService {
   constructor(
     private readonly identities: ReadonlyMap<string, string>,
@@ -44,21 +59,24 @@ export class CommercialProductReviewService {
     private readonly clock = () => new Date(),
   ) {}
 
-  private identity(candidateId: string, productId: string) {
-    try { return resolveCandidateIdentity(candidateId, productId, this.identities); }
+  private identity(candidateId: string, productId?: string) {
+    const canonicalProductId = this.identities.get(candidateId);
+    if (!canonicalProductId || productId && productId !== canonicalProductId) throw new CommercialProductReviewError("REVIEW_CANDIDATE_IDENTITY_MISMATCH");
+    try { return resolveCandidateIdentity(candidateId, canonicalProductId, this.identities); }
     catch (error: any) { throw new CommercialProductReviewError(error.message); }
   }
 
-  private packet(candidateId: string, productId: string) {
-    this.identity(candidateId, productId);
+  private packet(candidateId: string, productId?: string) {
+    const identity = this.identity(candidateId, productId);
     const packet = this.packets.get(candidateId);
-    if (!packet || packet.commercial_product_id !== productId) throw new CommercialProductReviewError("REVIEW_PACKET_NOT_FOUND", "Review packet is unavailable.", 404);
+    if (!packet || packet.commercial_product_id !== identity.commercialProductId) throw new CommercialProductReviewError("REVIEW_PACKET_NOT_FOUND", "Review packet is unavailable.", 404);
     return packet;
   }
 
   async recordDecision(input: any, actor: any) {
-    rejectUnexpected(input, ["candidateId", "commercialProductId", "gateType", "decisionStatus", "decisionReason", "authorityType", "authorityReference", "evidenceReferences", "reviewedAt", "effectiveAt", "expiresAt", "staleAt", "supersedesDecisionId", "reviewDecisionId"]);
-    const packet = this.packet(input?.candidateId, input?.commercialProductId);
+    rejectUnexpected(input, ["candidateId", "commercialProductId", "gateType", "decisionStatus", "decisionReason", "authorityType", "authorityReference", "evidenceReferences", "reviewedAt", "effectiveAt", "expiresAt", "staleAt", "supersedesDecisionId", "reviewDecisionId", "expectedVersion"]);
+    const identity = this.identity(input?.candidateId, input?.commercialProductId);
+    const packet = this.packet(input?.candidateId, identity.commercialProductId);
     actorContext(actor);
     const policy = REVIEW_GATE_POLICY[input?.gateType as keyof typeof REVIEW_GATE_POLICY];
     if (!policy) throw new CommercialProductReviewError("REVIEW_GATE_TYPE_INVALID");
@@ -66,6 +84,8 @@ export class CommercialProductReviewService {
     let decision: any;
     try { decision = validateDecisionInput(input, policy.authorityTypes); }
     catch (error: any) { throw new CommercialProductReviewError(error.message); }
+    if (decision.decisionStatus === "NOT_REQUIRED" && !decision.decisionReason) throw new CommercialProductReviewError("REVIEW_DECISION_REASON_REQUIRED");
+    rejectFundingEligibilitySemantics({ ...input, evidenceReferences: decision.evidenceReferences });
     if (decision.decisionStatus === "APPROVED" && (!actor.user_id || actor.actor_system_id)) throw new CommercialProductReviewError("REVIEW_HUMAN_ACTOR_REQUIRED", "Only an attributable human reviewer may record approval.", 403);
     if (["APPROVED", "NOT_REQUIRED"].includes(decision.decisionStatus) && [decision.authorityReference, ...decision.evidenceReferences].some((reference) => !safeSourceReference(reference))) {
       throw new CommercialProductReviewError("REVIEW_EVIDENCE_REFERENCE_NOT_AUTHORITATIVE", "Demo, fixture, UI, marketing, or mock references cannot support a review decision.");
@@ -74,13 +94,14 @@ export class CommercialProductReviewService {
     return this.transaction(async (executor: any) => {
       await this.repo.lockStream(input.candidateId, input.gateType, executor);
       const latest = await this.repo.getLatestDecision(input.candidateId, input.gateType, executor, true);
+      assertExpectedVersion(input.expectedVersion, latest, "REVIEW");
       if (latest && input.supersedesDecisionId !== latest.review_decision_id) throw new CommercialProductReviewError("REVIEW_SUPERSESSION_REQUIRED", "A new decision must explicitly supersede the latest decision.", 409);
       if (!latest && input.supersedesDecisionId) throw new CommercialProductReviewError("REVIEW_SUPERSESSION_NOT_FOUND", "There is no prior decision to supersede.", 409);
       const now = this.clock();
       const row = await this.repo.insertDecision({
         review_decision_id: input.reviewDecisionId || `cprd_${randomUUID()}`,
         candidate_id: input.candidateId,
-        commercial_product_id: input.commercialProductId,
+        commercial_product_id: identity.commercialProductId,
         gate_type: input.gateType,
         decision_status: decision.decisionStatus,
         decision_reason: decision.decisionReason,
@@ -103,8 +124,9 @@ export class CommercialProductReviewService {
   }
 
   async recordSourceResolution(input: any, actor: any) {
-    rejectUnexpected(input, ["candidateId", "commercialProductId", "resolutionStatus", "authorityDomain", "authorityReference", "authorityVersion", "evidenceReference", "resolvedAt", "resolutionReason", "remainingRequirements", "supersedesResolutionId", "sourceResolutionId"]);
-    this.packet(input?.candidateId, input?.commercialProductId);
+    rejectUnexpected(input, ["candidateId", "commercialProductId", "resolutionStatus", "authorityDomain", "authorityReference", "authorityVersion", "evidenceReference", "resolvedAt", "resolutionReason", "remainingRequirements", "supersedesResolutionId", "sourceResolutionId", "expectedVersion"]);
+    const identity = this.identity(input?.candidateId, input?.commercialProductId);
+    this.packet(input?.candidateId, identity.commercialProductId);
     actorContext(actor);
     requireCapability(actor, "commercial_product.review_source_authority");
     let resolution: any;
@@ -118,12 +140,13 @@ export class CommercialProductReviewService {
     return this.transaction(async (executor: any) => {
       await this.repo.lockStream(input.candidateId, "SOURCE", executor);
       const latest = await this.repo.getLatestSourceResolution(input.candidateId, executor, true);
+      assertExpectedVersion(input.expectedVersion, latest, "SOURCE_RESOLUTION");
       if (latest && input.supersedesResolutionId !== latest.source_resolution_id) throw new CommercialProductReviewError("SOURCE_RESOLUTION_SUPERSESSION_REQUIRED", "A new resolution must explicitly supersede the latest source resolution.", 409);
       if (!latest && input.supersedesResolutionId) throw new CommercialProductReviewError("SOURCE_RESOLUTION_SUPERSESSION_NOT_FOUND", "There is no prior source resolution to supersede.", 409);
       const row = await this.repo.insertSourceResolution({
         source_resolution_id: input.sourceResolutionId || `cprs_${randomUUID()}`,
         candidate_id: input.candidateId,
-        commercial_product_id: input.commercialProductId,
+        commercial_product_id: identity.commercialProductId,
         resolution_status: resolution.resolutionStatus,
         authority_domain: resolution.authorityDomain,
         authority_reference: resolution.authorityReference,
@@ -150,11 +173,61 @@ export class CommercialProductReviewService {
     return this.repo.listDecisionHistory(candidateId, gateType);
   }
 
+  async listDecisionHistoryPage(candidateId: string, actor: any, options: { gateType?: string; limit: number; offset: number }) {
+    actorContext(actor);
+    requireCapability(actor, "commercial_product.read");
+    if (!this.identities.has(candidateId)) throw new CommercialProductReviewError("REVIEW_PACKET_NOT_FOUND", "Review packet is unavailable.", 404);
+    return this.repo.listDecisionHistoryPage(candidateId, options);
+  }
+
   async listSourceResolutionHistory(candidateId: string, actor: any) {
     actorContext(actor);
     requireCapability(actor, "commercial_product.read");
     if (!this.identities.has(candidateId)) throw new CommercialProductReviewError("REVIEW_PACKET_NOT_FOUND", "Review packet is unavailable.", 404);
     return this.repo.listSourceResolutionHistory(candidateId);
+  }
+
+  async listSourceResolutionHistoryPage(candidateId: string, actor: any, options: { limit: number; offset: number }) {
+    actorContext(actor);
+    requireCapability(actor, "commercial_product.read");
+    if (!this.identities.has(candidateId)) throw new CommercialProductReviewError("REVIEW_PACKET_NOT_FOUND", "Review packet is unavailable.", 404);
+    return this.repo.listSourceResolutionHistoryPage(candidateId, options);
+  }
+
+  async getPacket(candidateId: string, actor: any) {
+    actorContext(actor);
+    requireCapability(actor, "commercial_product.read");
+    const productId = this.identities.get(candidateId);
+    if (!productId) throw new CommercialProductReviewError("REVIEW_PACKET_NOT_FOUND", "Review packet is unavailable.", 404);
+    const packet = this.packet(candidateId, productId);
+    const decisions = await this.repo.listDecisionHistory(candidateId);
+    const sourceResolutions = await this.repo.listSourceResolutionHistory(candidateId);
+    const latestDecisions = new Map<string, any>();
+    for (const row of decisions) if (!latestDecisions.has(row.gate_type) || Number(latestDecisions.get(row.gate_type).version) < Number(row.version)) latestDecisions.set(row.gate_type, row);
+    const latestSource = sourceResolutions.reduce((latest: any, row: any) => !latest || Number(row.version) > Number(latest.version) ? row : latest, null);
+    return {
+      packet,
+      latest_decisions: [...latestDecisions.values()],
+      latest_source_resolution: latestSource,
+      reassessment: reassessReviewPacket(packet, [...latestDecisions.values()], latestSource, this.clock().toISOString()),
+    };
+  }
+
+  async listQueue(actor: any) {
+    actorContext(actor);
+    requireCapability(actor, "commercial_product.read");
+    const entries = [];
+    for (const candidateId of this.identities.keys()) {
+      const productId = this.identities.get(candidateId)!;
+      const packet = this.packet(candidateId, productId);
+      const decisions = await this.repo.listDecisionHistory(candidateId);
+      const latestDecisions = new Map<string, any>();
+      for (const row of decisions) if (!latestDecisions.has(row.gate_type) || Number(latestDecisions.get(row.gate_type).version) < Number(row.version)) latestDecisions.set(row.gate_type, row);
+      const sources = await this.repo.listSourceResolutionHistory(candidateId);
+      const latestSource = sources.reduce((latest: any, row: any) => !latest || Number(row.version) > Number(latest.version) ? row : latest, null);
+      entries.push({ candidate_id: candidateId, commercial_product_id: productId, candidate_name: packet.candidate_name, family: packet.family, source_status: latestSource?.resolution_status || packet.source_resolution_status, ...reassessReviewPacket(packet, [...latestDecisions.values()], latestSource, this.clock().toISOString()) });
+    }
+    return entries;
   }
 
   async reassess(candidateId: string, actor: any) {

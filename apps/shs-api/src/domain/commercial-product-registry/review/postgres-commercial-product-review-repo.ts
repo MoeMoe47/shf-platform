@@ -25,6 +25,19 @@ export class PostgresCommercialProductReviewRepo {
     return result.rows;
   }
 
+  async listDecisionHistoryPage(candidateId: string, options: { gateType?: string; limit: number; offset: number }, executor?: ProductRegistryExecutor) {
+    const client = db(executor);
+    const values = options.gateType ? [candidateId, options.gateType, options.limit, options.offset] : [candidateId, options.limit, options.offset];
+    const filter = options.gateType ? " AND gate_type=$2" : "";
+    const limitParam = options.gateType ? "$3" : "$2";
+    const offsetParam = options.gateType ? "$4" : "$3";
+    const [items, count] = await Promise.all([
+      client.query(`SELECT * FROM commercial_product_review_decisions WHERE candidate_id=$1${filter} ORDER BY gate_type, version DESC LIMIT ${limitParam} OFFSET ${offsetParam}`, values),
+      client.query(`SELECT count(*)::int AS total FROM commercial_product_review_decisions WHERE candidate_id=$1${options.gateType ? " AND gate_type=$2" : ""}`, options.gateType ? [candidateId, options.gateType] : [candidateId]),
+    ]);
+    return { items: items.rows, total: count.rows[0]?.total || 0 };
+  }
+
   async insertDecision(input: any, executor: ProductRegistryExecutor) {
     const result = await executor.query(
       `INSERT INTO commercial_product_review_decisions (
@@ -50,6 +63,15 @@ export class PostgresCommercialProductReviewRepo {
   async listSourceResolutionHistory(candidateId: string, executor?: ProductRegistryExecutor) {
     const result = await db(executor).query("SELECT * FROM commercial_product_source_resolutions WHERE candidate_id=$1 ORDER BY version", [candidateId]);
     return result.rows;
+  }
+
+  async listSourceResolutionHistoryPage(candidateId: string, options: { limit: number; offset: number }, executor?: ProductRegistryExecutor) {
+    const client = db(executor);
+    const [items, count] = await Promise.all([
+      client.query("SELECT * FROM commercial_product_source_resolutions WHERE candidate_id=$1 ORDER BY version DESC LIMIT $2 OFFSET $3", [candidateId, options.limit, options.offset]),
+      client.query("SELECT count(*)::int AS total FROM commercial_product_source_resolutions WHERE candidate_id=$1", [candidateId]),
+    ]);
+    return { items: items.rows, total: count.rows[0]?.total || 0 };
   }
 
   async insertSourceResolution(input: any, executor: ProductRegistryExecutor) {

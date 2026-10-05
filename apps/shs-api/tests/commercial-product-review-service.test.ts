@@ -82,6 +82,18 @@ test("decision supersession is append-only and audited; readiness and sellabilit
   assert.equal(ctx.packet.current_sellability, "PILOT");
 });
 
+test("expected review versions reject stale writers and funding decisions cannot claim customer eligibility or awards", async () => {
+  const ctx = harness();
+  const base = { candidateId: ctx.packet.candidate_id, commercialProductId: ctx.packet.commercial_product_id, gateType: "LEGAL", reviewedAt: generatedAt };
+  const first = await ctx.service.recordDecision({ ...base, decisionStatus: "PENDING", expectedVersion: 0 }, actor(REVIEW_GATE_POLICY.LEGAL.capability));
+  await assert.rejects(ctx.service.recordDecision({ ...base, decisionStatus: "BLOCKED", decisionReason: "Blocked pending review.", supersedesDecisionId: first.review_decision_id, expectedVersion: 0 }, actor(REVIEW_GATE_POLICY.LEGAL.capability)), (error: any) => error.code === "REVIEW_SUPERSESSION_CONFLICT");
+  assert.equal(ctx.decisions.length, 1);
+
+  const fundingInput = { candidateId: ctx.packet.candidate_id, commercialProductId: ctx.packet.commercial_product_id, gateType: "FUNDING", decisionStatus: "PENDING", decisionReason: "Customer is eligible for a grant award.", reviewedAt: generatedAt };
+  await assert.rejects(ctx.service.recordDecision(fundingInput, actor(REVIEW_GATE_POLICY.FUNDING.capability)), (error: any) => error.code === "FUNDING_ELIGIBILITY_NOT_REGISTRY_AUTHORITY");
+  assert.equal(ctx.decisions.length, 1);
+});
+
 test("system actors cannot approve and unsupported financial or funding fields are rejected by the input contract", async () => {
   const ctx = harness();
   const input = { candidateId: ctx.packet.candidate_id, commercialProductId: ctx.packet.commercial_product_id, gateType: "PRICING", decisionStatus: "APPROVED", decisionReason: "Reference only", authorityType: "APPROVED_PRICING_AUTHORITY", authorityReference: "pricing:review", evidenceReferences: ["pricing:policy"], reviewedAt: generatedAt };

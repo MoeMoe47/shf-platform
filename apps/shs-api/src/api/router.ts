@@ -73,6 +73,7 @@ import { registerFundingGrantRoutes } from "../domain/funding-grants/api/routes.
 import { registerSalesRoutes } from "../domain/sales/api/routes.js";
 import { registerCommercialProductRegistryRoutes } from "../domain/commercial-product-registry/api/routes.js";
 import { registerCommercialProductReviewRoutes } from "../domain/commercial-product-registry/review/review-operations-routes.js";
+import { registerCommercialProductReviewerAssignmentRoutes } from "../domain/commercial-product-registry/review/reviewer-assignment-routes.js";
 import { registerImpactAttributionRoutes } from "../domain/impact-attribution/api/routes.js";
 import { registerAiGovernanceRoutes } from "../domain/ai-governance/api/routes.js";
 import { registerInputSecurityRoutes } from "../domain/input-security/api/routes.js";
@@ -428,6 +429,7 @@ app.post("/auth/login", async (req: any, res: any) => {
   registerSalesRoutes(app);
   registerCommercialProductRegistryRoutes(app);
   registerCommercialProductReviewRoutes(app);
+  registerCommercialProductReviewerAssignmentRoutes(app);
   registerImpactAttributionRoutes(app);
   registerCareerRoutes(app);
   registerCaseRoutes(app);

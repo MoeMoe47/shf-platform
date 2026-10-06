@@ -48,6 +48,7 @@ function mapError(error: any) {
   const code = String(error?.code || "");
   if (error instanceof CommercialProductReviewError) {
     const mappedCode = code.includes("NOT_FOUND") ? "NOT_FOUND"
+      : code.includes("ASSIGNMENT") || code.includes("IDENTITY_MEMBERSHIP") ? "FORBIDDEN"
       : code.includes("CAPABILITY") || code.includes("HUMAN_ACTOR") || code.includes("ACTOR_CONTEXT") ? "FORBIDDEN"
         : code.includes("AUTHORITY_REQUIRED") ? "AUTHORITY_REQUIRED"
           : code.includes("EVIDENCE") ? "EVIDENCE_REQUIRED"
@@ -60,6 +61,7 @@ function mapError(error: any) {
     return { status: error.statusCode, code: mappedCode, message: error.message };
   }
   if (code.includes("NOT_FOUND")) return { status: 404, code: "NOT_FOUND", message: error.message };
+  if (code.includes("ASSIGNMENT") || code.includes("IDENTITY_MEMBERSHIP")) return { status: 403, code: "FORBIDDEN", message: error.message };
   if (code.includes("CAPABILITY") || code.includes("HUMAN_ACTOR")) return { status: 403, code: "FORBIDDEN", message: error.message };
   if (code.includes("SUPERSESSION") || error?.code === "23505") return { status: 409, code: "SUPERSESSION_CONFLICT", message: error.message };
   if (code.includes("AUTHORITY_REQUIRED")) return { status: 400, code: "AUTHORITY_REQUIRED", message: error.message };

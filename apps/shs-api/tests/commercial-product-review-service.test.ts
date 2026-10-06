@@ -17,10 +17,11 @@ const packets = buildReviewPackets(reviewManifest, onboardingManifest, generated
 const identityMap = new Map(packets.map((packet) => [packet.candidate_id, packet.commercial_product_id]));
 const packetMap = new Map(packets.map((packet) => [packet.candidate_id, packet]));
 
-function harness(packet = packets[0]) {
+function harness(packet = packets[0], assignmentAllowed: boolean | ((input: any) => boolean) = true) {
   const decisions: any[] = [];
   const resolutions: any[] = [];
   const audits: any[] = [];
+  const isAllowed = (input: any) => typeof assignmentAllowed === "function" ? assignmentAllowed(input) : assignmentAllowed;
   const repo: any = {
     lockStream: async () => {},
     getLatestDecision: async (candidateId: string, gate: string) => decisions.filter((row) => row.candidate_id === candidateId && row.gate_type === gate).at(-1) || null,
@@ -31,11 +32,17 @@ function harness(packet = packets[0]) {
     listSourceResolutionHistory: async (candidateId: string) => resolutions.filter((row) => row.candidate_id === candidateId),
   };
   const transaction = (fn: any) => fn({ query: async () => ({ rows: [] }) });
-  const service = new CommercialProductReviewService(identityMap, packetMap, repo, async (event: any) => audits.push(event), transaction, () => new Date(generatedAt));
+  const assignments: any = {
+    assertIdentityMembership: async () => true,
+    assertActiveAssignment: async (input: any) => isAllowed(input) ? { assignment_id: "test-assignment", allowed_gate_types: [input.gateType] } : null,
+    findActiveForCandidate: async (_actorId: string, _orgId: string, candidateId: string) => isAllowed({ candidateId, gateType: "LEGAL" }) ? [{ assignment_id: "test-assignment", candidate_id: candidateId, allowed_gate_types: ["LEGAL"] }] : [],
+    listActiveForReviewer: async () => isAllowed({ candidateId: packet.candidate_id, gateType: "LEGAL" }) ? [{ assignment_id: "test-assignment", candidate_id: packet.candidate_id, allowed_gate_types: ["LEGAL"] }] : [],
+  };
+  const service = new CommercialProductReviewService(identityMap, packetMap, repo, async (event: any) => audits.push(event), transaction, () => new Date(generatedAt), assignments);
   return { service, decisions, resolutions, audits, packet };
 }
 
-const actor = (capability: string) => ({ user_id: "reviewer-1", active_organization_id: "org-review-1", capabilities: [capability] });
+const actor = (capability: string) => ({ user_id: "reviewer-1", active_organization_id: "org-review-1", organization_id: "org-review-1", tenant_id: "tenant:org-review-1", capabilities: [capability] });
 
 test("review packet generator creates 32 deterministic identity packets without approvals", () => {
   const first = buildReviewPackets(reviewManifest, onboardingManifest, generatedAt);
@@ -56,6 +63,41 @@ test("candidate/product pair and gate-specific authority are enforced; generic S
   assert.equal(ctx.decisions.length, 0);
 });
 
+test("identity capability without a candidate-and-gate assignment is denied", async () => {
+  const ctx = harness(packets[0], false);
+  const input = { candidateId: ctx.packet.candidate_id, commercialProductId: ctx.packet.commercial_product_id, gateType: "LEGAL", decisionStatus: "PENDING", reviewedAt: generatedAt };
+  await assert.rejects(ctx.service.recordDecision(input, actor(REVIEW_GATE_POLICY.LEGAL.capability)), (error: any) => error.code === "REVIEW_ASSIGNMENT_REQUIRED");
+  assert.equal(ctx.decisions.length, 0);
+});
+
+test("candidate and gate assignment scope are independently enforced on decisions", async () => {
+  const scoped = harness(packets[0], (input: any) => input.candidateId === packets[0].candidate_id && input.gateType === "LEGAL");
+  const legal = { candidateId: packets[0].candidate_id, commercialProductId: packets[0].commercial_product_id, gateType: "LEGAL", decisionStatus: "PENDING", reviewedAt: generatedAt };
+  const wrongCandidate = { ...legal, candidateId: packets[1].candidate_id, commercialProductId: packets[1].commercial_product_id };
+  const wrongGate = { ...legal, gateType: "REGULATORY" };
+  await assert.rejects(scoped.service.recordDecision(wrongCandidate, actor(REVIEW_GATE_POLICY.LEGAL.capability)), (error: any) => error.code === "REVIEW_ASSIGNMENT_REQUIRED");
+  await assert.rejects(scoped.service.recordDecision(wrongGate, actor(REVIEW_GATE_POLICY.REGULATORY.capability)), (error: any) => error.code === "REVIEW_ASSIGNMENT_REQUIRED");
+  const accepted = await scoped.service.recordDecision(legal, actor(REVIEW_GATE_POLICY.LEGAL.capability));
+  assert.equal(accepted.review_assignment_id, "test-assignment");
+  assert.equal(scoped.decisions.length, 1);
+});
+
+test("candidate-scoped reads expose only assigned queue, packet gates, and history", async () => {
+  const ctx = harness(packets[0], (input: any) => input.candidateId === packets[0].candidate_id && input.gateType === "LEGAL");
+  ctx.decisions.push({ candidate_id: packets[0].candidate_id, gate_type: "LEGAL", decision_status: "PENDING", version: 1 });
+  ctx.decisions.push({ candidate_id: packets[0].candidate_id, gate_type: "REGULATORY", decision_status: "PENDING", version: 1 });
+  const queue = await ctx.service.listQueue(actor("commercial_product.read"));
+  assert.deepEqual(queue.map((item: any) => item.candidate_id), [packets[0].candidate_id]);
+  assert.deepEqual(queue[0].assigned_gate_types, ["LEGAL"]);
+  const packet = await ctx.service.getPacket(packets[0].candidate_id, actor("commercial_product.read"));
+  assert.ok(packet.packet.current_review_gates.every((gate: any) => gate.gate_type === "LEGAL"));
+  assert.equal(packet.latest_decisions.length, 1);
+  assert.equal(packet.latest_decisions[0].gate_type, "LEGAL");
+  assert.equal(packet.latest_source_resolution, null);
+  assert.equal(packet.reassessment.assessment_scope, "ASSIGNED_GATES");
+  await assert.rejects(ctx.service.getPacket(packets[1].candidate_id, actor("commercial_product.read")), (error: any) => error.code === "REVIEW_ASSIGNMENT_REQUIRED");
+});
+
 test("APPROVED requires an allowed authority and evidence; BLOCKED requires a reason", async () => {
   const ctx = harness();
   const base = { candidateId: ctx.packet.candidate_id, commercialProductId: ctx.packet.commercial_product_id, gateType: "LEGAL", reviewedAt: generatedAt };
@@ -69,6 +111,7 @@ test("decision supersession is append-only and audited; readiness and sellabilit
   const ctx = harness();
   const base = { candidateId: ctx.packet.candidate_id, commercialProductId: ctx.packet.commercial_product_id, gateType: "LEGAL", reviewedAt: generatedAt };
   const first = await ctx.service.recordDecision({ ...base, decisionStatus: "PENDING", decisionReason: "Awaiting counsel." }, actor(REVIEW_GATE_POLICY.LEGAL.capability));
+  assert.equal(first.review_assignment_id, "test-assignment");
   await assert.rejects(ctx.service.recordDecision({ ...base, decisionStatus: "APPROVED", authorityType: "LEGAL_COUNSEL", authorityReference: "legal:review:1", evidenceReferences: ["evidence:legal:1"] }, actor(REVIEW_GATE_POLICY.LEGAL.capability)), (error: any) => error.code === "REVIEW_SUPERSESSION_REQUIRED");
   const second = await ctx.service.recordDecision({ ...base, decisionStatus: "APPROVED", decisionReason: "Counsel decision recorded.", authorityType: "LEGAL_COUNSEL", authorityReference: "legal:review:1", evidenceReferences: ["evidence:legal:1"], supersedesDecisionId: first.review_decision_id }, actor(REVIEW_GATE_POLICY.LEGAL.capability));
   assert.equal(first.decision_status, "PENDING");
@@ -112,6 +155,16 @@ test("source resolution requires a source capability, authority reference, evide
   assert.equal(row.resolution_status, "RESOLVED");
   assert.equal(ctx.resolutions.length, 1);
   assert.ok(ctx.audits.some((event) => event.action_type.endsWith("source_resolution_recorded")));
+});
+
+test("source resolution requires both source capability and candidate source assignment, not review-gate assignment", async () => {
+  const sourcePacket = packets.find((packet) => packet.candidate_id === "cc-005")!;
+  const ctx = harness(sourcePacket, (input: any) => input.candidateId === "cc-005" && input.gateType === "SOURCE_AUTHORITY");
+  const sourceBase = { commercialProductId: sourcePacket.commercial_product_id, resolutionStatus: "UNRESOLVED", resolutionReason: "Still missing authority.", resolvedAt: generatedAt };
+  await assert.rejects(ctx.service.recordSourceResolution({ ...sourceBase, candidateId: "cc-006", commercialProductId: identityMap.get("cc-006") }, actor("commercial_product.review_source_authority")), (error: any) => error.code === "REVIEW_ASSIGNMENT_REQUIRED");
+  const resolved = await ctx.service.recordSourceResolution({ ...sourceBase, candidateId: "cc-005" }, actor("commercial_product.review_source_authority"));
+  assert.equal(resolved.review_assignment_id, "test-assignment");
+  await assert.rejects(ctx.service.recordDecision({ candidateId: "cc-005", commercialProductId: sourcePacket.commercial_product_id, gateType: "LEGAL", decisionStatus: "PENDING", reviewedAt: generatedAt }, actor(REVIEW_GATE_POLICY.LEGAL.capability)), (error: any) => error.code === "REVIEW_ASSIGNMENT_REQUIRED");
 });
 
 test("reassessment reflects gate/source history and never emits readiness or sellability upgrades", () => {

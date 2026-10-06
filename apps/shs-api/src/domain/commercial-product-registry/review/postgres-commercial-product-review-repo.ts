@@ -43,9 +43,9 @@ export class PostgresCommercialProductReviewRepo {
       `INSERT INTO commercial_product_review_decisions (
         review_decision_id,candidate_id,commercial_product_id,gate_type,decision_status,decision_reason,
         authority_type,authority_reference,evidence_references,reviewer_actor_id,reviewer_org_id,
-        effective_at,reviewed_at,expires_at,stale_at,supersedes_decision_id,version
-      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9::jsonb,$10,$11,$12,$13,$14,$15,$16,$17) RETURNING *`,
-      [input.review_decision_id,input.candidate_id,input.commercial_product_id,input.gate_type,input.decision_status,input.decision_reason,input.authority_type,input.authority_reference,JSON.stringify(input.evidence_references),input.reviewer_actor_id,input.reviewer_org_id,input.effective_at,input.reviewed_at,input.expires_at,input.stale_at,input.supersedes_decision_id,input.version],
+        effective_at,reviewed_at,expires_at,stale_at,supersedes_decision_id,version,review_assignment_id
+      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9::jsonb,$10,$11,$12,$13,$14,$15,$16,$17,$18) RETURNING *`,
+      [input.review_decision_id,input.candidate_id,input.commercial_product_id,input.gate_type,input.decision_status,input.decision_reason,input.authority_type,input.authority_reference,JSON.stringify(input.evidence_references),input.reviewer_actor_id,input.reviewer_org_id,input.effective_at,input.reviewed_at,input.expires_at,input.stale_at,input.supersedes_decision_id,input.version,input.review_assignment_id],
     );
     return result.rows[0];
   }
@@ -79,9 +79,9 @@ export class PostgresCommercialProductReviewRepo {
       `INSERT INTO commercial_product_source_resolutions (
         source_resolution_id,candidate_id,commercial_product_id,resolution_status,authority_domain,
         authority_reference,authority_version,evidence_reference,resolved_by_actor,resolved_by_org,
-        resolved_at,resolution_reason,remaining_requirements,supersedes_resolution_id,version
-      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13::jsonb,$14,$15) RETURNING *`,
-      [input.source_resolution_id,input.candidate_id,input.commercial_product_id,input.resolution_status,input.authority_domain,input.authority_reference,input.authority_version,input.evidence_reference,input.resolved_by_actor,input.resolved_by_org,input.resolved_at,input.resolution_reason,JSON.stringify(input.remaining_requirements),input.supersedes_resolution_id,input.version],
+        resolved_at,resolution_reason,remaining_requirements,supersedes_resolution_id,version,review_assignment_id
+      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13::jsonb,$14,$15,$16) RETURNING *`,
+      [input.source_resolution_id,input.candidate_id,input.commercial_product_id,input.resolution_status,input.authority_domain,input.authority_reference,input.authority_version,input.evidence_reference,input.resolved_by_actor,input.resolved_by_org,input.resolved_at,input.resolution_reason,JSON.stringify(input.remaining_requirements),input.supersedes_resolution_id,input.version,input.review_assignment_id],
     );
     return result.rows[0];
   }

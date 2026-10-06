@@ -5,6 +5,7 @@ import { once } from "node:events";
 import express from "express";
 import test from "node:test";
 import pkg from "pg";
+import { buildReviewPackets } from "../src/domain/commercial-product-registry/review/review-packet-generator.ts";
 
 const { Pool } = pkg;
 const databaseUrl = process.env.SHS_TEST_DATABASE_URL;
@@ -40,6 +41,10 @@ test("4E reviewer pilot uses canonical memberships and gate-specific role permis
   const operatorId = `user_cpr_4e_operator_${suffix}`;
   const plan = JSON.parse(await readFile(path.join(root, "docs/sales/commercial-product-registry-review-pilot/reviewer-provisioning-plan.json"), "utf8"));
   const operatorProcedure = await readFile(path.join(root, "docs/sales/commercial-product-registry-review-pilot/04_OPERATOR_PROCEDURE.md"), "utf8");
+  const reviewManifest = JSON.parse(await readFile(path.join(root, "docs/sales/commercial-product-registry-review/commercial-product-review-manifest.json"), "utf8"));
+  const onboardingManifest = JSON.parse(await readFile(path.join(root, "docs/sales/commercial-product-registry-onboarding/commercial-product-onboarding-manifest.json"), "utf8"));
+  const reviewPackets = buildReviewPackets(reviewManifest, onboardingManifest, reviewManifest.reviewed_at);
+  const candidateIdentities = new Map(reviewPackets.map((packet: any) => [packet.candidate_id, packet.commercial_product_id]));
   const profiles = new Map(plan.profiles.map((profile: any) => [profile.profile_id, profile]));
   const reviewerIds = new Map<string, string>();
   const memberships = new Map<string, string>();
@@ -68,6 +73,20 @@ test("4E reviewer pilot uses canonical memberships and gate-specific role permis
     roles: ["super_admin"], role_scope_type: "platform", permissions: ["identity.membership.assign", "identity.membership.revoke"],
   };
   const assignments: Array<{ user_id: string; role_id: string; profile_id: string }> = [];
+  const insertReviewerAssignment = async (userId: string, candidateId: string, gateType: string) => {
+    const productId = candidateIdentities.get(candidateId);
+    assert.ok(productId);
+    const assignmentId = `assignment_${userId}_${candidateId}_${gateType}_${suffix}`;
+    await pool.query(
+      `INSERT INTO commercial_product_reviewer_assignments (
+        assignment_id, reviewer_actor_id, reviewer_org_id, candidate_id, commercial_product_id,
+        effective_at, expires_at, assignment_status, assigned_by_actor_id,
+        assignment_authority_reference, reason, version
+      ) VALUES ($1,$2,$3,$4,$5,NOW()-interval '1 hour',NOW()+interval '1 day','ACTIVE',$6,'test-only://4e/current-baseline','TEST_ONLY current 4F assignment fixture',1)`,
+      [assignmentId, userId, orgId, candidateId, productId, operatorId],
+    );
+    await pool.query("INSERT INTO commercial_product_reviewer_assignment_gates (assignment_id, gate_type) VALUES ($1,$2)", [assignmentId, gateType]);
+  };
 
   try {
     await pool.query("INSERT INTO organizations (organization_id, legal_name, display_name, org_type, status) VALUES ($1,'4E TEST ONLY','4E TEST ONLY','SHS','active')", [orgId]);
@@ -103,6 +122,12 @@ test("4E reviewer pilot uses canonical memberships and gate-specific role permis
     const marginId = reviewerIds.get("MARGIN_REVIEWER")!;
     const evidenceId = reviewerIds.get("EVIDENCE_REVIEWER")!;
     const sourceId = reviewerIds.get("SOURCE_AUTHORITY_REVIEWER")!;
+    await insertReviewerAssignment(legalId, "cc-005", "LEGAL");
+    await insertReviewerAssignment(regulatoryId, "cc-011", "REGULATORY");
+    await insertReviewerAssignment(pricingId, "cc-019", "PRICING");
+    await insertReviewerAssignment(marginId, "cc-019", "MARGIN");
+    await insertReviewerAssignment(evidenceId, "cc-025", "EVIDENCE");
+    await insertReviewerAssignment(sourceId, "cc-005", "SOURCE_AUTHORITY");
     assert.equal((await request("/commercial-product-reviews/cc-005/packet")).status, 401);
     const packetRead = await request("/commercial-product-reviews/cc-005/packet", legalId);
     assert.equal(packetRead.status, 200);
@@ -124,12 +149,12 @@ test("4E reviewer pilot uses canonical memberships and gate-specific role permis
     assert.equal(sourceRow.resolved_by_actor, sourceId);
     assert.equal(sourceRow.resolved_by_org, orgId);
 
-    const reassessmentResponse = await request("/commercial-product-reviews/cc-005/reassessment", legalId);
+    const reassessmentResponse = await request("/commercial-product-reviews/cc-005/reassessment", sourceId);
     assert.equal(reassessmentResponse.status, 200);
     const reassessment: any = (await reassessmentResponse.json() as any).data;
     assert.equal(reassessment.source_status, "SOURCE_RESOLVED");
-    assert.equal(reassessment.production_onboarding_eligibility, false);
-    assert.ok(reassessment.remaining_required_gates.length > 0);
+    assert.equal(reassessment.production_onboarding_eligibility, null);
+    assert.deepEqual(reassessment.eligibility_reason, ["full_review_visibility_required"]);
     const blockedAssessment = await request("/commercial-product-reviews/cc-011/reassessment", regulatoryId);
     assert.ok((await blockedAssessment.json() as any).data.blocking_gates.includes("REGULATORY"));
     const staleAssessment = await request("/commercial-product-reviews/cc-019/reassessment", marginId);

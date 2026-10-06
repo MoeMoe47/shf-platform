@@ -35,6 +35,7 @@ test("4D authenticated review operations persist immutable history and canonical
   const suffix = `${process.pid}_${Date.now()}`;
   const organizationId = `org_cpr_4d_${suffix}`;
   const userId = `user_cpr_4d_${suffix}`;
+  const managerId = `user_cpr_4d_manager_${suffix}`;
   const review = JSON.parse(await readFile(path.join(root, "docs/sales/commercial-product-registry-review/commercial-product-review-manifest.json"), "utf8"));
   const onboarding = JSON.parse(await readFile(path.join(root, "docs/sales/commercial-product-registry-onboarding/commercial-product-onboarding-manifest.json"), "utf8"));
   const packets = buildReviewPackets(review, onboarding, "2026-10-05T12:00:00.000Z");
@@ -53,13 +54,40 @@ test("4D authenticated review operations persist immutable history and canonical
   const base = `http://127.0.0.1:${address.port}`;
   const pool = new Pool({ connectionString: databaseUrl });
   const request = (route: string, permission?: string, init: any = {}) => fetch(`${base}${route}`, { ...init, headers: { "content-type": "application/json", ...(permission ? { "x-test-permission": permission } : {}), ...(init.headers || {}) } });
+  const insertRoleMembership = async (actorId: string, roleName: string, permissions: string[]) => {
+    const roleId = `role_${actorId}_${suffix}`;
+    await pool.query("INSERT INTO roles (role_id, organization_id, role_name, role_scope_type) VALUES ($1,$2,$3,'organization')", [roleId, organizationId, roleName]);
+    for (const [index, permission] of permissions.entries()) {
+      await pool.query("INSERT INTO role_permissions (role_permission_id, role_id, permission_name) VALUES ($1,$2,$3)", [`rp_${roleId}_${index}`, roleId, permission]);
+    }
+    await pool.query("INSERT INTO memberships (membership_id, user_id, organization_id, role_id, status, effective_from) VALUES ($1,$2,$3,$4,'active',NOW()-interval '1 day')", [`membership_${actorId}_${suffix}`, actorId, organizationId, roleId]);
+  };
+  const insertAssignment = async (candidateId: string, gateType: string) => {
+    const productId = packets.find((packet) => packet.candidate_id === candidateId)?.commercial_product_id;
+    assert.ok(productId);
+    const assignmentId = `assignment_${candidateId}_${gateType}_${suffix}`;
+    await pool.query(
+      `INSERT INTO commercial_product_reviewer_assignments (
+        assignment_id, reviewer_actor_id, reviewer_org_id, candidate_id, commercial_product_id,
+        effective_at, expires_at, assignment_status, assigned_by_actor_id,
+        assignment_authority_reference, reason, version
+      ) VALUES ($1,$2,$3,$4,$5,NOW()-interval '1 hour',NOW()+interval '1 day','ACTIVE',$6,'test-only://4d/current-baseline','TEST_ONLY current 4F assignment fixture',1)`,
+      [assignmentId, userId, organizationId, candidateId, productId, managerId],
+    );
+    await pool.query("INSERT INTO commercial_product_reviewer_assignment_gates (assignment_id, gate_type) VALUES ($1,$2)", [assignmentId, gateType]);
+  };
 
   try {
     await pool.query("INSERT INTO organizations (organization_id, legal_name, display_name, org_type, status) VALUES ($1,'4D Test Org','4D Test Org','SHS','active')", [organizationId]);
     await pool.query("INSERT INTO users (user_id, organization_id, email, full_name, status, identity_source) VALUES ($1,$2,$3,'4D Test Reviewer','active','test')", [userId, organizationId, `${userId}@example.test`]);
+    await pool.query("INSERT INTO users (user_id, organization_id, email, full_name, status, identity_source) VALUES ($1,$2,$3,'4D Test Assignment Manager','active','test')", [managerId, organizationId, `${managerId}@example.test`]);
+    await insertRoleMembership(userId, `test_only_4d_reviewer_${suffix}`, ["commercial_product.read", "commercial_product.review.read_all", "commercial_product.review_legal", "commercial_product.review_source_authority"]);
+    await insertRoleMembership(managerId, `test_only_4d_manager_${suffix}`, ["commercial_product.read", "commercial_product.review_assignment.manage"]);
+    await insertAssignment("cc-001", "LEGAL");
+    await insertAssignment("cc-005", "SOURCE_AUTHORITY");
     assert.equal((await request("/commercial-product-reviews")).status, 401);
     assert.equal((await request("/commercial-product-reviews", "sales.admin")).status, 403);
-    const initial = await request("/commercial-product-reviews?page_size=100", "commercial_product.read");
+    const initial = await request("/commercial-product-reviews?page_size=100", "commercial_product.read,commercial_product.review.read_all");
     assert.equal(initial.status, 200);
     assert.equal((await initial.json() as any).data.total, 32);
     assert.equal(Number((await pool.query("SELECT count(*)::int AS n FROM commercial_products")).rows[0].n), 0);

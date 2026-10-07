@@ -32,7 +32,7 @@ export interface ResolvedLessonRef {
 export interface ResolvedAssignmentWork {
   assignment: Assignment;
   studioRequirement: { required: boolean; projectType: "WEBSITE" | "AI_AGENT" | null } | null;
-  curriculumRelease: { releaseId: string; versionNumber: number; courseTitle: string; courseStableKey: string } | null;
+  curriculumRelease: { releaseId: string; versionNumber: number; courseId: string; courseTitle: string; courseStableKey: string } | null;
   assignedContent: { type: "COURSE" | "UNIT" | "LESSON"; title: string } | null;
   scopeLessons: ResolvedLessonRef[]; // empty for legacy/non-catalog assignments
   completedCount: number;
@@ -142,7 +142,13 @@ export async function resolveAssignmentWork(assignment: Assignment, actor: Actor
   return {
     assignment,
     studioRequirement: studioRequirementValue,
-    curriculumRelease: { releaseId: release.releaseId, versionNumber: release.versionNumber, courseTitle: snapshot.course.title, courseStableKey: snapshot.course.stableKey },
+    curriculumRelease: {
+      releaseId: release.releaseId,
+      versionNumber: release.versionNumber,
+      courseId: release.courseId,
+      courseTitle: snapshot.course.title,
+      courseStableKey: snapshot.course.stableKey,
+    },
     assignedContent: assignment.assignedContentType ? { type: assignment.assignedContentType, title: contentTitle } : null,
     scopeLessons,
     completedCount,

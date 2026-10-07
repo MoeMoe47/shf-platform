@@ -23,6 +23,7 @@
 // only (src/utils/lessonGuidedStages.js) — no fabricated activity,
 // instructor, due date, or completion percentage.
 import React from "react";
+import { lessonCoursePosition } from "@/utils/lessonCoursePosition.js";
 import { Link } from "react-router-dom";
 import MediaRow from "@/components/ui/MediaRow.jsx";
 import normalizeLessonMedia from "@/utils/normalizeLessonMedia.js";
@@ -130,11 +131,14 @@ function buildContentNavItems(lesson, availableStages) {
   if (availableStages.some((s) => s.key === "reflect")) {
     add("reflect", "Reflect", "Private reflection", upcoming, ChatBubbleIcon);
   }
-  add("complete", "Completion Check", "Backend confirmation", upcoming, CheckCircleIcon);
+  if (availableStages.some((s) => s.key === "complete")) {
+    add("complete", "Completion Check", "Backend confirmation", upcoming, CheckCircleIcon);
+  }
   return items;
 }
 
-function ContentNavigator({ items, onSelectStage }) {
+function ContentNavigator({ items, onSelectStage, lesson }) {
+  const position = lessonCoursePosition(lesson);
   const [openGroups, setOpenGroups] = React.useState(() => new Set(["learn"]));
 
   function toggle(id) {
@@ -149,7 +153,22 @@ function ContentNavigator({ items, onSelectStage }) {
   return (
     <aside className="ld-card ld-contentNav" aria-label="Lesson content">
       <div className="ld-contentNavHead">
-        <h2>Lesson Content</h2>
+        <div>
+          <h2>
+            {position
+              ? `Lesson ${position.lessonCode} Content`
+              : "Lesson Content"}
+          </h2>
+
+          {position ? (
+            <p className="ld-contentNavPosition">
+              Unit {position.unitNumber}
+              {" · "}
+              Lesson {position.lessonNumber} of {position.lessonCount}
+            </p>
+          ) : null}
+        </div>
+
         <span>{items.length} groups</span>
       </div>
       <div className="ld-contentNavList">
@@ -207,23 +226,44 @@ function ContentNavigator({ items, onSelectStage }) {
   );
 }
 
-function ContextRail({ lesson, curriculum, completedCount, availableCount, nextHref, resources }) {
-  const pct = availableCount > 0 ? Math.round((completedCount / availableCount) * 100) : 0;
-  const curriculumName = String(curriculum || lesson.curriculum || "Curriculum").replace(/-/g, " ");
+function ContextRail({ lesson, curriculum, completedCount, availableCount, nextHref, resources, previewMode = false }) {
+  const position = lessonCoursePosition(lesson);
+  const displayCompletedCount = previewMode ? 0 : completedCount;
+  const pct = availableCount > 0 ? Math.round((displayCompletedCount / availableCount) * 100) : 0;
+
+  const curriculumKey = String(curriculum || lesson.curriculum || "Curriculum");
+
+  const curriculumName =
+    curriculumKey === "shu-universal-career-readiness"
+      ? "SHU Universal Career Readiness"
+      : curriculumKey.replace(/-/g, " ");
+
+  const unitKey = String(lesson.curriculum || "");
+  const unitName =
+    unitKey === "ucr-entering-world-of-work"
+      ? "Entering the World of Work"
+      : unitKey
+          .replace(/^ucr-/, "")
+          .replace(/-/g, " ")
+          .replace(/\b\w/g, (c) => c.toUpperCase());
   return (
     <aside className="ld-contextRail" aria-label="Lesson context">
       <section className="ld-card ld-panelCard ld-progressPanel">
         <div className="ld-panelTitleRow">
-          <h2 className="ld-panelTitle">Lesson Progress</h2>
+          <h2 className="ld-panelTitle">{previewMode ? "Preview Status" : "Lesson Progress"}</h2>
         </div>
         <div className="ld-progressPanelBody">
           <div className="ld-progressRing" style={{ "--progress": `${pct}%` }} aria-label={`Lesson progress ${pct}%`}>
             <span>{pct}%</span>
           </div>
           <div>
-            <p className="ld-progressPanelLabel">Overall Progress</p>
-            <p className="ld-progressPanelValue">{completedCount} of {availableCount} steps completed</p>
-            <div className="ld-progressBar" role="progressbar" aria-valuemin="0" aria-valuemax={availableCount} aria-valuenow={completedCount}>
+            <p className="ld-progressPanelLabel">{previewMode ? "Draft preview" : "Overall Progress"}</p>
+            <p className="ld-progressPanelValue">
+              {previewMode
+                ? "Completion tracking disabled"
+                : `${displayCompletedCount} of ${availableCount} steps completed`}
+            </p>
+            <div className="ld-progressBar" role="progressbar" aria-valuemin="0" aria-valuemax={availableCount} aria-valuenow={displayCompletedCount}>
               <span style={{ width: `${pct}%` }} />
             </div>
           </div>
@@ -235,11 +275,41 @@ function ContextRail({ lesson, curriculum, completedCount, availableCount, nextH
           <h2 className="ld-panelTitle">Current Context</h2>
         </div>
         <dl className="ld-contextList">
-          <div><dt><BookIcon size={15} /> Course</dt><dd>{curriculumName}</dd></div>
-          <div><dt><LayersIcon size={15} /> Unit</dt><dd>{lesson.gradeBand?.stage || "Current unit"}</dd></div>
-          <div><dt><TargetIcon size={15} /> Lesson</dt><dd>{lesson.slug || lesson.id}</dd></div>
+          <div>
+            <dt><BookIcon size={15} /> Course</dt>
+            <dd>{position?.courseTitle || curriculumName}</dd>
+          </div>
+
+          <div>
+            <dt><LayersIcon size={15} /> Unit</dt>
+            <dd>
+              {position
+                ? `Unit ${position.unitNumber} of ${position.unitCount} · ${position.unitTitle}`
+                : previewMode
+                  ? unitName
+                  : (lesson.gradeBand?.stage || "Current unit")}
+            </dd>
+          </div>
+
+          <div>
+            <dt><TargetIcon size={15} /> Lesson</dt>
+            <dd>
+              {position
+                ? `Lesson ${position.lessonNumber} of ${position.lessonCount} · ${position.lessonCode} · ${lesson.title}`
+                : previewMode
+                  ? (lesson.title || "Draft lesson")
+                  : (lesson.slug || lesson.id)}
+            </dd>
+          </div>
           {lesson.estMinutes ? <div><dt><ClockIcon size={15} /> Estimated Time</dt><dd>{lesson.estMinutes} minutes</dd></div> : null}
-          <div><dt><CalendarIcon size={15} /> Due Date</dt><dd>Assigned due date unavailable</dd></div>
+          <div>
+            <dt><CalendarIcon size={15} /> Due Date</dt>
+            <dd>
+              {previewMode
+                ? "Not applicable in draft preview"
+                : "Assigned due date unavailable"}
+            </dd>
+          </div>
         </dl>
       </section>
 
@@ -303,7 +373,7 @@ function lessonResources(lesson, nextHref) {
   return resources;
 }
 
-export default function GuidedLessonExperience({ lesson, curriculum, nextHref, role, assignmentId, unitStableKey, activityState }) {
+export default function GuidedLessonExperience({ lesson, curriculum, nextHref, role, assignmentId, unitStableKey, activityState, previewMode = false }) {
   const { email } = useUser();
   const { addPoints } = useRewards();
   const actorId = email || "local-student";
@@ -318,7 +388,15 @@ export default function GuidedLessonExperience({ lesson, curriculum, nextHref, r
     };
   }, [activityState, lesson]);
   const stages = React.useMemo(() => buildGuidedStages(canonicalLesson), [canonicalLesson]);
-  const availableStages = React.useMemo(() => stages.filter((s) => s.available), [stages]);
+  const availableStages = React.useMemo(
+    () =>
+      stages.filter(
+        (stage) =>
+          stage.available &&
+          (!previewMode || !["evidence", "complete"].includes(stage.key))
+      ),
+    [stages, previewMode]
+  );
   const { check: checkAssessment, reflect: reflectAssessment } = React.useMemo(() => splitAssessment(canonicalLesson), [canonicalLesson]);
 
   const initialStage = React.useMemo(() => firstAvailableStage(availableStages), [availableStages]);
@@ -370,26 +448,31 @@ export default function GuidedLessonExperience({ lesson, curriculum, nextHref, r
   if (!canonicalLesson) return null;
 
   return (
-    <div className="ld-lessonPage">
+    <div className={`ld-lessonPage${previewMode ? " ld-previewMode" : ""}`}>
       <LessonHeader
         lesson={canonicalLesson}
         curriculum={curriculum}
         completedCount={completedKeys.size}
         availableCount={availableStages.length}
+        previewMode={previewMode}
       />
 
       <div className="ld-card ld-stageRailCard">
         <LessonStageRail
           stages={availableStages}
           activeKey={activeKey}
-          completedKeys={completedKeys}
+          completedKeys={previewMode ? new Set() : completedKeys}
           onSelect={goToStage}
           panelId="lesson-stage-panel"
         />
       </div>
 
       <div className="ld-lessonGrid">
-        <ContentNavigator items={contentNavItems} onSelectStage={goToStage} />
+        <ContentNavigator
+          items={contentNavItems}
+          onSelectStage={goToStage}
+          lesson={canonicalLesson}
+        />
 
         <section id="lesson-stage-panel" role="tabpanel" aria-labelledby={`lesson-stage-tab-${activeKey}`} className="ld-card ld-workspace">
           <div className="ld-studySurfaceHead">
@@ -479,11 +562,75 @@ export default function GuidedLessonExperience({ lesson, curriculum, nextHref, r
           )}
 
           {activeKey === "check" && checkAssessment && (
-            activityState?.assessment ? <AssessmentActivity definition={activityState.assessment} context={activityContext} /> : <p className="ld-workspaceEmpty">No canonical assessment is available for this assignment.</p>
+            previewMode ? (
+              <div className="ld-previewAssessment">
+                <p className="ld-workspaceEmpty" style={{ marginBottom: 16 }}>
+                  Draft preview — scoring and submission are disabled until this lesson is imported, released, and assigned.
+                </p>
+
+                {(checkAssessment.items || []).map((item, index) => (
+                  <section
+                    key={item.id || `preview-check-${index}`}
+                    className="ld-card"
+                    style={{ padding: 18, marginBottom: 14 }}
+                  >
+                    <p className="ld-studyEyebrow">
+                      Knowledge Check {index + 1}
+                    </p>
+
+                    <h3 style={{ marginTop: 6 }}>
+                      {item.prompt}
+                    </h3>
+
+                    {Array.isArray(item.choices) && item.choices.length > 0 ? (
+                      <div
+                        style={{
+                          display: "grid",
+                          gap: 10,
+                          marginTop: 14
+                        }}
+                      >
+                        {item.choices.map((choice, choiceIndex) => (
+                          <div
+                            key={`${item.id || index}-${choiceIndex}`}
+                            className="ld-card"
+                            style={{
+                              padding: "12px 14px",
+                              background: "var(--surface, #fff)"
+                            }}
+                          >
+                            <strong>
+                              {String.fromCharCode(65 + choiceIndex)}.
+                            </strong>{" "}
+                            {choice}
+                          </div>
+                        ))}
+                      </div>
+                    ) : null}
+
+                    <p
+                      className="subtle"
+                      style={{ marginTop: 14, marginBottom: 0 }}
+                    >
+                      Answer key is hidden in draft learner preview.
+                    </p>
+                  </section>
+                ))}
+              </div>
+            ) : activityState?.assessment ? (
+              <AssessmentActivity
+                definition={activityState.assessment}
+                context={activityContext}
+              />
+            ) : (
+              <p className="ld-workspaceEmpty">
+                No canonical assessment is available for this assignment.
+              </p>
+            )
           )}
 
           {activeKey === "practice" && (
-            activityState?.practice ? <PracticeActivity definition={activityState.practice} context={activityContext} /> : <p className="ld-workspaceEmpty">No canonical practice activity is available for this assignment.</p>
+            activityState?.practice ? <PracticeActivity definition={activityState.practice} context={activityContext} /> : <p className="ld-workspaceEmpty">{previewMode ? "Draft preview — the practice activity becomes interactive after this lesson is imported, released, and assigned." : "No canonical practice activity is available for this assignment."}</p>
           )}
 
           {activeKey === "arcade" && (
@@ -493,7 +640,11 @@ export default function GuidedLessonExperience({ lesson, curriculum, nextHref, r
           {activeKey === "apply" && (
             <div className="ld-applyCard">
               {canonicalLesson.proofActivity ? (
-                <ProofActivity activity={canonicalLesson.proofActivity} />
+                <ProofActivity
+                  activity={canonicalLesson.proofActivity}
+                  context={activityContext}
+                  previewMode={previewMode}
+                />
               ) : (
                 <>
               {canonicalLesson.project?.title && <h3>{canonicalLesson.project.title}</h3>}
@@ -532,7 +683,7 @@ export default function GuidedLessonExperience({ lesson, curriculum, nextHref, r
           )}
 
           {activeKey === "reflect" && reflectAssessment && (
-            activityState?.reflection ? <ReflectionActivity definition={activityState.reflection} context={activityContext} /> : <p className="ld-workspaceEmpty">No canonical reflection is available for this assignment.</p>
+            activityState?.reflection ? <ReflectionActivity definition={activityState.reflection} context={activityContext} /> : <p className="ld-workspaceEmpty">{previewMode ? "Draft preview — reflection submission becomes interactive after this lesson is imported, released, and assigned." : "No canonical reflection is available for this assignment."}</p>
           )}
 
           {activeKey === "evidence" && (
@@ -575,12 +726,13 @@ export default function GuidedLessonExperience({ lesson, curriculum, nextHref, r
         </section>
 
         <ContextRail
-              lesson={canonicalLesson}
+          lesson={canonicalLesson}
           curriculum={curriculum}
           completedCount={completedKeys.size}
           availableCount={availableStages.length}
           nextHref={nextHref}
           resources={resources}
+          previewMode={previewMode}
         />
       </div>
     </div>
@@ -621,79 +773,334 @@ function VocabularyStage({ lesson, curriculum, actorId }) {
   );
 }
 
-function ProofActivity({ activity }) {
-  const monitoringData = Array.isArray(activity?.monitoringData) && activity.monitoringData.length > 0
-    ? activity.monitoringData
-    : [
-      { signal: "Service state", value: "degraded", status: "review", detail: "Synthetic signal for evidence-based analysis." },
-      { signal: "Storage pressure", value: "elevated", status: "review", detail: "Synthetic signal; root cause remains uncertain." },
-    ];
-  const [form, setForm] = React.useState({ observations: "", affectedSystem: "", uncertainty: "", safeNextStep: "" });
+function ProofActivity({ activity, context, previewMode = false }) {
+  const isCurriculumAssignmentProof =
+    activity?.activityType === "WORKPLACE_READINESS_PROOF";
+
+  const monitoringData =
+    Array.isArray(activity?.monitoringData) && activity.monitoringData.length > 0
+      ? activity.monitoringData
+      : isCurriculumAssignmentProof
+        ? []
+        : [
+            {
+              signal: "Service state",
+              value: "degraded",
+              status: "review",
+              detail: "Synthetic signal for evidence-based analysis.",
+            },
+            {
+              signal: "Storage pressure",
+              value: "elevated",
+              status: "review",
+              detail: "Synthetic signal; root cause remains uncertain.",
+            },
+          ];
+
+  const labels = isCurriculumAssignmentProof
+    ? {
+        title: activity?.title || "Prove your workplace-readiness skill",
+        description:
+          activity?.description ||
+          "Complete the workplace scenario using clear evidence, appropriate reasoning, and an accurate next step.",
+        observations: activity?.prompts?.observations || "Relevant facts or evidence",
+        affectedSystem: activity?.prompts?.affectedSystem || "Your response or decision",
+        uncertainty: activity?.prompts?.uncertainty || "What remains uncertain or limited?",
+        safeNextStep: activity?.prompts?.safeNextStep || "Appropriate follow-up, verification, or next step",
+      }
+    : {
+        title: "Prove: document a safe finding",
+        description:
+          "Use the synthetic monitoring snapshot to record facts, uncertainty, and a safe next step. This activity is simulation only.",
+        observations: "Observations (one fact per line)",
+        affectedSystem: "Affected system hypothesis",
+        uncertainty: "What remains uncertain?",
+        safeNextStep: "Safe next step or escalation",
+      };
+
+  const [form, setForm] = React.useState({
+    observations: "",
+    affectedSystem: "",
+    uncertainty: "",
+    safeNextStep: "",
+  });
   const [status, setStatus] = React.useState(null);
   const [busy, setBusy] = React.useState(false);
   const [error, setError] = React.useState("");
+
   const loadStatus = React.useCallback(async () => {
+    if (previewMode) return;
+
+    if (isCurriculumAssignmentProof && !context?.assignmentId) {
+      setStatus(null);
+      return;
+    }
+
     try {
-      const response = await fetch(`/api/prepare-prove/proof-status?activity_id=${encodeURIComponent(activity.activityId)}`, { credentials: "include", cache: "no-store" });
+      const params = new URLSearchParams({
+        activity_id: activity.activityId,
+      });
+
+      if (isCurriculumAssignmentProof) {
+        params.set("assignment_id", context.assignmentId);
+      }
+
+      const response = await fetch(
+        `/api/prepare-prove/proof-status?${params.toString()}`,
+        {
+          credentials: "include",
+          cache: "no-store",
+        },
+      );
+
       if (!response.ok) return;
+
       const body = await response.json();
       if (body?.ok) setStatus(body.data);
-    } catch { /* The submit path reports a concrete error. */ }
-  }, []);
-  React.useEffect(() => { loadStatus(); }, [loadStatus]);
+    } catch {
+      /* The submit path reports a concrete error. */
+    }
+  }, [
+    activity?.activityId,
+    context?.assignmentId,
+    isCurriculumAssignmentProof,
+    previewMode,
+  ]);
+
+  React.useEffect(() => {
+    loadStatus();
+  }, [loadStatus]);
+
   async function submit(event) {
     event.preventDefault();
+
+    if (previewMode) return;
+
+    if (isCurriculumAssignmentProof) {
+      if (
+        !context?.assignmentId ||
+        !context?.unitStableKey ||
+        !context?.lessonStableKey
+      ) {
+        setError(
+          "This proof activity requires an active curriculum assignment.",
+        );
+        return;
+      }
+    }
+
     setBusy(true);
     setError("");
+
     try {
       const headers = { "Content-Type": "application/json" };
-      const resultResponse = await fetch("/api/prepare-prove/activity-results", {
-        method: "POST", credentials: "include", headers,
-        body: JSON.stringify({ result: {
-          observations: form.observations.split("\n").map((value) => value.trim()).filter(Boolean),
-          activity_id: activity.activityId,
-          affected_system: form.affectedSystem,
-          uncertainty: form.uncertainty,
-          safe_next_step: form.safeNextStep,
-        } }),
-      });
-      if (!resultResponse.ok) throw new Error("The proof result could not be recorded.");
+
+      const result = {
+        observations: form.observations
+          .split("\n")
+          .map((value) => value.trim())
+          .filter(Boolean),
+        activity_id: activity.activityId,
+        affected_system: form.affectedSystem,
+        uncertainty: form.uncertainty,
+        safe_next_step: form.safeNextStep,
+      };
+
+      if (isCurriculumAssignmentProof) {
+        result.assignment_id = context.assignmentId;
+        result.unit_stable_key = context.unitStableKey;
+        result.lesson_stable_key = context.lessonStableKey;
+      }
+
+      const resultResponse = await fetch(
+        "/api/prepare-prove/activity-results",
+        {
+          method: "POST",
+          credentials: "include",
+          headers,
+          body: JSON.stringify({ result }),
+        },
+      );
+
+      if (!resultResponse.ok) {
+        throw new Error("The proof result could not be recorded.");
+      }
+
       const resultBody = await resultResponse.json();
+
       const evidenceResponse = await fetch("/api/prepare-prove/evidence", {
-        method: "POST", credentials: "include", headers,
-        body: JSON.stringify({ source_result_id: resultBody.data.result_id, criterion: activity.criterion || "safe-finding" }),
+        method: "POST",
+        credentials: "include",
+        headers,
+        body: JSON.stringify({
+          source_result_id: resultBody.data.result_id,
+          criterion: activity.criterion || "safe-finding",
+        }),
       });
-      if (!evidenceResponse.ok) throw new Error("The evidence record could not be created.");
+
+      if (!evidenceResponse.ok) {
+        throw new Error("The evidence record could not be created.");
+      }
+
       await loadStatus();
     } catch (submitError) {
-      setError(submitError?.message || "The proof could not be submitted.");
-    } finally { setBusy(false); }
+      setError(
+        submitError?.message || "The proof could not be submitted.",
+      );
+    } finally {
+      setBusy(false);
+    }
   }
-  const update = (key) => (event) => setForm((current) => ({ ...current, [key]: event.target.value }));
+
+  const update = (key) => (event) =>
+    setForm((current) => ({
+      ...current,
+      [key]: event.target.value,
+    }));
+
   const decision = status?.decision;
+
+  if (previewMode) {
+    return (
+      <div data-testid="prepare-prove-proof-activity">
+        <h3>{labels.title}</h3>
+        <p>{labels.description}</p>
+
+        {Array.isArray(activity?.criteria) &&
+          activity.criteria.length > 0 && (
+            <>
+              <h4>Review criteria</h4>
+              <ul>
+                {activity.criteria.map((criterion) => (
+                  <li key={criterion}>{criterion}</li>
+                ))}
+              </ul>
+            </>
+          )}
+
+        <p className="subtle">
+          Draft preview only. Proof submission, evidence creation, review,
+          competency decisions, and assignment status are disabled until
+          this lesson is released and assigned.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div data-testid="prepare-prove-proof-activity">
-      <h3>Prove: document a safe finding</h3>
-      <p>Use the synthetic monitoring snapshot to record facts, uncertainty, and a safe next step. This activity is simulation only.</p>
-      <div className="ld-proofTableWrap">
-        <table className="ld-proofTable">
-          <caption className="sr-only">Synthetic monitoring data</caption>
-          <thead><tr><th scope="col">Signal</th><th scope="col">Value</th><th scope="col">Status</th><th scope="col">Detail</th></tr></thead>
-          <tbody>{monitoringData.map((row) => <tr key={row.signal}><th scope="row">{row.signal}</th><td>{row.value}</td><td>{row.status}</td><td>{row.detail}</td></tr>)}</tbody>
-        </table>
-      </div>
-      <form onSubmit={submit} className="ld-proofForm">
-        <label>Observations (one fact per line)<textarea required value={form.observations} onChange={update("observations")} /></label>
-        <label>Affected system hypothesis<input required value={form.affectedSystem} onChange={update("affectedSystem")} /></label>
-        <label>What remains uncertain?<textarea required value={form.uncertainty} onChange={update("uncertainty")} /></label>
-        <label>Safe next step or escalation<textarea required value={form.safeNextStep} onChange={update("safeNextStep")} /></label>
-        <button type="submit" className="ld-btn ld-btnPrimary" disabled={busy}>{busy ? "Submitting…" : "Submit evidence for review"}</button>
-      </form>
+      <h3>{labels.title}</h3>
+      <p>{labels.description}</p>
+
+      {monitoringData.length > 0 && (
+        <div className="ld-proofTableWrap">
+          <table className="ld-proofTable">
+            <caption className="sr-only">
+              Synthetic monitoring data
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Signal</th>
+                <th scope="col">Value</th>
+                <th scope="col">Status</th>
+                <th scope="col">Detail</th>
+              </tr>
+            </thead>
+            <tbody>
+              {monitoringData.map((row) => (
+                <tr key={row.signal}>
+                  <th scope="row">{row.signal}</th>
+                  <td>{row.value}</td>
+                  <td>{row.status}</td>
+                  <td>{row.detail}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {isCurriculumAssignmentProof && !context?.assignmentId ? (
+        <p className="ld-workspaceEmpty">
+          This proof activity becomes available through an active curriculum
+          assignment.
+        </p>
+      ) : (
+        <form onSubmit={submit} className="ld-proofForm">
+          <label>
+            {labels.observations}
+            <textarea
+              required
+              value={form.observations}
+              onChange={update("observations")}
+            />
+          </label>
+
+          <label>
+            {labels.affectedSystem}
+            <input
+              required
+              value={form.affectedSystem}
+              onChange={update("affectedSystem")}
+            />
+          </label>
+
+          <label>
+            {labels.uncertainty}
+            <textarea
+              required
+              value={form.uncertainty}
+              onChange={update("uncertainty")}
+            />
+          </label>
+
+          <label>
+            {labels.safeNextStep}
+            <textarea
+              required
+              value={form.safeNextStep}
+              onChange={update("safeNextStep")}
+            />
+          </label>
+
+          <button
+            type="submit"
+            className="ld-btn ld-btnPrimary"
+            disabled={busy}
+          >
+            {busy ? "Submitting…" : "Submit evidence for review"}
+          </button>
+        </form>
+      )}
+
       {error && <p role="alert">{error}</p>}
-      <div role="status" aria-live="polite" data-testid="prepare-prove-proof-status">
-        {!status?.evidence && <p>Evidence status: Not submitted</p>}
-        {status?.evidence && !decision && <p>Evidence status: Evidence submitted, pending review.</p>}
-        {decision && <p>Review status: {decision.decision === "DEMONSTRATED" ? "Criteria demonstrated" : decision.decision === "EVIDENCE_INSUFFICIENT" ? "Evidence insufficient" : "Review needs follow-up"}. Criteria version {decision.criteria_version}.</p>}
+
+      <div
+        role="status"
+        aria-live="polite"
+        data-testid="prepare-prove-proof-status"
+      >
+        {!status?.evidence && (
+          <p>Evidence status: Not submitted</p>
+        )}
+
+        {status?.evidence && !decision && (
+          <p>
+            Evidence status: Evidence submitted, pending review.
+          </p>
+        )}
+
+        {decision && (
+          <p>
+            Review status:{" "}
+            {decision.decision === "DEMONSTRATED"
+              ? "Criteria demonstrated"
+              : decision.decision === "EVIDENCE_INSUFFICIENT"
+                ? "Evidence insufficient"
+                : "Review needs follow-up"}
+            . Criteria version {decision.criteria_version}.
+          </p>
+        )}
       </div>
     </div>
   );

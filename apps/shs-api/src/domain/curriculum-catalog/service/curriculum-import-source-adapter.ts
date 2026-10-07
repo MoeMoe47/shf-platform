@@ -231,6 +231,76 @@ function humanizeGroupKey(key: string): string {
   return key.split("-").map((w) => (w ? w[0].toUpperCase() + w.slice(1) : w)).join(" ");
 }
 
+// Presentation metadata only.
+//
+// Stable keys remain the canonical identities used by the importer,
+// catalog, assignments, completion, reporting, and re-import continuity.
+// These mappings only prevent machine-humanized labels from becoming
+// learner/staff-facing catalog titles.
+const SOURCE_DISPLAY_TITLES: Record<string, string> = {
+  "shu-universal-career-readiness": "SHU Universal Career Readiness",
+};
+
+const UNIT_DISPLAY_TITLES: Record<string, Record<string, string>> = {
+  "shu-universal-career-readiness": {
+    "ucr-entering-world-of-work": "Unit 1 — Entering the World of Work",
+    "ucr-professionalism": "Unit 2 — Professionalism",
+    "ucr-communication": "Unit 3 — Communication",
+    "ucr-teamwork-collaboration": "Unit 4 — Teamwork & Collaboration",
+    "ucr-workplace-safety-culture": "Unit 5 — Workplace Safety Culture",
+    "ucr-problem-solving-decision-making": "Unit 6 — Problem Solving & Decision Making",
+    "ucr-time-attendance-responsibility": "Unit 7 — Time, Attendance & Responsibility",
+    "ucr-digital-ai-workplace-literacy": "Unit 8 — Digital & AI Workplace Literacy",
+    "ucr-accessibility-inclusion-accommodations": "Unit 9 — Accessibility, Inclusion & Accommodations",
+    "ucr-ethics-rights-responsibilities": "Unit 10 — Ethics, Rights & Responsibilities",
+    "ucr-career-planning-employer-expectations": "Unit 11 — Career Planning & Employer Expectations",
+    "ucr-resume-interview-professional-presentation": "Unit 12 — Resume, Interview & Professional Presentation",
+    "ucr-evidence-skills-portfolio": "Unit 13 — Evidence, Skills & Portfolio",
+    "ucr-financial-readiness-for-work": "Unit 14 — Financial Readiness for Work",
+    "ucr-transition-plan": "Unit 15 — Transition Plan",
+  },
+};
+
+const UNIT_SEQUENCE: Record<string, Record<string, number>> = {
+  "shu-universal-career-readiness": {
+    "ucr-entering-world-of-work": 1,
+    "ucr-professionalism": 2,
+    "ucr-communication": 3,
+    "ucr-teamwork-collaboration": 4,
+    "ucr-workplace-safety-culture": 5,
+    "ucr-problem-solving-decision-making": 6,
+    "ucr-time-attendance-responsibility": 7,
+    "ucr-digital-ai-workplace-literacy": 8,
+    "ucr-accessibility-inclusion-accommodations": 9,
+    "ucr-ethics-rights-responsibilities": 10,
+    "ucr-career-planning-employer-expectations": 11,
+    "ucr-resume-interview-professional-presentation": 12,
+    "ucr-evidence-skills-portfolio": 13,
+    "ucr-financial-readiness-for-work": 14,
+    "ucr-transition-plan": 15,
+  },
+};
+
+function courseDisplayTitle(sourceKey: string): string {
+  return SOURCE_DISPLAY_TITLES[sourceKey]
+    ?? `${humanizeGroupKey(sourceKey)} Curriculum`;
+}
+
+function unitDisplayTitle(
+  sourceKey: string,
+  stableKey: string,
+  fallbackTitle: string,
+): string {
+  return UNIT_DISPLAY_TITLES[sourceKey]?.[stableKey] ?? fallbackTitle;
+}
+
+function sourceUnitSequence(
+  sourceKey: string,
+  stableKey: string,
+): number | null {
+  return UNIT_SEQUENCE[sourceKey]?.[stableKey] ?? null;
+}
+
 // Reconstructs order within one group via its nextSlug chain(s), when
 // every lesson in the group has a usable `slug` and no nextSlug points
 // outside the group (Data Center: reliable). Returns null — never a
@@ -372,6 +442,15 @@ export function readStructuredSource(sourceKey: string): StructuredCurriculumSou
     return [1, 0, g.key];
   };
   groupList.sort((a, b) => {
+    const explicitA = sourceUnitSequence(sourceKey, a.key);
+    const explicitB = sourceUnitSequence(sourceKey, b.key);
+
+    if (explicitA !== null || explicitB !== null) {
+      if (explicitA === null) return 1;
+      if (explicitB === null) return -1;
+      if (explicitA !== explicitB) return explicitA - explicitB;
+    }
+
     const [ta, na, ka] = sortKey(a);
     const [tb, nb, kb] = sortKey(b);
     if (ta !== tb) return ta - tb;
@@ -395,10 +474,12 @@ export function readStructuredSource(sourceKey: string): StructuredCurriculumSou
         arcadeReferences: extractArcadeReferences(file.raw, sourceReference),
       };
     });
-    const title = group.key === "all-lessons" ? "All Lessons"
+    const fallbackTitle = group.key === "all-lessons" ? "All Lessons"
       : group.key === "ungrouped" ? "Ungrouped Lessons"
       : group.sourceKind === "title-unit" ? `Unit ${group.unitNumber}`
       : humanizeGroupKey(group.key);
+
+    const title = unitDisplayTitle(sourceKey, group.key, fallbackTitle);
     const unit = {
       stableKey: group.key,
       title,
@@ -413,7 +494,7 @@ export function readStructuredSource(sourceKey: string): StructuredCurriculumSou
   return {
     sourceKey,
     courseStableKey: sourceKey.toLowerCase(),
-    courseTitle: `${humanizeGroupKey(sourceKey)} Curriculum`,
+    courseTitle: courseDisplayTitle(sourceKey),
     units,
     sourceHash: sourceHashOf({ sourceKey, units: units.map((unit) => ({ stableKey: unit.stableKey, sourceHash: unit.sourceHash })) }),
   };

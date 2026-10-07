@@ -22,6 +22,7 @@ const Settings = lazy(() => import("@/pages/Settings.jsx"));
  * place rather than deleted, since nothing in this task required removing
  * it. */
 const CurriculumLesson = lazy(() => import("@/pages/curriculum/Lesson.jsx"));
+const DraftLessonPreview = lazy(() => import("@/pages/curriculum/DraftLessonPreview.jsx"));
 
 /** Phase 5.5 Unified Learning Workspace — course-first Learning landing +
  * Course Workspace (Overview/Lessons/Assignments/Live/Resources/Progress
@@ -179,6 +180,7 @@ export default function CurriculumRoutes() {
 
           {/* Curriculum lesson routes */}
           <Route path="lesson/:id" element={<CurriculumLesson />} />
+          <Route path="preview/lessons/:slug" element={<DraftLessonPreview />} />
           {/* Canonical student content (src/content/lessons/asl-student/*)
               — previously unreachable, see StudentUnit.jsx header comment.
               Deliberately "lessons/:slug" (plural), matching the shape

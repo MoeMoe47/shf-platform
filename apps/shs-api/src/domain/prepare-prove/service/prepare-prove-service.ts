@@ -3,8 +3,28 @@ import { withTransaction } from "../../../db/transaction.js";
 import { query } from "../../../db/client.js";
 import { IntegrationOutboxRepo } from "../../trusted-reporting/outbox-repo.js";
 import { hasPermission, SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions.js";
+import { resolveAssignmentWorkForActor } from "../../assignments/service/assignment-entitlement-service.js";
 
 const PROOF_ACTIVITY_TYPE = "SIMULATED_INFRASTRUCTURE_PROOF";
+const UCR_PROOF_ACTIVITY_TYPE = "WORKPLACE_READINESS_PROOF";
+const UCR_COURSE_STABLE_KEY = "shu-universal-career-readiness";
+
+type ProofEligibilityPolicy =
+  | "DATA_CENTER_SPECIALIZATION"
+  | "CURRICULUM_ASSIGNMENT";
+
+type ProofConfig = {
+  slug: string;
+  activityType: string;
+  domain: string;
+  title: string;
+  description: string;
+  criteria: string[];
+  eligibilityPolicy?: ProofEligibilityPolicy;
+  courseStableKey?: string;
+  unitStableKey?: string;
+  lessonStableKey?: string;
+};
 const PROOF_ACTIVITY_ID = "grade11-technical-operations-monitoring-proof";
 const PROOF_COMPETENCY_SLUG = "interpret-monitoring-data-and-document-safe-finding";
 const GRADE12_PROOF_ACTIVITY_ID = "grade12-technical-operations-multi-system-operations-analysis";
@@ -16,7 +36,7 @@ const GRADE12_COURSE_BY_DOMAIN: Record<string, string> = {
   "cybersecurity-security": "data-center-cybersecurity-security-12",
   "ai-cloud-infrastructure": "data-center-ai-cloud-infrastructure-12",
 };
-const PROOF_CONFIGS: Record<string, { slug: string; activityType: string; domain: string; title: string; description: string; criteria: string[] }> = {
+const PROOF_CONFIGS: Record<string, ProofConfig> = {
   "grade11-technical-operations-monitoring-proof": { slug: PROOF_COMPETENCY_SLUG, activityType: PROOF_ACTIVITY_TYPE, domain: "technical-operations", title: "Interpret monitoring data and document a safe technical finding", description: "Interpret synthetic infrastructure observations, distinguish evidence from assumptions, identify an affected system, and recommend a safe escalation or next step.", criteria: ["records observations accurately", "identifies a plausible affected system", "separates evidence from uncertainty", "recommends a safe next step"] },
   "grade11-technical-operations-linux-inspection": { slug: "inspect-linux-system-state-safely", activityType: PROOF_ACTIVITY_TYPE, domain: "technical-operations", title: "Inspect Linux system state safely", description: "Use an approved sandbox observation to identify relevant system state and document it without unsafe changes.", criteria: ["uses approved inspection evidence", "identifies relevant system state", "avoids unsupported conclusions", "documents a safe next step"] },
   "grade11-technical-operations-troubleshooting-documentation": { slug: "document-structured-infrastructure-troubleshooting", activityType: PROOF_ACTIVITY_TYPE, domain: "technical-operations", title: "Document structured infrastructure troubleshooting", description: "Use synthetic evidence to identify a likely subsystem, select a low-risk action, verify the result, and document escalation.", criteria: ["defines the symptom", "uses relevant evidence", "selects a low-risk action", "documents verification or escalation"] },
@@ -58,6 +78,59 @@ const PROOF_CONFIGS: Record<string, { slug: string; activityType: string; domain
   "grade12-cybersecurity-security-access-governance-analysis": { slug: "grade12-cybersecurity-security-access-governance-analysis", activityType: PROOF_ACTIVITY_TYPE, domain: "cybersecurity-security", title: "Analyze defensive access governance", description: "Interpret synthetic identities, roles, permissions, and lifecycle records using least-privilege and separation-of-duties reasoning without changing real accounts.", criteria: ["interprets identity, role, and permission relationships", "identifies stale or excessive access", "applies least-privilege and separation-of-duties reasoning", "preserves uncertainty", "documents an authorized recommendation"] },
   "grade12-cybersecurity-security-defensive-incident-correlation-coordination": { slug: "grade12-cybersecurity-security-defensive-incident-correlation-coordination", activityType: PROOF_ACTIVITY_TYPE, domain: "cybersecurity-security", title: "Coordinate a simulated defensive security incident", description: "Correlate synthetic physical and cyber events, preserve source records, distinguish alerts from confirmed incidents, and recommend safe escalation.", criteria: ["correlates synthetic events and chronology", "distinguishes an alert from a confirmed incident", "identifies missing evidence and uncertainty", "preserves source records", "coordinates safe authorized escalation"] },
   "grade12-cybersecurity-security-defensive-incident-correlation-coordination-reassessment": { slug: "grade12-cybersecurity-security-defensive-incident-correlation-coordination", activityType: PROOF_ACTIVITY_TYPE, domain: "cybersecurity-security", title: "Coordinate a simulated defensive security incident", description: "Reassess a synthetic defensive security incident while preserving source records, uncertainty, and safe escalation boundaries.", criteria: ["correlates synthetic events and chronology", "distinguishes an alert from a confirmed incident", "identifies missing evidence and uncertainty", "preserves source records", "coordinates safe authorized escalation"] },
+  "ucr-professional-communication-proof": {
+    slug: "professional-workplace-communication",
+    activityType: UCR_PROOF_ACTIVITY_TYPE,
+    domain: "universal-career-readiness",
+    title: "Communicate clearly and appropriately in a workplace scenario",
+    description: "Use a workplace scenario to select an appropriate communication approach, distinguish facts from assumptions, communicate clearly, and identify a responsible follow-up.",
+    criteria: [
+      "selects an appropriate communication approach for the situation",
+      "communicates relevant facts clearly and respectfully",
+      "distinguishes facts, assumptions, and uncertainty",
+      "identifies an appropriate follow-up or confirmation step",
+    ],
+    eligibilityPolicy: "CURRICULUM_ASSIGNMENT",
+    courseStableKey: UCR_COURSE_STABLE_KEY,
+    unitStableKey: "ucr-communication",
+    lessonStableKey: "ucr-13-verbal-written-digital-communication",
+  },
+
+  "ucr-problem-solving-proof": {
+    slug: "workplace-problem-solving-and-verification",
+    activityType: UCR_PROOF_ACTIVITY_TYPE,
+    domain: "universal-career-readiness",
+    title: "Analyze a workplace problem and document a reasoned next step",
+    description: "Use workplace facts and constraints to define a problem, compare reasonable options, select an appropriate next step, and explain how the result should be verified.",
+    criteria: [
+      "defines the workplace problem using relevant facts",
+      "identifies reasonable options or tradeoffs",
+      "selects and explains an appropriate next step",
+      "defines a verification or follow-up method",
+    ],
+    eligibilityPolicy: "CURRICULUM_ASSIGNMENT",
+    courseStableKey: UCR_COURSE_STABLE_KEY,
+    unitStableKey: "ucr-problem-solving-decision-making",
+    lessonStableKey: "ucr-29-make-communicate-verify-decision",
+  },
+
+  "ucr-evidence-self-advocacy-proof": {
+    slug: "present-skills-and-evidence-without-overclaiming",
+    activityType: UCR_PROOF_ACTIVITY_TYPE,
+    domain: "universal-career-readiness",
+    title: "Present skills and evidence accurately without overclaiming",
+    description: "Use relevant work samples or learning artifacts to explain demonstrated skills, distinguish evidence from unsupported claims, state limitations honestly, and identify an appropriate next step or support need.",
+    criteria: [
+      "connects a skill claim to relevant supporting evidence",
+      "distinguishes demonstrated evidence from unsupported claims",
+      "states limitations or uncertainty honestly",
+      "communicates an appropriate next step, request, or support need",
+    ],
+    eligibilityPolicy: "CURRICULUM_ASSIGNMENT",
+    courseStableKey: UCR_COURSE_STABLE_KEY,
+    unitStableKey: "ucr-evidence-skills-portfolio",
+    lessonStableKey: "ucr-65-presenting-skills-without-overclaiming",
+  },
 };
 
 function scope(actor: any) {
@@ -70,6 +143,87 @@ function scope(actor: any) {
 
 function stableId(...parts: string[]) {
   return createHash("sha256").update(parts.join("|"), "utf8").digest("hex").slice(0, 32);
+}
+
+function proofEligibilityPolicy(config: ProofConfig): ProofEligibilityPolicy {
+  return config.eligibilityPolicy || "DATA_CENTER_SPECIALIZATION";
+}
+
+async function resolveCurriculumAssignmentLineage(
+  actor: any,
+  config: ProofConfig,
+  result: Record<string, unknown>,
+) {
+  const assignmentId = String(
+    result.assignment_id || result.assignmentId || "",
+  ).trim();
+
+  const unitStableKey = String(
+    result.unit_stable_key || result.unitStableKey || "",
+  ).trim();
+
+  const lessonStableKey = String(
+    result.lesson_stable_key || result.lessonStableKey || "",
+  ).trim();
+
+  if (!assignmentId || !unitStableKey || !lessonStableKey) {
+    throw new Error("curriculum_assignment_context_required");
+  }
+
+  const work = await resolveAssignmentWorkForActor(assignmentId, actor);
+
+  if (!work || work.assignment.status !== "published") {
+    throw new Error("curriculum_assignment_required");
+  }
+
+  if (work.accessState === "LOCKED") {
+    throw new Error("curriculum_assignment_locked");
+  }
+
+  if (!work.assignment.curriculumReleaseId || !work.curriculumRelease) {
+    throw new Error("curriculum_release_required");
+  }
+
+  if (
+    config.courseStableKey &&
+    work.curriculumRelease.courseStableKey !== config.courseStableKey
+  ) {
+    throw new Error("curriculum_course_scope_required");
+  }
+
+  if (
+    config.unitStableKey &&
+    unitStableKey !== config.unitStableKey
+  ) {
+    throw new Error("curriculum_unit_scope_required");
+  }
+
+  if (
+    config.lessonStableKey &&
+    lessonStableKey !== config.lessonStableKey
+  ) {
+    throw new Error("curriculum_lesson_scope_required");
+  }
+
+  const lessonInScope = work.scopeLessons.some(
+    (lesson: any) =>
+      lesson.unitStableKey === unitStableKey &&
+      lesson.lessonStableKey === lessonStableKey,
+  );
+
+  if (!lessonInScope) {
+    throw new Error("curriculum_lesson_scope_required");
+  }
+
+  return {
+    assignment_id: work.assignment.id,
+    curriculum_release_id: work.curriculumRelease.releaseId,
+    release_version: work.curriculumRelease.versionNumber,
+    course_id: work.curriculumRelease.courseId,
+    course_stable_key: work.curriculumRelease.courseStableKey,
+    unit_stable_key: unitStableKey,
+    lesson_stable_key: lessonStableKey,
+  };
 }
 
 export class PrepareProveService {
@@ -88,24 +242,88 @@ export class PrepareProveService {
     const activityId = String(input.result.activity_id || PROOF_ACTIVITY_ID);
     const config = PROOF_CONFIGS[activityId];
     if (!config) throw new Error("unknown_proof_activity");
-    const assignment = await this.dbQuery("SELECT specialization_id FROM program_specialization_assignments WHERE learner_id=$1 AND organization_id=$2 AND tenant_id=$3 AND program_id=$4 AND assignment_type='PRIMARY' AND status='ACTIVE'", [userId, organizationId, tenantId, "data-center-specialization-11"]);
-    if (assignment.rows[0] && assignment.rows[0].specialization_id !== config.domain) throw new Error("specialization_assignment_required");
-    if (activityId.startsWith("grade12-")) {
-      const courseId = GRADE12_COURSE_BY_DOMAIN[config.domain];
-      const course = await this.dbQuery("SELECT assignment_id FROM program_course_assignments WHERE learner_id=$1 AND organization_id=$2 AND tenant_id=$3 AND program_id='data-center-specialization-11' AND course_id=$4 AND specialization_id=$5 AND status='ACTIVE'", [userId, organizationId, tenantId, courseId, config.domain]);
-      if (!course.rows[0]) throw new Error("grade12_course_assignment_required");
+    let resultPayload: Record<string, unknown> = { ...input.result };
+    let resultAssignmentId: string | null = null;
+
+    if (proofEligibilityPolicy(config) === "DATA_CENTER_SPECIALIZATION") {
+      const assignment = await this.dbQuery("SELECT specialization_id FROM program_specialization_assignments WHERE learner_id=$1 AND organization_id=$2 AND tenant_id=$3 AND program_id=$4 AND assignment_type='PRIMARY' AND status='ACTIVE'", [userId, organizationId, tenantId, "data-center-specialization-11"]);
+
+      if (assignment.rows[0] && assignment.rows[0].specialization_id !== config.domain) {
+        throw new Error("specialization_assignment_required");
+      }
+
+      if (activityId.startsWith("grade12-")) {
+        const courseId = GRADE12_COURSE_BY_DOMAIN[config.domain];
+        const course = await this.dbQuery("SELECT assignment_id FROM program_course_assignments WHERE learner_id=$1 AND organization_id=$2 AND tenant_id=$3 AND program_id='data-center-specialization-11' AND course_id=$4 AND specialization_id=$5 AND status='ACTIVE'", [userId, organizationId, tenantId, courseId, config.domain]);
+
+        if (!course.rows[0]) {
+          throw new Error("grade12_course_assignment_required");
+        }
+      }
     }
-    const resultId = `activity_result_${stableId(organizationId, userId, config.activityType, activityId)}`;
-    const result = await this.dbQuery(
+
+    if (proofEligibilityPolicy(config) === "CURRICULUM_ASSIGNMENT") {
+      const institutionalLineage = await resolveCurriculumAssignmentLineage(
+        input.actor,
+        config,
+        input.result,
+      );
+
+      resultPayload = {
+        ...input.result,
+        institutional_lineage: institutionalLineage,
+      };
+      resultAssignmentId = institutionalLineage.assignment_id;
+    }
+
+    const resultId = resultAssignmentId
+      ? `activity_result_${stableId(organizationId, userId, config.activityType, activityId, resultAssignmentId)}`
+      : `activity_result_${stableId(organizationId, userId, config.activityType, activityId)}`;
+
+    const inserted = await this.dbQuery(
       `INSERT INTO prepare_prove_activity_results
-       (result_id, activity_type, activity_id, user_id, organization_id, tenant_id, result_status, result_json)
-       VALUES ($1,$2,$3,$4,$5,$6,'SUCCEEDED',$7)
-       ON CONFLICT (organization_id, user_id, activity_type, activity_id)
-       DO UPDATE SET result_json = prepare_prove_activity_results.result_json
+       (result_id, activity_type, activity_id, user_id, organization_id, tenant_id, result_status, result_json, assignment_id)
+       VALUES ($1,$2,$3,$4,$5,$6,'SUCCEEDED',$7,$8)
+       ON CONFLICT DO NOTHING
        RETURNING *`,
-      [resultId, config.activityType, activityId, userId, organizationId, tenantId, JSON.stringify(input.result)],
+      [
+        resultId,
+        config.activityType,
+        activityId,
+        userId,
+        organizationId,
+        tenantId,
+        JSON.stringify(resultPayload),
+        resultAssignmentId,
+      ],
     );
-    return result.rows[0];
+
+    if (inserted.rows[0]) return inserted.rows[0];
+
+    const existing = resultAssignmentId
+      ? await this.dbQuery(
+          `SELECT *
+             FROM prepare_prove_activity_results
+            WHERE organization_id=$1
+              AND user_id=$2
+              AND activity_type=$3
+              AND activity_id=$4
+              AND assignment_id=$5`,
+          [organizationId, userId, config.activityType, activityId, resultAssignmentId],
+        )
+      : await this.dbQuery(
+          `SELECT *
+             FROM prepare_prove_activity_results
+            WHERE organization_id=$1
+              AND user_id=$2
+              AND activity_type=$3
+              AND activity_id=$4
+              AND assignment_id IS NULL`,
+          [organizationId, userId, config.activityType, activityId],
+        );
+
+    if (!existing.rows[0]) throw new Error("proof_result_identity_conflict");
+    return existing.rows[0];
   }
 
   async createEvidence(input: { actor: any; sourceResultId: string; criterion: string }) {
@@ -114,26 +332,142 @@ export class PrepareProveService {
     const result = await this.dbQuery(`SELECT * FROM prepare_prove_activity_results WHERE result_id=$1 AND user_id=$2 AND organization_id=$3 AND tenant_id=$4`, [input.sourceResultId, userId, organizationId, tenantId]);
     if (!result.rows[0]) throw new Error("source_result_not_found");
     const evidenceId = `evidence_${stableId(organizationId, input.sourceResultId, input.criterion)}`;
+    const institutionalLineage =
+      (result.rows[0].result_json as any)?.institutional_lineage || {};
     const evidence = await this.dbQuery(
       `INSERT INTO prepare_prove_evidence
-       (evidence_id, source_domain, source_record_id, user_id, organization_id, tenant_id, activity_id, criterion, status, provenance_json)
-       VALUES ($1,'prepare_prove_activity',$2,$3,$4,$5,$6,$7,'REVIEWABLE',$8)
+       (evidence_id, source_domain, source_record_id, user_id, organization_id, tenant_id, activity_id, criterion, status, provenance_json,
+        assignment_id, curriculum_release_id, release_version, course_id, unit_stable_key, lesson_stable_key)
+       VALUES ($1,'prepare_prove_activity',$2,$3,$4,$5,$6,$7,'REVIEWABLE',$8,$9,$10,$11,$12,$13,$14)
        ON CONFLICT (organization_id, source_domain, source_record_id, criterion)
        DO UPDATE SET status = prepare_prove_evidence.status
        RETURNING *`,
-      [evidenceId, input.sourceResultId, userId, organizationId, tenantId, result.rows[0].activity_id, input.criterion, JSON.stringify({ source_result_id: input.sourceResultId, created_by: userId })],
+      [
+        evidenceId,
+        input.sourceResultId,
+        userId,
+        organizationId,
+        tenantId,
+        result.rows[0].activity_id,
+        input.criterion,
+        JSON.stringify({
+          source_result_id: input.sourceResultId,
+          created_by: userId,
+          institutional_lineage: Object.keys(institutionalLineage).length
+            ? institutionalLineage
+            : null,
+        }),
+        institutionalLineage.assignment_id || null,
+        institutionalLineage.curriculum_release_id || null,
+        institutionalLineage.release_version || null,
+        institutionalLineage.course_id || null,
+        institutionalLineage.unit_stable_key || null,
+        institutionalLineage.lesson_stable_key || null,
+      ],
     );
     return evidence.rows[0];
   }
 
-  async getProofStatus(actor: any, activityId = PROOF_ACTIVITY_ID) {
+  async getProofStatus(actor: any, activityId = PROOF_ACTIVITY_ID, assignmentId?: string | null) {
     const { userId, organizationId, tenantId } = scope(actor);
-    const result = await this.dbQuery(`SELECT * FROM prepare_prove_activity_results WHERE user_id=$1 AND organization_id=$2 AND tenant_id=$3 AND activity_id=$4`, [userId, organizationId, tenantId, activityId]);
+    const config = PROOF_CONFIGS[activityId];
+    if (!config) throw new Error("unknown_proof_activity");
+
+    let result: any;
+
+    if (proofEligibilityPolicy(config) === "CURRICULUM_ASSIGNMENT") {
+      const normalizedAssignmentId = String(assignmentId || "").trim();
+      if (!normalizedAssignmentId) throw new Error("curriculum_assignment_context_required");
+
+      const institutionalLineage = await resolveCurriculumAssignmentLineage(
+        actor,
+        config,
+        {
+          assignment_id: normalizedAssignmentId,
+          unit_stable_key: config.unitStableKey,
+          lesson_stable_key: config.lessonStableKey,
+        },
+      );
+
+      result = await this.dbQuery(
+        `SELECT *
+           FROM prepare_prove_activity_results
+          WHERE user_id=$1
+            AND organization_id=$2
+            AND tenant_id=$3
+            AND activity_type=$4
+            AND activity_id=$5
+            AND assignment_id=$6`,
+        [
+          userId,
+          organizationId,
+          tenantId,
+          config.activityType,
+          activityId,
+          institutionalLineage.assignment_id,
+        ],
+      );
+    } else {
+      result = await this.dbQuery(
+        `SELECT *
+           FROM prepare_prove_activity_results
+          WHERE user_id=$1
+            AND organization_id=$2
+            AND tenant_id=$3
+            AND activity_type=$4
+            AND activity_id=$5
+            AND assignment_id IS NULL`,
+        [
+          userId,
+          organizationId,
+          tenantId,
+          config.activityType,
+          activityId,
+        ],
+      );
+    }
+
     const source = result.rows[0] || null;
-    const evidence = source ? await this.dbQuery(`SELECT * FROM prepare_prove_evidence WHERE source_record_id=$1 AND user_id=$2 AND organization_id=$3 AND tenant_id=$4 ORDER BY created_at DESC, evidence_id DESC LIMIT 1`, [source.result_id, userId, organizationId, tenantId]) : { rows: [] };
+
+    const evidence = source
+      ? await this.dbQuery(
+          `SELECT *
+             FROM prepare_prove_evidence
+            WHERE source_record_id=$1
+              AND user_id=$2
+              AND organization_id=$3
+              AND tenant_id=$4
+            ORDER BY created_at DESC, evidence_id DESC
+            LIMIT 1`,
+          [source.result_id, userId, organizationId, tenantId],
+        )
+      : { rows: [] };
+
     const evidenceRow = evidence.rows[0] || null;
-    const decision = evidenceRow ? await this.dbQuery(`SELECT d.*, c.slug AS competency_slug, c.title AS competency_title FROM learner_competency_decisions d JOIN competency_definitions c ON c.competency_id=d.competency_id WHERE d.evidence_id=$1 AND d.user_id=$2 AND d.organization_id=$3 AND d.tenant_id=$4 ORDER BY d.reviewed_at DESC, d.decision_id DESC LIMIT 1`, [evidenceRow.evidence_id, userId, organizationId, tenantId]) : { rows: [] };
-    return { result: source, evidence: evidenceRow, decision: decision.rows[0] || null };
+
+    const decision = evidenceRow
+      ? await this.dbQuery(
+          `SELECT d.*,
+                  c.slug AS competency_slug,
+                  c.title AS competency_title
+             FROM learner_competency_decisions d
+             JOIN competency_definitions c
+               ON c.competency_id=d.competency_id
+            WHERE d.evidence_id=$1
+              AND d.user_id=$2
+              AND d.organization_id=$3
+              AND d.tenant_id=$4
+            ORDER BY d.reviewed_at DESC, d.decision_id DESC
+            LIMIT 1`,
+          [evidenceRow.evidence_id, userId, organizationId, tenantId],
+        )
+      : { rows: [] };
+
+    return {
+      result: source,
+      evidence: evidenceRow,
+      decision: decision.rows[0] || null,
+    };
   }
 
   async getReviewPackage(actor: any, evidenceId: string) {

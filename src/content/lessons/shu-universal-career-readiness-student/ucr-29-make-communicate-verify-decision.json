@@ -1,0 +1,114 @@
+{
+  "id": "ucr-29-make-communicate-verify-decision",
+  "slug": "ucr-29-make-communicate-verify-decision",
+  "nextSlug": "ucr-30-learn-from-results-improve-process",
+  "title": "Make, Communicate & Verify a Decision",
+  "curriculum": "ucr-problem-solving-decision-making",
+  "coursePosition": {
+    "courseTitle": "SHU Universal Career Readiness",
+    "unitNumber": 6,
+    "unitCount": 15,
+    "unitTitle": "Problem Solving & Decision Making",
+    "lessonNumber": 4,
+    "lessonCount": 5,
+    "lessonCode": "6.4"
+  },
+  "gradeBand": {
+    "minGrade": 7,
+    "maxGrade": 12,
+    "stage": "PREPARE"
+  },
+  "estMinutes": 45,
+  "summary": "Learn how to make a reasoned decision, explain why it was chosen, communicate responsibilities, and verify whether the decision produced the intended result.",
+  "objectives": [
+    "Choose an option using evidence and decision criteria.",
+    "Communicate a decision, rationale, ownership, and next steps clearly.",
+    "Define how the result of a decision will be checked."
+  ],
+  "vocab": [
+    {
+      "term": "DECISION",
+      "def": "A selected course of action after considering available information and options."
+    },
+    {
+      "term": "RATIONALE",
+      "def": "The reasoning that explains why a decision was made."
+    },
+    {
+      "term": "VERIFICATION",
+      "def": "Checking whether an action or decision produced the expected result."
+    },
+    {
+      "term": "SUCCESS CRITERIA",
+      "def": "Specific conditions used to determine whether a result is acceptable."
+    }
+  ],
+  "sections": [
+    {
+      "heading": "A decision should connect to the evidence",
+      "body": "Strong decisions can be explained. The selected option should connect to the problem, available evidence, relevant constraints, and the criteria used to compare alternatives."
+    },
+    {
+      "heading": "Communicate what happens next",
+      "body": "A decision is incomplete if nobody knows who is responsible, what action is expected, when it should happen, or what conditions could require reconsideration."
+    },
+    {
+      "heading": "Explain the rationale",
+      "body": "Sharing the reasoning behind a decision helps others understand the tradeoffs and assumptions that shaped it. This can also make future review easier."
+    },
+    {
+      "heading": "Verify the result",
+      "body": "Do not assume that taking action means the problem is solved. Define what result should be observed and check whether that result actually occurred."
+    }
+  ],
+  "practice": [
+    {
+      "prompt": "A team implements a solution and immediately closes the issue without checking the result. What problem-solving step is missing?",
+      "answer": "Verification is missing."
+    },
+    {
+      "prompt": "You make a decision that affects several coworkers. What should be communicated?",
+      "answer": "The decision, rationale when appropriate, responsible owner, expected actions, timing, and how the result will be checked."
+    }
+  ],
+  "quiz": {
+    "question": "Why should a workplace decision include verification?",
+    "options": [
+      "To determine whether the action produced the intended result",
+      "To prove the original decision could never be wrong",
+      "To eliminate the need for future communication",
+      "To avoid documenting what happened"
+    ],
+    "answer": "To determine whether the action produced the intended result"
+  },
+  "lab": {
+    "safetyClassification": "SAFE CLASSROOM",
+    "objective": "Choose an option from a simulated problem, document the rationale, assign next steps, and define measurable or observable success criteria."
+  },
+  "reflectionPrompt": "Why is taking action different from proving that a problem has actually been solved?",
+  "evidenceCandidate": {
+    "title": "Decision and Verification Plan",
+    "type": "LEARNER_ARTIFACT",
+    "verificationRequired": true
+  },
+  "proofActivity": {
+    "activityId": "ucr-problem-solving-proof",
+    "activityType": "WORKPLACE_READINESS_PROOF",
+    "safetyClassification": "SAFE CLASSROOM",
+    "title": "Prove: workplace problem solving",
+    "description": "Use the available facts and constraints to define the workplace problem, compare reasonable options, select a next step, and explain how the result should be verified.",
+    "criterion": "workplace-problem-solving-and-verification",
+    "criteria": [
+      "Defines the workplace problem using relevant facts",
+      "Identifies reasonable options or tradeoffs",
+      "Selects and explains an appropriate next step",
+      "Defines a verification or follow-up method"
+    ],
+    "prompts": {
+      "observations": "Relevant facts, constraints, and evidence",
+      "affectedSystem": "Selected decision or proposed response",
+      "uncertainty": "What remains uncertain or could change the decision?",
+      "safeNextStep": "Verification method or follow-up step"
+    }
+  }
+}

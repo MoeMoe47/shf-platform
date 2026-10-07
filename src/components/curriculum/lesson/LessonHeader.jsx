@@ -10,8 +10,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { HomeIcon, ClockIcon, ChevronRightIcon } from "@/components/curriculum/icons.jsx";
+import { lessonCoursePosition } from "@/utils/lessonCoursePosition.js";
 
-const CURRICULUM_LABELS = { asl: "ASL" };
+const CURRICULUM_LABELS = {
+  asl: "ASL",
+  "shu-universal-career-readiness": "SHU Universal Career Readiness",
+};
 
 function curriculumLabel(curriculum) {
   const key = String(curriculum || "").toLowerCase();
@@ -19,8 +23,19 @@ function curriculumLabel(curriculum) {
   return key ? key.split("-").map((s) => s[0].toUpperCase() + s.slice(1)).join(" ") : "Curriculum";
 }
 
-export default function LessonHeader({ lesson, curriculum, completedCount, availableCount }) {
-  const pct = availableCount > 0 ? Math.round((completedCount / availableCount) * 100) : 0;
+export default function LessonHeader({
+  lesson,
+  curriculum,
+  completedCount,
+  availableCount,
+  previewMode = false,
+}) {
+  const position = lessonCoursePosition(lesson);
+  const displayCompletedCount = previewMode ? 0 : completedCount;
+  const pct =
+    availableCount > 0
+      ? Math.round((displayCompletedCount / availableCount) * 100)
+      : 0;
 
   return (
     <div className="ld-lessonPage__header">
@@ -31,13 +46,64 @@ export default function LessonHeader({ lesson, curriculum, completedCount, avail
         <ChevronRightIcon size={14} className="ld-lessonCrumbSep" />
         <Link className="ld-lessonCrumbLink" to="/curriculum/learning">Learning</Link>
         <ChevronRightIcon size={14} className="ld-lessonCrumbSep" />
-        <span className="ld-lessonCrumbCurrent">{lesson.title || "Lesson"}</span>
+        {position ? (
+          <>
+            <span className="ld-lessonCrumbLink">
+              Unit {position.unitNumber}
+            </span>
+
+            <ChevronRightIcon
+              size={14}
+              className="ld-lessonCrumbSep"
+            />
+
+            <span className="ld-lessonCrumbCurrent">
+              Lesson {position.lessonCode}
+            </span>
+          </>
+        ) : (
+          <span className="ld-lessonCrumbCurrent">
+            {lesson.title || "Lesson"}
+          </span>
+        )}
       </nav>
 
       <div className="ld-card ld-lessonHeaderCard ld-lessonHeader" style={{ marginTop: 10 }}>
         <div className="ld-lessonHeaderMain">
+          {position ? (
+            <div className="ld-coursePosition">
+              <p className="ld-coursePositionCourse">
+                {position.courseTitle}
+              </p>
+
+              <div className="ld-coursePositionRows">
+                <span>
+                  <strong>
+                    Unit {position.unitNumber} of {position.unitCount}
+                  </strong>
+                  {" · "}
+                  {position.unitTitle}
+                </span>
+
+                <span>
+                  <strong>
+                    Lesson {position.lessonNumber} of {position.lessonCount}
+                  </strong>
+                  {" · "}
+                  {position.lessonCode}
+                </span>
+              </div>
+            </div>
+          ) : null}
+
           <h1 className="ld-lessonTitle">{lesson.title}</h1>
-          <p className="ld-lessonContext">{curriculumLabel(curriculum)} Curriculum</p>
+          {!position ? (
+            <p className="ld-lessonContext">
+              {previewMode
+                ? curriculumLabel(curriculum)
+                : `${curriculumLabel(curriculum)} Curriculum`}
+            </p>
+          ) : null}
           {lesson.summary ? (
             <p className="ld-lessonSummary">{lesson.summary}</p>
           ) : Array.isArray(lesson.objectives) && lesson.objectives[0] ? (
@@ -57,7 +123,11 @@ export default function LessonHeader({ lesson, curriculum, completedCount, avail
         {availableCount > 0 && (
           <div className="ld-lessonHeaderSide">
             <p className="ld-lessonUnitLabel">
-              Lesson progress <span className="ld-lessonUnitPct">{pct}%</span>
+              {previewMode ? (
+                <>Draft preview <span className="ld-lessonUnitPct">0%</span></>
+              ) : (
+                <>Lesson progress <span className="ld-lessonUnitPct">{pct}%</span></>
+              )}
             </p>
             <div className="ld-lessonUnitProgress">
               <div className="ld-lessonUnitProgressFill" style={{ width: `${pct}%` }} />

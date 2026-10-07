@@ -17,7 +17,18 @@ export function registerPrepareProveRoutes(app: any) {
     try { return res.status(201).json({ ok: true, data: await service.createEvidence({ actor: req.user, sourceResultId: String(req.body?.source_result_id || ""), criterion: String(req.body?.criterion || "") }) }); } catch (error) { return reject(res, error); }
   });
   app.get("/prepare-prove/proof-status", requirePermission(SHS_SECURITY_PERMISSIONS.CURRICULUM_LESSON_COMPLETE), async (req: any, res: any) => {
-    try { return res.json({ ok: true, data: await service.getProofStatus(req.user, String(req.query?.activity_id || "grade11-technical-operations-monitoring-proof")) }); } catch (error) { return reject(res, error, 403); }
+    try {
+      return res.json({
+        ok: true,
+        data: await service.getProofStatus(
+          req.user,
+          String(req.query?.activity_id || "grade11-technical-operations-monitoring-proof"),
+          req.query?.assignment_id ? String(req.query.assignment_id) : null,
+        ),
+      });
+    } catch (error) {
+      return reject(res, error, 403);
+    }
   });
   app.get("/prepare-prove/evidence/:evidenceId", requirePermission(SHS_SECURITY_PERMISSIONS.VERIFICATION_VIEW), async (req: any, res: any) => {
     try { return res.json({ ok: true, data: await service.getReviewPackage(req.user, req.params.evidenceId) }); } catch (error: any) { return reject(res, error, error?.message === "evidence_not_found" ? 404 : 403); }

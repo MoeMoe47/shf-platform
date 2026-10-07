@@ -153,7 +153,9 @@ export default function CurriculumLayout() {
   // approved mock, which has no generic page title above the lesson) — the
   // shared header still renders here for search/notifications/pathway,
   // just with no title/subtitle of its own.
-  const isLessonExperience = /\/curriculum\/lessons\/[^/]+\/?$/.test(pathname);
+  const isLessonExperience =
+    /\/curriculum\/lessons\/[^/]+\/?$/.test(pathname) ||
+    /\/curriculum\/preview\/lessons\/[^/]+\/?$/.test(pathname);
   // Phase 5.5 Course Workspace (CourseWorkspace.jsx) renders its own
   // "Courses > {course title}" breadcrumb + tab strip in the page body,
   // matching the approved mock (no separate generic page title above

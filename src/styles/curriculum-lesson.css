@@ -1282,3 +1282,128 @@
     justify-content: center;
   }
 }
+
+/* UCR DRAFT PREVIEW — SOFT NEUTRAL COLORS */
+/*
+ * Draft preview deliberately uses quieter neutral styling.
+ * Orange remains the active/action color.
+ *
+ * These overrides are scoped to .ld-previewMode so production,
+ * assigned learner lessons keep their existing visual treatment.
+ */
+
+.ld-previewMode .ld-vocabPillRow .ld-lessonPill {
+  background: #f6f2eb;
+  border-color: #ddd6ca;
+  color: #514c45;
+  box-shadow: none;
+}
+
+/* Preview status ring: very soft instead of charcoal. */
+.ld-previewMode .ld-progressRing {
+  background: #e9e4dc;
+  color: #6f6961;
+}
+
+.ld-previewMode .ld-progressRing::before {
+  background: #fffdf9;
+}
+
+/* Right-rail preview track. */
+.ld-previewMode .ld-progressBar {
+  background: #eee9e1;
+}
+
+.ld-previewMode .ld-progressBar span {
+  background: #d8d1c6;
+}
+
+/* Header draft-preview track. */
+.ld-previewMode .ld-lessonUnitProgress {
+  background: #eee9e1;
+}
+
+.ld-previewMode .ld-lessonUnitProgressFill {
+  background: #d8d1c6;
+}
+
+/* The 0% preview label should read as secondary information. */
+.ld-previewMode .ld-lessonUnitPct {
+  color: #8a8379;
+}
+
+/* Right-side preview status wording should stay readable but quiet. */
+.ld-previewMode .ld-progressPanelLabel {
+  color: #8a8379;
+}
+
+.ld-previewMode .ld-progressPanelValue {
+  color: #5d574f;
+}
+
+
+/* UCR DRAFT PREVIEW — soften estimated-time pill */
+.ld-previewMode .ld-lessonMetaRow .ld-lessonPill {
+  background: #f6f2eb;
+  border-color: #ddd6ca;
+  color: #625c54;
+  box-shadow: none;
+}
+
+.ld-previewMode .ld-lessonMetaRow .ld-lessonPillIcon {
+  color: #8a8379;
+}
+
+/* UCR DRAFT PREVIEW — soften stage-count pill */
+.ld-previewMode .ld-studySurfaceHead .ld-lessonPill,
+.ld-previewMode .ld-studySurfaceHead [class*="Pill"] {
+  background: #f6f2eb;
+  border-color: #ddd6ca;
+  color: #625c54;
+  box-shadow: none;
+}
+
+/* UCR — top-level course / unit / lesson orientation */
+
+.ld-coursePosition {
+  margin-bottom: 9px;
+}
+
+.ld-coursePositionCourse {
+  margin: 0 0 5px;
+  color: var(--ld-orange-600);
+  font-size: calc(11px * var(--ld-text-scale, 1));
+  font-weight: 850;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+.ld-coursePositionRows {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 18px;
+  color: var(--ld-muted);
+  font-size: calc(12px * var(--ld-text-scale, 1));
+  line-height: 1.35;
+}
+
+.ld-coursePositionRows strong {
+  color: var(--ld-ink);
+  font-weight: 800;
+}
+
+.ld-contentNavPosition {
+  margin: 3px 0 0;
+  color: var(--ld-muted);
+  font-size: calc(10px * var(--ld-text-scale, 1));
+  font-weight: 750;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 760px) {
+  .ld-coursePositionRows {
+    flex-direction: column;
+    gap: 3px;
+  }
+}

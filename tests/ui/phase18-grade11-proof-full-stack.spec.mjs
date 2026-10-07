@@ -3,9 +3,12 @@ import { test, expect } from "@playwright/test";
 const baseUrl = String(process.env.SHS_TEST_FRONTEND_URL || "").replace(/\/$/, "");
 const apiUrl = String(process.env.SHS_TEST_API_URL || "").replace(/\/$/, "");
 const lessonId = "data-center-specialization-11-monitoring-proof";
-const learnerToken = "Bearer dev-token:user_student_001";
-const reviewerToken = "Bearer dev-token:user_reviewer_001";
-const unauthorizedToken = "Bearer dev-token:user_operator_001";
+const learnerToken = "Bearer dev-token:learner_A1";
+const reviewerToken = "Bearer dev-token:admin_A";
+const unauthorizedToken = "Bearer dev-token:instructor_A_unauthorized";
+
+const assignmentId = "phase18_dc_frontend_assignment";
+const unitStableKey = "data-center-specialization-11";
 
 function auth(token) {
   return { Authorization: token };
@@ -15,6 +18,71 @@ test("Grade 11 learner to reviewer to learner proof workflow uses the disposable
   skip: baseUrl && apiUrl ? false : "SHS_TEST_FRONTEND_URL and SHS_TEST_API_URL are required",
   timeout: 60_000,
 }, async ({ page }) => {
+  // StudentUnit now correctly requires canonical curriculum assignment
+  // context before it renders a production learner lesson. Phase 18 is a
+  // Prepare/Prove compatibility test, so mock only that frontend assignment
+  // shell while keeping every Prepare/Prove request on the real disposable API.
+  await page.route("**/assignments", async (route) => {
+    if (route.request().method() !== "GET") {
+      return route.continue();
+    }
+
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        ok: true,
+        data: {
+          items: [
+            {
+              id: assignmentId,
+              status: "published",
+              accessState: "AVAILABLE",
+              curriculumRelease: {
+                releaseId: "phase18_dc_frontend_release",
+                versionNumber: 1,
+                courseId: "phase18_dc_frontend_course",
+                courseTitle: "Data Center & AI Infrastructure Pathway",
+                courseStableKey: "data-center-specialization-11",
+              },
+              assignedContent: {
+                type: "LESSON",
+                title: "Monitoring Data and Safe Technical Findings",
+              },
+              nextLesson: {
+                unitStableKey,
+                lessonStableKey: lessonId,
+                title: "Monitoring Data and Safe Technical Findings",
+                sequence: 1,
+                completed: false,
+              },
+              scopeLessons: [
+                {
+                  unitStableKey,
+                  lessonStableKey: lessonId,
+                  title: "Monitoring Data and Safe Technical Findings",
+                  sequence: 1,
+                  completed: false,
+                },
+              ],
+            },
+          ],
+        },
+      }),
+    });
+  });
+
+  await page.route("**/activity-domains/assignments/**", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        ok: true,
+        data: {},
+      }),
+    });
+  });
+
   await page.setExtraHTTPHeaders(auth(learnerToken));
   await page.goto(`${baseUrl}/curriculum.html#/curriculum/lessons/${lessonId}`, { waitUntil: "networkidle" });
   await expect(page.getByRole("heading", { name: "Monitoring Data and Safe Technical Findings" })).toBeVisible();

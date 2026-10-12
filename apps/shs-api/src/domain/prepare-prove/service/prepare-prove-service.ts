@@ -4,6 +4,7 @@ import { query } from "../../../db/client.js";
 import { IntegrationOutboxRepo } from "../../trusted-reporting/outbox-repo.js";
 import { hasPermission, SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions.js";
 import { resolveAssignmentWorkForActor } from "../../assignments/service/assignment-entitlement-service.js";
+import { projectCompetencyDecisionToMastery } from "../../curriculum/service/learner-result-service.js";
 
 const PROOF_ACTIVITY_TYPE = "SIMULATED_INFRASTRUCTURE_PROOF";
 const UCR_PROOF_ACTIVITY_TYPE = "WORKPLACE_READINESS_PROOF";
@@ -516,6 +517,7 @@ export class PrepareProveService {
         payload: { decision_id: decisionId, competency_id: competency.competency_id, evidence_id: input.evidenceId, learner_id: evidence.rows[0].user_id, decision: input.decision, criteria_version: competency.version },
         destination: "agent-fabric",
       }, db);
+      await projectCompetencyDecisionToMastery(decisionId, db);
       return inserted.rows[0];
     });
   }

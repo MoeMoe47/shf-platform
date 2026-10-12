@@ -16,4 +16,6 @@ export type LearnerMastery = {
   masteryId: string; organizationId: string; tenantId: string; learnerUserId: string;
   competencyId: string; masteryStatus: MasteryStatus; verificationStatus: VerificationStatus;
   sourceOutcomeId: string; evidenceIds: string[]; determinedAt: string;
+  sourceDecisionId: string | null; reviewerUserId: string | null; sourceAuthority: string | null;
+  effectiveAt: string | null; provenance: Record<string, unknown>;
 };

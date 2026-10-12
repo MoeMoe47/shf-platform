@@ -86,11 +86,13 @@ async function projectAuthoritativeFactInternal(actor: ProjectionActor, input: P
   const evidenceRuleId = String(input.evidenceRuleId || "").trim();
   const source = SOURCE_TABLES[sourceType];
   if (!source || !sourceRecordId || !evidenceRuleId) throw new Error("invalid_projection_input");
-  const rule = await query("SELECT * FROM curriculum_evidence_rules WHERE evidence_rule_id=$1 AND organization_id=$2 AND status='ACTIVE'", [evidenceRuleId, actor.organization_id]);
+  const rule = await query("SELECT * FROM curriculum_evidence_rules WHERE evidence_rule_id=$1 AND organization_id=$2 AND source_type=$3 AND status='ACTIVE' ORDER BY rule_version DESC LIMIT 1", [evidenceRuleId, actor.organization_id, sourceType]);
   if (!rule.rows[0]) throw new Error("evidence_rule_not_found");
-  const sourceResult = await loadSourceRow(sourceType, source, sourceRecordId, actor.organization_id, actor.user_id);
+  const sourceResult = await loadSourceRow(sourceType, source, sourceRecordId, actor.organization_id);
   const row = sourceResult.rows[0];
   if (!row) throw new Error("source_record_not_found");
+  const subjectUserId = String(row[source.learner] || "").trim();
+  if (!subjectUserId) throw new Error("source_record_learner_not_found");
   const validSource = sourceType === "AGENT_TASK_ATTEMPT" ? row.status === "SUCCEEDED"
     : sourceType === "STUDIO_DELIVERY" ? row.status === "FINALIZED" && row.studio_destination === "STUDENT"
     : sourceType === "ASSESSMENT_RESULT" ? row.passed === true && row.needs_review !== true
@@ -103,6 +105,30 @@ async function projectAuthoritativeFactInternal(actor: ProjectionActor, input: P
                 : true;
   if (!validSource) throw new Error("source_record_not_evidence_eligible");
   const configured = rule.rows[0];
+  const tenantId = `tenant:${actor.organization_id}`;
+  const provenance = {
+    source_type: sourceType,
+    source_record_id: sourceRecordId,
+    rule_id: evidenceRuleId,
+    rule_version: configured.rule_version,
+    organization_id: actor.organization_id,
+    tenant_id: tenantId,
+    learner_user_id: subjectUserId,
+    projector_user_id: actor.user_id,
+    project_id: row.project_id || null,
+    workspace_revision: row.workspace_revision || null,
+    agent: sourceType === "AGENT_TASK_ATTEMPT" ? {
+      task_id: row.task_id,
+      attempt_id: row.attempt_id,
+      session_id: row.session_id,
+      agent_identity_id: row.agent_identity_id,
+      delegation_id: row.delegation_id,
+      action_fingerprint: row.action_fingerprint || row.action_hash,
+      approval_request_id: row.approval_request_id || null,
+      approval_status: row.approval_status || null,
+      consequence_class: row.consequence_class,
+    } : null,
+  };
   return withTransaction(async (db: any) => {
     let evidence = null;
     if (configured.evidence_type) {
@@ -113,7 +139,7 @@ async function projectAuthoritativeFactInternal(actor: ProjectionActor, input: P
          evidence_rule_id, evidence_rule_version, competency_id, verifier_user_id, source_occurred_at)
         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$2,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22)
         ON CONFLICT DO NOTHING
-      RETURNING *`, [evidenceId, sourceType, sourceRecordId, sourceType === "AGENT_TASK_ATTEMPT" ? row.agent_principal_user_id : actor.user_id, actor.organization_id, `tenant:${actor.organization_id}`, row.activity_id || sourceRecordId, configured.evidence_type, sourceType === "STUDIO_DELIVERY" || configured.review_required || sourceType === "AGENT_TASK_ATTEMPT" ? "REVIEWABLE" : "REVIEWED", JSON.stringify({ source_type: sourceType, source_record_id: sourceRecordId, rule_id: evidenceRuleId, rule_version: configured.rule_version, project_id: row.project_id || null, workspace_revision: row.workspace_revision || null, agent: sourceType === "AGENT_TASK_ATTEMPT" ? { task_id: row.task_id, attempt_id: row.attempt_id, session_id: row.session_id, agent_identity_id: row.agent_identity_id, delegation_id: row.delegation_id, action_fingerprint: row.action_fingerprint || row.action_hash, approval_request_id: row.approval_request_id || null, approval_status: row.approval_status || null, consequence_class: row.consequence_class } : null }), row.assignment_id || null, row.curriculum_release_id || null, row.release_version || null, row.course_id || null, row.unit_stable_key || null, row.lesson_stable_key || null, row.assessment_definition_id || row.reflection_definition_id || row.practice_definition_id || null, evidenceRuleId, configured.rule_version, configured.competency_id || null, sourceType === "STUDIO_DELIVERY" || configured.review_required || sourceType === "AGENT_TASK_ATTEMPT" ? null : actor.user_id, row[source.occurred] || new Date()]);
+      RETURNING *`, [evidenceId, sourceType, sourceRecordId, subjectUserId, actor.organization_id, tenantId, row.activity_id || sourceRecordId, configured.evidence_type, sourceType === "STUDIO_DELIVERY" || configured.review_required || sourceType === "AGENT_TASK_ATTEMPT" ? "REVIEWABLE" : "REVIEWED", JSON.stringify(provenance), row.assignment_id || null, row.curriculum_release_id || null, row.release_version || null, row.course_id || null, row.unit_stable_key || null, row.lesson_stable_key || null, row.assessment_definition_id || row.reflection_definition_id || row.practice_definition_id || null, evidenceRuleId, configured.rule_version, configured.competency_id || null, sourceType === "STUDIO_DELIVERY" || configured.review_required || sourceType === "AGENT_TASK_ATTEMPT" ? null : actor.user_id, row[source.occurred] || new Date()]);
       evidence = result.rows[0] || (await db.query("SELECT * FROM prepare_prove_evidence WHERE organization_id=$1 AND source_type=$2 AND source_record_id=$3 AND evidence_rule_id=$4 AND status <> 'SUPERSEDED'", [actor.organization_id, sourceType, sourceRecordId, evidenceRuleId])).rows[0];
     }
     let truthFact = null;
@@ -124,7 +150,7 @@ async function projectAuthoritativeFactInternal(actor: ProjectionActor, input: P
         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19)
         ON CONFLICT (organization_id, source_type, source_record_id, fact_type, evidence_rule_id)
         DO UPDATE SET truth_fact_id=curriculum_truth_facts.truth_fact_id
-        RETURNING *`, [truthFactId, actor.organization_id, actor.user_id, configured.truth_fact_type, sourceType, sourceRecordId, evidence?.evidence_id || null, row.assignment_id || null, row.curriculum_release_id || null, row.release_version || null, row.course_id || null, row.unit_stable_key || null, row.lesson_stable_key || null, row.assessment_definition_id || row.reflection_definition_id || row.practice_definition_id || null, evidenceRuleId, configured.rule_version, configured.competency_id || null, JSON.stringify({ source_type: sourceType, source_record_id: sourceRecordId, rule_id: evidenceRuleId, rule_version: configured.rule_version }), row[source.occurred] || new Date()]);
+        RETURNING *`, [truthFactId, actor.organization_id, subjectUserId, configured.truth_fact_type, sourceType, sourceRecordId, evidence?.evidence_id || null, row.assignment_id || null, row.curriculum_release_id || null, row.release_version || null, row.course_id || null, row.unit_stable_key || null, row.lesson_stable_key || null, row.assessment_definition_id || row.reflection_definition_id || row.practice_definition_id || null, evidenceRuleId, configured.rule_version, configured.competency_id || null, JSON.stringify(provenance), row[source.occurred] || new Date()]);
       truthFact = result.rows[0];
     }
     return { evidence, truthFact, truthSpineFact: truthFact ? toTruthSpineFact(truthFact) : null, idempotent: Boolean(evidence || truthFact) };
@@ -186,7 +212,7 @@ export async function projectAuthoritativeOutboxEvent(event: ProjectionOutboxEve
   if (!row) { const error: any = new Error("projection_source_record_not_found"); error.status = 503; throw error; }
   const learnerId = String(row[source.learner] || "").trim();
   if (!learnerId) { const error: any = new Error("projection_source_learner_missing"); error.status = 503; throw error; }
-  const rules = await query("SELECT evidence_rule_id FROM curriculum_evidence_rules WHERE organization_id=$1 AND source_type=$2 AND status='ACTIVE' ORDER BY evidence_rule_id", [event.organization_id, sourceType]);
+  const rules = await query("SELECT DISTINCT ON (evidence_rule_id) evidence_rule_id FROM curriculum_evidence_rules WHERE organization_id=$1 AND source_type=$2 AND status='ACTIVE' ORDER BY evidence_rule_id, rule_version DESC", [event.organization_id, sourceType]);
   let projected = 0;
   for (const rule of rules.rows) {
     await projectAuthoritativeFactInternal({ user_id: learnerId, organization_id: event.organization_id }, { sourceType, sourceRecordId, evidenceRuleId: rule.evidence_rule_id }, sourceType !== "STUDIO_DELIVERY");

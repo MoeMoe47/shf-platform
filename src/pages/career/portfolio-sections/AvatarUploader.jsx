@@ -1,12 +1,8 @@
 // src/pages/career/portfolio-sections/AvatarUploader.jsx
 //
-// Extracted from the pre-existing inline AvatarUploader in Portfolio.jsx.
-// Same localStorage-backed upload/resize/validation logic, unchanged;
-// now dispatches "sh-profile-photo-updated" so StudentProfileHero and
-// ProfileStrength (which read the same storage key) update live.
+// Student-owned profile photo presentation. This never creates verified
+// evidence, mastery, credentials, or institutional profile truth.
 import React from "react";
-
-const STORAGE_KEY = "sh_profile_photo";
 
 function earn(detail) {
   try {
@@ -42,18 +38,16 @@ async function resizeToDataURL(file, maxDim = 512) {
   }
 }
 
-export default function AvatarUploader() {
-  const [dataUrl, setDataUrl] = React.useState(null);
+export default function AvatarUploader({ avatarReference = null, onSave }) {
+  const [dataUrl, setDataUrl] = React.useState(avatarReference || null);
   const [dragOver, setDragOver] = React.useState(false);
   const [error, setError] = React.useState("");
+  const [saving, setSaving] = React.useState(false);
   const inputRef = React.useRef(null);
 
   React.useEffect(() => {
-    try {
-      const x = localStorage.getItem(STORAGE_KEY);
-      if (x) setDataUrl(x);
-    } catch {}
-  }, []);
+    setDataUrl(avatarReference || null);
+  }, [avatarReference]);
 
   const pick = () => inputRef.current?.click();
   function onDrop(e) {
@@ -72,17 +66,17 @@ export default function AvatarUploader() {
     handleFiles(e.target.files);
     e.target.value = "";
   }
-  function notifyUpdated() {
+  async function clear() {
+    setSaving(true);
+    setError("");
     try {
-      window.dispatchEvent(new CustomEvent("sh-profile-photo-updated"));
-    } catch {}
-  }
-  function clear() {
-    setDataUrl(null);
-    try {
-      localStorage.removeItem(STORAGE_KEY);
-    } catch {}
-    notifyUpdated();
+      await onSave?.({ avatarReference: null });
+      setDataUrl(null);
+    } catch {
+      setError("We could not remove that image. Verified records were not changed.");
+    } finally {
+      setSaving(false);
+    }
   }
 
   async function handleFiles(list) {
@@ -99,21 +93,24 @@ export default function AvatarUploader() {
     }
     try {
       const out = await resizeToDataURL(f, 512);
+      setSaving(true);
+      await onSave?.({ avatarReference: out });
       setDataUrl(out);
-      try {
-        localStorage.setItem(STORAGE_KEY, out);
-      } catch {}
-      notifyUpdated();
       earn({ action: "profile.photo.upload", rewards: { heart: 1 }, scoreDelta: 3 });
     } catch (err) {
       console.error(err);
-      setError("Couldn't process that image.");
+      setError("Couldn't save that image. Verified records were not changed.");
+    } finally {
+      setSaving(false);
     }
   }
 
   return (
     <div>
       <h3 style={{ margin: "0 0 10px", fontSize: 14, fontWeight: 700 }}>Profile photo</h3>
+      <p style={{ margin: "0 0 10px", color: "var(--sp-muted, #6b7280)", fontSize: 13, lineHeight: 1.4 }}>
+        This photo is learner-owned Portfolio presentation. It is not verified evidence, mastery, or a credential.
+      </p>
       <div
         role="button"
         tabIndex={0}
@@ -172,11 +169,11 @@ export default function AvatarUploader() {
             <small>PNG/JPG/WEBP • up to ~3 MB</small>
           </div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-            <button type="button" className="sp-btn sp-btnSecondary" style={{ minHeight: 36, padding: "6px 12px" }} onClick={pick}>
-              Upload
+            <button type="button" className="sp-btn sp-btnSecondary" style={{ minHeight: 36, padding: "6px 12px" }} onClick={pick} disabled={saving}>
+              {saving ? "Saving..." : "Upload"}
             </button>
             {dataUrl && (
-              <button type="button" className="sp-btn sp-btnSecondary" style={{ minHeight: 36, padding: "6px 12px" }} onClick={clear}>
+              <button type="button" className="sp-btn sp-btnSecondary" style={{ minHeight: 36, padding: "6px 12px" }} onClick={clear} disabled={saving}>
                 Remove
               </button>
             )}

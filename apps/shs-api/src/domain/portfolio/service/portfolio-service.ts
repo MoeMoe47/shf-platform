@@ -4,6 +4,8 @@ import { withTransaction } from "../../../db/transaction.js";
 import { IntegrationOutboxRepo } from "../../trusted-reporting/outbox-repo.js";
 import { hasPermission, SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions.js";
 import { isAdminTier } from "../../shared/audience-eligibility.js";
+import { deriveLearnerPathway } from "../../career-pathways/service/career-pathway-service.js";
+import { listMyCourses } from "../../curriculum-catalog/service/student-catalog-service.js";
 import {
   assertEligibleEvidenceSource,
   assertPortfolioScope,
@@ -18,6 +20,7 @@ type Executor = { query: (sql: string, params?: unknown[]) => Promise<any> };
 type Actor = { user_id?: string; id?: string; active_organization_id?: string; organization_id?: string; tenant_id?: string; roles?: string[]; permissions?: string[] };
 
 const PRESENTATION_FIELDS = ["title", "summary", "reflection", "thumbnailRef", "collectionKey", "position", "visibility"] as const;
+const PROFILE_PRESENTATION_FIELDS = ["aboutText", "avatarReference"] as const;
 const LIFECYCLE_STATUSES = ["ACTIVE", "HIDDEN", "ARCHIVED", "REMOVED"] as const;
 
 function scope(actor: Actor) {
@@ -102,6 +105,20 @@ function learnerResultFromRow(row: any) {
   };
 }
 
+function portfolioFromRow(row: any) {
+  return {
+    portfolioId: row.portfolio_id,
+    learnerId: row.learner_id,
+    organizationId: row.organization_id,
+    tenantId: row.tenant_id,
+    status: row.status,
+    aboutText: row.about_text || "",
+    avatarReference: row.avatar_reference || null,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
+}
+
 function skillFromRow(row: any) {
   return {
     competencyId: row.competency_id,
@@ -111,6 +128,65 @@ function skillFromRow(row: any) {
     sourceOutcomeId: row.source_outcome_id,
     evidenceIds: Array.isArray(row.evidence_ids) ? row.evidence_ids.map(String) : [],
     determinedAt: row.determined_at,
+    sourceDecisionId: row.source_decision_id || null,
+    reviewerUserId: row.reviewer_user_id || null,
+    sourceAuthority: row.source_authority || "curriculum_learner_mastery",
+    provenance: row.provenance_json || {},
+  };
+}
+
+function actorUserId(actor: Actor) {
+  return String(actor.user_id || actor.id || "");
+}
+
+function actorOrganizationId(actor: Actor) {
+  return String(actor.active_organization_id || actor.organization_id || "");
+}
+
+function studentProfileFromActor(actor: Actor) {
+  const organizationId = actorOrganizationId(actor);
+  const activeMembership = Array.isArray((actor as any).memberships)
+    ? (actor as any).memberships.find((item: any) => item?.organization_id === organizationId)
+    : null;
+  return {
+    learnerId: actorUserId(actor),
+    displayName: String((actor as any).full_name || (actor as any).name || (actor as any).email || "Student"),
+    email: (actor as any).email || null,
+    organizationId,
+    tenantId: String(actor.tenant_id || `tenant:${organizationId}`),
+    organizationName: (actor as any).organization_name || (actor as any).organizationName || null,
+    roles: Array.isArray(actor.roles) ? actor.roles : [],
+    membershipStatus: activeMembership?.status || null,
+  };
+}
+
+async function readOptional<T>(source: string, reader: () => Promise<T>) {
+  try {
+    return { source, status: "CONNECTED", data: await reader() };
+  } catch (error: any) {
+    return { source, status: "UNAVAILABLE", data: null, errorCode: error?.code || error?.message || "SOURCE_UNAVAILABLE" };
+  }
+}
+
+function learningProgressFromCourses(courses: any[]) {
+  const totalLessons = courses.reduce((sum, course) => sum + Number(course.lessonCount || 0), 0);
+  const completedLessons = courses.reduce((sum, course) => sum + Number(course.completedCount || 0), 0);
+  return {
+    source: "curriculum-student-catalog",
+    courseCount: courses.length,
+    totalLessons,
+    completedLessons,
+    progressPercent: totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : null,
+    courses: courses.map((course) => ({
+      courseId: course.courseId,
+      stableKey: course.stableKey,
+      title: course.title,
+      curriculumReleaseId: course.curriculumReleaseId,
+      completedCount: course.completedCount,
+      lessonCount: course.lessonCount,
+      progressPercent: course.progressPercent,
+      nextLesson: course.nextLesson,
+    })),
   };
 }
 
@@ -132,6 +208,24 @@ function validatePresentationSafety(input: any) {
   if (/^(javascript|vbscript):/.test(value) || /^data:text\/html/.test(value)) {
     throw new Error("PORTFOLIO_THUMBNAIL_REFERENCE_UNSAFE");
   }
+}
+
+function profilePresentationInput(input: any) {
+  const result: any = {};
+  if (input.aboutText !== undefined) {
+    const value = String(input.aboutText || "");
+    if (value.length > 1200) throw new Error("PORTFOLIO_ABOUT_TEXT_TOO_LONG");
+    result.aboutText = value;
+  }
+  if (input.avatarReference !== undefined) {
+    const value = input.avatarReference == null ? null : String(input.avatarReference || "");
+    if (value && value.length > 750_000) throw new Error("PORTFOLIO_AVATAR_REFERENCE_TOO_LARGE");
+    if (value && !/^data:image\/(png|jpe?g|webp);base64,/i.test(value) && !/^https:\/\//i.test(value)) {
+      throw new Error("PORTFOLIO_AVATAR_REFERENCE_UNSAFE");
+    }
+    result.avatarReference = value || null;
+  }
+  return result;
 }
 
 export class PortfolioService {
@@ -232,7 +326,7 @@ export class PortfolioService {
   }
 
   async createFromEvidence(actor: Actor, input: any) {
-    requirePermission(actor, SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_UPDATE);
+    requirePermission(actor, SHS_SECURITY_PERMISSIONS.PORTFOLIO_UPDATE);
     const expected = scope(actor);
     const body = input || {};
     rejectUnknown(body, ["evidenceId", ...PRESENTATION_FIELDS]);
@@ -366,12 +460,69 @@ export class PortfolioService {
   }
 
   async getPortfolio(actor: Actor) {
-    requirePermission(actor, SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_VIEW);
+    requirePermission(actor, SHS_SECURITY_PERMISSIONS.PORTFOLIO_VIEW);
     const expected = scope(actor);
+    const [learnerProjection, pathwayProjection, courseProjection] = await Promise.all([
+      readOptional("portfolio-learner-results", () => this.getLearnerResultProjection(actor)),
+      readOptional("career-pathway", () => deriveLearnerPathway({ organization_id: expected.organizationId, user_id: expected.learnerId })),
+      readOptional("curriculum-student-catalog", async () => {
+        const courses = await listMyCourses({
+          user_id: expected.learnerId,
+          organization_id: expected.organizationId,
+          roles: Array.isArray(actor.roles) ? actor.roles : [],
+        });
+        return learningProgressFromCourses(courses);
+      }),
+    ]);
+    const sourceAvailability = [learnerProjection, pathwayProjection, courseProjection].map(({ source, status, errorCode }) => ({ source, status, ...(errorCode ? { errorCode } : {}) }));
+    const base = {
+      studentProfile: studentProfileFromActor(actor),
+      pathway: pathwayProjection.data,
+      learningProgress: courseProjection.data,
+      learnerResultItems: learnerProjection.data?.learnerResultItems || [],
+      skillProfile: learnerProjection.data?.skillProfile || [],
+      sourceAvailability,
+    };
     const result = await this.dbQuery(`SELECT * FROM portfolio_profiles WHERE organization_id=$1 AND tenant_id=$2 AND learner_id=$3 AND status='ACTIVE'`, [expected.organizationId, expected.tenantId, expected.learnerId]);
-    if (!result.rows[0]) return { portfolio: null, artifacts: [], ...(await this.getLearnerResultProjection(actor)) };
+    if (!result.rows[0]) return { portfolio: null, artifacts: [], ...base };
     const artifacts = await this.dbQuery(`SELECT * FROM portfolio_artifacts WHERE portfolio_id=$1 AND status <> 'REMOVED' ORDER BY position ASC, created_at ASC`, [result.rows[0].portfolio_id]);
-    return { portfolio: portfolioFromRow(result.rows[0]), artifacts: artifacts.rows.map(artifactFromRow), ...(await this.getLearnerResultProjection(actor)) };
+    return { portfolio: portfolioFromRow(result.rows[0]), artifacts: artifacts.rows.map(artifactFromRow), ...base };
+  }
+
+  async updateProfilePresentation(actor: Actor, input: any) {
+    requirePermission(actor, SHS_SECURITY_PERMISSIONS.PORTFOLIO_UPDATE);
+    const expected = scope(actor);
+    const body = input || {};
+    rejectUnknown(body, PROFILE_PRESENTATION_FIELDS);
+    const changes = profilePresentationInput(body);
+    return this.transaction(async (executor) => {
+      const profile = await this.getOrCreateProfile(executor, expected);
+      const updated = await executor.query(
+        `UPDATE portfolio_profiles
+            SET about_text=$2,
+                avatar_reference=$3,
+                updated_at=NOW()
+          WHERE portfolio_id=$1
+            AND organization_id=$4
+            AND tenant_id=$5
+            AND learner_id=$6
+          RETURNING *`,
+        [
+          profile.portfolio_id,
+          changes.aboutText !== undefined ? changes.aboutText : profile.about_text || "",
+          changes.avatarReference !== undefined ? changes.avatarReference : profile.avatar_reference || null,
+          expected.organizationId,
+          expected.tenantId,
+          expected.learnerId,
+        ],
+      );
+      if (!updated.rows[0]) throw new Error("PORTFOLIO_PROFILE_UPDATE_FORBIDDEN");
+      await this.emit(executor, "portfolio.profile.updated", "portfolio", profile.portfolio_id, expected, {
+        fields: Object.keys(changes),
+        authoritative: false,
+      });
+      return portfolioFromRow(updated.rows[0]);
+    });
   }
 
   async listArtifacts(actor: Actor) {
@@ -379,7 +530,7 @@ export class PortfolioService {
   }
 
   async findArtifactsForEvidence(actor: Actor, evidenceIds: string[]) {
-    requirePermission(actor, SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_VIEW);
+    requirePermission(actor, SHS_SECURITY_PERMISSIONS.PORTFOLIO_VIEW);
     const expected = scope(actor);
     const ids = evidenceIds.map((value) => String(value || "").trim()).filter(Boolean);
     if (!ids.length) return new Map<string, ReturnType<typeof artifactFromRow>>();
@@ -399,19 +550,19 @@ export class PortfolioService {
       `SELECT a.* FROM portfolio_artifacts a
        WHERE a.artifact_id=$1 AND a.organization_id=$2 AND a.tenant_id=$3
          AND (a.learner_id=$4 OR (a.visibility='ORGANIZATION' AND a.status <> 'REMOVED' AND $5))`,
-      [artifactId, expected.organizationId, expected.tenantId, expected.learnerId, hasPermission(actor.permissions || [], SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_VIEW)],
+      [artifactId, expected.organizationId, expected.tenantId, expected.learnerId, hasPermission(actor.permissions || [], SHS_SECURITY_PERMISSIONS.PORTFOLIO_VIEW)],
     );
     if (!result.rows[0]) throw new Error("PORTFOLIO_ARTIFACT_NOT_FOUND");
     return { expected, row: result.rows[0] };
   }
 
   async getArtifact(actor: Actor, artifactId: string) {
-    requirePermission(actor, SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_VIEW);
+    requirePermission(actor, SHS_SECURITY_PERMISSIONS.PORTFOLIO_VIEW);
     return artifactFromRow((await this.getArtifactRow(actor, artifactId)).row);
   }
 
   async updateArtifact(actor: Actor, artifactId: string, input: any) {
-    requirePermission(actor, SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_UPDATE);
+    requirePermission(actor, SHS_SECURITY_PERMISSIONS.PORTFOLIO_UPDATE);
     const body = input || {};
     rejectUnknown(body, [...PRESENTATION_FIELDS, "status"]);
     return this.transaction(async (executor) => {
@@ -446,8 +597,4 @@ export class PortfolioService {
       return artifactFromRow(updated.rows[0]);
     });
   }
-}
-
-function portfolioFromRow(row: any) {
-  return { portfolioId: row.portfolio_id, learnerId: row.learner_id, organizationId: row.organization_id, tenantId: row.tenant_id, status: row.status, createdAt: row.created_at, updatedAt: row.updated_at };
 }

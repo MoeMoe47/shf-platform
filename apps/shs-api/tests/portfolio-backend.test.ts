@@ -7,11 +7,11 @@ const actor = {
   active_organization_id: "org-a",
   organization_id: "org-a",
   tenant_id: "tenant:org-a",
-  permissions: ["studio.project.view", "studio.project.update"],
+  permissions: ["portfolio.view", "portfolio.update", "studio.project.view", "studio.project.update"],
   roles: ["student"],
 };
 
-function fakeStore() {
+function fakeStore(options: { masteryRows?: any[] } = {}) {
   let profile: any = null;
   let artifact: any = null;
   const events: any[] = [];
@@ -25,9 +25,16 @@ function fakeStore() {
   };
   const execute = async (sql: string, params: any[] = []) => {
     if (sql.includes("FROM prepare_prove_evidence")) return { rows: [source] };
+    if (sql.includes("FROM portfolio_learner_result_entries")) return { rows: [] };
+    if (sql.includes("FROM curriculum_learner_mastery")) return { rows: options.masteryRows || [] };
+    if (sql.includes("UPDATE portfolio_profiles")) {
+      if (!profile) return { rows: [] };
+      profile = { ...profile, about_text: params[1], avatar_reference: params[2], updated_at: "updated" };
+      return { rows: [profile] };
+    }
     if (sql.includes("FROM portfolio_profiles")) return { rows: profile ? [profile] : [] };
     if (sql.includes("INSERT INTO portfolio_profiles")) {
-      if (!profile) profile = { portfolio_id: params[0], organization_id: params[1], tenant_id: params[2], learner_id: params[3], status: "ACTIVE", created_at: "now", updated_at: "now" };
+      if (!profile) profile = { portfolio_id: params[0], organization_id: params[1], tenant_id: params[2], learner_id: params[3], status: "ACTIVE", about_text: "", avatar_reference: null, created_at: "now", updated_at: "now" };
       return { rows: [profile] };
     }
     if (sql.includes("FROM portfolio_artifacts")) return { rows: artifact ? [artifact] : [] };
@@ -73,6 +80,79 @@ test("Portfolio backend rejects authority fields before persistence", async () =
 test("Portfolio backend rejects invalid organization/tenant context", async () => {
   const service = new PortfolioService();
   await assert.rejects(() => service.getPortfolio({ ...actor, tenant_id: "tenant:org-b" }), /scope must agree/);
+});
+
+test("Portfolio backend read uses Portfolio permission rather than Studio view", async () => {
+  const store = fakeStore();
+  const service = new PortfolioService(
+    store.execute as any,
+    async (fn: any) => fn({ query: store.execute }),
+    { enqueue: async () => undefined } as any,
+  );
+  await assert.rejects(() => service.getPortfolio({ ...actor, permissions: ["studio.project.view"] }), /portfolio_view_required/);
+  const result = await service.getPortfolio({ ...actor, permissions: ["portfolio.view"] });
+  assert.deepEqual(result.artifacts, []);
+});
+
+test("Portfolio backend write uses Portfolio update permission rather than Studio update", async () => {
+  const store = fakeStore();
+  const service = new PortfolioService(
+    store.execute as any,
+    async (fn: any) => fn({ query: store.execute }),
+    { enqueue: async () => undefined } as any,
+  );
+  await assert.rejects(() => service.createFromEvidence({ ...actor, permissions: ["portfolio.view", "studio.project.update"] }, { evidenceId: "evidence-a" }), /portfolio_update_required/);
+});
+
+test("Portfolio profile presentation update is learner-owned and does not mutate mastery authorities", async () => {
+  const store = fakeStore();
+  const executed: string[] = [];
+  const execute = async (sql: string, params: any[] = []) => {
+    executed.push(sql);
+    return store.execute(sql, params);
+  };
+  const service = new PortfolioService(
+    execute as any,
+    async (fn: any) => fn({ query: execute }),
+    { enqueue: async (event: any) => { store.events.push(event); } } as any,
+  );
+  const updated = await service.updateProfilePresentation(actor, { aboutText: "Student-owned intro", avatarReference: "data:image/png;base64,AAAA" });
+  assert.equal(updated.aboutText, "Student-owned intro");
+  assert.equal(updated.avatarReference, "data:image/png;base64,AAAA");
+  assert.equal(executed.some((sql) => /UPDATE\s+curriculum_learner_mastery|UPDATE\s+curriculum_learner_outcomes|UPDATE\s+learner_competency_decisions|UPDATE\s+prepare_prove_evidence/i.test(sql)), false);
+});
+
+test("Portfolio skill profile reads canonical curriculum learner mastery", async () => {
+  const store = fakeStore({
+    masteryRows: [{
+      mastery_id: "mastery-a",
+      organization_id: "org-a",
+      tenant_id: "tenant:org-a",
+      learner_user_id: "learner-a",
+      competency_id: "comp-a",
+      competency_title: "Fiber Safety",
+      mastery_status: "DEMONSTRATED",
+      verification_status: "VERIFIED",
+      evidence_ids: ["evidence-a"],
+      source_decision_id: "decision-a",
+      reviewer_user_id: "reviewer-a",
+      source_authority: "curriculum_learner_mastery",
+      provenance_json: { decisionState: "DEMONSTRATED" },
+      determined_at: "2026-10-12T12:00:00.000Z",
+    }],
+  });
+  const service = new PortfolioService(
+    store.execute as any,
+    async (fn: any) => fn({ query: store.execute }),
+    { enqueue: async () => undefined } as any,
+  );
+  const result = await service.getPortfolio(actor);
+  assert.equal(result.skillProfile.length, 1);
+  assert.equal(result.skillProfile[0].competencyId, "comp-a");
+  assert.equal(result.skillProfile[0].masteryStatus, "DEMONSTRATED");
+  assert.equal(result.skillProfile[0].sourceDecisionId, "decision-a");
+  assert.equal(result.skillProfile[0].reviewerUserId, "reviewer-a");
+  assert.deepEqual(result.skillProfile[0].evidenceIds, ["evidence-a"]);
 });
 
 test("Portfolio backend rejects executable thumbnail schemes", async () => {

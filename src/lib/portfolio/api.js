@@ -43,6 +43,16 @@ export async function createPortfolioArtifactFromEvidence(role = "student", { ev
   }));
 }
 
+export async function updatePortfolioProfile(role = "student", profile = {}) {
+  const body = {};
+  for (const key of ["aboutText", "avatarReference"]) {
+    if (profile[key] !== undefined) body[key] = profile[key];
+  }
+  return parseResponse(await fetch(`${PORTFOLIO_API_BASE}/portfolio/profile`, {
+    method: "PATCH", credentials: "include", headers: authHeaders(role), body: JSON.stringify(body),
+  }));
+}
+
 export async function updatePortfolioArtifact(role = "student", artifactId, presentation = {}) {
   const body = {};
   for (const key of ["title", "summary", "reflection", "thumbnailRef", "collectionKey", "position", "visibility", "status"]) {
@@ -57,5 +67,6 @@ export default {
   getPortfolio,
   listPortfolioArtifacts,
   createPortfolioArtifactFromEvidence,
+  updatePortfolioProfile,
   updatePortfolioArtifact,
 };

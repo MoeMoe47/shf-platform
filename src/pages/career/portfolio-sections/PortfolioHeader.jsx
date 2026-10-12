@@ -2,7 +2,7 @@
 import React from "react";
 import { SearchIcon, BellIcon, ChevronDownIcon } from "@/components/curriculum/icons.jsx";
 
-export default function PortfolioHeader({ onSearch }) {
+export default function PortfolioHeader({ onSearch, onShare, onExport, shareStatus }) {
   const [query, setQuery] = React.useState("");
   const [notifOpen, setNotifOpen] = React.useState(false);
   const [hasUnread, setHasUnread] = React.useState(true);
@@ -30,9 +30,17 @@ export default function PortfolioHeader({ onSearch }) {
 
   return (
     <header className="sp-header">
-      <div>
-        <h1 className="sp-h1">Student Portfolio</h1>
-        <p className="sp-subtitle">Showcase your progress, projects, and career readiness.</p>
+      <div className="sp-headerCopy">
+        <nav className="sp-breadcrumb" aria-label="Breadcrumb">
+          <a href="/career.html#/portfolio">Portfolio</a>
+          <span aria-hidden="true">›</span>
+          <span>Student</span>
+        </nav>
+        <div className="sp-titleRow">
+          <span className="sp-titleIcon" aria-hidden="true">✣</span>
+          <h1 id="portfolio-v1-heading" className="sp-h1">Student Portfolio</h1>
+        </div>
+        <p className="sp-subtitle">Evidence-backed learner profile across curriculum, projects, skills, credentials, and verified achievements.</p>
       </div>
 
       <div className="sp-headerControls">
@@ -88,6 +96,25 @@ export default function PortfolioHeader({ onSearch }) {
           </select>
           <ChevronDownIcon size={16} className="sp-pathwayChevron" />
         </div>
+
+        <button type="button" className="sp-btn sp-btnPrimary" onClick={onShare}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+            <circle cx="6" cy="12" r="2.5" />
+            <circle cx="18" cy="6" r="2.5" />
+            <circle cx="18" cy="18" r="2.5" />
+            <path d="M8.2 10.8 15.8 7M8.2 13.2l7.6 3.8" />
+          </svg>
+          Share Portfolio
+        </button>
+        <button type="button" className="sp-btn sp-btnSecondary" onClick={onExport}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+            <path d="M12 3v12" />
+            <path d="m7 10 5 5 5-5" />
+            <path d="M5 21h14" />
+          </svg>
+          Export PDF
+        </button>
+        <span className="sp-shareStatus" role="status" aria-live="polite">{shareStatus}</span>
       </div>
     </header>
   );

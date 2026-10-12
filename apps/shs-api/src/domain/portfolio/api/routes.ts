@@ -19,19 +19,22 @@ function reject(res: any, error: any) {
 }
 
 export function registerPortfolioRoutes(app: any) {
-  app.get("/portfolio", requirePermission(SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_VIEW), async (req: any, res: any) => {
+  app.get("/portfolio", requirePermission(SHS_SECURITY_PERMISSIONS.PORTFOLIO_VIEW), async (req: any, res: any) => {
     try { return res.json(ok(await service.getPortfolio(req.user))); } catch (error) { return reject(res, error); }
   });
-  app.get("/portfolio/artifacts", requirePermission(SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_VIEW), async (req: any, res: any) => {
+  app.get("/portfolio/artifacts", requirePermission(SHS_SECURITY_PERMISSIONS.PORTFOLIO_VIEW), async (req: any, res: any) => {
     try { return res.json(ok({ items: await service.listArtifacts(req.user) })); } catch (error) { return reject(res, error); }
   });
-  app.get("/portfolio/artifacts/:artifactId", requirePermission(SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_VIEW), async (req: any, res: any) => {
+  app.get("/portfolio/artifacts/:artifactId", requirePermission(SHS_SECURITY_PERMISSIONS.PORTFOLIO_VIEW), async (req: any, res: any) => {
     try { return res.json(ok(await service.getArtifact(req.user, req.params.artifactId))); } catch (error) { return reject(res, error); }
   });
-  app.post("/portfolio/artifacts/from-evidence", requirePermission(SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_UPDATE), async (req: any, res: any) => {
+  app.patch("/portfolio/profile", requirePermission(SHS_SECURITY_PERMISSIONS.PORTFOLIO_UPDATE), async (req: any, res: any) => {
+    try { return res.json(ok(await service.updateProfilePresentation(req.user, req.body || {}))); } catch (error) { return reject(res, error); }
+  });
+  app.post("/portfolio/artifacts/from-evidence", requirePermission(SHS_SECURITY_PERMISSIONS.PORTFOLIO_UPDATE), async (req: any, res: any) => {
     try { return res.status(201).json(ok(await service.createFromEvidence(req.user, req.body || {}))); } catch (error) { return reject(res, error); }
   });
-  app.patch("/portfolio/artifacts/:artifactId", requirePermission(SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_UPDATE), async (req: any, res: any) => {
+  app.patch("/portfolio/artifacts/:artifactId", requirePermission(SHS_SECURITY_PERMISSIONS.PORTFOLIO_UPDATE), async (req: any, res: any) => {
     try { return res.json(ok(await service.updateArtifact(req.user, req.params.artifactId, req.body || {}))); } catch (error) { return reject(res, error); }
   });
 }

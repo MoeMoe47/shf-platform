@@ -184,6 +184,7 @@ export const GOVERNANCE_CAPABILITIES = [
   "commercial_product.review_entitlement",
   "commercial_product.review_partner",
   "commercial_product.review_source_authority",
+  "commercial_product.production_onboard",
   "commercial_product.transition_lifecycle",
   "commercial_product.retire",
 ] as const;

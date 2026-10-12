@@ -12,6 +12,11 @@ import {
   type CommercialProductGovernanceCapability,
 } from "../model/commercial-product-registry-contract.js";
 import { CommercialProductRegistryService, CommercialProductRegistryServiceError } from "../service/commercial-product-registry-service.js";
+import {
+  CommercialProductProductionOnboardingError,
+  CommercialProductProductionOnboardingService,
+  PRODUCTION_ONBOARD_CAPABILITY,
+} from "../onboarding/commercial-product-production-onboarding-service.js";
 
 const BASE_PATH = "/commercial-products";
 const MAX_PAGE_SIZE = 100;
@@ -135,6 +140,14 @@ function mapServiceError(err: any) {
 }
 
 function handleError(err: any, res: any, next: any) {
+  if (err instanceof CommercialProductProductionOnboardingError) {
+    const status = err.statusCode || (err.code.includes("STALE") || err.code.includes("ALREADY") ? 409 : 400);
+    const code = err.code.includes("CAPABILITY") || err.code.includes("OPERATOR") || err.code.includes("ORG") ? "FORBIDDEN"
+      : err.code.includes("NOT_FOUND") ? "NOT_FOUND"
+        : err.code.includes("STALE") || err.code.includes("INELIGIBLE") || err.code.includes("EXISTS") ? "CONFLICT"
+          : "INVALID_INPUT";
+    return error(res, status, code, err.message || code);
+  }
   if (err instanceof CommercialProductRegistryServiceError || err?.code === "INVALID_INPUT" || err?.code) {
     const mapped = mapServiceError(err);
     return error(res, mapped.status, mapped.code, err?.message || mapped.code);
@@ -152,6 +165,12 @@ async function requireProduct(routeService: CommercialProductRegistryService, id
 }
 
 export function registerCommercialProductRegistryRoutes(app: any, routeService = new CommercialProductRegistryService()) {
+  let onboardingServicePromise: Promise<CommercialProductProductionOnboardingService> | undefined;
+  const onboardingService = () => {
+    onboardingServicePromise ||= CommercialProductProductionOnboardingService.fromDefaultManifests();
+    return onboardingServicePromise;
+  };
+
   app.get(BASE_PATH, requireCapability("commercial_product.read"), async (req: any, res: any, next: any) => {
     try {
       const projection = await routeService.projectSalesProductReadModel(actor(req));
@@ -176,6 +195,32 @@ export function registerCommercialProductRegistryRoutes(app: any, routeService =
     try {
       const projection = await routeService.projectSalesProductReadModel(actor(req));
       return res.json(ok(projection.summary));
+    } catch (err) {
+      return handleError(err, res, next);
+    }
+  });
+
+  app.post(`${BASE_PATH}/production-onboarding/:candidateId/dry-run`, requireCapability(PRODUCTION_ONBOARD_CAPABILITY as any), async (req: any, res: any, next: any) => {
+    try {
+      const result = await (await onboardingService()).dryRun(String(req.params.candidateId), actor(req), req.body || {});
+      return res.json(ok(result));
+    } catch (err) {
+      return handleError(err, res, next);
+    }
+  });
+
+  app.post(`${BASE_PATH}/production-onboarding/:candidateId/execute`, requireCapability(PRODUCTION_ONBOARD_CAPABILITY as any), async (req: any, res: any, next: any) => {
+    try {
+      const result = await (await onboardingService()).execute(String(req.params.candidateId), actor(req), req.body || {});
+      return res.status(result.idempotent ? 200 : 201).json(ok(result));
+    } catch (err) {
+      return handleError(err, res, next);
+    }
+  });
+
+  app.get(`${BASE_PATH}/production-onboarding/:candidateId/history`, requireCapability(PRODUCTION_ONBOARD_CAPABILITY as any), async (req: any, res: any, next: any) => {
+    try {
+      return res.json(ok(await (await onboardingService()).history(String(req.params.candidateId), actor(req))));
     } catch (err) {
       return handleError(err, res, next);
     }

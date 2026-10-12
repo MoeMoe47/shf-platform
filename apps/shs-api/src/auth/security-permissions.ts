@@ -129,6 +129,7 @@ export const SHS_SECURITY_PERMISSIONS = {
   COMMERCIAL_PRODUCT_REVIEW_SOURCE_AUTHORITY: "commercial_product.review_source_authority",
   COMMERCIAL_PRODUCT_REVIEW_ASSIGNMENT_MANAGE: "commercial_product.review_assignment.manage",
   COMMERCIAL_PRODUCT_REVIEW_READ_ALL: "commercial_product.review.read_all",
+  COMMERCIAL_PRODUCT_PRODUCTION_ONBOARD: "commercial_product.production_onboard",
   COMMERCIAL_PRODUCT_TRANSITION_LIFECYCLE: "commercial_product.transition_lifecycle",
   COMMERCIAL_PRODUCT_RETIRE: "commercial_product.retire",
 

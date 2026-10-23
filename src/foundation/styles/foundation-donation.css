@@ -1,0 +1,787 @@
+/* Donation page only. Shared Foundation shell remains canonical. */
+.shf-donation-page {
+  background: #fffdf8;
+  color: var(--shf-ink, #061a30);
+  --donation-label: #b92f08;
+}
+.shf-donation-page .shf-donation-shell {
+  width: min(100% - 112px, 1340px);
+  margin-inline: auto;
+}
+.shf-donation-page h1,
+.shf-donation-page h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+  margin: 0 0 12px;
+}
+.shf-donation-page h2 {
+  font-size: clamp(28px, 3.1vw, 44px);
+}
+.shf-donation-page p {
+  line-height: 1.5;
+  margin: 0 0 16px;
+}
+.shf-donation-page .shf-donation-eyebrow {
+  color: var(--donation-label);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.055em;
+  margin-bottom: 6px;
+}
+.shf-donation-page button,
+.shf-donation-page input {
+  font: inherit;
+}
+.shf-donation-page button {
+  cursor: pointer;
+}
+.shf-donation-page :is(button, a, input):focus-visible,
+.shf-donation-dialog button:focus-visible {
+  outline: 3px solid #166baf;
+  outline-offset: 4px;
+}
+.shf-donation-page section[id] {
+  scroll-margin-top: 150px;
+}
+.shf-donation-page section[tabindex]:focus {
+  outline: none;
+}
+.shf-donation-hero {
+  /* Preserve a legible base while the approved hero photograph loads. */
+  background-color: #17202a;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.shf-donation-hero__image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 18%;
+  z-index: -2;
+}
+.shf-donation-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    90deg,
+    rgba(17, 20, 23, 0.78),
+    rgba(17, 20, 23, 0.7) 38%,
+    transparent 61%
+  );
+}
+.shf-donation-hero__inner {
+  min-height: 460px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  padding-block: 40px;
+}
+.shf-donation-hero__copy {
+  width: 510px;
+  max-width: 100%;
+  flex: 0 0 auto;
+  color: #fff;
+}
+.shf-donation-hero h1 {
+  font-size: clamp(42px, 4.45vw, 66px);
+  text-shadow: 0 2px 3px #061a3060;
+}
+.shf-donation-hero__copy > p:last-child {
+  font-size: 19px;
+  max-width: 460px;
+  margin-bottom: 0;
+}
+.shf-donation-page .shf-donation-hero .shf-donation-eyebrow {
+  color: #ff6c38;
+  font-size: 19px;
+}
+.shf-donation-page .shf-donation-handwritten {
+  font-family: "SHF Permanent Marker", cursive;
+  font-weight: 400;
+  font-size: clamp(24px, 2.7vw, 40px);
+  line-height: 1.18;
+  transform: rotate(-9deg);
+  position: relative;
+}
+.shf-donation-hero .shf-donation-handwritten {
+  align-self: flex-start;
+  text-align: center;
+  color: #061a30;
+  background: transparent;
+  padding: 0;
+  margin: 4px 4px 0 0;
+  flex: 0 0 auto;
+  text-shadow: 0 1px 2px #fff5df;
+}
+.shf-donation-handwritten::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 6px;
+  background: var(--shf-orange);
+  transform: rotate(-5deg);
+  margin-top: 10px;
+  clip-path: polygon(0 40%, 100% 0, 93% 60%, 3% 100%);
+}
+.shf-donation-nav {
+  display: flex;
+  background: #fffdf8;
+  overscroll-behavior-x: contain;
+  scroll-padding-inline: 8px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--shf-line);
+  scrollbar-width: thin;
+}
+.shf-donation-nav > :is(button, a) {
+  position: relative;
+  flex: 1 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 22px 14px;
+  min-height: 82px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  color: var(--shf-ink);
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.shf-donation-nav > :is(button, a):not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 32px;
+  background: var(--shf-line);
+}
+.shf-donation-nav > :is(button, a):focus-visible {
+  outline: 3px solid #166baf;
+  outline-offset: -5px;
+}
+.shf-donation-nav > [aria-current] {
+  border-bottom-color: var(--shf-orange);
+}
+.shf-donation-nav svg {
+  color: var(--shf-orange);
+  width: 32px;
+  height: 32px;
+}
+.shf-donation-gift {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 28px;
+  padding-block: 34px;
+}
+.shf-donation-gift > * {
+  min-width: 0;
+}
+.shf-donation-gift > div > p:not(.shf-donation-eyebrow) {
+  max-width: 590px;
+  color: var(--shf-muted);
+  font-size: 18px;
+}
+.shf-gift-selector fieldset {
+  border: 0;
+  padding: 0;
+  margin: 20px 0;
+  min-width: 0;
+}
+.shf-gift-presets {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+.shf-gift-presets button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 10px 12px;
+  border: 1px solid #d8d8d3;
+  border-radius: 7px;
+  background: #fffefa;
+  color: var(--shf-muted);
+  min-height: 132px;
+}
+.shf-gift-presets button:hover {
+  border-color: var(--shf-orange);
+}
+.shf-gift-presets button[aria-pressed="true"] {
+  background: #fff0e3;
+  border: 2px solid var(--shf-orange-dark);
+  padding: 15px 9px 11px;
+  box-shadow: 0 0 0 2px #ff4f191a;
+}
+.shf-gift-presets strong {
+  color: var(--donation-label);
+  font-size: 27px;
+}
+.shf-gift-presets span {
+  font-size: 13px;
+  line-height: 1.5;
+}
+.shf-gift-submit {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: 24px;
+  align-items: end;
+}
+.shf-gift-submit label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+.shf-gift-submit label span {
+  color: var(--shf-muted);
+  font-size: 12px;
+}
+.shf-gift-input {
+  display: flex;
+  align-items: center;
+  border: 1px solid #b8c2ca;
+  border-radius: 5px;
+  background: white;
+  padding-left: 14px;
+  height: 54px;
+  color: var(--shf-muted);
+}
+.shf-gift-input input {
+  min-width: 0;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 14px 10px;
+  color: var(--shf-ink);
+}
+.shf-donation-page .shf-donation-primary {
+  min-height: 60px;
+  border: 1px solid #b92f08;
+  background: var(--shf-orange);
+  color: #061a30;
+  font-size: 19px;
+  font-weight: 800;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+.shf-gift-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--shf-muted);
+  font-size: 12px;
+  margin-top: 17px !important;
+}
+.shf-gift-error {
+  color: #a12015;
+  margin-top: 12px !important;
+}
+.shf-support-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 38fr) minmax(0, 62fr);
+  background: linear-gradient(130deg, #fbefdf, #faf1e6);
+  border-radius: 5px;
+  overflow: hidden;
+}
+.shf-support-panel > .shf-support-panel__image {
+  display: block;
+  max-width: 100%;
+  width: 100%;
+  height: 100%;
+  min-height: 385px;
+  object-fit: cover;
+  object-position: 30% center;
+}
+.shf-support-panel > div {
+  min-width: 0;
+  padding: 24px;
+}
+.shf-support-panel ul {
+  padding: 0;
+  margin: 10px 0 0;
+  list-style: none;
+}
+.shf-support-panel li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  color: var(--shf-muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.shf-support-panel li + li {
+  border-top: 1px solid #eadfce;
+}
+.shf-support-panel li > span {
+  display: grid;
+  place-items: center;
+  background: #fffaf2;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}
+.shf-support-panel svg {
+  width: 28px;
+  height: 28px;
+  color: var(--donation-label);
+}
+.shf-donation-ways {
+  padding-block: 20px 28px;
+  border-top: 1px solid #eee9df;
+}
+.shf-donation-ways > p:not(.shf-donation-eyebrow) {
+  color: var(--shf-muted);
+  font-size: 17px;
+}
+.shf-giving-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  gap: 20px;
+}
+.shf-donation-page .shf-giving-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  text-align: left;
+  padding: 0;
+  border: 1px solid #eee7de;
+  background: #fffdf8;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 3px 12px #061a3006;
+  color: var(--shf-ink);
+}
+.shf-giving-card > .shf-giving-card__image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  object-position: center 40%;
+  display: block;
+}
+.shf-giving-card__body {
+  position: relative;
+  flex: 1;
+  padding: 18px 18px 62px;
+  min-height: 160px;
+}
+.shf-giving-card h3 {
+  font-size: 17px;
+  margin: 0 0 9px;
+  line-height: 1.3;
+}
+.shf-giving-card p {
+  font-size: 15px;
+  color: var(--shf-muted);
+}
+.shf-giving-action {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  padding: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.shf-giving-arrow {
+  background: var(--shf-orange);
+  color: #061a30;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+}
+.shf-giving-card:hover {
+  box-shadow: 0 4px 16px #061a301a;
+}
+.shf-gift-impact {
+  display: grid;
+  grid-template-columns: minmax(0, 38fr) minmax(0, 38fr) minmax(0, 24fr);
+  background: #031a26;
+  color: white;
+}
+.shf-gift-impact > * {
+  min-width: 0;
+}
+.shf-gift-impact__visual {
+  position: relative;
+  min-height: 0;
+  aspect-ratio: 2007 / 783;
+  align-self: center;
+  overflow: hidden;
+}
+.shf-gift-impact__visual .shf-gift-impact__image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: none;
+}
+.shf-gift-impact__copy {
+  padding: 36px 28px;
+  align-self: center;
+}
+.shf-donation-page .shf-gift-impact h2 {
+  font-size: clamp(27px, 2.8vw, 40px);
+}
+.shf-donation-page .shf-gift-impact .shf-donation-eyebrow {
+  color: #ff9b6f;
+}
+.shf-gift-impact__copy > p:not(.shf-donation-eyebrow) {
+  font-size: 16px;
+  color: #d4e1eb;
+}
+.shf-gift-impact .shf-donation-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  min-height: 48px;
+  border: 1px solid #dae2e8;
+  padding: 10px 22px;
+  border-radius: 5px;
+  font-size: 15px;
+  font-weight: 700;
+}
+.shf-gift-impact .shf-donation-outline:hover {
+  background: #ffffff12;
+}
+.shf-gift-impact .shf-donation-outline:focus-visible {
+  outline: 3px solid #ff9b6f;
+  outline-offset: 4px;
+}
+.shf-gift-impact > ul {
+  align-self: center;
+  border-left: 2px solid #a43e1c;
+  padding: 5px 20px 5px 30px;
+  list-style: none;
+  margin: 26px 0;
+}
+.shf-gift-impact > ul li {
+  position: relative;
+  padding: 8px 0 8px 22px;
+  font-size: 15px;
+}
+.shf-gift-impact > ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 12px;
+  width: 12px;
+  height: 12px;
+  background: var(--shf-orange);
+  border-radius: 50%;
+}
+.shf-donation-transparency {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  background: #fffdf8;
+  gap: 28px;
+  padding-block: 32px;
+  align-items: center;
+}
+.shf-donation-transparency > * {
+  min-width: 0;
+}
+.shf-donation-page .shf-donation-transparency h2 {
+  font-size: 31px;
+}
+.shf-donation-transparency p:last-child {
+  font-size: 15px;
+  color: var(--shf-muted);
+  margin-bottom: 0;
+}
+.shf-transparency-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.shf-transparency-actions > :is(button, a) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 0;
+  border-left: 1px solid #e9e5dd;
+  background: transparent;
+  min-height: 112px;
+  text-align: center;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--shf-ink);
+}
+.shf-transparency-actions > :is(button, a):hover {
+  background: #fff5e8;
+}
+.shf-transparency-actions > :is(button, a):focus-visible {
+  outline: 3px solid #166baf;
+  outline-offset: -4px;
+}
+.shf-transparency-actions svg {
+  width: 34px;
+  height: 34px;
+  color: var(--donation-label);
+}
+.shf-donation-dialog {
+  max-width: min(540px, calc(100% - 32px));
+  padding: 30px;
+  border: 1px solid #e3d5c6;
+  border-radius: 10px;
+  background: #fffdf8;
+  color: #061a30;
+  box-shadow: 0 20px 100px #0004;
+}
+.shf-donation-dialog::backdrop {
+  background: #061a30b8;
+}
+.shf-donation-dialog h2 {
+  font:
+    bold 30px/1.15 Georgia,
+    serif;
+  margin: 0 0 18px;
+}
+.shf-donation-dialog p {
+  font:
+    16px/1.65 system-ui,
+    sans-serif;
+  margin: 0 0 24px;
+}
+.shf-donation-dialog button {
+  border: 1px solid #b92f08;
+  border-radius: 5px;
+  background: #ff4f19;
+  color: #061a30;
+  padding: 13px 20px;
+  min-height: 48px;
+  font:
+    bold 15px system-ui,
+    sans-serif;
+  cursor: pointer;
+}
+.shf-donation-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+@media (max-width: 1100px) {
+  .shf-donation-page .shf-donation-shell {
+    width: calc(100% - 64px);
+  }
+  .shf-donation-gift {
+    grid-template-columns: 1fr;
+  }
+  .shf-support-panel {
+    grid-template-columns: 32% 68%;
+  }
+  .shf-support-panel > .shf-support-panel__image {
+    min-height: 300px;
+    max-height: 340px;
+  }
+  .shf-support-panel ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 24px;
+  }
+  .shf-giving-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .shf-gift-impact {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .shf-gift-impact__visual {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+  .shf-gift-impact > ul {
+    grid-column: auto;
+    display: block;
+    margin: 28px 24px 28px 0;
+  }
+  .shf-donation-transparency {
+    grid-template-columns: 1fr;
+  }
+}
+@media (min-width: 601px) and (max-width: 1000px) {
+  .shf-donation-hero__inner {
+    min-height: 560px;
+    align-items: flex-end;
+    padding-block: 32px;
+  }
+  .shf-donation-hero__image {
+    object-position: 62% top;
+  }
+  .shf-donation-hero::before {
+    background: linear-gradient(
+      90deg,
+      rgba(17, 20, 23, 0.8),
+      rgba(17, 20, 23, 0.76) 46%,
+      transparent 72%
+    );
+  }
+  .shf-donation-hero__copy {
+    width: 370px;
+  }
+  .shf-donation-hero h1 {
+    font-size: 48px;
+  }
+  .shf-donation-hero__copy > p:last-child {
+    font-size: 17px;
+    max-width: 350px;
+  }
+  .shf-donation-hero .shf-donation-handwritten {
+    position: absolute;
+    right: 32px;
+    top: 28px;
+    margin: 0;
+    font-size: 28px;
+  }
+}
+@media (max-width: 600px) {
+  .shf-donation-page .shf-donation-shell {
+    width: calc(100% - 36px);
+  }
+  .shf-donation-hero__image {
+    height: 380px;
+    object-position: 65% top;
+  }
+  .shf-donation-hero::before {
+    top: 270px;
+    bottom: auto;
+    height: 110px;
+    background: linear-gradient(0deg, #17202a, transparent);
+  }
+  .shf-donation-hero__inner {
+    min-height: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    padding-block: 370px 30px;
+  }
+  .shf-donation-hero h1 {
+    font-size: 43px;
+  }
+  .shf-donation-hero__copy > p:last-child {
+    font-size: 17px;
+  }
+  .shf-donation-hero .shf-donation-handwritten {
+    align-self: flex-end;
+    font-size: 25px;
+    margin: 0 8px 8px 0;
+    padding: 0;
+    color: #fff;
+    text-shadow: none;
+  }
+  .shf-donation-nav > :is(button, a) {
+    min-height: 72px;
+    padding: 15px 12px;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .shf-donation-nav svg {
+    width: 25px;
+    height: 25px;
+  }
+  .shf-donation-gift {
+    padding-block: 28px;
+    gap: 20px;
+  }
+  .shf-gift-presets {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .shf-gift-presets button {
+    min-height: 115px;
+  }
+  .shf-gift-submit {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  .shf-support-panel {
+    grid-template-columns: 1fr;
+  }
+  .shf-support-panel > .shf-support-panel__image {
+    height: clamp(240px, 65vw, 340px);
+    min-height: 0;
+    object-position: center 20%;
+  }
+  .shf-support-panel > div {
+    padding: 22px;
+  }
+  .shf-support-panel ul {
+    grid-template-columns: 1fr;
+  }
+  .shf-support-panel li {
+    padding-block: 13px;
+  }
+  .shf-giving-cards {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .shf-gift-impact {
+    grid-template-columns: 1fr;
+  }
+  .shf-gift-impact__visual {
+    min-height: 0;
+  }
+  .shf-gift-impact__copy {
+    padding: 28px 22px;
+  }
+  .shf-gift-impact > ul {
+    margin: 0 22px 28px;
+  }
+  .shf-donation-page .shf-donation-transparency h2 {
+    font-size: 29px;
+  }
+  .shf-transparency-actions {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .shf-transparency-actions > :is(button, a) {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 16px;
+    min-height: 76px;
+    border-left: 0;
+    border-top: 1px solid #e9e5dd;
+    padding: 18px 16px;
+    font-size: 15px;
+    text-align: left;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .shf-donation-page *,
+  .shf-donation-page *::before,
+  .shf-donation-page *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}

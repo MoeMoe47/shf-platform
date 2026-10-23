@@ -1,0 +1,39 @@
+/* Canonical closing CTA only; preserve the existing artwork and orange gradient. */
+.shf-home-mock .shf-final-cta .shf-btn--primary {
+  color: var(--shf-ink);
+}
+.shf-home-mock .shf-final-cta a:focus-visible {
+  outline: 3px solid #fdfcf8;
+  outline-offset: 4px;
+}
+@media (max-width: 768px) {
+  .shf-home-mock .shf-final-cta {
+    background-color: #fffdf8;
+    background-size:
+      auto,
+      100% auto;
+    background-position:
+      center,
+      center bottom;
+    background-repeat: no-repeat;
+  }
+}
+
+/* Catalog's Store entry has a responsive 15px root. Keep this canonical
+   ending at Foundation's typography without changing the surrounding app. */
+.shu-catalog .shf-final-cta p {
+  font-size: 16px;
+  margin-top: 10px;
+}
+.shu-catalog .shf-final-cta .shf-btn {
+  font-size: 15.04px;
+  line-height: normal;
+}
+.shu-catalog .shf-final-cta .shf-btn--primary {
+  border: 1px solid transparent;
+}
+@media (max-width: 768px) {
+  .shu-catalog.shf-home-mock .shf-final-cta .shf-slogan {
+    font-size: clamp(20.8px, 5vw, 28.8px);
+  }
+}

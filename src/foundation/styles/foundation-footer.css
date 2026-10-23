@@ -1,0 +1,36 @@
+/* Canonical Foundation footer integration only. Catalog has a 1.6 line height
+   and Store has a responsive 15px root; preserve Foundation's own footer sizes. */
+.shu-catalog .shf-footer {
+  font-size: 16px;
+  line-height: normal;
+}
+.shu-catalog .shf-footer__inner {
+  padding: 26px 0 34px;
+  flex-wrap: wrap;
+}
+.shu-catalog .shf-footer__links {
+  font-size: 13.12px;
+}
+.shu-catalog .shf-footer__social span,
+.shu-catalog .shf-footer__bottom {
+  font-size: 11.52px;
+}
+@media (max-width: 1024px) {
+  .shu-catalog .shf-footer__inner {
+    padding: 24px 0;
+  }
+}
+
+/* Public Foundation footer accessibility; leave other app styles untouched. */
+.shf-site.shf-home-mock .shf-footer__links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  min-width: 44px;
+  padding-block: 6px;
+}
+.shf-site.shf-home-mock .shf-footer a:focus-visible {
+  outline: 3px solid #061a30;
+  outline-offset: 3px;
+  border-radius: 3px;
+}

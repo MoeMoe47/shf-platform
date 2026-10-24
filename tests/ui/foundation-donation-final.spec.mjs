@@ -1,4 +1,13 @@
 import { test, expect } from "@playwright/test";
+test.beforeEach(async ({ page }) => {
+  await page.route("**/foundation/donations/checkout", (route) =>
+    route.fulfill({
+      status: 503,
+      contentType: "application/json",
+      body: JSON.stringify({ error: "donation_provider_unavailable" }),
+    }),
+  );
+});
 import { mkdir } from "node:fs/promises";
 test.setTimeout(120_000);
 
@@ -83,7 +92,7 @@ for (const width of [1440, 1280, 768, 390]) {
     page.on("request", track);
     for (const [amount, label] of [
       ["42.37", "$42.37"],
-      ["90071992547409.91", "$90,071,992,547,409.91"],
+      ["10000", "$10,000.00"],
     ]) {
       await input.fill(amount);
       await expect(form.locator('[aria-pressed="true"]')).toHaveCount(0);
@@ -98,7 +107,14 @@ for (const width of [1440, 1280, 768, 390]) {
     await give.press("Enter");
     await page.getByRole("dialog").getByRole("button").click();
     await expect(give).toBeFocused();
-    expect(nonGet).toEqual([]);
+    expect(nonGet).toHaveLength(3);
+    for (const request of nonGet)
+      expect(request).toMatch(/\/foundation\/donations\/checkout$/);
+    await input.fill("10000.01");
+    await give.click();
+    await expect(form.getByRole("alert")).toContainText(
+      "between $1.00 and $10,000.00",
+    );
     page.off("request", track);
     const ways = page.getByRole("region", {
       name: "More Ways to Make an Impact.",

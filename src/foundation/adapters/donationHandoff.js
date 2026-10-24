@@ -24,7 +24,7 @@ export function formatDonationAmount(amountMinor) {
 }
 
 /**
- * Safe boundary for a future approved hosted-checkout adapter.
+ * Legacy informational handoff, retained for existing consumers.
  * No network requests, persistence, donor details or payment simulation.
  * @param {{amountMinor: number, currency: "USD", frequency: "one-time"}} gift
  */
@@ -39,3 +39,8 @@ export function prepareDonationHandoff(gift) {
   }
   return { status: "provider-unavailable", ...gift };
 }
+
+export {
+  startDonationCheckout,
+  redirectToDonationCheckout,
+} from "./donationCheckout.js";

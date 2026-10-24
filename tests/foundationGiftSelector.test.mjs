@@ -112,10 +112,7 @@ test("handoff stays provider-unavailable and shared dialog retains native modal 
     "src/foundation/components/FoundationGiftSelector.jsx",
     "utf8",
   );
-  assert.match(
-    source,
-    /No payment has been taken and your amount has not been saved/,
-  );
+  assert.match(source, /No payment has been taken by this page/);
   assert.match(source, /approved secure payment provider must be connected/);
   assert.doesNotMatch(source, /fetch\(|localStorage|transactionId|cardNumber/);
   const dialog = renderToStaticMarkup(

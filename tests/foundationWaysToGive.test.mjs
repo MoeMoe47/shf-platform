@@ -120,7 +120,7 @@ test("three information actions invoke truthful existing previews and partnershi
     calls.map((c) => c.title),
     ["Monthly Giving", "Grants & Foundations", "Planned Giving"],
   );
-  assert.match(calls[0].description, /Recurring giving is not available yet/);
+  assert.match(calls[0].description, /Choose Monthly in Make a Gift/);
   assert.match(calls[0].description, /approved provider/);
   assert.match(calls[1].description, /not yet published/);
   assert.match(

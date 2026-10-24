@@ -108,6 +108,11 @@ export class DonationService {
         if (event.kind === "FAILED") row.status = "FAILED";
         else if (event.kind === "EXPIRED") row.status = "CANCELED";
         else if (
+          event.kind === "SUBSCRIPTION" &&
+          event.recurringStatus === "CANCELED"
+        )
+          row.status = "CANCELED";
+        else if (
           event.kind === "CHECKOUT" &&
           !["FAILED", "CANCELED"].includes(row.status)
         )

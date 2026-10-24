@@ -785,3 +785,25 @@
     animation: none !important;
   }
 }
+.shf-donation-page .shf-gift-frequency {
+  display: flex;
+  gap: 1.5rem;
+  margin: 1rem 0;
+}
+.shf-donation-page .shf-gift-frequency label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.shf-donation-page .shf-gift-frequency input {
+  width: auto;
+  accent-color: #b26923;
+}
+.shf-donation-page .shf-gift-frequency input:focus-visible {
+  outline: 3px solid #865019;
+  outline-offset: 4px;
+}
+.shf-donation-return {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}

@@ -88,11 +88,15 @@ test("assembled IDs, input labels and ARIA references resolve uniquely; icons an
   assert.match(html, /shf-institutional-header__support" aria-current="page"/);
 });
 
-test("only the custom USD input/form and safe unconfigured handoff exist, with no collection fields or fake receipts", () => {
+test("only gift frequency and custom USD inputs exist, with no credential fields or fake receipts", () => {
   const inputs = [...html.matchAll(/<input\b[^>]*>/g)].map((m) => m[0]);
-  assert.equal(inputs.length, 1);
-  assert.match(inputs[0], /id="shf-custom-amount"/);
-  assert.match(inputs[0], /inputMode="decimal"/);
+  assert.equal(inputs.length, 3);
+  assert.equal(
+    inputs.filter((input) => input.includes('type="radio"')).length,
+    2,
+  );
+  assert.match(inputs[2], /id="shf-custom-amount"/);
+  assert.match(inputs[2], /inputMode="decimal"/);
   assert.equal((html.match(/<form\b/g) || []).length, 1);
   assert.doesNotMatch(
     html,
@@ -106,7 +110,7 @@ test("only the custom USD input/form and safe unconfigured handoff exist, with n
       readFileSync(path, "utf8"),
       /fetch\(|localStorage|sessionStorage|XMLHttpRequest|sendBeacon|https:\/\/.*checkout/,
     );
-  assert.match(html, /Online payments are not yet available/);
+  assert.match(html, /Payment details are entered securely on Stripe/);
 });
 
 test("rendered links stay inside implemented canonical Foundation destinations with no placeholders", () => {
@@ -124,7 +128,10 @@ test("rendered links stay inside implemented canonical Foundation destinations w
   const app = readFileSync("src/foundation/App.jsx", "utf8");
   assert.match(app, /route === "get-involved"\) page = <Donation/);
   assert.match(app, /<FoundationLayout>\{page\}<\/FoundationLayout>/);
-  assert.doesNotMatch(app, /DataCenterCommunityImpact|data-center-community-impact/);
+  assert.doesNotMatch(
+    app,
+    /DataCenterCommunityImpact|data-center-community-impact/,
+  );
   assert.doesNotMatch(html, /href="#"|href="javascript:/i);
 });
 

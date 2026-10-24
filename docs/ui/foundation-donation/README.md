@@ -1,5 +1,7 @@
 # SHF-DONATION-001
 
+Current payment integration: [PAYMENT_INTEGRATION.md](PAYMENT_INTEGRATION.md). The UI now supports Stripe-hosted one-time/monthly initiation and backend-verified return states, with safe unconfigured fallback. The original implementation/audit notes below remain historical evidence.
+
 ## Architecture audit / selected route (before implementation)
 
 Canonical route: `/foundation.html#/get-involved` (also available from the existing `shf.html` entry). Upgrade the existing generic PublicInfoPage destination; do not add a competing donation route. The shared header and closing CTA already link here. Partners remain `#/partners`; impact remains `#impact` on the homepage; public reporting remains `#/reports`.

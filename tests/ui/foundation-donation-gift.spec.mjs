@@ -1,4 +1,13 @@
 import { test, expect } from "@playwright/test";
+test.beforeEach(async ({ page }) => {
+  await page.route("**/foundation/donations/checkout", (route) =>
+    route.fulfill({
+      status: 503,
+      contentType: "application/json",
+      body: JSON.stringify({ error: "donation_provider_unavailable" }),
+    }),
+  );
+});
 import { mkdir } from "node:fs/promises";
 const origin = process.env.SHF_FOUNDATION_BASE_URL || "http://127.0.0.1:5191";
 for (const width of [1440, 1280, 768, 390]) {

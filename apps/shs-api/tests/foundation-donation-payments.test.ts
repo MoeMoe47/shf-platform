@@ -232,6 +232,30 @@ after(async () => {
 });
 const integration = (name: string, fn: () => Promise<void>) =>
   test(name, { skip: !connection }, fn);
+integration(
+  "subscription cancellation before the first collection remains uncompleted",
+  async () => {
+    const f = await fixture("MONTHLY");
+    const event = signed("customer.subscription.deleted", {
+      id: `sub_${f.row.donation_id}`,
+      status: "canceled",
+      metadata: metadata(f.row.donation_id),
+    });
+    await f.service.webhook(event.raw, event.signature);
+    const status = await f.service.status(f.result.donationId);
+    assert.equal(status.status, "CANCELED");
+    assert.equal(status.recurringStatus, "CANCELED");
+    assert.equal(
+      (
+        await database.query(
+          "SELECT * FROM foundation_donation_collections WHERE donation_id=$1",
+          [f.row.donation_id],
+        )
+      ).rowCount,
+      0,
+    );
+  },
+);
 async function fixture(frequency = "ONE_TIME", amountCents = 2500) {
   const fake = fakeSdk();
   const repo = new PostgresDonationRepository(database);

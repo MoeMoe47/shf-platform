@@ -1,4 +1,13 @@
 import { test, expect } from "@playwright/test";
+test.beforeEach(async ({ page }) => {
+  await page.route("**/foundation/donations/checkout", (route) =>
+    route.fulfill({
+      status: 503,
+      contentType: "application/json",
+      body: JSON.stringify({ error: "donation_provider_unavailable" }),
+    }),
+  );
+});
 import { mkdir } from "node:fs/promises";
 const origin = process.env.SHF_FOUNDATION_BASE_URL || "http://127.0.0.1:5191";
 const url = `${origin}/foundation.html#/get-involved`;
@@ -114,7 +123,8 @@ test("amount selection, validation, safe handoff and keyboard focus return", asy
   await page.keyboard.press("Escape");
   await expect(dialog).not.toBeVisible();
   await expect(give).toBeFocused();
-  expect(requests).toEqual([]);
+  expect(requests).toHaveLength(1);
+  expect(requests[0]).toMatch(/\/foundation\/donations\/checkout$/);
   await page.reload();
   await expect(input).toHaveValue("");
 });

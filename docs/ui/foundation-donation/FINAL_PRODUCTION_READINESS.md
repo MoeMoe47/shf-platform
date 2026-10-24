@@ -1,5 +1,7 @@
 # SHF Donation Page — Final Production Readiness
 
+2026-10-24 payment update: [PAYMENT_INTEGRATION.md](PAYMENT_INTEGRATION.md) and [PAYMENT_HANDOFF.md](PAYMENT_HANDOFF.md) record the Stripe donation implementation and fresh verification. The unavailable-only adapter/readiness conclusions below describe the earlier baseline. Processor credentials and real Stripe sandbox acceptance remain required; this update does not declare production activation.
+
 **SHF DONATION PAGE READY WITH VERIFIED BROWSER LIMITATION — REAL DONATION PROCESSOR REQUIRED**
 
 Task: SHF-DONATION-FINAL-READINESS-001. Audit scope: assembled Donation page, approved assets, shared shell, local actions and relevant prefixed/shared consumers. This is source/render/build readiness with an explicitly unverified browser layer. No visual section is promoted to a screenshot-verified lock, and no production deployment has been performed.

@@ -1,5 +1,7 @@
 # CODEX HANDOFF REPORT
 
+Current payment work: [PAYMENT_HANDOFF.md](PAYMENT_HANDOFF.md) and [PAYMENT_INTEGRATION.md](PAYMENT_INTEGRATION.md). The earlier chronological UI handoff below is preserved.
+
 Current full-page audit: [FINAL_PRODUCTION_READINESS.md](FINAL_PRODUCTION_READINESS.md). This file retains the chronological implementation record, including superseded initial imagery and readiness states.
 
 Agent: Foundation implementation (single executor)

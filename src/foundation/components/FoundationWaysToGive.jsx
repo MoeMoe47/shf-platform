@@ -17,7 +17,7 @@ const cards = [
     image: "/assets/foundation/donation/donation-monthly-giving.webp",
     alt: "Students collaborating around a laptop outdoors",
     preview:
-      "Recurring giving is not available yet. SHF must connect an approved provider and publish recurring-gift terms and cancellation information before monthly donations can begin.",
+      "Choose Monthly in Make a Gift to support SHF through Stripe-hosted checkout. Each monthly gift depends on a successful payment. Contact SHF to cancel future gifts. Secure giving requires the approved provider to be configured.",
   },
   {
     title: "Corporate Support",

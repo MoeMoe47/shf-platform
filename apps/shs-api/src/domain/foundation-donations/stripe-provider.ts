@@ -228,7 +228,8 @@ export class StripeDonationProvider implements DonationProvider {
       if (subscription.metadata.context !== "shf_public_donation") return null;
       // Only cancellation is projected from subscription status. Payment
       // success/failure comes from actual collections, not subscription.active.
-      if (subscription.status !== "canceled") return null;
+      if (!["canceled", "incomplete_expired"].includes(subscription.status))
+        return null;
       return {
         ...common,
         donationId: subscription.metadata.shf_donation_id,

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Home from "./pages/Home";
 import Donation from "./pages/Donation.jsx";
+import DonationReturn from "./pages/DonationReturn.jsx";
 import CountyDetail from "./pages/CountyDetail";
 import FoundationLayout from "./layout/FoundationLayout";
 import PublicInfoPage from "./pages/PublicInfoPage";
@@ -8,20 +9,33 @@ import { installGlobalButtonClickSound } from "../shared/ui/globalButtonClickSou
 import "./styles/foundation.css";
 import "./styles/shf-home-mock.css";
 
-function getRoute() {
-  const hash = window.location.hash || "#/top";
+function getRoute(currentHash) {
+  const hash = currentHash || "#/top";
   if (/^#\/county\/[^/]+$/i.test(hash)) return "county";
   if (hash === "#reports" || hash.startsWith("#reports?")) return "top";
   const route = hash.replace(/^#\/?/, "").split("?")[0].replace(/\/$/, "");
-  if (["mission", "about", "programs", "partners", "get-involved", "reports"].includes(route)) return route;
+  if (["get-involved/success", "get-involved/canceled"].includes(route))
+    return route;
+  if (
+    [
+      "mission",
+      "about",
+      "programs",
+      "partners",
+      "get-involved",
+      "reports",
+    ].includes(route)
+  )
+    return route;
   return "top";
 }
 
 export default function FoundationApp() {
-  const [route, setRoute] = useState(getRoute());
+  const [hash, setHash] = useState(() => window.location.hash);
+  const route = getRoute(hash);
 
   useEffect(() => {
-    const onChange = () => setRoute(getRoute());
+    const onChange = () => setHash(window.location.hash);
     window.addEventListener("hashchange", onChange);
     return () => window.removeEventListener("hashchange", onChange);
   }, []);
@@ -31,7 +45,11 @@ export default function FoundationApp() {
   if (route === "mission") page = <PublicInfoPage page="mission" />;
   if (route === "about") page = <PublicInfoPage page="about" />;
   if (route === "get-involved") page = <Donation />;
-  if (["programs", "partners", "reports"].includes(route)) page = <PublicInfoPage page={route} />;
+  if (route === "get-involved/success") page = <DonationReturn key={hash} />;
+  if (route === "get-involved/canceled")
+    page = <DonationReturn key={hash} canceled />;
+  if (["programs", "partners", "reports"].includes(route))
+    page = <PublicInfoPage page={route} />;
 
   return <FoundationLayout>{page}</FoundationLayout>;
 }

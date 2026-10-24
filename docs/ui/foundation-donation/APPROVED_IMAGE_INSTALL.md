@@ -1,10 +1,10 @@
 # Approved Donation photography installation — SHF-DONATION-IMAGE-002
 
-Owner authority: explicit approval of the nine described images in this conversation. All source identities were checked against visible content and dimensions, not filename alone. The supplied collage is reference only; it was not sliced or installed. Source files are preserved in Downloads; application code uses only production asset URLs.
+Owner authority: explicit approval of the nine described images in this conversation. All source identities were checked against visible content and dimensions, not filename alone. The supplied collage is reference only; it was not sliced or installed. Original approved source files are preserved outside the repository; application code uses only production asset URLs.
 
 Conversion: existing Pillow WebP capability, RGB, quality 95, method 6, no resizing or destructive crop. Full source/output dimensions are identical. The machine-readable manifest records source/output SHA-256, source modification time, installed URL, dimensions and byte size. No image generation performed.
 
-| Slot                  | Source file (under `/Users/mikeslate/Downloads/`) | Installed file (under `/assets/foundation/donation/`) | Source → output dimensions | Status                     |
+| Slot                  | Original approved source file | Installed file (under `/assets/foundation/donation/`) | Source → output dimensions | Status                     |
 | --------------------- | ------------------------------------------------- | ----------------------------------------------------- | -------------------------- | -------------------------- |
 | hero                  | `Hopeful Gaze Over the City.png`                  | `donation-hero.webp`                                  | 1672 × 941 → 1672 × 941    | OWNER APPROVED — INSTALLED |
 | support-impact        | `Hopeful Horizons at Sunset.png`                  | `donation-impact-support.webp`                        | 1122 × 1402 → 1122 × 1402  | OWNER APPROVED — INSTALLED |

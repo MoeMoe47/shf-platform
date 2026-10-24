@@ -11,6 +11,7 @@ import { assertProductionRateLimitConfigured, rateLimitMiddleware } from "./secu
 import { assertPr1ProductionSecurityConfigured } from "./security/pr1-production-security-readiness.js";
 import { operationalMonitoringThresholds } from "./observability/operational-telemetry.js";
 import { randomUUID } from "node:crypto";
+import { registerDonationRoutes } from "./domain/foundation-donations/routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -48,6 +49,8 @@ app.use(cors({
   },
 }));
 app.use("/uploads", express.static(path.resolve(__dirname, "../uploads")));
+// Stripe signature verification needs the original bytes, before express.json.
+registerDonationRoutes(app);
 app.use(express.json());
 app.use((req: any, res: any, next: any) => {
   const requestId = String(req.headers["x-request-id"] || randomUUID()).trim();

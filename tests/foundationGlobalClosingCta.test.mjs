@@ -54,7 +54,6 @@ test("every shared Foundation shell ends with one canonical CTA and one footer",
 test("pages do not duplicate the shared closing component and its artwork is retained", () => {
   for (const page of [
     "Home",
-    "DataCenterCommunityImpact",
     "PublicInfoPage",
     "CountyDetail",
   ]) {

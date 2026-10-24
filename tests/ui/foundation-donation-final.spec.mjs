@@ -186,7 +186,6 @@ for (const width of [1440, 1280, 768, 390]) {
       ["Partners", "#/partners"],
       ["Resources", "#/reports"],
       ["News", "#/reports"],
-      ["Data Center Community Impact", "#/data-center-community-impact"],
       ["Contact", "#/get-involved"],
     ]) {
       await footerNav.getByRole("link", { name, exact: true }).press("Enter");

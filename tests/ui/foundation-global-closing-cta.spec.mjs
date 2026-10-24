@@ -10,7 +10,6 @@ const routes = [
   "#/partners",
   "#/get-involved",
   "#/reports",
-  "#/data-center-community-impact",
   "#/county/franklin",
 ];
 const screenshots = "docs/foundation/global-closing-cta-verification";

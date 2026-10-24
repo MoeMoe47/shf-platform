@@ -8,7 +8,6 @@ const destinations = [
   ["Partners", /#\/partners$/],
   ["Resources", /#\/reports$/],
   ["News", /#\/reports$/],
-  ["Data Center Community Impact", /#\/data-center-community-impact$/],
   ["Contact", /#\/get-involved$/],
 ];
 for (const width of [1440, 1280, 768, 390]) {
@@ -51,7 +50,7 @@ for (const width of [1440, 1280, 768, 390]) {
       true,
     );
     const nav = footer.getByRole("navigation", { name: "Foundation footer" });
-    await expect(nav.getByRole("link")).toHaveCount(8);
+    await expect(nav.getByRole("link")).toHaveCount(7);
     for (const action of await nav.getByRole("link").all()) {
       await action.focus();
       await expect(action).toBeFocused();

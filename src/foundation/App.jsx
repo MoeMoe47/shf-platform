@@ -4,7 +4,6 @@ import Donation from "./pages/Donation.jsx";
 import CountyDetail from "./pages/CountyDetail";
 import FoundationLayout from "./layout/FoundationLayout";
 import PublicInfoPage from "./pages/PublicInfoPage";
-import DataCenterCommunityImpact from "./pages/DataCenterCommunityImpact";
 import { installGlobalButtonClickSound } from "../shared/ui/globalButtonClickSound.js";
 import "./styles/foundation.css";
 import "./styles/shf-home-mock.css";
@@ -14,30 +13,18 @@ function getRoute() {
   if (/^#\/county\/[^/]+$/i.test(hash)) return "county";
   if (hash === "#reports" || hash.startsWith("#reports?")) return "top";
   const route = hash.replace(/^#\/?/, "").split("?")[0].replace(/\/$/, "");
-  if (["mission", "about", "programs", "partners", "get-involved", "reports", "data-center-community-impact"].includes(route)) return route;
+  if (["mission", "about", "programs", "partners", "get-involved", "reports"].includes(route)) return route;
   return "top";
 }
 
 export default function FoundationApp() {
   const [route, setRoute] = useState(getRoute());
-  const [hash, setHash] = useState(() => window.location.hash || "#/top");
 
   useEffect(() => {
-    const onChange = () => {
-      setHash(window.location.hash || "#/top");
-      setRoute(getRoute());
-    };
+    const onChange = () => setRoute(getRoute());
     window.addEventListener("hashchange", onChange);
     return () => window.removeEventListener("hashchange", onChange);
   }, []);
-
-  useEffect(() => {
-    if (route !== "data-center-community-impact") return;
-    const query = hash.split("?")[1] || "";
-    const section = new URLSearchParams(query).get("section");
-    if (!section) return;
-    requestAnimationFrame(() => document.getElementById(section)?.scrollIntoView({ block: "start" }));
-  }, [hash, route]);
 
   let page = <Home />;
   if (route === "county") page = <CountyDetail />;
@@ -45,9 +32,6 @@ export default function FoundationApp() {
   if (route === "about") page = <PublicInfoPage page="about" />;
   if (route === "get-involved") page = <Donation />;
   if (["programs", "partners", "reports"].includes(route)) page = <PublicInfoPage page={route} />;
-  if (route === "data-center-community-impact") {
-    page = <DataCenterCommunityImpact />;
-  }
 
   return <FoundationLayout>{page}</FoundationLayout>;
 }

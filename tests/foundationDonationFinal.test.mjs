@@ -118,13 +118,13 @@ test("rendered links stay inside implemented canonical Foundation destinations w
     "#/partners",
     "#/reports",
     "#/get-involved",
-    "/foundation.html#/data-center-community-impact",
   ]);
   for (const match of html.matchAll(/<a\b[^>]*href="([^"]+)"/g))
     assert.ok(known.has(match[1]), match[1]);
   const app = readFileSync("src/foundation/App.jsx", "utf8");
   assert.match(app, /route === "get-involved"\) page = <Donation/);
   assert.match(app, /<FoundationLayout>\{page\}<\/FoundationLayout>/);
+  assert.doesNotMatch(app, /DataCenterCommunityImpact|data-center-community-impact/);
   assert.doesNotMatch(html, /href="#"|href="javascript:/i);
 });
 

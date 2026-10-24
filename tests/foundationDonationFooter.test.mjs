@@ -36,10 +36,6 @@ const links = [
   ["Partners", "#/partners"],
   ["Resources", "#/reports"],
   ["News", "#/reports"],
-  [
-    "Data Center Community Impact",
-    "/foundation.html#/data-center-community-impact",
-  ],
   ["Contact", "#/get-involved"],
 ];
 
@@ -88,7 +84,7 @@ test("official wordmark, exact tagline/copyright and decorative social placehold
   assert.doesNotMatch(social[2], /<a\b/);
 });
 
-test("all eight navigation destinations remain valid canonical routes with documented aliases", () => {
+test("all seven base navigation destinations remain valid without a separate Data Center dependency", () => {
   const nav = footer.match(
     /<nav class="shf-footer__links"[^>]*>([\s\S]*?)<\/nav>/,
   )[1];
@@ -107,14 +103,11 @@ test("all eight navigation destinations remain valid canonical routes with docum
     assert.match(info, new RegExp(`${route}:\\s*\\{`));
   }
   assert.match(app, /route === "get-involved"\) page = <Donation/);
-  assert.match(app, /route === "data-center-community-impact"/);
+  assert.doesNotMatch(app, /DataCenterCommunityImpact|data-center-community-impact/);
+  assert.doesNotMatch(nav, /data-center-community-impact/);
   assert.match(
     readFileSync("src/foundation/pages/Home.jsx", "utf8"),
     /id="impact"/,
-  );
-  assert.ok(
-    readFileSync("src/foundation/pages/DataCenterCommunityImpact.jsx").length >
-      0,
   );
 });
 

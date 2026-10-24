@@ -40,9 +40,6 @@ export default function FoundationFooter({ baseHref = "" }) {
           <a href={`${baseHref}#/partners`}>Partners</a>
           <a href={`${baseHref}#/reports`}>Resources</a>
           <a href={`${baseHref}#/reports`}>News</a>
-          <a href="/foundation.html#/data-center-community-impact">
-            Data Center Community Impact
-          </a>
           <a href={`${baseHref}#/get-involved`}>Contact</a>
         </nav>
 

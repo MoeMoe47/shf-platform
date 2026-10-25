@@ -112,7 +112,7 @@ test('independent Autonomous Registry is reached through the shared prefix and d
   expect(auth.status()).toBe(401);
 });
 
-test('Registry Phase 1 normalizes Home and preserves legacy hard reloads without enabling planned pages', async ({ page, request }) => {
+test('Registry compatibility normalizes Home and preserves current canonical and legacy hard reloads', async ({ page, request }) => {
   const home = await request.get(`${origin}/autonomous-registry?from=universe`, { maxRedirects: 0 });
   expect(home.status()).toBe(308);
   expect(home.headers().location).toBe('/autonomous-registry/?from=universe');
@@ -127,35 +127,37 @@ test('Registry Phase 1 normalizes Home and preserves legacy hard reloads without
   await expect(page.getByRole('heading', { level: 1, name: 'Autonomous Registry' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Autonomous Registry home' })).toHaveAttribute('href', '/autonomous-registry/');
   const nav = page.getByRole('navigation', { name: 'Primary navigation' });
-  await expect(nav.locator('span')).toHaveText(['Explore', 'Verify', 'Register', 'Standards & Governance', 'Developers']);
-  await expect(nav.locator('[aria-disabled="true"]')).toHaveCount(5);
-  await expect(nav.getByRole('link')).toHaveCount(0);
+  await expect(nav.locator('span')).toHaveText(['Explore', 'Verify', 'Developers']);
+  await expect(nav.locator('[aria-disabled="true"]')).toHaveCount(3);
+  await expect(nav.getByRole('link')).toHaveCount(2);
+  await expect(nav.getByRole('link', { name: 'Register', exact: true })).toHaveAttribute('href', '/autonomous-registry/register');
+  await expect(nav.getByRole('link', { name: 'Standards & Governance', exact: true })).toHaveAttribute('href', '/autonomous-registry/standards');
   await expect(nav.getByText('Status', { exact: true })).toHaveCount(0);
   await expect(page.getByRole('link', { name: 'Return to Universe' })).toBeVisible();
 
   for (const [path, title] of [
     ['/autonomous-registry/agents/AR-2026-0001847', 'Civic Pathways Advisor'],
-    ['/autonomous-registry/verify/AR-2026-0001847', 'Record Verified']
+    ['/autonomous-registry/verify/AR-2026-0001847', 'Verification unavailable']
   ]) {
     await page.goto(`${origin}${path}`);
     await page.reload();
     await expect(page.getByRole('heading', { level: 1, name: title })).toBeVisible();
-    await expect(page).toHaveURL(`${origin}${path}`);
+    await expect(page).toHaveURL(`${origin}${path.includes('/agents/') ? path.replace('/agents/', '/agent/') : '/autonomous-registry/verify?registryId=AR-2026-0001847'}`);
   }
-  for (const path of ['/autonomous-registry/future-route', '/autonomous-registry/agent/AR-UNKNOWN', '/autonomous-registry/verify']) {
+  for (const path of ['/autonomous-registry/future-route', '/autonomous-registry/agent/AR-UNKNOWN', '/autonomous-registry/explore', '/autonomous-registry/developers', '/autonomous-registry/status']) {
     await page.goto(`${origin}${path}`);
     await page.reload();
     await expect(page.getByRole('heading', { level: 1, name: 'Page not found' })).toBeVisible();
   }
 });
 
-test('Registry Phase 1 keeps the institutional navigation usable at tablet and mobile widths', async ({ page }) => {
+test('Registry compatibility keeps the institutional navigation usable at tablet and mobile widths', async ({ page }) => {
   for (const width of [768, 390]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto(`${origin}/autonomous-registry/`);
     await expect(page.getByRole('heading', { level: 1, name: 'Autonomous Registry' })).toBeVisible();
     await expect(page.getByRole('navigation', { name: 'Primary navigation' })).toBeVisible();
-    await expect(page.getByLabel('Standards & Governance — coming in a future phase')).toHaveAttribute('aria-disabled', 'true');
+    await expect(page.getByRole('link', { name: 'Standards & Governance', exact: true })).toHaveAttribute('href', '/autonomous-registry/standards');
     await expect(page.getByRole('link', { name: 'Return to Universe' })).toBeVisible();
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
     expect(overflow).toBe(false);

@@ -26,15 +26,17 @@ export async function isRegistry(origin) {
     const status = await identity.json();
     if (status.service !== 'autonomous-registry-frontend' || status.version !== 1 ||
         status.canonicalHome !== REGISTRY_HOME || status.verification !== 'static-prototype' ||
-        !Array.isArray(status.implementedPages) || status.implementedPages.length !== 3 ||
-        status.implementedPages[0] !== REGISTRY_HOME ||
-        !status.implementedPages[1]?.startsWith(`${registryBase}/agents/`) ||
-        !status.implementedPages[2]?.startsWith(`${registryBase}/verify/`)) return false;
+        !Array.isArray(status.implementedPages) ||
+        !status.implementedPages.every(page => typeof page === 'string' && page.startsWith(REGISTRY_HOME)) ||
+        !status.implementedPages.includes(REGISTRY_HOME) ||
+        !status.implementedPages.some(page => page.startsWith(`${registryBase}/agent/`) || page.startsWith(`${registryBase}/agents/`)) ||
+        !status.implementedPages.some(page => page === `${registryBase}/verify` || page.startsWith(`${registryBase}/verify/`))) return false;
     // Retain the pre-existing source-wiring assertion, but follow centralized
     // definitions instead of searching App source for one obsolete literal URL.
     const source = await fetch(`${origin}${REGISTRY_HOME}src/App.tsx`, { ...options, signal: AbortSignal.timeout(2000) });
     const app = await source.text();
-    return source.ok && app.includes('/src/routes/registryRoutes') &&
-      app.includes('registryExistingPages.agent') && app.includes('registryExistingPages.verify');
+    const legacyWiring = app.includes('registryExistingPages.agent') && app.includes('registryExistingPages.verify');
+    const canonicalWiring = app.includes('AGENT_RECORD_ROUTE') && app.includes('REGISTRY_VERIFY') && app.includes('resolveRegistryCompatibility');
+    return source.ok && app.includes('/src/routes/registryRoutes') && (legacyWiring || canonicalWiring);
   } catch { return false; }
 }

@@ -1,0 +1,310 @@
+{
+  "validated_at": "2026-10-27T12:07:25.794212+00:00",
+  "checkpoint": "3e3a6585da2117a37f959f8630dc7cf8300b648c",
+  "prepared_source_revision": "517cc23426e7485c352a1672c8fe4614291d552a",
+  "acceptance_recorded": false,
+  "rc_issued": false,
+  "checks": [
+    {
+      "name": "acceptance-tests",
+      "command": [
+        "npm",
+        "run",
+        "oas:rc1:test"
+      ],
+      "exit_code": 0,
+      "log": "acceptance-tests.log"
+    },
+    {
+      "name": "closure-tests",
+      "command": [
+        "npm",
+        "run",
+        "oas:closure:test"
+      ],
+      "exit_code": 0,
+      "log": "closure-tests.log"
+    },
+    {
+      "name": "governance-tests",
+      "command": [
+        "npm",
+        "run",
+        "oas:governance:test"
+      ],
+      "exit_code": 0,
+      "log": "governance-tests.log"
+    },
+    {
+      "name": "first-release-tests",
+      "command": [
+        "npm",
+        "run",
+        "oas:first:test"
+      ],
+      "exit_code": 0,
+      "log": "first-release-tests.log"
+    },
+    {
+      "name": "catalog-tests",
+      "command": [
+        "npm",
+        "run",
+        "oas:test"
+      ],
+      "exit_code": 0,
+      "log": "catalog-tests.log"
+    },
+    {
+      "name": "acceptance-bindings",
+      "command": [
+        "npm",
+        "run",
+        "oas:rc1:verify"
+      ],
+      "exit_code": 0,
+      "log": "acceptance-bindings.log"
+    },
+    {
+      "name": "acceptance-package",
+      "command": [
+        "npm",
+        "run",
+        "oas:rc1:acceptance:check"
+      ],
+      "exit_code": 0,
+      "log": "acceptance-package.log"
+    },
+    {
+      "name": "closure-schemas",
+      "command": [
+        "npm",
+        "run",
+        "oas:closure:validate"
+      ],
+      "exit_code": 0,
+      "log": "closure-schemas.log"
+    },
+    {
+      "name": "governance-schemas",
+      "command": [
+        "npm",
+        "run",
+        "oas:governance:validate"
+      ],
+      "exit_code": 0,
+      "log": "governance-schemas.log"
+    },
+    {
+      "name": "first-release-schemas",
+      "command": [
+        "npm",
+        "run",
+        "oas:first:validate"
+      ],
+      "exit_code": 0,
+      "log": "first-release-schemas.log"
+    },
+    {
+      "name": "catalog-schemas",
+      "command": [
+        "npm",
+        "run",
+        "oas:validate"
+      ],
+      "exit_code": 0,
+      "log": "catalog-schemas.log"
+    },
+    {
+      "name": "closure-reproduction",
+      "command": [
+        "npm",
+        "run",
+        "oas:closure:check"
+      ],
+      "exit_code": 0,
+      "log": "closure-reproduction.log"
+    },
+    {
+      "name": "governance-reproduction",
+      "command": [
+        "npm",
+        "run",
+        "oas:governance:check"
+      ],
+      "exit_code": 0,
+      "log": "governance-reproduction.log"
+    },
+    {
+      "name": "first-release-reproduction",
+      "command": [
+        "npm",
+        "run",
+        "oas:first:check"
+      ],
+      "exit_code": 0,
+      "log": "first-release-reproduction.log"
+    },
+    {
+      "name": "catalog-reproduction",
+      "command": [
+        "npm",
+        "run",
+        "oas:check"
+      ],
+      "exit_code": 0,
+      "log": "catalog-reproduction.log"
+    },
+    {
+      "name": "acceptance-typecheck",
+      "command": [
+        "npm",
+        "run",
+        "oas:rc1:typecheck"
+      ],
+      "exit_code": 0,
+      "log": "acceptance-typecheck.log"
+    },
+    {
+      "name": "closure-typecheck",
+      "command": [
+        "npm",
+        "run",
+        "oas:closure:typecheck"
+      ],
+      "exit_code": 0,
+      "log": "closure-typecheck.log"
+    },
+    {
+      "name": "governance-typecheck",
+      "command": [
+        "npm",
+        "run",
+        "oas:governance:typecheck"
+      ],
+      "exit_code": 0,
+      "log": "governance-typecheck.log"
+    },
+    {
+      "name": "first-release-typecheck",
+      "command": [
+        "npm",
+        "run",
+        "oas:first:typecheck"
+      ],
+      "exit_code": 0,
+      "log": "first-release-typecheck.log"
+    },
+    {
+      "name": "oas-typecheck",
+      "command": [
+        "npm",
+        "run",
+        "oas:typecheck"
+      ],
+      "exit_code": 0,
+      "log": "oas-typecheck.log"
+    },
+    {
+      "name": "architecture-registry",
+      "command": [
+        "npm",
+        "run",
+        "check:registry"
+      ],
+      "exit_code": 0,
+      "log": "architecture-registry.log"
+    },
+    {
+      "name": "architecture-proposal",
+      "command": [
+        "npm",
+        "run",
+        "check:proposal"
+      ],
+      "exit_code": 0,
+      "log": "architecture-proposal.log"
+    },
+    {
+      "name": "architecture-truth",
+      "command": [
+        "npm",
+        "run",
+        "check:truth"
+      ],
+      "exit_code": 0,
+      "log": "architecture-truth.log"
+    },
+    {
+      "name": "manifests",
+      "command": [
+        "npm",
+        "run",
+        "manifests:validate"
+      ],
+      "exit_code": 0,
+      "log": "manifests.log"
+    },
+    {
+      "name": "ui-contracts",
+      "command": [
+        "npm",
+        "run",
+        "ui:validate"
+      ],
+      "exit_code": 0,
+      "log": "ui-contracts.log"
+    },
+    {
+      "name": "whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "log": "whitespace.log"
+    },
+    {
+      "name": "focused-build",
+      "command": [
+        "npm",
+        "run",
+        "oas:build"
+      ],
+      "exit_code": 0,
+      "log": "focused-build.log"
+    },
+    {
+      "name": "full-build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exit_code": 0,
+      "log": "full-build.log"
+    },
+    {
+      "name": "reporting-tests",
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "--test",
+        "apps/shs-api/tests/report-u2-studio-oas.test.ts"
+      ],
+      "exit_code": 0,
+      "log": "reporting-tests.log"
+    },
+    {
+      "name": "independent-checksums",
+      "command": [
+        "python3",
+        "hashlib and git show verification"
+      ],
+      "exit_code": 0,
+      "log": "independent-checksums.log"
+    }
+  ]
+}

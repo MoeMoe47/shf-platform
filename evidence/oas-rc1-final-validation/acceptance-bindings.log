@@ -1,0 +1,123 @@
+
+> oas:rc1:verify
+> node scripts/oas-rc1-acceptance.mjs verify
+
+{
+  "verified": {
+    "prepared_source_revision": "517cc23426e7485c352a1672c8fe4614291d552a",
+    "expected_bindings_path": "evidence/oas-governance-resolution/EXPECTED_ACCEPTANCE_BINDINGS.json",
+    "expected_bindings_checksum": "sha256:8a87fb0246c27dcb58f5f702f7b9acbb687c88675ab0c71e15031a766998e30b",
+    "scope_checksum": "sha256:14be68339c76888fa1cac497564b6abd427352688ff68c531e8f46b61972d3c4",
+    "requirement_ids": [
+      "OAS-1-REQ-0001",
+      "OAS-1-REQ-0002",
+      "OAS-1-REQ-0003",
+      "OAS-1-REQ-0004",
+      "OAS-1-REQ-0005",
+      "OAS-1-REQ-0006",
+      "OAS-1-REQ-0007",
+      "OAS-1-REQ-0008",
+      "OAS-1-REQ-0009",
+      "OAS-1-REQ-0010",
+      "OAS-1-REQ-0012",
+      "OAS-1-REQ-0014",
+      "OAS-1-REQ-0016",
+      "OAS-1-REQ-0017"
+    ],
+    "requirements_checksum": "sha256:ac3e5aa8086552547b8b36c38c2826733585b9458f53584aa2ba0550643a1929",
+    "domain_ids": [
+      "OAS-1-D01",
+      "OAS-1-D02",
+      "OAS-1-D03",
+      "OAS-1-D04",
+      "OAS-1-D05",
+      "OAS-1-D06",
+      "OAS-1-D07",
+      "OAS-1-D08"
+    ],
+    "contract_checksums": {
+      "schemas/oas/closure/declaration.schema.json": "sha256:a3610fe9adac97b8e92d39b4431c340f7b84a1c9ba6bf9ae87b7e06390ea7f9e",
+      "schemas/oas/closure/rc.schema.json": "sha256:5a7a3a000dd9fd40d698f1fe819385763ee92da968020bd2ceba6bb0fb6ba89c",
+      "standards/oas/closure/founding-policy.json": "sha256:a55f42224fec0bbfa86ee8d2e4d95fb94531fc430b7b088a3cbe8a3f925ac9ab",
+      "docs/OAS_GOVERNANCE_AUTHORITY.md": "sha256:2f7071a93476398746f2ac0c2d7332f7842deefaaf40ef59b4a866bc1cb50546",
+      "docs/OAS_DECLARATION_CONTRACT.md": "sha256:f2bdc2a40a335197ae26caaf1489ef2ea4243f1d7607912b7c21ad99a286ca83",
+      "docs/OAS_RELEASE_CANDIDATE_CONTRACT.md": "sha256:424c5b57aa74fdfdafa3146d58d91a6cfbc2cc2dcd3b6ec88d6811052c1488fb"
+    },
+    "supporting_artifacts": [
+      {
+        "path": "docs/OAS_1_0_REQUIREMENTS.md",
+        "source_revision": "517cc23426e7485c352a1672c8fe4614291d552a",
+        "checksum": "sha256:55269743c5c0af7e3966f6ed0c025a129c962bc64fa1b755d8f8c14a5f3c9d2a"
+      },
+      {
+        "path": "docs/OAS_1_0_SCOPE.md",
+        "source_revision": "517cc23426e7485c352a1672c8fe4614291d552a",
+        "checksum": "sha256:92a2e5d3f179d83c15dc33656690d237e83b9a2bd71ea687b11c6faa9ca3c3da"
+      },
+      {
+        "path": "docs/OAS_DECLARATION_CONTRACT.md",
+        "source_revision": "517cc23426e7485c352a1672c8fe4614291d552a",
+        "checksum": "sha256:f2bdc2a40a335197ae26caaf1489ef2ea4243f1d7607912b7c21ad99a286ca83"
+      },
+      {
+        "path": "docs/OAS_DOMAIN_MAPPING.md",
+        "source_revision": "517cc23426e7485c352a1672c8fe4614291d552a",
+        "checksum": "sha256:b9be5454e36af70aaae152fc0400701185f9597da6e8669c7b31b2fe0ed1b362"
+      },
+      {
+        "path": "docs/OAS_GOVERNANCE_AUTHORITY.md",
+        "source_revision": "517cc23426e7485c352a1672c8fe4614291d552a",
+        "checksum": "sha256:2f7071a93476398746f2ac0c2d7332f7842deefaaf40ef59b4a866bc1cb50546"
+      },
+      {
+        "path": "docs/OAS_RELEASE_CANDIDATE_CONTRACT.md",
+        "source_revision": "517cc23426e7485c352a1672c8fe4614291d552a",
+        "checksum": "sha256:424c5b57aa74fdfdafa3146d58d91a6cfbc2cc2dcd3b6ec88d6811052c1488fb"
+      },
+      {
+        "path": "schemas/oas/closure/declaration.schema.json",
+        "source_revision": "517cc23426e7485c352a1672c8fe4614291d552a",
+        "checksum": "sha256:a3610fe9adac97b8e92d39b4431c340f7b84a1c9ba6bf9ae87b7e06390ea7f9e"
+      },
+      {
+        "path": "schemas/oas/closure/rc.schema.json",
+        "source_revision": "517cc23426e7485c352a1672c8fe4614291d552a",
+        "checksum": "sha256:5a7a3a000dd9fd40d698f1fe819385763ee92da968020bd2ceba6bb0fb6ba89c"
+      },
+      {
+        "path": "standards/oas/closure/domain-mapping.json",
+        "source_revision": "517cc23426e7485c352a1672c8fe4614291d552a",
+        "checksum": "sha256:6f1e7c41d855fc6c4fbe192d72c27e6e9ebd4d95d974e0f4ae62fbe17e3aac26"
+      },
+      {
+        "path": "standards/oas/closure/founding-policy.json",
+        "source_revision": "517cc23426e7485c352a1672c8fe4614291d552a",
+        "checksum": "sha256:a55f42224fec0bbfa86ee8d2e4d95fb94531fc430b7b088a3cbe8a3f925ac9ab"
+      },
+      {
+        "path": "standards/oas/closure/scope.json",
+        "source_revision": "517cc23426e7485c352a1672c8fe4614291d552a",
+        "checksum": "sha256:14be68339c76888fa1cac497564b6abd427352688ff68c531e8f46b61972d3c4"
+      }
+    ],
+    "historical_public_review": {
+      "release_id": "OAS-1@0.0.0-public-review.1",
+      "path": "public/oas/catalogs/OAS-1@0.0.0-public-review.1.json",
+      "artifact_file_checksum": "sha256:465b9c63a5358b64ae68880bf94858bef5f5a05065cd9295a1b8b7745e76cc57"
+    },
+    "profiles": [],
+    "declaration_contract_version": "1.1.0",
+    "governance_mode": "FOUNDING GOVERNANCE"
+  },
+  "acceptance": {
+    "state": "ACCEPTED",
+    "acceptance_recorded": true,
+    "maintainer_reference": "Mike Slate",
+    "authority_evidence_reference": "f1060153361ef635c8d26fae91d8a33f031faf31:docs/OAS_FOUNDING_MAINTAINER_DESIGNATION.md",
+    "accepted_at": "2026-10-27T14:10:43.232Z",
+    "decision_record_reference": "f501c946cb0de2d848445d8e2af0b9c678175cf9:docs/OAS_RC1_ACCEPTANCE_DECISION.md",
+    "authorize_rc1": true,
+    "authorize_final_release": false
+  },
+  "rc_issued": true
+}

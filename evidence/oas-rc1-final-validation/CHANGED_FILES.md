@@ -1,0 +1,56 @@
+# Review changed files
+
+Only new files beneath evidence/oas-rc1-final-validation/ are added relative to exact issuance commit 1e3b4cad34257f207d8adf3d1afb51cc2b1bd2d8. No existing tracked file is modified. RC1, source, schemas, tests, config, existing evidence and Autonomous Registry remain unchanged.
+
+- evidence/oas-rc1-final-validation/CHANGED_FILES.md
+- evidence/oas-rc1-final-validation/DECLARATION_CONTRACT_REVIEW.md
+- evidence/oas-rc1-final-validation/DOMAIN_COVERAGE_REVIEW.md
+- evidence/oas-rc1-final-validation/FINAL_ADOPTION_GATES.md
+- evidence/oas-rc1-final-validation/FINDINGS.md
+- evidence/oas-rc1-final-validation/GOVERNANCE_VALIDATION.md
+- evidence/oas-rc1-final-validation/HANDOFF.md
+- evidence/oas-rc1-final-validation/IMMUTABILITY_PROBE.json
+- evidence/oas-rc1-final-validation/POST_1_0_BACKLOG.md
+- evidence/oas-rc1-final-validation/PROFILE_REVIEW.md
+- evidence/oas-rc1-final-validation/RC1_INDEPENDENT_VALIDATION.md
+- evidence/oas-rc1-final-validation/REGISTRY_COMPATIBILITY.md
+- evidence/oas-rc1-final-validation/REQUIREMENT_REVIEW_MATRIX.md
+- evidence/oas-rc1-final-validation/REQUIREMENT_REVIEW_TRACE.json
+- evidence/oas-rc1-final-validation/REVIEW_PROVENANCE.json
+- evidence/oas-rc1-final-validation/TEST_RESULTS.md
+- evidence/oas-rc1-final-validation/VERIFICATION_MATRIX.md
+- evidence/oas-rc1-final-validation/acceptance-bindings.log
+- evidence/oas-rc1-final-validation/acceptance-check.log
+- evidence/oas-rc1-final-validation/acceptance-gate.log
+- evidence/oas-rc1-final-validation/architecture-proposal.log
+- evidence/oas-rc1-final-validation/architecture-registry.log
+- evidence/oas-rc1-final-validation/architecture-truth.log
+- evidence/oas-rc1-final-validation/canonical-catalog-tests.log
+- evidence/oas-rc1-final-validation/catalog-reproduction.log
+- evidence/oas-rc1-final-validation/catalog-schema.log
+- evidence/oas-rc1-final-validation/catalog-typecheck.log
+- evidence/oas-rc1-final-validation/closure-typecheck.log
+- evidence/oas-rc1-final-validation/core-results.json
+- evidence/oas-rc1-final-validation/first-release-reproduction.log
+- evidence/oas-rc1-final-validation/first-release-schema.log
+- evidence/oas-rc1-final-validation/first-release-tests.log
+- evidence/oas-rc1-final-validation/first-release-typecheck.log
+- evidence/oas-rc1-final-validation/full-build.log
+- evidence/oas-rc1-final-validation/governance-reproduction.log
+- evidence/oas-rc1-final-validation/governance-review-tests.log
+- evidence/oas-rc1-final-validation/governance-schema.log
+- evidence/oas-rc1-final-validation/governance-typecheck.log
+- evidence/oas-rc1-final-validation/independent-checksums.log
+- evidence/oas-rc1-final-validation/manifest-validation.log
+- evidence/oas-rc1-final-validation/oas-build.log
+- evidence/oas-rc1-final-validation/rc1-release-check.log
+- evidence/oas-rc1-final-validation/rc1-tests.log
+- evidence/oas-rc1-final-validation/rc1-typecheck.log
+- evidence/oas-rc1-final-validation/reporting-tests.log
+- evidence/oas-rc1-final-validation/runtime-results.json
+- evidence/oas-rc1-final-validation/scope-closure-tests.log
+- evidence/oas-rc1-final-validation/scope-reproduction.log
+- evidence/oas-rc1-final-validation/scope-schema.log
+- evidence/oas-rc1-final-validation/ui-contracts.log
+- evidence/oas-rc1-final-validation/validation-results.json
+- evidence/oas-rc1-final-validation/whitespace.log

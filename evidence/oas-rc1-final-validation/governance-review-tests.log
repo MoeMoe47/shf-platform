@@ -1,0 +1,86 @@
+
+> oas:governance:test
+> node --test tests/oasGovernanceReview.test.mjs
+
+TAP version 13
+# Subtest: all 17 candidates have exactly one explicit disposition and ten criterion findings
+ok 1 - all 17 candidates have exactly one explicit disposition and ten criterion findings
+  ---
+  duration_ms: 226.745036
+  type: 'test'
+  ...
+# Subtest: missing, duplicate and unknown dispositions reject
+ok 2 - missing, duplicate and unknown dispositions reject
+  ---
+  duration_ms: 28.332548
+  type: 'test'
+  ...
+# Subtest: content-approved rows have complete canonical normative metadata
+ok 3 - content-approved rows have complete canonical normative metadata
+  ---
+  duration_ms: 5.02085
+  type: 'test'
+  ...
+# Subtest: proposed membership is deterministic, unique and excludes held/rejected/revision-pending requirements
+ok 4 - proposed membership is deterministic, unique and excludes held/rejected/revision-pending requirements
+  ---
+  duration_ms: 21.960016
+  type: 'test'
+  ...
+# Subtest: no ID changes or reuse and exact editorial deltas are recorded
+ok 5 - no ID changes or reuse and exact editorial deltas are recorded
+  ---
+  duration_ms: 23.546406
+  type: 'test'
+  ...
+# Subtest: stale wording/metadata and incomplete revision evidence reject
+ok 6 - stale wording/metadata and incomplete revision evidence reject
+  ---
+  duration_ms: 28.51186
+  type: 'test'
+  ...
+# Subtest: all twelve questions have one disposition; deferred is not silently resolved
+ok 7 - all twelve questions have one disposition; deferred is not silently resolved
+  ---
+  duration_ms: 22.032306
+  type: 'test'
+  ...
+# Subtest: seven mapping holds preserve deterministic canonical labels and never become aliases
+ok 8 - seven mapping holds preserve deterministic canonical labels and never become aliases
+  ---
+  duration_ms: 29.549713
+  type: 'test'
+  ...
+# Subtest: no institutional approval is fabricated or inferred from a content disposition
+ok 9 - no institutional approval is fabricated or inferred from a content disposition
+  ---
+  duration_ms: 7.654692
+  type: 'test'
+  ...
+# Subtest: RC gates fail and no RC artifact, source revision, checksum or membership exists
+ok 10 - RC gates fail and no RC artifact, source revision, checksum or membership exists
+  ---
+  duration_ms: 49.525976
+  type: 'test'
+  ...
+# Subtest: no released status or 1.0.0 publication and historical public-review pin preserved
+ok 11 - no released status or 1.0.0 publication and historical public-review pin preserved
+  ---
+  duration_ms: 2258.010315
+  type: 'test'
+  ...
+# Subtest: review manifest and generated decision records reproduce; no invented RC checksum
+ok 12 - review manifest and generated decision records reproduce; no invented RC checksum
+  ---
+  duration_ms: 154.700137
+  type: 'test'
+  ...
+1..12
+# tests 12
+# suites 0
+# pass 12
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3938.978389

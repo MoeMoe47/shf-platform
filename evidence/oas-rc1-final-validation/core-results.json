@@ -1,0 +1,365 @@
+[
+  {
+    "name": "rc1-tests",
+    "command": [
+      "npm",
+      "run",
+      "oas:rc1:test"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T15:41:36.058415+00:00",
+    "completed_at": "2026-10-27T15:43:14.446512+00:00",
+    "log": "rc1-tests.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "scope-closure-tests",
+    "command": [
+      "npm",
+      "run",
+      "oas:closure:test"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T15:41:36.059481+00:00",
+    "completed_at": "2026-10-27T15:42:09.670375+00:00",
+    "log": "scope-closure-tests.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "governance-review-tests",
+    "command": [
+      "npm",
+      "run",
+      "oas:governance:test"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T15:42:09.670538+00:00",
+    "completed_at": "2026-10-27T15:42:14.341847+00:00",
+    "log": "governance-review-tests.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "canonical-catalog-tests",
+    "command": [
+      "npm",
+      "run",
+      "oas:test"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T15:42:14.342043+00:00",
+    "completed_at": "2026-10-27T15:42:16.827242+00:00",
+    "log": "canonical-catalog-tests.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "first-release-tests",
+    "command": [
+      "npm",
+      "run",
+      "oas:first:test"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T15:42:16.827612+00:00",
+    "completed_at": "2026-10-27T15:42:20.937274+00:00",
+    "log": "first-release-tests.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "rc1-release-check",
+    "command": [
+      "npm",
+      "run",
+      "oas:rc1:check"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T15:42:20.937421+00:00",
+    "completed_at": "2026-10-27T15:42:37.332964+00:00",
+    "log": "rc1-release-check.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "acceptance-check",
+    "command": [
+      "npm",
+      "run",
+      "oas:rc1:acceptance:check"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T15:42:37.333132+00:00",
+    "completed_at": "2026-10-27T15:42:56.319889+00:00",
+    "log": "acceptance-check.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "acceptance-bindings",
+    "command": [
+      "npm",
+      "run",
+      "oas:rc1:verify"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T15:42:56.319998+00:00",
+    "completed_at": "2026-10-27T15:43:02.206636+00:00",
+    "log": "acceptance-bindings.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "acceptance-gate",
+    "command": [
+      "npm",
+      "run",
+      "oas:rc1:require-acceptance"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T15:43:02.206766+00:00",
+    "completed_at": "2026-10-27T15:43:12.210683+00:00",
+    "log": "acceptance-gate.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "scope-schema",
+    "command": [
+      "npm",
+      "run",
+      "oas:closure:validate"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T15:43:12.210853+00:00",
+    "completed_at": "2026-10-27T15:43:20.842298+00:00",
+    "log": "scope-schema.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "governance-schema",
+    "command": [
+      "npm",
+      "run",
+      "oas:governance:validate"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T15:43:14.446725+00:00",
+    "completed_at": "2026-10-27T15:43:16.169917+00:00",
+    "log": "governance-schema.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "catalog-schema",
+    "command": [
+      "npm",
+      "run",
+      "oas:validate"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T15:43:16.170076+00:00",
+    "completed_at": "2026-10-27T15:43:17.349300+00:00",
+    "log": "catalog-schema.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "first-release-schema",
+    "command": [
+      "npm",
+      "run",
+      "oas:first:validate"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T15:43:17.349598+00:00",
+    "completed_at": "2026-10-27T15:43:18.882577+00:00",
+    "log": "first-release-schema.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "scope-reproduction",
+    "command": [
+      "npm",
+      "run",
+      "oas:closure:check"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T15:43:18.882714+00:00",
+    "completed_at": "2026-10-27T15:43:27.872587+00:00",
+    "log": "scope-reproduction.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "governance-reproduction",
+    "command": [
+      "npm",
+      "run",
+      "oas:governance:check"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T15:43:20.842460+00:00",
+    "completed_at": "2026-10-27T15:43:22.955021+00:00",
+    "log": "governance-reproduction.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "catalog-reproduction",
+    "command": [
+      "npm",
+      "run",
+      "oas:check"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T15:43:22.955156+00:00",
+    "completed_at": "2026-10-27T15:43:24.998287+00:00",
+    "log": "catalog-reproduction.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "first-release-reproduction",
+    "command": [
+      "npm",
+      "run",
+      "oas:first:check"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T15:43:24.998404+00:00",
+    "completed_at": "2026-10-27T15:43:26.664160+00:00",
+    "log": "first-release-reproduction.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "rc1-typecheck",
+    "command": [
+      "npm",
+      "run",
+      "oas:rc1:typecheck"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T15:43:26.664270+00:00",
+    "completed_at": "2026-10-27T15:43:34.024546+00:00",
+    "log": "rc1-typecheck.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "closure-typecheck",
+    "command": [
+      "npm",
+      "run",
+      "oas:closure:typecheck"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T15:43:27.872722+00:00",
+    "completed_at": "2026-10-27T15:43:34.845045+00:00",
+    "log": "closure-typecheck.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "governance-typecheck",
+    "command": [
+      "npm",
+      "run",
+      "oas:governance:typecheck"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T15:43:34.024711+00:00",
+    "completed_at": "2026-10-27T15:43:42.365756+00:00",
+    "log": "governance-typecheck.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "catalog-typecheck",
+    "command": [
+      "npm",
+      "run",
+      "oas:typecheck"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T15:43:34.845199+00:00",
+    "completed_at": "2026-10-27T15:43:44.160157+00:00",
+    "log": "catalog-typecheck.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "first-release-typecheck",
+    "command": [
+      "npm",
+      "run",
+      "oas:first:typecheck"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T15:43:42.365915+00:00",
+    "completed_at": "2026-10-27T15:43:47.448863+00:00",
+    "log": "first-release-typecheck.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "independent-checksums",
+    "command": [
+      "python3",
+      "scripts/verify-oas-rc1-checksums.py"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T15:43:44.160299+00:00",
+    "completed_at": "2026-10-27T15:43:47.630585+00:00",
+    "log": "independent-checksums.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "architecture-registry",
+    "command": [
+      "npm",
+      "run",
+      "check:registry"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T15:43:47.449006+00:00",
+    "completed_at": "2026-10-27T15:43:48.013456+00:00",
+    "log": "architecture-registry.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "architecture-proposal",
+    "command": [
+      "npm",
+      "run",
+      "check:proposal"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T15:43:47.630727+00:00",
+    "completed_at": "2026-10-27T15:43:48.168493+00:00",
+    "log": "architecture-proposal.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "architecture-truth",
+    "command": [
+      "npm",
+      "run",
+      "check:truth"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T15:43:48.013586+00:00",
+    "completed_at": "2026-10-27T15:43:48.601692+00:00",
+    "log": "architecture-truth.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "manifest-validation",
+    "command": [
+      "npm",
+      "run",
+      "manifests:validate"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T15:43:48.168656+00:00",
+    "completed_at": "2026-10-27T15:43:48.770662+00:00",
+    "log": "manifest-validation.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "ui-contracts",
+    "command": [
+      "npm",
+      "run",
+      "ui:validate"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T15:43:48.601839+00:00",
+    "completed_at": "2026-10-27T15:43:49.157620+00:00",
+    "log": "ui-contracts.log",
+    "execution_context": "workspace sandbox"
+  }
+]

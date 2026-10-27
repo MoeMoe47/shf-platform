@@ -1,0 +1,282 @@
+[
+  {
+    "requirement_id": "OAS-1-REQ-0001",
+    "domain_id": "OAS-1-D01",
+    "normative_text_sha256": "sha256:23b5e665a7bf495daa91cacb23bb28e6779b4b76fa36f9a52b5800b32b35ec9f",
+    "original_id_domain_and_wording_match": true,
+    "classification": "READY FOR FINAL ADOPTION",
+    "review": {
+      "status": "READY FOR FINAL ADOPTION",
+      "clarity": "Provider, per-version description record, system identifier and named responsible person/organization are explicit.",
+      "test": "Inspect both subject identifier and responsible-party name for the declared version.",
+      "neutral": "No vendor identity service, legal-title registry or identifier issuer is required.",
+      "authority": "Responsibility is attributed by the provider; legal ownership/authentication is not determined.",
+      "human": "Names the accountable person/organization; intervention authority is separately described by 0012.",
+      "evidence": "Identity/responsibility record permits direct inspection; authenticity is a separate question.",
+      "lifecycle": "Every described version is covered; 0016 supplies the version/state context.",
+      "cert": "A named party is documentation, not an authenticated/certified identity.",
+      "registry": "No Registry-issued ID or Registry owner record is assumed.",
+      "notes": "No material wording change proposed."
+    }
+  },
+  {
+    "requirement_id": "OAS-1-REQ-0002",
+    "domain_id": "OAS-1-D01",
+    "normative_text_sha256": "sha256:12f8c2092a569cafa95cf696f70110e8d0965b27ea8f496b9cec2865050b7e60",
+    "original_id_domain_and_wording_match": true,
+    "classification": "READY WITH NON-BLOCKING NOTE",
+    "review": {
+      "status": "READY WITH NON-BLOCKING NOTE",
+      "clarity": "A provenance reference must identify the source artifact or origin record of the declared version.",
+      "test": "Resolve the cited artifact/origin record sufficiently to identify the exact subject version.",
+      "neutral": "An artifact, hosted origin record or version-specific manifest can satisfy the descriptive obligation.",
+      "authority": "Reference resolution does not establish origin authenticity or legal authorship.",
+      "human": "Provider is accountable for the supplied reference under 0001; no additional operator role is implied.",
+      "evidence": "Version-specific provenance/origin reference; a generic homepage alone cannot identify a version.",
+      "lifecycle": "Origin reference is tied to the declared version; changing the subject requires a newly pinned statement.",
+      "cert": "Traceability is not verification that the origin is trustworthy.",
+      "registry": "No Registry provenance endpoint or ingestion process is mandated.",
+      "notes": "NB-REQ-02: Add informative examples for composite/hosted origins later; retain the existing version-identification obligation."
+    }
+  },
+  {
+    "requirement_id": "OAS-1-REQ-0003",
+    "domain_id": "OAS-1-D02",
+    "normative_text_sha256": "sha256:2bc06ac09e5e7e63dc21fbe5a6d265572ab92064e6cdef54700becb921a7c00e",
+    "original_id_domain_and_wording_match": true,
+    "classification": "READY FOR FINAL ADOPTION",
+    "review": {
+      "status": "READY FOR FINAL ADOPTION",
+      "clarity": "Intended goals and use cases have a clear provider and record target.",
+      "test": "Inspect explicit goals and use cases for the declared version/scope.",
+      "neutral": "No goal representation, domain platform or implementation architecture is prescribed.",
+      "authority": "Provider describes intended purpose; OAS does not approve the use case.",
+      "human": "Provider responsibility is inherited from 0001; 0012 covers intervention roles.",
+      "evidence": "Purpose documentation supports a presence/content inspection.",
+      "lifecycle": "Purpose is version-scoped; changes are reviewed through 0005.",
+      "cert": "A purpose statement is not proof of aligned behavior.",
+      "registry": "No Registry categorization or endorsement is needed.",
+      "notes": "No material wording change proposed."
+    }
+  },
+  {
+    "requirement_id": "OAS-1-REQ-0004",
+    "domain_id": "OAS-1-D02",
+    "normative_text_sha256": "sha256:eb71e153311262a3cc1c917ffc25024c8294724ab6c0f65e32cbad5ef4af1555",
+    "original_id_domain_and_wording_match": true,
+    "classification": "READY FOR FINAL ADOPTION",
+    "review": {
+      "status": "READY FOR FINAL ADOPTION",
+      "clarity": "Both permitted operating scope and excluded actions/uses are required.",
+      "test": "Inspect for an explicit scope and exclusions; distinguish missing/unknown from an explicit policy.",
+      "neutral": "No permission engine or policy serialization is required.",
+      "authority": "Describes boundaries; it does not enforce them or grant permission.",
+      "human": "Provider owns the description; human role documentation is handled by 0012.",
+      "evidence": "Scope specification and boundary policy give inspectable references.",
+      "lifecycle": "Scope changes trigger 0005 review and a new declaration snapshot or withdrawal.",
+      "cert": "Documented limits do not prove containment or deployment safety.",
+      "registry": "No Registry lifecycle/permission field is relied on.",
+      "notes": "No material wording change proposed."
+    }
+  },
+  {
+    "requirement_id": "OAS-1-REQ-0005",
+    "domain_id": "OAS-1-D02",
+    "normative_text_sha256": "sha256:30cdea09a5609c556d2e59379dcc3b9560d2b6cd313afdd33596a2a3751aa7f0",
+    "original_id_domain_and_wording_match": true,
+    "classification": "READY FOR FINAL ADOPTION",
+    "review": {
+      "status": "READY FOR FINAL ADOPTION",
+      "clarity": "Four concrete change triggers are named: capabilities, permissions, context and intended use.",
+      "test": "Sample a scoped change and inspect its linked purpose/boundary review record.",
+      "neutral": "Review record may be implemented in any change-control process.",
+      "authority": "Requires a recorded review, not OAS/Registry authorization of a runtime change.",
+      "human": "Provider is responsible for recording review; intervention and retirement roles remain separate.",
+      "evidence": "Change review record directly matches the trigger; no arbitrary review interval is invented.",
+      "lifecycle": "Explicit change-management connection across 0003/0004/0006/0008/0016.",
+      "cert": "A review record does not certify that changed behavior is safe.",
+      "registry": "No Registry event bus, approval API or version transition is mandated.",
+      "notes": "No material wording change proposed; periodic review guidance belongs outside this obligation."
+    }
+  },
+  {
+    "requirement_id": "OAS-1-REQ-0006",
+    "domain_id": "OAS-1-D03",
+    "normative_text_sha256": "sha256:6c15e0139a515cc548b97c413c7e7d3460af8aabe4b54c38c1fe685c6ec3bfcc",
+    "original_id_domain_and_wording_match": true,
+    "classification": "READY WITH NON-BLOCKING NOTE",
+    "review": {
+      "status": "READY WITH NON-BLOCKING NOTE",
+      "clarity": "The inventory concerns capabilities made available by the declared version within its operating scope.",
+      "test": "Compare the list/manifest with the scoped interface or permitted-function description.",
+      "neutral": "Fixed lists or version-specific dynamic manifests are allowed.",
+      "authority": "Capability availability is distinct from permission and runtime success.",
+      "human": "Provider owns inventory completeness claims under 0001; human controls remain under 0012.",
+      "evidence": "Capability manifest; sampled successful actions cannot establish inventory completeness.",
+      "lifecycle": "Snapshot-specific manifest and 0005 change review prevent implicit cross-version reuse.",
+      "cert": "Inventory documentation is not behavioral completeness verification.",
+      "registry": "No Registry tool catalog or capability identifier scheme is assumed.",
+      "notes": "NB-REQ-06: Informative dynamic-capability examples would help; unknown completeness must stay unknown, as already stated in the accepted scope."
+    }
+  },
+  {
+    "requirement_id": "OAS-1-REQ-0007",
+    "domain_id": "OAS-1-D03",
+    "normative_text_sha256": "sha256:f47c88279ed552bef047d426c54307ac8f43a21bc5f9cc2b7963be7d4df73557",
+    "original_id_domain_and_wording_match": true,
+    "classification": "READY WITH NON-BLOCKING NOTE",
+    "review": {
+      "status": "READY WITH NON-BLOCKING NOTE",
+      "clarity": "Resources and external tools/systems used within the described version/scope are the bounded subject.",
+      "test": "Inspect the dependency/resource inventory and its version-specific interface references.",
+      "neutral": "No vendor, dependency manager, deployment topology or supply-chain format is prescribed.",
+      "authority": "Provider describes used dependencies; OAS does not authorize their use or determine supplier trust.",
+      "human": "Provider owns the inventory claim; no invented third-party accountable party is assigned.",
+      "evidence": "Dependency inventory/interface definition; unknown dependency sets are not silently complete.",
+      "lifecycle": "Version-specific dependencies/selectors are pinned; changes flow through scoped review/new statements.",
+      "cert": "A dependency list is not a supply-chain assurance finding.",
+      "registry": "No Registry integration inventory or provider registration is mandatory.",
+      "notes": "NB-REQ-07: Later guidance can distinguish used dependencies from merely accessible tools and show selector manifests; avoid expanding into an unlimited supply-chain census."
+    }
+  },
+  {
+    "requirement_id": "OAS-1-REQ-0008",
+    "domain_id": "OAS-1-D04",
+    "normative_text_sha256": "sha256:b0eb6cfa5b0047f8b46c056cdb7dcc170adcd1e4203d14dc8d46d7942526603e",
+    "original_id_domain_and_wording_match": true,
+    "classification": "READY FOR FINAL ADOPTION",
+    "review": {
+      "status": "READY FOR FINAL ADOPTION",
+      "clarity": "Data, systems and actions authorized within the declared scope are explicitly identified.",
+      "test": "Compare the documented permission list against its policy/configuration references.",
+      "neutral": "No particular RBAC/ABAC engine or platform API is required.",
+      "authority": "Describes authorization from the applicable authority; the provider declaration grants none.",
+      "human": "Provider is accountable for the claim; authorization owners are not replaced by OAS.",
+      "evidence": "Permission policy and configuration references are inspectable; truth/efficacy is separate.",
+      "lifecycle": "Authorization is snapshot-scoped; changed scope/permissions require repinning or withdrawal.",
+      "cert": "A permission claim is not a successful enforcement test.",
+      "registry": "No Registry grant, registration or execution entitlement is inferred.",
+      "notes": "No material wording change proposed."
+    }
+  },
+  {
+    "requirement_id": "OAS-1-REQ-0009",
+    "domain_id": "OAS-1-D04",
+    "normative_text_sha256": "sha256:a5121a1f41be4c6999cbdaf63b244037ed9db7a19f9ca4b0e7471b1ab241cb4b",
+    "original_id_domain_and_wording_match": true,
+    "classification": "READY FOR FINAL ADOPTION",
+    "review": {
+      "status": "READY FOR FINAL ADOPTION",
+      "clarity": "Each documented data/system/action permission must have an associated authorization mechanism.",
+      "test": "Enumerate permissions from 0008 and check a mechanism reference for each one.",
+      "neutral": "Mechanism can be a policy, interface or configuration; no implementation is mandated.",
+      "authority": "OAS records claimed authorization relationships; it does not become an authorizer.",
+      "human": "Provider describes the authorization mechanism; authority holders remain independent.",
+      "evidence": "Permission-to-mechanism references give a concrete completeness check.",
+      "lifecycle": "References describe the declared version and must be reviewed when permissions change.",
+      "cert": "Presence of a mechanism reference is not proof of access-control efficacy.",
+      "registry": "No canonical Registry authorization service is required by the text.",
+      "notes": "No material wording change proposed."
+    }
+  },
+  {
+    "requirement_id": "OAS-1-REQ-0010",
+    "domain_id": "OAS-1-D05",
+    "normative_text_sha256": "sha256:3b005e36cb2e18b0266b44e6057855a46d64790a165fa340cd8c320c6d44d45e",
+    "original_id_domain_and_wording_match": true,
+    "classification": "READY WITH NON-BLOCKING NOTE",
+    "review": {
+      "status": "READY WITH NON-BLOCKING NOTE",
+      "clarity": "An explicit list of prohibited actions is required for the declared version/scope.",
+      "test": "Inspect the policy-attributed prohibition set, distinguishing explicit empty from missing/unknown.",
+      "neutral": "No sector law, safety blacklist, policy engine or universal threat model is imposed.",
+      "authority": "Applicable policy remains its source authority; OAS does not legislate a prohibition set.",
+      "human": "Provider identifies its policy claim; responsibility and intervention remain in 0001/0012.",
+      "evidence": "Prohibited-action policy supports inspection; an empty list requires an explicit claim.",
+      "lifecycle": "Version/scope-specific restrictions are repinned when changed.",
+      "cert": "An explicit prohibition list, including an empty one, is not safe-deployment approval.",
+      "registry": "No Registry enforcement, sanctions list or authorization result is assumed.",
+      "notes": "NB-REQ-10: Keep the distinction between disclosure and runtime prevention prominent. Control efficacy reserved by deferred 0011 is post-1.0 work."
+    }
+  },
+  {
+    "requirement_id": "OAS-1-REQ-0012",
+    "domain_id": "OAS-1-D06",
+    "normative_text_sha256": "sha256:3bf529700f70b7fabf0855eaead049f6d35b93edb507374a69abc73b7fae3702",
+    "original_id_domain_and_wording_match": true,
+    "classification": "READY WITH NON-BLOCKING NOTE",
+    "review": {
+      "status": "READY WITH NON-BLOCKING NOTE",
+      "clarity": "Names the authorized human role and the interface for each documented intervention; or is disjunctive.",
+      "test": "For every claimed oversight/override/stop intervention, inspect the role and corresponding interface.",
+      "neutral": "No universal kill switch, response latency or control product is mandated.",
+      "authority": "Describes real human authority without letting OAS, a bot or Registry silently acquire it.",
+      "human": "Direct human-accountability obligation; unsupported intervention must not be advertised.",
+      "evidence": "Human authority policy and interface definition establish offered documentation, not efficacy.",
+      "lifecycle": "Role/interface claims apply to the described version; changes require a new scoped statement.",
+      "cert": "A documented stop interface is not a demonstrated stop/latency guarantee.",
+      "registry": "No Registry operator console or lifecycle stop event is required.",
+      "notes": "NB-REQ-12: Informative examples should prevent reading or as a guarantee of all three interventions. Escalation/control-effectiveness obligations remain outside this baseline."
+    }
+  },
+  {
+    "requirement_id": "OAS-1-REQ-0014",
+    "domain_id": "OAS-1-D07",
+    "normative_text_sha256": "sha256:3beffe3f2d215d4f464a3ece05df0026d46d2916005dc2ef382fabd2f79314fe",
+    "original_id_domain_and_wording_match": true,
+    "classification": "READY WITH NON-BLOCKING NOTE",
+    "review": {
+      "status": "READY WITH NON-BLOCKING NOTE",
+      "clarity": "The provider documents intended verification methods and performance-monitoring measures.",
+      "test": "Inspect named methods/measures and referenced plan documentation.",
+      "neutral": "No testing framework, telemetry backend, score or minimum performance target is imposed.",
+      "authority": "OAS specifies plan disclosure; ATB or another authorized evaluator independently assesses outcomes.",
+      "human": "Provider owns the plan; no automatic AI or tool approval authority is introduced.",
+      "evidence": "A plan can support a plan obligation; it cannot stand in for an executed test or result.",
+      "lifecycle": "Plan is version/scope-specific; monitoring records and their retention are not newly mandated here.",
+      "cert": "Intended verification is not behavioral verification, conformance or certification.",
+      "registry": "No Registry evaluator or monitoring integration is assumed.",
+      "notes": "NB-REQ-14: Keep plan/evidence/result examples distinct. Retention and evidence-authenticity schemes belong in later explicitly governed work."
+    }
+  },
+  {
+    "requirement_id": "OAS-1-REQ-0016",
+    "domain_id": "OAS-1-D08",
+    "normative_text_sha256": "sha256:ecf83f962492a22c505bd04eceac899b6a397c70bbb6ce53dcf84d95a427f296",
+    "original_id_domain_and_wording_match": true,
+    "classification": "READY WITH NON-BLOCKING NOTE",
+    "review": {
+      "status": "READY WITH NON-BLOCKING NOTE",
+      "clarity": "The subject version and provider-defined lifecycle state must be recorded.",
+      "test": "Inspect version and an interpretable state using the provider description/vocabulary.",
+      "neutral": "Provider vocabulary is allowed; no fixed external state machine is imposed.",
+      "authority": "Provider lifecycle is separate from OAS release state and canonical Registry lifecycle.",
+      "human": "Provider owns the lifecycle claim; 0017 assigns retirement responsibility.",
+      "evidence": "Version/lifecycle records must give enough context to interpret the state.",
+      "lifecycle": "This is the explicit version/state anchor for the other scope-bound obligations.",
+      "cert": "A lifecycle label is not operational readiness, endorsement or certification.",
+      "registry": "Matching a label does not trigger a Registry state change.",
+      "notes": "NB-REQ-16: An informative provider-state glossary example would reduce label confusion; no vocabulary expansion is needed for 1.0."
+    }
+  },
+  {
+    "requirement_id": "OAS-1-REQ-0017",
+    "domain_id": "OAS-1-D08",
+    "normative_text_sha256": "sha256:edb9157813c09c7df66815f36cbe83bef4269854793f8cab651548ae3af71584",
+    "original_id_domain_and_wording_match": true,
+    "classification": "READY FOR FINAL ADOPTION",
+    "review": {
+      "status": "READY FOR FINAL ADOPTION",
+      "clarity": "Both the retirement-responsible role and the retirement process are explicit record contents.",
+      "test": "Inspect a named role and a process describing retirement of the subject version.",
+      "neutral": "No shutdown interface, deletion policy, retention duration or platform is prescribed.",
+      "authority": "Describes accountability; it does not execute retirement or mutate Registry records.",
+      "human": "Direct role-based retirement accountability complements 0001 and 0012.",
+      "evidence": "Retirement procedure and responsibility record are directly inspectable.",
+      "lifecycle": "Closes the descriptive lifecycle at retirement/decommissioning.",
+      "cert": "A process description is not evidence that retirement was executed successfully.",
+      "registry": "No Registry deactivation, deletion or record-retention implementation is assumed.",
+      "notes": "No material wording change proposed."
+    }
+  }
+]

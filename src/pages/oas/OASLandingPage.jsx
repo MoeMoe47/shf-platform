@@ -22,6 +22,7 @@
 // the routing rules for this page — no fabricated routes.
 
 import React, { useState } from "react";
+import { publicDomains } from "../../../standards/oas/compatibility.js";
 import "./oas-landing.css";
 import { VenusMark, PlannedItem, AnchorLink, OASFooter } from "./oasShared.jsx";
 
@@ -110,42 +111,42 @@ const FOUNDATION_ICONS = [
 const FOUNDATIONS = [
   {
     n: "01",
-    label: "Identity & Ownership",
+    label: publicDomains[0].label,
     desc: "How an agent is uniquely identified, and who owns it.",
   },
   {
     n: "02",
-    label: "Purpose & Boundaries",
+    label: publicDomains[1].label,
     desc: "What the agent is built to do, and the limits on its scope.",
   },
   {
     n: "03",
-    label: "Capabilities & Resources",
+    label: publicDomains[2].label,
     desc: "What the agent can access, use, or control.",
   },
   {
     n: "04",
-    label: "Permissions & Access",
+    label: publicDomains[3].label,
     desc: "What the agent is explicitly authorized to do.",
   },
   {
     n: "05",
-    label: "Safety & Prohibited Actions",
+    label: publicDomains[4].label,
     desc: "What the agent must never do, under any circumstance.",
   },
   {
     n: "06",
-    label: "Human Authority",
+    label: publicDomains[5].label,
     desc: "How people retain oversight, override, and control.",
   },
   {
     n: "07",
-    label: "Validation & Evidence",
+    label: publicDomains[6].label,
     desc: "How claims and behavior can be verified over time.",
   },
   {
     n: "08",
-    label: "Lifecycle & Accountability",
+    label: publicDomains[7].label,
     desc: "How agents are versioned, retired, and held accountable.",
   },
 ];

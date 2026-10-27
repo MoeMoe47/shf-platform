@@ -21,20 +21,12 @@
 // styling is knowingly not carried over to function — nothing here
 // links anywhere or claims to be downloadable when it isn't.
 import React, { useState } from "react";
+import { publicDomains } from "../../../standards/oas/compatibility.js";
 import "./oas-landing.css";
 import "./oas1-page.css";
 import { VenusMark, PlannedItem, AnchorLink, OASFooter } from "./oasShared.jsx";
 
-const DOMAINS = [
-  { n: "01", label: "Identity & Ownership" },
-  { n: "02", label: "Purpose & Boundaries" },
-  { n: "03", label: "Capabilities & Resources" },
-  { n: "04", label: "Permissions & Access" },
-  { n: "05", label: "Safety & Prohibited Actions" },
-  { n: "06", label: "Human Authority" },
-  { n: "07", label: "Validation & Evidence" },
-  { n: "08", label: "Lifecycle & Accountability" },
-];
+const DOMAINS = publicDomains;
 
 // The approved mock shows a 10-line preview of the 14-section spec
 // followed by a "View Full Table of Contents" link — a genuine partial
@@ -142,7 +134,7 @@ const ICONS = {
   ),
 };
 
-function ActionRow({ icon, title, comingSoon, description }) {
+function ActionRow({ icon, title, comingSoon = false, description }) {
   return (
     <span className="oas1-action" aria-disabled="true" title="Coming soon — this file does not exist yet">
       <span className="oas1-action__icon">{ICONS[icon](iconProps)}</span>

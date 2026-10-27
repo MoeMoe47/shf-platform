@@ -1,0 +1,7 @@
+# Requirement model
+
+The current OAS source explicitly places normative requirements in an unavailable full specification. Public domain descriptions and risk matrix values are explanatory guidance, not adopted individual normative rules. Thus requirements is empty and requirement_population_status is normative_source_not_published. Requirement-level readiness is BLOCKED on OAS normative authorship; fabricating IDs attached to invented obligations would violate the authority boundary.
+
+The canonical requirement registry is standards/oas/catalog.json, with requirement.schema.json defining requirement_id, standard_id/version/release_id, domain_id, risk_levels, normative_text, normative_text_reference (repository-relative path and anchor), status, supersedes and superseded_by. Preserve authored wording exactly when populated; source reference identifies normative authority. IDs differ from R-levels. R0–R4 remain Minimal, Low, Moderate, High, Critical as the existing risk model; none is a test result or profile.
+
+New normative wording gets a new serial, deprecation/replacement links preserve the old row. Same-release applicability is enforced initially; future cross-release reuse needs an explicit schema addition rather than implicit carry-over. Future requirement UI must consume this registry, not establish another authority. Tests use visibly synthetic rows solely to exercise validation, never public obligations. No normative wording has been rewritten.

@@ -18,6 +18,7 @@
 // This page purely explains the eight control domains already named on
 // OAS-1; it introduces no new normative claims.
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import { publicDomains } from "../../../standards/oas/compatibility.js";
 import "./oas-landing.css";
 import "./oas-control-domains.css";
 import { VenusMark, PlannedItem, AnchorLink, OASFooter } from "./oasShared.jsx";
@@ -98,56 +99,56 @@ const ICONS = {
 const DOMAINS = [
   {
     n: "01",
-    title: "Identity & Ownership",
+    title: publicDomains[0].label,
     icon: "fingerprint",
     pos: "top",
     body: "Establishes clear identity, provenance and ownership for agents, ensuring accountability throughout their lifecycle.",
   },
   {
     n: "02",
-    title: "Purpose & Boundaries",
+    title: publicDomains[1].label,
     icon: "target",
     pos: "upper-right",
     body: "Defines what the agent is intended to do, including its goals, scope and operational boundaries.",
   },
   {
     n: "03",
-    title: "Capabilities & Resources",
+    title: publicDomains[2].label,
     icon: "gear",
     pos: "right",
     body: "Specifies the agent's capabilities, required resources and any external tools or systems it can access.",
   },
   {
     n: "04",
-    title: "Permissions & Access",
+    title: publicDomains[3].label,
     icon: "key",
     pos: "lower-right",
     body: "Controls what the agent can access, including data, systems and actions, with appropriate authorization mechanisms.",
   },
   {
     n: "05",
-    title: "Safety & Prohibited Actions",
+    title: publicDomains[4].label,
     icon: "shield",
     pos: "bottom",
     body: "Defines safety requirements, prohibited actions and guardrails to prevent harmful behavior.",
   },
   {
     n: "06",
-    title: "Human Authority",
+    title: publicDomains[5].label,
     icon: "people",
     pos: "lower-left",
     body: "Clarifies human oversight, authority structures and escalation paths for critical decisions.",
   },
   {
     n: "07",
-    title: "Validation & Evidence",
+    title: publicDomains[6].label,
     icon: "doc",
     pos: "left",
     body: "Establishes verification methods, performance monitoring and evidence requirements.",
   },
   {
     n: "08",
-    title: "Lifecycle & Accountability",
+    title: publicDomains[7].label,
     icon: "cycle",
     pos: "upper-left",
     body: "Covers the full lifecycle from development to decommissioning, including ongoing accountability and impact assessment.",

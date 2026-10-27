@@ -112,7 +112,13 @@
     "ui:snap": "node scripts/run-phase8-acceptance-env.mjs tests/ui/appRegistry.spec.mjs",
     "ui:snap:update": "node scripts/run-phase8-acceptance-env.mjs tests/ui/appRegistry.spec.mjs --update-snapshots",
     "ui:style": "node scripts/run-phase8-acceptance-env.mjs tests/ui/appRegistry.styles.spec.mjs",
-    "ci:ui": "npm run manifests:validate && npm run ui:validate && npm run ui:style && npm run ui:snap"
+    "ci:ui": "npm run manifests:validate && npm run ui:validate && npm run ui:style && npm run ui:snap",
+    "oas:validate": "node scripts/oas-catalog.mjs validate",
+    "oas:generate": "node scripts/oas-catalog.mjs generate",
+    "oas:check": "node scripts/oas-catalog.mjs check",
+    "oas:test": "node --test tests/oasCanonicalCatalog.test.mjs",
+    "oas:typecheck": "tsc -p tests/oas-catalog.tsconfig.json",
+    "oas:build": "vite build --config vite.oas.config.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.0",

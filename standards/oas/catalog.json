@@ -1,0 +1,160 @@
+{
+  "catalog_version": "1.0.0",
+  "authority": "Open Autonomous Standard",
+  "standards": [
+    {
+      "standard_id": "OAS-1",
+      "standard_name": "Open Autonomous Standard",
+      "description": "Autonomous agents; existing public working-draft framework."
+    }
+  ],
+  "releases": [
+    {
+      "standard_id": "OAS-1",
+      "standard_version": "0.0.0-public-review.1",
+      "release_id": "OAS-1@0.0.0-public-review.1",
+      "release_status": "public_review",
+      "release_date": null,
+      "effective_date": null,
+      "publication_label": "Public Working Draft",
+      "review_label": "Public Review",
+      "normative_status": "not_published",
+      "supersedes": [],
+      "superseded_by": []
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "OAS-1-D01",
+      "ordinal": "01",
+      "domain_name": "Identity & Ownership",
+      "aliases": []
+    },
+    {
+      "domain_id": "OAS-1-D02",
+      "ordinal": "02",
+      "domain_name": "Purpose & Boundaries",
+      "aliases": []
+    },
+    {
+      "domain_id": "OAS-1-D03",
+      "ordinal": "03",
+      "domain_name": "Capabilities & Resources",
+      "aliases": []
+    },
+    {
+      "domain_id": "OAS-1-D04",
+      "ordinal": "04",
+      "domain_name": "Permissions & Access",
+      "aliases": []
+    },
+    {
+      "domain_id": "OAS-1-D05",
+      "ordinal": "05",
+      "domain_name": "Safety & Prohibited Actions",
+      "aliases": []
+    },
+    {
+      "domain_id": "OAS-1-D06",
+      "ordinal": "06",
+      "domain_name": "Human Authority",
+      "aliases": [
+        "Human Oversight"
+      ]
+    },
+    {
+      "domain_id": "OAS-1-D07",
+      "ordinal": "07",
+      "domain_name": "Validation & Evidence",
+      "aliases": []
+    },
+    {
+      "domain_id": "OAS-1-D08",
+      "ordinal": "08",
+      "domain_name": "Lifecycle & Accountability",
+      "aliases": []
+    }
+  ],
+  "risk_levels": [
+    {
+      "risk_level_id": "R0",
+      "risk_level_name": "Minimal"
+    },
+    {
+      "risk_level_id": "R1",
+      "risk_level_name": "Low"
+    },
+    {
+      "risk_level_id": "R2",
+      "risk_level_name": "Moderate"
+    },
+    {
+      "risk_level_id": "R3",
+      "risk_level_name": "High"
+    },
+    {
+      "risk_level_id": "R4",
+      "risk_level_name": "Critical"
+    }
+  ],
+  "legacy_taxonomies": [
+    {
+      "taxonomy_id": "shs-oas-reporting-v1",
+      "status": "legacy_unmapped",
+      "domains": [
+        {
+          "legacy_id": "01",
+          "legacy_label": "Identity and Purpose",
+          "canonical_domain_id": null,
+          "migration_status": "requires_semantic_review"
+        },
+        {
+          "legacy_id": "02",
+          "legacy_label": "Autonomy and Agency",
+          "canonical_domain_id": null,
+          "migration_status": "requires_semantic_review"
+        },
+        {
+          "legacy_id": "03",
+          "legacy_label": "Safety and Risk",
+          "canonical_domain_id": null,
+          "migration_status": "requires_semantic_review"
+        },
+        {
+          "legacy_id": "04",
+          "legacy_label": "Transparency and Explainability",
+          "canonical_domain_id": null,
+          "migration_status": "requires_semantic_review"
+        },
+        {
+          "legacy_id": "05",
+          "legacy_label": "Human Oversight",
+          "canonical_domain_id": null,
+          "migration_status": "requires_semantic_review"
+        },
+        {
+          "legacy_id": "06",
+          "legacy_label": "Data and Privacy",
+          "canonical_domain_id": null,
+          "migration_status": "requires_semantic_review"
+        },
+        {
+          "legacy_id": "07",
+          "legacy_label": "Interoperability",
+          "canonical_domain_id": null,
+          "migration_status": "requires_semantic_review"
+        },
+        {
+          "legacy_id": "08",
+          "legacy_label": "Accountability and Governance",
+          "canonical_domain_id": null,
+          "migration_status": "requires_semantic_review"
+        }
+      ]
+    }
+  ],
+  "profiles": [],
+  "profile_population_status": "not_defined",
+  "requirements": [],
+  "requirement_population_status": "normative_source_not_published"
+}

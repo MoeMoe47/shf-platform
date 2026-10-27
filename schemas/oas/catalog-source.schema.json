@@ -1,0 +1,182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oas:schema:catalog-source:1",
+  "type": "object",
+  "properties": {
+    "catalog_version": {
+      "const": "1.0.0"
+    },
+    "authority": {
+      "const": "Open Autonomous Standard"
+    },
+    "standards": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:oas:schema:standard:1"
+      },
+      "uniqueItems": true
+    },
+    "releases": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:oas:schema:release:1"
+      },
+      "uniqueItems": true
+    },
+    "domains": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "domain_id": {
+            "type": "string",
+            "pattern": "^OAS-[1-9][0-9]*-D[0-9]{2}$"
+          },
+          "ordinal": {
+            "type": "string",
+            "pattern": "^[0-9]{2}$"
+          },
+          "domain_name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "domain_id",
+          "ordinal",
+          "domain_name",
+          "aliases"
+        ],
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
+    "risk_levels": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "risk_level_id": {
+            "enum": [
+              "R0",
+              "R1",
+              "R2",
+              "R3",
+              "R4"
+            ]
+          },
+          "risk_level_name": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "risk_level_id",
+          "risk_level_name"
+        ],
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
+    "legacy_taxonomies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "taxonomy_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "const": "legacy_unmapped"
+          },
+          "domains": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "legacy_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "legacy_label": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "canonical_domain_id": {
+                  "type": "null"
+                },
+                "migration_status": {
+                  "const": "requires_semantic_review"
+                }
+              },
+              "required": [
+                "legacy_id",
+                "legacy_label",
+                "canonical_domain_id",
+                "migration_status"
+              ],
+              "additionalProperties": false
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "taxonomy_id",
+          "status",
+          "domains"
+        ],
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
+    "profiles": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:oas:schema:profile:1"
+      },
+      "uniqueItems": true
+    },
+    "profile_population_status": {
+      "enum": [
+        "not_defined",
+        "populated"
+      ]
+    },
+    "requirements": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:oas:schema:requirement:1"
+      },
+      "uniqueItems": true
+    },
+    "requirement_population_status": {
+      "enum": [
+        "normative_source_not_published",
+        "populated"
+      ]
+    }
+  },
+  "required": [
+    "catalog_version",
+    "authority",
+    "standards",
+    "releases",
+    "domains",
+    "risk_levels",
+    "legacy_taxonomies",
+    "profiles",
+    "profile_population_status",
+    "requirements",
+    "requirement_population_status"
+  ],
+  "additionalProperties": false
+}

@@ -29,7 +29,7 @@ export function PlannedItem({ children }) {
   );
 }
 
-export function AnchorLink({ href, children, className }) {
+export function AnchorLink({ href, children, className = undefined }) {
   return (
     <a href={href} className={className}>
       {children}

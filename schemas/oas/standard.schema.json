@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oas:schema:standard:1",
+  "type": "object",
+  "properties": {
+    "standard_id": {
+      "type": "string",
+      "pattern": "^OAS-[1-9][0-9]*$"
+    },
+    "standard_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "standard_id",
+    "standard_name",
+    "description"
+  ],
+  "additionalProperties": false
+}

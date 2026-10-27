@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oas:schema:declaration:1",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "standard_reference": {
+      "type": "object",
+      "properties": {
+        "standard_id": {
+          "type": "string",
+          "pattern": "^OAS-[1-9][0-9]*$"
+        },
+        "standard_version": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-(?:[a-z][a-z0-9-]*\\.)*[a-z0-9-]+)?$"
+        },
+        "release_id": {
+          "type": "string",
+          "pattern": "^OAS-[1-9][0-9]*@(?:0|[1-9][0-9]*)\\.(?:0|[1-9][0-9]*)\\.(?:0|[1-9][0-9]*)(?:-(?:[a-z][a-z0-9-]*\\.)*[a-z0-9-]+)?$"
+        }
+      },
+      "required": [
+        "standard_id",
+        "standard_version",
+        "release_id"
+      ],
+      "additionalProperties": false
+    },
+    "profile_reference": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^OAS-[1-9][0-9]*-P-[a-z][a-z0-9-]*@(?:0|[1-9][0-9]*)\\.(?:0|[1-9][0-9]*)\\.(?:0|[1-9][0-9]*)(?:-(?:[a-z][a-z0-9-]*\\.)*[a-z0-9-]+)?$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "requirement_references": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^OAS-[1-9][0-9]*-REQ-[0-9]{4,}$"
+      },
+      "uniqueItems": true
+    },
+    "declaration_scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "declared_by": {
+      "type": "string",
+      "minLength": 1
+    },
+    "declared_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "declaration_status": {
+      "enum": [
+        "declared",
+        "withdrawn"
+      ]
+    },
+    "evidence_references": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "notes": {
+      "type": "string"
+    },
+    "evaluation_status": {
+      "const": "NOT_EVALUATED"
+    }
+  },
+  "required": [
+    "schema_version",
+    "standard_reference",
+    "profile_reference",
+    "requirement_references",
+    "declaration_scope",
+    "declared_by",
+    "declared_at",
+    "declaration_status",
+    "evidence_references",
+    "notes",
+    "evaluation_status"
+  ],
+  "additionalProperties": false
+}

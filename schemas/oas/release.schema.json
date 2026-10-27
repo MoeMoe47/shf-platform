@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oas:schema:release:1",
+  "$defs": {
+    "record": {
+      "allOf": [
+        {
+          "type": "object",
+          "properties": {
+            "standard_id": {
+              "type": "string",
+              "pattern": "^OAS-[1-9][0-9]*$"
+            },
+            "standard_version": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-(?:[a-z][a-z0-9-]*\\.)*[a-z0-9-]+)?$"
+            },
+            "release_id": {
+              "type": "string",
+              "pattern": "^OAS-[1-9][0-9]*@(?:0|[1-9][0-9]*)\\.(?:0|[1-9][0-9]*)\\.(?:0|[1-9][0-9]*)(?:-(?:[a-z][a-z0-9-]*\\.)*[a-z0-9-]+)?$"
+            },
+            "release_status": {
+              "enum": [
+                "working_draft",
+                "public_review",
+                "released",
+                "deprecated",
+                "superseded"
+              ]
+            },
+            "release_date": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "effective_date": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "publication_label": {
+              "type": "string",
+              "minLength": 1
+            },
+            "review_label": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "normative_status": {
+              "enum": [
+                "not_published",
+                "published"
+              ]
+            },
+            "supersedes": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            },
+            "superseded_by": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "standard_id",
+            "standard_version",
+            "release_id",
+            "release_status",
+            "release_date",
+            "effective_date",
+            "publication_label",
+            "review_label",
+            "normative_status",
+            "supersedes",
+            "superseded_by"
+          ]
+        },
+        {
+          "if": {
+            "properties": {
+              "release_status": {
+                "enum": [
+                  "released",
+                  "deprecated",
+                  "superseded"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "release_date": {
+                "type": "string",
+                "format": "date"
+              },
+              "normative_status": {
+                "const": "published"
+              },
+              "standard_version": {
+                "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "release_status": {
+                "enum": [
+                  "working_draft",
+                  "public_review"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "release_date": {
+                "type": "null"
+              },
+              "effective_date": {
+                "type": "null"
+              },
+              "standard_version": {
+                "pattern": "-",
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "type": "object"
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "#/$defs/record"
+    }
+  ],
+  "unevaluatedProperties": false,
+  "type": "object"
+}

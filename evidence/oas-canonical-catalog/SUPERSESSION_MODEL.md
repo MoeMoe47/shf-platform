@@ -1,0 +1,7 @@
+# Supersession model
+
+Each release, requirement and profile carries supersedes and superseded_by arrays. References must exist in the same entity collection and standard; both directions must agree; self-links and directed cycles reject. Multiple replacement IDs allow explicit split/merge relationships. Replacement does not imply semantic equivalence. Superseded status requires a replacement; deprecated status may have none (discouraged without known replacement). No supersession events exist in the current source.
+
+A new release explicitly links the old release in supersedes and the editorial catalog records the reverse link. Old adopted releases remain addressable and valid historical references; current suitability is a separate as-of policy decision. Requirements use deprecated or superseded status, preserve normative wording/reference, and link new immutable serials when replacement occurs. Profiles get a new version ID and replacement links. Cross-standard replacements are not silently allowed.
+
+Already published snapshots are immutable. Publish changed status observations in a newly versioned catalog snapshot while retaining earlier artifact paths/Git revisions. A consumer must retain its original artifact digest/revision and may separately record a newer as-of observation. Supersession does not alter historical declarations, Registry agent lifecycle, withdrawn declarations, conformance, execution permissions or Trust Bureau findings. No automatic rejection or rewriting of historical declarations is implemented.

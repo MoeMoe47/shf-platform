@@ -1,0 +1,9 @@
+# Registry integration readiness
+
+Bounded draft metadata integration: technically prepared through the Git repository, pending OAS review of this branch. Inputs: standard catalog, exact public-review snapshot, canonical domains/R-levels, explicit empty profile/requirement catalogs, declaration schema and semantic resolver, empty supersession graphs, source revision/manifest/checksums. Registry must pin the full source/artifact commit and exact release; legacy OAS-1 alone is not a version. The snapshot is public data without provider or internal governance payloads.
+
+Full requested normative catalog integration: BLOCKED. The inspected repository does not publish the normative specification or individual normative requirements. No real profiles exist. This implementation refuses to invent either. OAS must author/adopt requirements, populate any actual profiles and govern releases/dates before those references become usable. Public hosting/transport/domain is also not adopted or deployed here. Legacy reporting semantic mappings require review; report input/output remains legacy and NOT_EVALUATED.
+
+Registry may later consume the exact artifact and schemas, verify source manifest and artifact digest, resolve pins, record attributed provider declarations and publish an explicitly approved projection. Registry may not redefine standards, fill empty OAS catalogs, infer certification or use report ordinals as canonical IDs. No Registry files were changed. No external canonical writes, release certification, trust score or unrestricted authorization exists.
+
+This is a standards-authority foundation ready for review, not a production-readiness declaration. See TEST_RESULTS.md and SCHEMA_VALIDATION_RESULTS.md for fresh validation and limits. Missing normative source authority is the remaining substantive blocker to the full requested integration target.

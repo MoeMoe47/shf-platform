@@ -1,0 +1,1295 @@
+{
+  "review_schema_version": "1.0.0",
+  "review_kind": "repository_technical_governance_review",
+  "review_actor": "Codex repository review under the user task authorization",
+  "review_date": "2026-10-27",
+  "baseline_commit": "47b12e3066ca6d83650eed62ae780ce03bf8e6e7",
+  "authoring_source_path": "standards/oas/authoring/first-release.json",
+  "authoring_checksum_before": "sha256:b617e224c934638424cb3c693cb04952c443e28557b23ccc0fe77928affa1c04",
+  "authoring_checksum_after": "sha256:8830d45169bc0c494ff0d6ac66cf95d358ac5efb69b510b658997d4aaf4abaad",
+  "institutional_authorization": null,
+  "rc_issued": false,
+  "rc_release_id": null,
+  "rc_source_revision": null,
+  "rc_checksum": null,
+  "rc_requirement_ids": [],
+  "adopted_release_id": null,
+  "requirements": [
+    {
+      "requirement_id": "OAS-1-REQ-0001",
+      "domain_id": "OAS-1-D01",
+      "title": "Identity and responsible party",
+      "decision": "APPROVE WITH REVISION",
+      "reason": "The obligation already identifies a responsible party rather than legal title. Align the title and evidence label with the obligation and retain the non-verification boundary.",
+      "required_revision": "Align title/evidence/verification metadata; do not change the normative obligation.",
+      "open_question_ids": [
+        "Q03"
+      ],
+      "baseline_record_checksum": "sha256:5e70ed9ee5e2b67146384cb2dbac45a272df184bf7d286286e93a611a2b19ccd",
+      "reviewed_record_checksum": "sha256:f5941c69982ceb8a96349771fac188ecfcda527d51413bb8b65e2205cfc590e0",
+      "criteria": {
+        "precision": {
+          "result": "needs_revision",
+          "reason": "The obligation already identifies a responsible party rather than legal title. Align the title and evidence label with the obligation and retain the non-verification boundary."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The normative actor is the provider making the scoped declaration."
+        },
+        "applicability": {
+          "result": "unresolved",
+          "reason": "Description-record applicability is explicit, but Q01/Q12 require an authorized first-release scope decision; local issues are listed separately."
+        },
+        "inspectability": {
+          "result": "acceptable",
+          "reason": "Documentation elements are inspectable; the original ownership label overstates the actual obligation."
+        },
+        "duplication": {
+          "result": "acceptable",
+          "reason": "No identical normative statement or identical primary obligation was found; related obligations inspect different records or relationships."
+        },
+        "breadth": {
+          "result": "acceptable",
+          "reason": "The content review is limited to provider description records; no universal runtime, safety or legal assurance is implied."
+        },
+        "narrowness": {
+          "result": "unresolved",
+          "reason": "A documentation-only baseline may be too narrow for the first OAS standard; Q12 remains a global scope gate."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Describing standards information stays within OAS; it does not issue Registry records, change system permissions or determine Trust Bureau opinion."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "No assessment result, certification scheme or conformance score is introduced; evidence presence remains NOT_EVALUATED."
+        },
+        "baseline_suitability": {
+          "result": "needs_revision",
+          "reason": "Content disposition is APPROVE WITH REVISION; institutional authorization, global blockers and any revision re-review remain separate release gates."
+        }
+      },
+      "release_eligible": false
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0002",
+      "domain_id": "OAS-1-D01",
+      "title": "Version provenance reference",
+      "decision": "HOLD",
+      "reason": "A source artifact or origin record has no defined minimum granularity for composite, hosted or continuously updated systems. A generic reference could satisfy the syntax without identifying the described version.",
+      "required_revision": "Define version-bound provenance granularity and acceptable origin-reference semantics.",
+      "open_question_ids": [
+        "Q04"
+      ],
+      "baseline_record_checksum": "sha256:8b45b79816dfd80f385db0a742d0d2bf113a27487046e9ee7d0ffab420cb8033",
+      "reviewed_record_checksum": "sha256:8b45b79816dfd80f385db0a742d0d2bf113a27487046e9ee7d0ffab420cb8033",
+      "criteria": {
+        "precision": {
+          "result": "unresolved",
+          "reason": "A source artifact or origin record has no defined minimum granularity for composite, hosted or continuously updated systems. A generic reference could satisfy the syntax without identifying the described version."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The normative actor is the provider making the scoped declaration."
+        },
+        "applicability": {
+          "result": "unresolved",
+          "reason": "Description-record applicability is explicit, but Q01/Q12 require an authorized first-release scope decision; local issues are listed separately."
+        },
+        "inspectability": {
+          "result": "unresolved",
+          "reason": "Reference presence is observable, but version identification is underdefined."
+        },
+        "duplication": {
+          "result": "acceptable",
+          "reason": "No identical normative statement or identical primary obligation was found; related obligations inspect different records or relationships."
+        },
+        "breadth": {
+          "result": "unresolved",
+          "reason": "The content review is limited to provider description records; no universal runtime, safety or legal assurance is implied."
+        },
+        "narrowness": {
+          "result": "unresolved",
+          "reason": "A documentation-only baseline may be too narrow for the first OAS standard; Q12 remains a global scope gate."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Describing standards information stays within OAS; it does not issue Registry records, change system permissions or determine Trust Bureau opinion."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "No assessment result, certification scheme or conformance score is introduced; evidence presence remains NOT_EVALUATED."
+        },
+        "baseline_suitability": {
+          "result": "unresolved",
+          "reason": "Content disposition is HOLD; institutional authorization, global blockers and any revision re-review remain separate release gates."
+        }
+      },
+      "release_eligible": false
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0003",
+      "domain_id": "OAS-1-D02",
+      "title": "Intended purpose",
+      "decision": "APPROVE",
+      "reason": "A named provider documents goals and use cases for an identified version. The obligation is bounded and inspectable without claiming aligned runtime behavior.",
+      "required_revision": "None.",
+      "open_question_ids": [
+        "Q01"
+      ],
+      "baseline_record_checksum": "sha256:c7a8bcb9376a619fdf06dfee7b0248bcae7f24e9300489343dff079fafed7d49",
+      "reviewed_record_checksum": "sha256:c7a8bcb9376a619fdf06dfee7b0248bcae7f24e9300489343dff079fafed7d49",
+      "criteria": {
+        "precision": {
+          "result": "acceptable",
+          "reason": "A named provider documents goals and use cases for an identified version. The obligation is bounded and inspectable without claiming aligned runtime behavior."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The normative actor is the provider making the scoped declaration."
+        },
+        "applicability": {
+          "result": "unresolved",
+          "reason": "Description-record applicability is explicit, but Q01/Q12 require an authorized first-release scope decision; local issues are listed separately."
+        },
+        "inspectability": {
+          "result": "acceptable",
+          "reason": "A reviewer can inspect explicit goals/use cases in the scoped description record."
+        },
+        "duplication": {
+          "result": "acceptable",
+          "reason": "No identical normative statement or identical primary obligation was found; related obligations inspect different records or relationships."
+        },
+        "breadth": {
+          "result": "acceptable",
+          "reason": "The content review is limited to provider description records; no universal runtime, safety or legal assurance is implied."
+        },
+        "narrowness": {
+          "result": "unresolved",
+          "reason": "A documentation-only baseline may be too narrow for the first OAS standard; Q12 remains a global scope gate."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Describing standards information stays within OAS; it does not issue Registry records, change system permissions or determine Trust Bureau opinion."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "No assessment result, certification scheme or conformance score is introduced; evidence presence remains NOT_EVALUATED."
+        },
+        "baseline_suitability": {
+          "result": "acceptable",
+          "reason": "Content disposition is APPROVE; institutional authorization, global blockers and any revision re-review remain separate release gates."
+        }
+      },
+      "release_eligible": false
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0004",
+      "domain_id": "OAS-1-D02",
+      "title": "Operating boundaries",
+      "decision": "APPROVE",
+      "reason": "Permitted scope and exclusions are distinct from permissions and control efficacy. The existing statement is a coherent description obligation without claiming enforcement.",
+      "required_revision": "None.",
+      "open_question_ids": [
+        "Q01"
+      ],
+      "baseline_record_checksum": "sha256:1f88fba4b3e21951a84d47b699d5ad3c8d9e92c5c4ccb5e1a183b3c96fff98d1",
+      "reviewed_record_checksum": "sha256:1f88fba4b3e21951a84d47b699d5ad3c8d9e92c5c4ccb5e1a183b3c96fff98d1",
+      "criteria": {
+        "precision": {
+          "result": "acceptable",
+          "reason": "Permitted scope and exclusions are distinct from permissions and control efficacy. The existing statement is a coherent description obligation without claiming enforcement."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The normative actor is the provider making the scoped declaration."
+        },
+        "applicability": {
+          "result": "unresolved",
+          "reason": "Description-record applicability is explicit, but Q01/Q12 require an authorized first-release scope decision; local issues are listed separately."
+        },
+        "inspectability": {
+          "result": "acceptable",
+          "reason": "Inspect permitted scope and excluded actions/uses; do not infer enforcement."
+        },
+        "duplication": {
+          "result": "acceptable",
+          "reason": "No identical normative statement or identical primary obligation was found; related obligations inspect different records or relationships."
+        },
+        "breadth": {
+          "result": "acceptable",
+          "reason": "The content review is limited to provider description records; no universal runtime, safety or legal assurance is implied."
+        },
+        "narrowness": {
+          "result": "unresolved",
+          "reason": "A documentation-only baseline may be too narrow for the first OAS standard; Q12 remains a global scope gate."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Describing standards information stays within OAS; it does not issue Registry records, change system permissions or determine Trust Bureau opinion."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "No assessment result, certification scheme or conformance score is introduced; evidence presence remains NOT_EVALUATED."
+        },
+        "baseline_suitability": {
+          "result": "acceptable",
+          "reason": "Content disposition is APPROVE; institutional authorization, global blockers and any revision re-review remain separate release gates."
+        }
+      },
+      "release_eligible": false
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0005",
+      "domain_id": "OAS-1-D02",
+      "title": "Purpose and boundary review",
+      "decision": "APPROVE WITH REVISION",
+      "reason": "The version is described as changing itself. Clarify that the trigger is a change in the declared version's capabilities, permissions, context or use; do not add a new timing or risk rule.",
+      "required_revision": "Clarify the grammatical subject of the change trigger; preserve all four triggers.",
+      "open_question_ids": [
+        "Q02"
+      ],
+      "baseline_record_checksum": "sha256:7f35d23cfca5759d87ebed7afa384356a01f13e115f116eba183230842cbdd6b",
+      "reviewed_record_checksum": "sha256:f17fc5ef20f5a2fe8b8f5022bfd12dab87b985e04d4a45f81536ce5e4bc9c9e7",
+      "criteria": {
+        "precision": {
+          "result": "needs_revision",
+          "reason": "The version is described as changing itself. Clarify that the trigger is a change in the declared version's capabilities, permissions, context or use; do not add a new timing or risk rule."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The normative actor is the provider making the scoped declaration."
+        },
+        "applicability": {
+          "result": "unresolved",
+          "reason": "Description-record applicability is explicit, but Q01/Q12 require an authorized first-release scope decision; local issues are listed separately."
+        },
+        "inspectability": {
+          "result": "acceptable",
+          "reason": "A change review record is inspectable; no arbitrary cadence is required."
+        },
+        "duplication": {
+          "result": "acceptable",
+          "reason": "No identical normative statement or identical primary obligation was found; related obligations inspect different records or relationships."
+        },
+        "breadth": {
+          "result": "acceptable",
+          "reason": "The content review is limited to provider description records; no universal runtime, safety or legal assurance is implied."
+        },
+        "narrowness": {
+          "result": "unresolved",
+          "reason": "A documentation-only baseline may be too narrow for the first OAS standard; Q12 remains a global scope gate."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Describing standards information stays within OAS; it does not issue Registry records, change system permissions or determine Trust Bureau opinion."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "No assessment result, certification scheme or conformance score is introduced; evidence presence remains NOT_EVALUATED."
+        },
+        "baseline_suitability": {
+          "result": "needs_revision",
+          "reason": "Content disposition is APPROVE WITH REVISION; institutional authorization, global blockers and any revision re-review remain separate release gates."
+        }
+      },
+      "release_eligible": false
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0006",
+      "domain_id": "OAS-1-D03",
+      "title": "Capability inventory",
+      "decision": "APPROVE",
+      "reason": "Capability enumeration is distinct from intended purpose and permission. The obligation is a useful documentation baseline; completeness methodology remains a release-level issue.",
+      "required_revision": "None.",
+      "open_question_ids": [
+        "Q05"
+      ],
+      "baseline_record_checksum": "sha256:5c195af599d0dfca55d2c7a4f00beebaabe84b185d07b365520460589fcf1f60",
+      "reviewed_record_checksum": "sha256:5c195af599d0dfca55d2c7a4f00beebaabe84b185d07b365520460589fcf1f60",
+      "criteria": {
+        "precision": {
+          "result": "acceptable",
+          "reason": "Capability enumeration is distinct from intended purpose and permission. The obligation is a useful documentation baseline; completeness methodology remains a release-level issue."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The normative actor is the provider making the scoped declaration."
+        },
+        "applicability": {
+          "result": "unresolved",
+          "reason": "Description-record applicability is explicit, but Q01/Q12 require an authorized first-release scope decision; local issues are listed separately."
+        },
+        "inspectability": {
+          "result": "acceptable",
+          "reason": "Inspect a scoped capability manifest; runtime completeness must not be inferred from schema validity."
+        },
+        "duplication": {
+          "result": "acceptable",
+          "reason": "No identical normative statement or identical primary obligation was found; related obligations inspect different records or relationships."
+        },
+        "breadth": {
+          "result": "acceptable",
+          "reason": "The content review is limited to provider description records; no universal runtime, safety or legal assurance is implied."
+        },
+        "narrowness": {
+          "result": "unresolved",
+          "reason": "A documentation-only baseline may be too narrow for the first OAS standard; Q12 remains a global scope gate."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Describing standards information stays within OAS; it does not issue Registry records, change system permissions or determine Trust Bureau opinion."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "No assessment result, certification scheme or conformance score is introduced; evidence presence remains NOT_EVALUATED."
+        },
+        "baseline_suitability": {
+          "result": "acceptable",
+          "reason": "Content disposition is APPROVE; institutional authorization, global blockers and any revision re-review remain separate release gates."
+        }
+      },
+      "release_eligible": false
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0007",
+      "domain_id": "OAS-1-D03",
+      "title": "Resources and external dependencies",
+      "decision": "HOLD",
+      "reason": "Resources lacks a bounded inventory granularity and used dependencies do not cover the source concept of accessible tools. Dynamic/composite dependency scope is unresolved.",
+      "required_revision": "Define resources, accessible versus used dependencies, and inventory boundaries before final wording.",
+      "open_question_ids": [
+        "Q04",
+        "Q05"
+      ],
+      "baseline_record_checksum": "sha256:3feca25b10c6bab15f79c86e143dbb1891c9bb52157f3fe9e9f9c3899b0d0ac3",
+      "reviewed_record_checksum": "sha256:3feca25b10c6bab15f79c86e143dbb1891c9bb52157f3fe9e9f9c3899b0d0ac3",
+      "criteria": {
+        "precision": {
+          "result": "unresolved",
+          "reason": "Resources lacks a bounded inventory granularity and used dependencies do not cover the source concept of accessible tools. Dynamic/composite dependency scope is unresolved."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The normative actor is the provider making the scoped declaration."
+        },
+        "applicability": {
+          "result": "unresolved",
+          "reason": "Description-record applicability is explicit, but Q01/Q12 require an authorized first-release scope decision; local issues are listed separately."
+        },
+        "inspectability": {
+          "result": "unresolved",
+          "reason": "The inventory can be present while omitting unspecified classes of dependencies."
+        },
+        "duplication": {
+          "result": "acceptable",
+          "reason": "No identical normative statement or identical primary obligation was found; related obligations inspect different records or relationships."
+        },
+        "breadth": {
+          "result": "unresolved",
+          "reason": "The content review is limited to provider description records; no universal runtime, safety or legal assurance is implied."
+        },
+        "narrowness": {
+          "result": "unresolved",
+          "reason": "A documentation-only baseline may be too narrow for the first OAS standard; Q12 remains a global scope gate."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Describing standards information stays within OAS; it does not issue Registry records, change system permissions or determine Trust Bureau opinion."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "No assessment result, certification scheme or conformance score is introduced; evidence presence remains NOT_EVALUATED."
+        },
+        "baseline_suitability": {
+          "result": "unresolved",
+          "reason": "Content disposition is HOLD; institutional authorization, global blockers and any revision re-review remain separate release gates."
+        }
+      },
+      "release_eligible": false
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0008",
+      "domain_id": "OAS-1-D04",
+      "title": "Access and action permissions",
+      "decision": "APPROVE",
+      "reason": "Documents existing access/action permissions within scope. It neither grants permission nor duplicates capability enumeration. The existing notes correctly exclude Registry authorization.",
+      "required_revision": "None.",
+      "open_question_ids": [
+        "Q05"
+      ],
+      "baseline_record_checksum": "sha256:e3562e2b6d66f1d334aea1ee7de454937e4512bf261251670fc714e3391a0224",
+      "reviewed_record_checksum": "sha256:e3562e2b6d66f1d334aea1ee7de454937e4512bf261251670fc714e3391a0224",
+      "criteria": {
+        "precision": {
+          "result": "acceptable",
+          "reason": "Documents existing access/action permissions within scope. It neither grants permission nor duplicates capability enumeration. The existing notes correctly exclude Registry authorization."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The normative actor is the provider making the scoped declaration."
+        },
+        "applicability": {
+          "result": "unresolved",
+          "reason": "Description-record applicability is explicit, but Q01/Q12 require an authorized first-release scope decision; local issues are listed separately."
+        },
+        "inspectability": {
+          "result": "acceptable",
+          "reason": "Inspect permission policy/configuration against identified data, systems and actions; authority and efficacy are not granted by the declaration."
+        },
+        "duplication": {
+          "result": "acceptable",
+          "reason": "No identical normative statement or identical primary obligation was found; related obligations inspect different records or relationships."
+        },
+        "breadth": {
+          "result": "acceptable",
+          "reason": "The content review is limited to provider description records; no universal runtime, safety or legal assurance is implied."
+        },
+        "narrowness": {
+          "result": "unresolved",
+          "reason": "A documentation-only baseline may be too narrow for the first OAS standard; Q12 remains a global scope gate."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Describing standards information stays within OAS; it does not issue Registry records, change system permissions or determine Trust Bureau opinion."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "No assessment result, certification scheme or conformance score is introduced; evidence presence remains NOT_EVALUATED."
+        },
+        "baseline_suitability": {
+          "result": "acceptable",
+          "reason": "Content disposition is APPROVE; institutional authorization, global blockers and any revision re-review remain separate release gates."
+        }
+      },
+      "release_eligible": false
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0009",
+      "domain_id": "OAS-1-D04",
+      "title": "Authorization mechanism references",
+      "decision": "APPROVE",
+      "reason": "Relates each documented permission to its authorization mechanism. This is inspectable linkage, distinct from merely listing permissions or proving access enforcement.",
+      "required_revision": "None.",
+      "open_question_ids": [
+        "Q05"
+      ],
+      "baseline_record_checksum": "sha256:4e160e2913162688f8373911a3ee245080cd259f82466cb19ffb4c89d53bc3f4",
+      "reviewed_record_checksum": "sha256:4e160e2913162688f8373911a3ee245080cd259f82466cb19ffb4c89d53bc3f4",
+      "criteria": {
+        "precision": {
+          "result": "acceptable",
+          "reason": "Relates each documented permission to its authorization mechanism. This is inspectable linkage, distinct from merely listing permissions or proving access enforcement."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The normative actor is the provider making the scoped declaration."
+        },
+        "applicability": {
+          "result": "unresolved",
+          "reason": "Description-record applicability is explicit, but Q01/Q12 require an authorized first-release scope decision; local issues are listed separately."
+        },
+        "inspectability": {
+          "result": "acceptable",
+          "reason": "Inspect permission-to-mechanism references; no mechanism-efficacy result follows."
+        },
+        "duplication": {
+          "result": "acceptable",
+          "reason": "No identical normative statement or identical primary obligation was found; related obligations inspect different records or relationships."
+        },
+        "breadth": {
+          "result": "acceptable",
+          "reason": "The content review is limited to provider description records; no universal runtime, safety or legal assurance is implied."
+        },
+        "narrowness": {
+          "result": "unresolved",
+          "reason": "A documentation-only baseline may be too narrow for the first OAS standard; Q12 remains a global scope gate."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Describing standards information stays within OAS; it does not issue Registry records, change system permissions or determine Trust Bureau opinion."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "No assessment result, certification scheme or conformance score is introduced; evidence presence remains NOT_EVALUATED."
+        },
+        "baseline_suitability": {
+          "result": "acceptable",
+          "reason": "Content disposition is APPROVE; institutional authorization, global blockers and any revision re-review remain separate release gates."
+        }
+      },
+      "release_eligible": false
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0010",
+      "domain_id": "OAS-1-D05",
+      "title": "Prohibited actions",
+      "decision": "HOLD",
+      "reason": "The source does not identify the authority defining prohibited actions or the treatment of an empty list. It can overlap the exclusions in 0004 unless a safety-policy scope is defined.",
+      "required_revision": "Define prohibition-policy authority, safety-specific scope and empty-list treatment.",
+      "open_question_ids": [
+        "Q06"
+      ],
+      "baseline_record_checksum": "sha256:f0654dddbaad018753bc42b32a1585b6b749ca9d563c1aed26d839e5aa6d288a",
+      "reviewed_record_checksum": "sha256:f0654dddbaad018753bc42b32a1585b6b749ca9d563c1aed26d839e5aa6d288a",
+      "criteria": {
+        "precision": {
+          "result": "unresolved",
+          "reason": "The source does not identify the authority defining prohibited actions or the treatment of an empty list. It can overlap the exclusions in 0004 unless a safety-policy scope is defined."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The normative actor is the provider making the scoped declaration."
+        },
+        "applicability": {
+          "result": "unresolved",
+          "reason": "Description-record applicability is explicit, but Q01/Q12 require an authorized first-release scope decision; local issues are listed separately."
+        },
+        "inspectability": {
+          "result": "unresolved",
+          "reason": "List presence alone does not resolve the content authority or distinguish it from general exclusions."
+        },
+        "duplication": {
+          "result": "unresolved",
+          "reason": "Potential overlap is identified in the disposition and needs scope clarification, not automatic rejection."
+        },
+        "breadth": {
+          "result": "unresolved",
+          "reason": "The content review is limited to provider description records; no universal runtime, safety or legal assurance is implied."
+        },
+        "narrowness": {
+          "result": "unresolved",
+          "reason": "A documentation-only baseline may be too narrow for the first OAS standard; Q12 remains a global scope gate."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Describing standards information stays within OAS; it does not issue Registry records, change system permissions or determine Trust Bureau opinion."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "No assessment result, certification scheme or conformance score is introduced; evidence presence remains NOT_EVALUATED."
+        },
+        "baseline_suitability": {
+          "result": "unresolved",
+          "reason": "Content disposition is HOLD; institutional authorization, global blockers and any revision re-review remain separate release gates."
+        }
+      },
+      "release_eligible": false
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0011",
+      "domain_id": "OAS-1-D05",
+      "title": "Guardrail control references",
+      "decision": "HOLD",
+      "reason": "The control-reference obligation depends on the unresolved prohibited-action set in 0010 and does not specify treatment of unavailable/partial controls.",
+      "required_revision": "Resolve 0010 and define control-coverage and unavailable-control disclosure semantics.",
+      "open_question_ids": [
+        "Q06"
+      ],
+      "baseline_record_checksum": "sha256:5e1c538576d5f43be70d8dde970ff791c89c4117cccc487442bb69f6e33ec791",
+      "reviewed_record_checksum": "sha256:5e1c538576d5f43be70d8dde970ff791c89c4117cccc487442bb69f6e33ec791",
+      "criteria": {
+        "precision": {
+          "result": "unresolved",
+          "reason": "The control-reference obligation depends on the unresolved prohibited-action set in 0010 and does not specify treatment of unavailable/partial controls."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The normative actor is the provider making the scoped declaration."
+        },
+        "applicability": {
+          "result": "unresolved",
+          "reason": "Description-record applicability is explicit, but Q01/Q12 require an authorized first-release scope decision; local issues are listed separately."
+        },
+        "inspectability": {
+          "result": "unresolved",
+          "reason": "Prohibition-to-control links are inspectable only once the prohibition set and control treatment are defined."
+        },
+        "duplication": {
+          "result": "acceptable",
+          "reason": "No identical normative statement or identical primary obligation was found; related obligations inspect different records or relationships."
+        },
+        "breadth": {
+          "result": "unresolved",
+          "reason": "The content review is limited to provider description records; no universal runtime, safety or legal assurance is implied."
+        },
+        "narrowness": {
+          "result": "unresolved",
+          "reason": "A documentation-only baseline may be too narrow for the first OAS standard; Q12 remains a global scope gate."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Describing standards information stays within OAS; it does not issue Registry records, change system permissions or determine Trust Bureau opinion."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "No assessment result, certification scheme or conformance score is introduced; evidence presence remains NOT_EVALUATED."
+        },
+        "baseline_suitability": {
+          "result": "unresolved",
+          "reason": "Content disposition is HOLD; institutional authorization, global blockers and any revision re-review remain separate release gates."
+        }
+      },
+      "release_eligible": false
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0012",
+      "domain_id": "OAS-1-D06",
+      "title": "Human authority and intervention",
+      "decision": "HOLD",
+      "reason": "The disjunction oversee/override/stop leaves which interventions must exist unclear. Documentation scope does not settle applicability for systems lacking an intervention interface.",
+      "required_revision": "Define intervention applicability, unavailable functions, role authority and the boundary between documentation and runtime obligations.",
+      "open_question_ids": [
+        "Q07"
+      ],
+      "baseline_record_checksum": "sha256:8b99e53a50b7ef07b35686bf42d9ba52d22a33b1c38481459d9dd9a9e9475113",
+      "reviewed_record_checksum": "sha256:8b99e53a50b7ef07b35686bf42d9ba52d22a33b1c38481459d9dd9a9e9475113",
+      "criteria": {
+        "precision": {
+          "result": "unresolved",
+          "reason": "The disjunction oversee/override/stop leaves which interventions must exist unclear. Documentation scope does not settle applicability for systems lacking an intervention interface."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The normative actor is the provider making the scoped declaration."
+        },
+        "applicability": {
+          "result": "unresolved",
+          "reason": "Description-record applicability is explicit, but Q01/Q12 require an authorized first-release scope decision; local issues are listed separately."
+        },
+        "inspectability": {
+          "result": "unresolved",
+          "reason": "A role/interface can be listed without establishing which intervention obligations apply."
+        },
+        "duplication": {
+          "result": "acceptable",
+          "reason": "No identical normative statement or identical primary obligation was found; related obligations inspect different records or relationships."
+        },
+        "breadth": {
+          "result": "unresolved",
+          "reason": "The content review is limited to provider description records; no universal runtime, safety or legal assurance is implied."
+        },
+        "narrowness": {
+          "result": "unresolved",
+          "reason": "A documentation-only baseline may be too narrow for the first OAS standard; Q12 remains a global scope gate."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Describing standards information stays within OAS; it does not issue Registry records, change system permissions or determine Trust Bureau opinion."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "No assessment result, certification scheme or conformance score is introduced; evidence presence remains NOT_EVALUATED."
+        },
+        "baseline_suitability": {
+          "result": "unresolved",
+          "reason": "Content disposition is HOLD; institutional authorization, global blockers and any revision re-review remain separate release gates."
+        }
+      },
+      "release_eligible": false
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0013",
+      "domain_id": "OAS-1-D06",
+      "title": "Escalation path",
+      "decision": "HOLD",
+      "reason": "Escalation triggers and destinations are valid concepts, but the no-escalation case and applicability of a receiving human role are unresolved with 0012.",
+      "required_revision": "Define escalation applicability and absent-trigger/destination treatment, without inventing latency rules.",
+      "open_question_ids": [
+        "Q07"
+      ],
+      "baseline_record_checksum": "sha256:c96eb954daeec7bfdecb7dc0fd109be0eb4c9ed91dc9d4e3f8ee1dabdbedfb7d",
+      "reviewed_record_checksum": "sha256:c96eb954daeec7bfdecb7dc0fd109be0eb4c9ed91dc9d4e3f8ee1dabdbedfb7d",
+      "criteria": {
+        "precision": {
+          "result": "unresolved",
+          "reason": "Escalation triggers and destinations are valid concepts, but the no-escalation case and applicability of a receiving human role are unresolved with 0012."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The normative actor is the provider making the scoped declaration."
+        },
+        "applicability": {
+          "result": "unresolved",
+          "reason": "Description-record applicability is explicit, but Q01/Q12 require an authorized first-release scope decision; local issues are listed separately."
+        },
+        "inspectability": {
+          "result": "unresolved",
+          "reason": "A trigger/destination record is inspectable, but its required applicability is not settled."
+        },
+        "duplication": {
+          "result": "acceptable",
+          "reason": "No identical normative statement or identical primary obligation was found; related obligations inspect different records or relationships."
+        },
+        "breadth": {
+          "result": "unresolved",
+          "reason": "The content review is limited to provider description records; no universal runtime, safety or legal assurance is implied."
+        },
+        "narrowness": {
+          "result": "unresolved",
+          "reason": "A documentation-only baseline may be too narrow for the first OAS standard; Q12 remains a global scope gate."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Describing standards information stays within OAS; it does not issue Registry records, change system permissions or determine Trust Bureau opinion."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "No assessment result, certification scheme or conformance score is introduced; evidence presence remains NOT_EVALUATED."
+        },
+        "baseline_suitability": {
+          "result": "unresolved",
+          "reason": "Content disposition is HOLD; institutional authorization, global blockers and any revision re-review remain separate release gates."
+        }
+      },
+      "release_eligible": false
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0014",
+      "domain_id": "OAS-1-D07",
+      "title": "Verification and monitoring plan",
+      "decision": "APPROVE",
+      "reason": "Explicitly documents intended verification and monitoring methods. It creates a plan requirement, not a passing test or minimum performance score; adequacy of the baseline remains Q08/Q12.",
+      "required_revision": "None.",
+      "open_question_ids": [
+        "Q08"
+      ],
+      "baseline_record_checksum": "sha256:eef8a364d2266257b0d5873d8b4d23e4405658d460e8fd8ebdfcadcf7287a370",
+      "reviewed_record_checksum": "sha256:eef8a364d2266257b0d5873d8b4d23e4405658d460e8fd8ebdfcadcf7287a370",
+      "criteria": {
+        "precision": {
+          "result": "acceptable",
+          "reason": "Explicitly documents intended verification and monitoring methods. It creates a plan requirement, not a passing test or minimum performance score; adequacy of the baseline remains Q08/Q12."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The normative actor is the provider making the scoped declaration."
+        },
+        "applicability": {
+          "result": "unresolved",
+          "reason": "Description-record applicability is explicit, but Q01/Q12 require an authorized first-release scope decision; local issues are listed separately."
+        },
+        "inspectability": {
+          "result": "acceptable",
+          "reason": "Inspect named methods/measures in a plan; plans and unexecuted tests are not evaluation results."
+        },
+        "duplication": {
+          "result": "acceptable",
+          "reason": "No identical normative statement or identical primary obligation was found; related obligations inspect different records or relationships."
+        },
+        "breadth": {
+          "result": "acceptable",
+          "reason": "The content review is limited to provider description records; no universal runtime, safety or legal assurance is implied."
+        },
+        "narrowness": {
+          "result": "unresolved",
+          "reason": "A documentation-only baseline may be too narrow for the first OAS standard; Q12 remains a global scope gate."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Describing standards information stays within OAS; it does not issue Registry records, change system permissions or determine Trust Bureau opinion."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "No assessment result, certification scheme or conformance score is introduced; evidence presence remains NOT_EVALUATED."
+        },
+        "baseline_suitability": {
+          "result": "acceptable",
+          "reason": "Content disposition is APPROVE; institutional authorization, global blockers and any revision re-review remain separate release gates."
+        }
+      },
+      "release_eligible": false
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0015",
+      "domain_id": "OAS-1-D07",
+      "title": "Evidence expectations and references",
+      "decision": "HOLD",
+      "reason": "Evidence typing is provider-defined and overlaps the proposed declaration schema's evidence-reference obligation. Acceptable evidence semantics, accessibility and self-reference need a defined schema migration.",
+      "required_revision": "Align evidence types and requirement-to-evidence linkage with the approved declaration contract; address self-reference and private evidence.",
+      "open_question_ids": [
+        "Q08"
+      ],
+      "baseline_record_checksum": "sha256:8b484f7d8e5315d0783babb1b65ce2bdf3f85290c14d1296bd7b149e26dd47cf",
+      "reviewed_record_checksum": "sha256:8b484f7d8e5315d0783babb1b65ce2bdf3f85290c14d1296bd7b149e26dd47cf",
+      "criteria": {
+        "precision": {
+          "result": "unresolved",
+          "reason": "Evidence typing is provider-defined and overlaps the proposed declaration schema's evidence-reference obligation. Acceptable evidence semantics, accessibility and self-reference need a defined schema migration."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The normative actor is the provider making the scoped declaration."
+        },
+        "applicability": {
+          "result": "unresolved",
+          "reason": "Description-record applicability is explicit, but Q01/Q12 require an authorized first-release scope decision; local issues are listed separately."
+        },
+        "inspectability": {
+          "result": "unresolved",
+          "reason": "Evidence references are observable but their required typing/linkage semantics are immature."
+        },
+        "duplication": {
+          "result": "unresolved",
+          "reason": "Potential overlap is identified in the disposition and needs scope clarification, not automatic rejection."
+        },
+        "breadth": {
+          "result": "unresolved",
+          "reason": "The content review is limited to provider description records; no universal runtime, safety or legal assurance is implied."
+        },
+        "narrowness": {
+          "result": "unresolved",
+          "reason": "A documentation-only baseline may be too narrow for the first OAS standard; Q12 remains a global scope gate."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Describing standards information stays within OAS; it does not issue Registry records, change system permissions or determine Trust Bureau opinion."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "No assessment result, certification scheme or conformance score is introduced; evidence presence remains NOT_EVALUATED."
+        },
+        "baseline_suitability": {
+          "result": "unresolved",
+          "reason": "Content disposition is HOLD; institutional authorization, global blockers and any revision re-review remain separate release gates."
+        }
+      },
+      "release_eligible": false
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0016",
+      "domain_id": "OAS-1-D08",
+      "title": "Version and lifecycle description",
+      "decision": "HOLD",
+      "reason": "A provider-defined lifecycle state without a referenced vocabulary has no reproducible interpretation. The version field also overlaps identity/provenance, though lifecycle description is a legitimate distinct concept.",
+      "required_revision": "Define provider lifecycle vocabulary/reference semantics separately from Registry lifecycle.",
+      "open_question_ids": [
+        "Q09"
+      ],
+      "baseline_record_checksum": "sha256:a7efd09ad1d373dd5b8e5a835c5170b8c0a20a612407ac734cdd0d7e02770e4d",
+      "reviewed_record_checksum": "sha256:a7efd09ad1d373dd5b8e5a835c5170b8c0a20a612407ac734cdd0d7e02770e4d",
+      "criteria": {
+        "precision": {
+          "result": "unresolved",
+          "reason": "A provider-defined lifecycle state without a referenced vocabulary has no reproducible interpretation. The version field also overlaps identity/provenance, though lifecycle description is a legitimate distinct concept."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The normative actor is the provider making the scoped declaration."
+        },
+        "applicability": {
+          "result": "unresolved",
+          "reason": "Description-record applicability is explicit, but Q01/Q12 require an authorized first-release scope decision; local issues are listed separately."
+        },
+        "inspectability": {
+          "result": "unresolved",
+          "reason": "State presence is inspectable, but an unqualified state value cannot be interpreted consistently."
+        },
+        "duplication": {
+          "result": "unresolved",
+          "reason": "Potential overlap is identified in the disposition and needs scope clarification, not automatic rejection."
+        },
+        "breadth": {
+          "result": "unresolved",
+          "reason": "The content review is limited to provider description records; no universal runtime, safety or legal assurance is implied."
+        },
+        "narrowness": {
+          "result": "unresolved",
+          "reason": "A documentation-only baseline may be too narrow for the first OAS standard; Q12 remains a global scope gate."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Describing standards information stays within OAS; it does not issue Registry records, change system permissions or determine Trust Bureau opinion."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "No assessment result, certification scheme or conformance score is introduced; evidence presence remains NOT_EVALUATED."
+        },
+        "baseline_suitability": {
+          "result": "unresolved",
+          "reason": "Content disposition is HOLD; institutional authorization, global blockers and any revision re-review remain separate release gates."
+        }
+      },
+      "release_eligible": false
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0017",
+      "domain_id": "OAS-1-D08",
+      "title": "Retirement accountability",
+      "decision": "APPROVE WITH REVISION",
+      "reason": "Role responsibility and retirement-process documentation are valid and bounded. Make the role/process relationship explicit without adding execution or Registry retirement authority.",
+      "required_revision": "Clarify the role responsible for retiring the described version and name the retirement process.",
+      "open_question_ids": [
+        "Q09"
+      ],
+      "baseline_record_checksum": "sha256:d23600c0c87f9eef38049d0ea38597fb3c5677bef22cc59ebadfcbee3816d0bf",
+      "reviewed_record_checksum": "sha256:6f3339dcad396b7f226b882e752a10bf18162716fbf2fe75e61127b06d4d4521",
+      "criteria": {
+        "precision": {
+          "result": "needs_revision",
+          "reason": "Role responsibility and retirement-process documentation are valid and bounded. Make the role/process relationship explicit without adding execution or Registry retirement authority."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The normative actor is the provider making the scoped declaration."
+        },
+        "applicability": {
+          "result": "unresolved",
+          "reason": "Description-record applicability is explicit, but Q01/Q12 require an authorized first-release scope decision; local issues are listed separately."
+        },
+        "inspectability": {
+          "result": "acceptable",
+          "reason": "Inspect a responsible role and process; do not infer operational deletion or Registry lifecycle changes."
+        },
+        "duplication": {
+          "result": "acceptable",
+          "reason": "No identical normative statement or identical primary obligation was found; related obligations inspect different records or relationships."
+        },
+        "breadth": {
+          "result": "acceptable",
+          "reason": "The content review is limited to provider description records; no universal runtime, safety or legal assurance is implied."
+        },
+        "narrowness": {
+          "result": "unresolved",
+          "reason": "A documentation-only baseline may be too narrow for the first OAS standard; Q12 remains a global scope gate."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Describing standards information stays within OAS; it does not issue Registry records, change system permissions or determine Trust Bureau opinion."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "No assessment result, certification scheme or conformance score is introduced; evidence presence remains NOT_EVALUATED."
+        },
+        "baseline_suitability": {
+          "result": "needs_revision",
+          "reason": "Content disposition is APPROVE WITH REVISION; institutional authorization, global blockers and any revision re-review remain separate release gates."
+        }
+      },
+      "release_eligible": false
+    }
+  ],
+  "revisions": [
+    {
+      "requirement_id": "OAS-1-REQ-0001",
+      "change_type": "editorial_clarification",
+      "material_normative_change": false,
+      "changes": [
+        {
+          "field": "title",
+          "before": "Identity and responsible owner",
+          "after": "Identity and responsible party"
+        },
+        {
+          "field": "evidence_expectations",
+          "before": [
+            "Identity/ownership record"
+          ],
+          "after": [
+            "Identity/responsibility record"
+          ]
+        },
+        {
+          "field": "verification_notes",
+          "before": "Inspect the record for a nonempty system identifier and named responsible party; this does not verify legal ownership.",
+          "after": "Inspect the record for a nonempty system identifier and named responsible party; this does not verify legal ownership or Registry issuance."
+        }
+      ],
+      "meaning_preserved_reason": "Align title/evidence/verification metadata; do not change the normative obligation.",
+      "reapproval_required": true
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0005",
+      "change_type": "editorial_clarification",
+      "material_normative_change": false,
+      "changes": [
+        {
+          "field": "normative_text",
+          "before": "The provider MUST record a review of the documented purpose and boundaries when the declared system version changes its capabilities, permissions, operating context or intended use.",
+          "after": "The provider MUST record a review of the documented purpose and boundaries when the capabilities, permissions, operating context or intended use of the system version covered by the declaration change."
+        }
+      ],
+      "meaning_preserved_reason": "Clarify the grammatical subject of the change trigger; preserve all four triggers.",
+      "reapproval_required": true
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0017",
+      "change_type": "editorial_clarification",
+      "material_normative_change": false,
+      "changes": [
+        {
+          "field": "normative_text",
+          "before": "The provider MUST identify the responsible role and the process for retiring the described system version in its description record.",
+          "after": "The provider MUST identify the role responsible for retiring the described system version and the retirement process in its description record."
+        }
+      ],
+      "meaning_preserved_reason": "Clarify the role responsible for retiring the described version and name the retirement process.",
+      "reapproval_required": true
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "Q01",
+      "classification": "BLOCKING",
+      "decision": "The source consistently targets description records, but choosing that scope as the first OAS baseline is an institutional scope decision not established by this repository review.",
+      "blocked_gate_or_deferred_scope": "first_release_scope",
+      "affected_requirement_ids": [
+        "OAS-1-REQ-0001",
+        "OAS-1-REQ-0002",
+        "OAS-1-REQ-0003",
+        "OAS-1-REQ-0004",
+        "OAS-1-REQ-0005",
+        "OAS-1-REQ-0006",
+        "OAS-1-REQ-0007",
+        "OAS-1-REQ-0008",
+        "OAS-1-REQ-0009",
+        "OAS-1-REQ-0010",
+        "OAS-1-REQ-0011",
+        "OAS-1-REQ-0012",
+        "OAS-1-REQ-0013",
+        "OAS-1-REQ-0014",
+        "OAS-1-REQ-0015",
+        "OAS-1-REQ-0016",
+        "OAS-1-REQ-0017"
+      ],
+      "source_change": "No scope adoption is recorded.",
+      "source_changes": []
+    },
+    {
+      "question_id": "Q02",
+      "classification": "DEFERRED",
+      "decision": "All candidates have empty risk applicability and R0–R4 remains informative. Classification thresholds can be excluded from this proposed documentation subset without weakening an included risk-conditioned rule, because none exists.",
+      "blocked_gate_or_deferred_scope": "risk_conditioned_future_requirements",
+      "affected_requirement_ids": [
+        "OAS-1-REQ-0005"
+      ],
+      "source_change": "No risk rules or thresholds added; not a blocker to the considered subset.",
+      "source_changes": []
+    },
+    {
+      "question_id": "Q03",
+      "classification": "DEFERRED",
+      "decision": "The responsibility/ownership label mismatch is clarified editorially, but multiple responsible parties and organization identifier semantics remain unresolved. Keep revised 0001 out pending re-review. This local deferral excludes the affected obligation from the consideration subset; Q12 still blocks any claim of adequate D01 coverage.",
+      "blocked_gate_or_deferred_scope": "revision_pending_responsibility",
+      "affected_requirement_ids": [
+        "OAS-1-REQ-0001"
+      ],
+      "source_change": "Requirement 0001 title/evidence/verification metadata clarified; canonical Q03 text/status remain unchanged and open.",
+      "source_changes": []
+    },
+    {
+      "question_id": "Q04",
+      "classification": "DEFERRED",
+      "decision": "Provenance granularity remains unresolved. Hold 0002 and 0007; exclude them from the considered subset. This deferral cannot imply coherent full-domain release scope; Q12 separately blocks that decision.",
+      "blocked_gate_or_deferred_scope": "held_provenance_dependencies",
+      "affected_requirement_ids": [
+        "OAS-1-REQ-0002",
+        "OAS-1-REQ-0007"
+      ],
+      "source_change": "No provenance requirement enters an RC.",
+      "source_changes": []
+    },
+    {
+      "question_id": "Q05",
+      "classification": "BLOCKING",
+      "decision": "The considered 0006/0008/0009 subset still lacks an agreed inventory-completeness/dynamic-tool scope and exception boundary. A content-level APPROVE does not resolve that release contract.",
+      "blocked_gate_or_deferred_scope": "applicability_and_completeness",
+      "affected_requirement_ids": [
+        "OAS-1-REQ-0006",
+        "OAS-1-REQ-0007",
+        "OAS-1-REQ-0008",
+        "OAS-1-REQ-0009"
+      ],
+      "source_change": "No unresolved completeness rule is filled in.",
+      "source_changes": []
+    },
+    {
+      "question_id": "Q06",
+      "classification": "DEFERRED",
+      "decision": "Hold 0010 and 0011 and exclude prohibition/guardrail semantics pending a real policy authority and applicability decision. No included obligation depends on this set; the D05 coverage gap remains a Q12 scope blocker.",
+      "blocked_gate_or_deferred_scope": "held_safety_policy",
+      "affected_requirement_ids": [
+        "OAS-1-REQ-0010",
+        "OAS-1-REQ-0011"
+      ],
+      "source_change": "No safety-policy authority is invented.",
+      "source_changes": []
+    },
+    {
+      "question_id": "Q07",
+      "classification": "DEFERRED",
+      "decision": "Hold 0012/0013. Do not introduce undocumented intervention applicability, latency or escalation defaults. Their exclusion removes the local dependency for the considered subset, but leaves a D06 scope gap under Q12.",
+      "blocked_gate_or_deferred_scope": "held_human_control",
+      "affected_requirement_ids": [
+        "OAS-1-REQ-0012",
+        "OAS-1-REQ-0013"
+      ],
+      "source_change": "No runtime human-control mandate is inferred.",
+      "source_changes": []
+    },
+    {
+      "question_id": "Q08",
+      "classification": "BLOCKING",
+      "decision": "0014 remains in the considered subset. Whether a plan-only obligation suffices and how declarations link evidence require an approved contract boundary. 0015 remains held.",
+      "blocked_gate_or_deferred_scope": "evidence_and_declaration_compatibility",
+      "affected_requirement_ids": [
+        "OAS-1-REQ-0014",
+        "OAS-1-REQ-0015"
+      ],
+      "source_change": "No evidence sufficiency or conformance is inferred.",
+      "source_changes": []
+    },
+    {
+      "question_id": "Q09",
+      "classification": "DEFERRED",
+      "decision": "Hold 0016; keep revised 0017 out until re-reviewed. Provider lifecycle vocabulary and record retention can be deferred only by excluding these obligations from the considered subset. Q12 retains the D08 coverage issue.",
+      "blocked_gate_or_deferred_scope": "held_lifecycle_scope",
+      "affected_requirement_ids": [
+        "OAS-1-REQ-0016",
+        "OAS-1-REQ-0017"
+      ],
+      "source_change": "No Registry lifecycle vocabulary is imported.",
+      "source_changes": []
+    },
+    {
+      "question_id": "Q10",
+      "classification": "BLOCKING",
+      "decision": "The repository policy explicitly leaves the authorized decision-maker and procedure unestablished. This task authorizes repository review work, not an invented institutional approval or RC issuance record.",
+      "blocked_gate_or_deferred_scope": "governance_authorization",
+      "affected_requirement_ids": [
+        "OAS-1-REQ-0001",
+        "OAS-1-REQ-0002",
+        "OAS-1-REQ-0003",
+        "OAS-1-REQ-0004",
+        "OAS-1-REQ-0005",
+        "OAS-1-REQ-0006",
+        "OAS-1-REQ-0007",
+        "OAS-1-REQ-0008",
+        "OAS-1-REQ-0009",
+        "OAS-1-REQ-0010",
+        "OAS-1-REQ-0011",
+        "OAS-1-REQ-0012",
+        "OAS-1-REQ-0013",
+        "OAS-1-REQ-0014",
+        "OAS-1-REQ-0015",
+        "OAS-1-REQ-0016",
+        "OAS-1-REQ-0017"
+      ],
+      "source_change": "No human names, votes, signatures, quorum or approving authority fabricated.",
+      "source_changes": []
+    },
+    {
+      "question_id": "Q11",
+      "classification": "BLOCKING",
+      "decision": "All seven legacy mappings remain ambiguous or unmapped. No approved non-equivalence/migration exclusion exists under the current proposed release policy.",
+      "blocked_gate_or_deferred_scope": "taxonomy_and_report_migration",
+      "affected_requirement_ids": [
+        "OAS-1-REQ-0001",
+        "OAS-1-REQ-0002",
+        "OAS-1-REQ-0003",
+        "OAS-1-REQ-0004",
+        "OAS-1-REQ-0005",
+        "OAS-1-REQ-0006",
+        "OAS-1-REQ-0007",
+        "OAS-1-REQ-0008",
+        "OAS-1-REQ-0009",
+        "OAS-1-REQ-0010",
+        "OAS-1-REQ-0011",
+        "OAS-1-REQ-0012",
+        "OAS-1-REQ-0013",
+        "OAS-1-REQ-0014",
+        "OAS-1-REQ-0015",
+        "OAS-1-REQ-0016",
+        "OAS-1-REQ-0017"
+      ],
+      "source_change": "Existing lexical Human Oversight alias is preserved; no new mapping approved.",
+      "source_changes": []
+    },
+    {
+      "question_id": "Q12",
+      "classification": "BLOCKING",
+      "decision": "Only six content-approved requirements remain for consideration, covering D02/D03/D04/D07. A coherent first OAS standard with explicit treatment of missing domains is not established.",
+      "blocked_gate_or_deferred_scope": "release_scope_adequacy",
+      "affected_requirement_ids": [
+        "OAS-1-REQ-0001",
+        "OAS-1-REQ-0002",
+        "OAS-1-REQ-0003",
+        "OAS-1-REQ-0004",
+        "OAS-1-REQ-0005",
+        "OAS-1-REQ-0006",
+        "OAS-1-REQ-0007",
+        "OAS-1-REQ-0008",
+        "OAS-1-REQ-0009",
+        "OAS-1-REQ-0010",
+        "OAS-1-REQ-0011",
+        "OAS-1-REQ-0012",
+        "OAS-1-REQ-0013",
+        "OAS-1-REQ-0014",
+        "OAS-1-REQ-0015",
+        "OAS-1-REQ-0016",
+        "OAS-1-REQ-0017"
+      ],
+      "source_change": "No completeness claim or arbitrary minimum count substituted for scope review.",
+      "source_changes": []
+    }
+  ],
+  "domain_mapping_decisions": [
+    {
+      "namespace": "shs-oas-reporting-v1",
+      "label": "Identity and Purpose",
+      "decision": "AMBIGUOUS — HOLD",
+      "reason": "Concept may span domains or add unspecified obligations; suggested related concepts are not approved equivalence. Related concepts do not establish equivalence; this review has no defensible complete mapping.",
+      "canonical_domain_ids": [],
+      "source_change": "None; resolver and canonical mapping documentation retain the explicit hold."
+    },
+    {
+      "namespace": "shs-oas-reporting-v1",
+      "label": "Autonomy and Agency",
+      "decision": "UNMAPPED — HOLD",
+      "reason": "No single canonical domain with equivalent documented meaning exists. Related concepts do not establish equivalence; this review has no defensible complete mapping.",
+      "canonical_domain_ids": [],
+      "source_change": "None; resolver and canonical mapping documentation retain the explicit hold."
+    },
+    {
+      "namespace": "shs-oas-reporting-v1",
+      "label": "Safety and Risk",
+      "decision": "AMBIGUOUS — HOLD",
+      "reason": "Concept may span domains or add unspecified obligations; suggested related concepts are not approved equivalence. Related concepts do not establish equivalence; this review has no defensible complete mapping.",
+      "canonical_domain_ids": [],
+      "source_change": "None; resolver and canonical mapping documentation retain the explicit hold."
+    },
+    {
+      "namespace": "shs-oas-reporting-v1",
+      "label": "Transparency and Explainability",
+      "decision": "AMBIGUOUS — HOLD",
+      "reason": "Concept may span domains or add unspecified obligations; suggested related concepts are not approved equivalence. Related concepts do not establish equivalence; this review has no defensible complete mapping.",
+      "canonical_domain_ids": [],
+      "source_change": "None; resolver and canonical mapping documentation retain the explicit hold."
+    },
+    {
+      "namespace": "shs-oas-reporting-v1",
+      "label": "Data and Privacy",
+      "decision": "AMBIGUOUS — HOLD",
+      "reason": "Concept may span domains or add unspecified obligations; suggested related concepts are not approved equivalence. Related concepts do not establish equivalence; this review has no defensible complete mapping.",
+      "canonical_domain_ids": [],
+      "source_change": "None; resolver and canonical mapping documentation retain the explicit hold."
+    },
+    {
+      "namespace": "shs-oas-reporting-v1",
+      "label": "Interoperability",
+      "decision": "UNMAPPED — HOLD",
+      "reason": "No single canonical domain with equivalent documented meaning exists. Related concepts do not establish equivalence; this review has no defensible complete mapping.",
+      "canonical_domain_ids": [],
+      "source_change": "None; resolver and canonical mapping documentation retain the explicit hold."
+    },
+    {
+      "namespace": "shs-oas-reporting-v1",
+      "label": "Accountability and Governance",
+      "decision": "AMBIGUOUS — HOLD",
+      "reason": "Concept may span domains or add unspecified obligations; suggested related concepts are not approved equivalence. Related concepts do not establish equivalence; this review has no defensible complete mapping.",
+      "canonical_domain_ids": [],
+      "source_change": "None; resolver and canonical mapping documentation retain the explicit hold."
+    }
+  ],
+  "evaluation_status": "NOT_EVALUATED"
+}

@@ -4,7 +4,7 @@ All candidates await review. A source concept does not approve its authored inte
 
 | Requirement | Proposed scope | Open questions | Decision |
 | --- | --- | --- | --- |
-| OAS-1-REQ-0001 — Identity and responsible owner | Description-record obligation, runtime effectiveness unclaimed | Q01, Q03; Q10; Q12 | PENDING |
+| OAS-1-REQ-0001 — Identity and responsible party | Description-record obligation, runtime effectiveness unclaimed | Q01, Q03; Q10; Q12 | PENDING |
 | OAS-1-REQ-0002 — Version provenance reference | Description-record obligation, runtime effectiveness unclaimed | Q01, Q04; Q10; Q12 | PENDING |
 | OAS-1-REQ-0003 — Intended purpose | Description-record obligation, runtime effectiveness unclaimed | Q01; Q10; Q12 | PENDING |
 | OAS-1-REQ-0004 — Operating boundaries | Description-record obligation, runtime effectiveness unclaimed | Q01; Q10; Q12 | PENDING |

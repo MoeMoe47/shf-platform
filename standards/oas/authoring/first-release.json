@@ -15,7 +15,7 @@
     {
       "requirement_id": "OAS-1-REQ-0001",
       "standard_id": "OAS-1",
-      "title": "Identity and responsible owner",
+      "title": "Identity and responsible party",
       "normative_text": "The provider MUST include a system identifier and the name of the person or organization responsible for the described system in the description record for each system version covered by the declaration.",
       "domain_id": "OAS-1-D01",
       "applicability": "Provider-authored description records for the specific system version and operating scope named in a provider declaration; this candidate does not impose a runtime effectiveness result.",
@@ -24,9 +24,9 @@
       "rationale": "Bind a declaration to a described subject and responsible party.",
       "implementation_notes": "Proposed document obligation derived from existing OAS concepts. Review the stated open questions before adoption; do not infer complete or effective implementation from a description.",
       "evidence_expectations": [
-        "Identity/ownership record"
+        "Identity/responsibility record"
       ],
-      "verification_notes": "Inspect the record for a nonempty system identifier and named responsible party; this does not verify legal ownership.",
+      "verification_notes": "Inspect the record for a nonempty system identifier and named responsible party; this does not verify legal ownership or Registry issuance.",
       "version_introduced": null,
       "proposed_version_introduced": "0.0.0-public-review.2",
       "release_id": null,
@@ -208,7 +208,7 @@
       "requirement_id": "OAS-1-REQ-0005",
       "standard_id": "OAS-1",
       "title": "Purpose and boundary review",
-      "normative_text": "The provider MUST record a review of the documented purpose and boundaries when the declared system version changes its capabilities, permissions, operating context or intended use.",
+      "normative_text": "The provider MUST record a review of the documented purpose and boundaries when the capabilities, permissions, operating context or intended use of the system version covered by the declaration change.",
       "domain_id": "OAS-1-D02",
       "applicability": "Provider-authored description records for the specific system version and operating scope named in a provider declaration; this candidate does not impose a runtime effectiveness result.",
       "requirement_level": "MUST",
@@ -795,7 +795,7 @@
       "requirement_id": "OAS-1-REQ-0017",
       "standard_id": "OAS-1",
       "title": "Retirement accountability",
-      "normative_text": "The provider MUST identify the responsible role and the process for retiring the described system version in its description record.",
+      "normative_text": "The provider MUST identify the role responsible for retiring the described system version and the retirement process in its description record.",
       "domain_id": "OAS-1-D08",
       "applicability": "Provider-authored description records for the specific system version and operating scope named in a provider declaration; this candidate does not impose a runtime effectiveness result.",
       "requirement_level": "MUST",

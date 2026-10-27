@@ -123,7 +123,12 @@
     "oas:first:generate": "node scripts/oas-first-release.mjs generate",
     "oas:first:check": "node scripts/oas-first-release.mjs check",
     "oas:first:test": "node --test tests/oasFirstRelease.test.mjs",
-    "oas:first:typecheck": "tsc -p tests/oas-first-release.tsconfig.json"
+    "oas:first:typecheck": "tsc -p tests/oas-first-release.tsconfig.json",
+    "oas:governance:validate": "node scripts/oas-governance-review.mjs validate",
+    "oas:governance:generate": "node scripts/oas-governance-review.mjs generate",
+    "oas:governance:check": "node scripts/oas-governance-review.mjs check",
+    "oas:governance:test": "node --test tests/oasGovernanceReview.test.mjs",
+    "oas:governance:typecheck": "tsc -p tests/oas-governance.tsconfig.json"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.0",

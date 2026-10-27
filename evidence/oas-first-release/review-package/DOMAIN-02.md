@@ -1,8 +1,8 @@
 # Purpose & Boundaries — individual requirement review
 
-Generated from `standards/oas/authoring/first-release.json`; source digest `sha256:b617e224c934638424cb3c693cb04952c443e28557b23ccc0fe77928affa1c04`. Edit the source, then run oas:first:generate.
+Generated from `standards/oas/authoring/first-release.json`; source digest `sha256:8830d45169bc0c494ff0d6ac66cf95d358ac5efb69b510b658997d4aaf4abaad`. Edit the source, then run oas:first:generate.
 
-REVIEW ONLY — proposed obligations, no adopted release, no certification or conformance determination. Candidate version 0.0.0-public-review.2 is reserved for a future reviewed draft, not a published pin.
+REVIEW ONLY — proposed obligations, no adopted release, no certification or conformance determination. Approval fields refer to authorized OAS content approval; repository technical dispositions are recorded separately in standards/oas/governance/first-release-review.json and do not populate those fields. Candidate version 0.0.0-public-review.2 is reserved for a future reviewed draft, not a published pin.
 
 Approve/reject each ID against its statement checksum and list any required changes. No decision below is prefilled. Decision records require an authorized reviewer and immutable record reference.
 
@@ -67,7 +67,7 @@ Supersedes: none. Superseded by: none.
 
 **CANDIDATE — NOT ADOPTED.**
 
-The provider MUST record a review of the documented purpose and boundaries when the declared system version changes its capabilities, permissions, operating context or intended use.
+The provider MUST record a review of the documented purpose and boundaries when the capabilities, permissions, operating context or intended use of the system version covered by the declaration change.
 
 Applicability: Provider-authored description records for the specific system version and operating scope named in a provider declaration; this candidate does not impose a runtime effectiveness result.
 

@@ -1,0 +1,15 @@
+# Domain mapping decisions
+
+This is the repository technical review requested by the user. APPROVE is a content disposition, not manufactured institutional authorization, adoption or RC issuance. Authorized OAS approval fields remain null. No RC exists.
+
+| Legacy reporting label | Decision | Canonical mapping | Reason | Source change |
+| --- | --- | --- | --- | --- |
+| Identity and Purpose | AMBIGUOUS — HOLD | none | Concept may span domains or add unspecified obligations; suggested related concepts are not approved equivalence. Related concepts do not establish equivalence; this review has no defensible complete mapping. | None; resolver and canonical mapping documentation retain the explicit hold. |
+| Autonomy and Agency | UNMAPPED — HOLD | none | No single canonical domain with equivalent documented meaning exists. Related concepts do not establish equivalence; this review has no defensible complete mapping. | None; resolver and canonical mapping documentation retain the explicit hold. |
+| Safety and Risk | AMBIGUOUS — HOLD | none | Concept may span domains or add unspecified obligations; suggested related concepts are not approved equivalence. Related concepts do not establish equivalence; this review has no defensible complete mapping. | None; resolver and canonical mapping documentation retain the explicit hold. |
+| Transparency and Explainability | AMBIGUOUS — HOLD | none | Concept may span domains or add unspecified obligations; suggested related concepts are not approved equivalence. Related concepts do not establish equivalence; this review has no defensible complete mapping. | None; resolver and canonical mapping documentation retain the explicit hold. |
+| Data and Privacy | AMBIGUOUS — HOLD | none | Concept may span domains or add unspecified obligations; suggested related concepts are not approved equivalence. Related concepts do not establish equivalence; this review has no defensible complete mapping. | None; resolver and canonical mapping documentation retain the explicit hold. |
+| Interoperability | UNMAPPED — HOLD | none | No single canonical domain with equivalent documented meaning exists. Related concepts do not establish equivalence; this review has no defensible complete mapping. | None; resolver and canonical mapping documentation retain the explicit hold. |
+| Accountability and Governance | AMBIGUOUS — HOLD | none | Concept may span domains or add unspecified obligations; suggested related concepts are not approved equivalence. Related concepts do not establish equivalence; this review has no defensible complete mapping. | None; resolver and canonical mapping documentation retain the explicit hold. |
+
+No new canonical mapping, alias or deprecation is approved. Existing public labels/D01–D08 remain canonical. The previously recorded lexical Human Oversight → D06 alias remains valid within its namespace; it does not reinterpret report ordinal 05 or assess a historical report. Canonical mapping source and docs/OAS_DOMAIN_MAPPING.md remain unchanged because no new equivalence is supportable.

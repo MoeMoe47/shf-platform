@@ -118,7 +118,12 @@
     "oas:check": "node scripts/oas-catalog.mjs check",
     "oas:test": "node --test tests/oasCanonicalCatalog.test.mjs",
     "oas:typecheck": "tsc -p tests/oas-catalog.tsconfig.json",
-    "oas:build": "vite build --config vite.oas.config.mjs"
+    "oas:build": "vite build --config vite.oas.config.mjs",
+    "oas:first:validate": "node scripts/oas-first-release.mjs validate",
+    "oas:first:generate": "node scripts/oas-first-release.mjs generate",
+    "oas:first:check": "node scripts/oas-first-release.mjs check",
+    "oas:first:test": "node --test tests/oasFirstRelease.test.mjs",
+    "oas:first:typecheck": "tsc -p tests/oas-first-release.tsconfig.json"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.0",

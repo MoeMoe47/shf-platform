@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oas:schema:review:authoring:1",
+  "type": "object",
+  "properties": {
+    "review_schema_version": {
+      "const": "1.0.0"
+    },
+    "standard_id": {
+      "const": "OAS-1"
+    },
+    "baseline_commit": {
+      "const": "35d2bdfd3d8014658789430c2288d20418bc7dcb"
+    },
+    "baseline_release_id": {
+      "const": "OAS-1@0.0.0-public-review.1"
+    },
+    "stage": {
+      "const": "review"
+    },
+    "candidate_version": {
+      "const": "0.0.0-public-review.2"
+    },
+    "published_candidate_release_id": {
+      "type": "null"
+    },
+    "release_candidate_status": {
+      "const": "not_eligible"
+    },
+    "adoption": {
+      "type": "null"
+    },
+    "publication": {
+      "type": "null"
+    },
+    "profiles": {
+      "const": []
+    },
+    "profile_decision": {
+      "const": "no_established_use_case"
+    },
+    "requirements": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:oas:schema:review:requirement:1"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "open_questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "question_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "detail": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scope": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "open",
+              "resolved"
+            ]
+          }
+        },
+        "required": [
+          "question_id",
+          "title",
+          "detail",
+          "scope",
+          "status"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "evaluation_status": {
+      "const": "NOT_EVALUATED"
+    }
+  },
+  "required": [
+    "review_schema_version",
+    "standard_id",
+    "baseline_commit",
+    "baseline_release_id",
+    "stage",
+    "candidate_version",
+    "published_candidate_release_id",
+    "release_candidate_status",
+    "adoption",
+    "publication",
+    "profiles",
+    "profile_decision",
+    "requirements",
+    "open_questions",
+    "evaluation_status"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,931 @@
+{
+  "review_schema_version": "1.0.0",
+  "standard_id": "OAS-1",
+  "baseline_commit": "35d2bdfd3d8014658789430c2288d20418bc7dcb",
+  "baseline_release_id": "OAS-1@0.0.0-public-review.1",
+  "stage": "review",
+  "candidate_version": "0.0.0-public-review.2",
+  "published_candidate_release_id": null,
+  "release_candidate_status": "not_eligible",
+  "adoption": null,
+  "publication": null,
+  "profiles": [],
+  "profile_decision": "no_established_use_case",
+  "requirements": [
+    {
+      "requirement_id": "OAS-1-REQ-0001",
+      "standard_id": "OAS-1",
+      "title": "Identity and responsible owner",
+      "normative_text": "The provider MUST include a system identifier and the name of the person or organization responsible for the described system in the description record for each system version covered by the declaration.",
+      "domain_id": "OAS-1-D01",
+      "applicability": "Provider-authored description records for the specific system version and operating scope named in a provider declaration; this candidate does not impose a runtime effectiveness result.",
+      "requirement_level": "MUST",
+      "risk_levels": [],
+      "rationale": "Bind a declaration to a described subject and responsible party.",
+      "implementation_notes": "Proposed document obligation derived from existing OAS concepts. Review the stated open questions before adoption; do not infer complete or effective implementation from a description.",
+      "evidence_expectations": [
+        "Identity/ownership record"
+      ],
+      "verification_notes": "Inspect the record for a nonempty system identifier and named responsible party; this does not verify legal ownership.",
+      "version_introduced": null,
+      "proposed_version_introduced": "0.0.0-public-review.2",
+      "release_id": null,
+      "status": "candidate",
+      "review_decision": null,
+      "normative_text_reference": {
+        "source_path": "docs/OAS_FIRST_REQUIREMENTS_REVIEW.md",
+        "anchor": "oas-1-req-0001"
+      },
+      "sources": [
+        {
+          "source_revision": "35d2bdfd3d8014658789430c2288d20418bc7dcb",
+          "source_path": "src/pages/oas/OASControlDomainsPage.jsx",
+          "source_section": "DOMAINS / ordinal 01",
+          "source_line": 105,
+          "exact_excerpt": "Establishes clear identity, provenance and ownership for agents, ensuring accountability throughout their lifecycle.",
+          "authority": "descriptive_or_near_normative_not_adopted"
+        }
+      ],
+      "open_question_ids": [
+        "Q01",
+        "Q03"
+      ],
+      "declaration_states": [
+        "applicable",
+        "not_applicable",
+        "declared_satisfied",
+        "not_declared",
+        "unknown"
+      ],
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0002",
+      "standard_id": "OAS-1",
+      "title": "Version provenance reference",
+      "normative_text": "The provider MUST include a provenance reference identifying the source artifact or origin record of the system version covered by the declaration in its description record.",
+      "domain_id": "OAS-1-D01",
+      "applicability": "Provider-authored description records for the specific system version and operating scope named in a provider declaration; this candidate does not impose a runtime effectiveness result.",
+      "requirement_level": "MUST",
+      "risk_levels": [],
+      "rationale": "Make the origin of the described version traceable.",
+      "implementation_notes": "Proposed document obligation derived from existing OAS concepts. Review the stated open questions before adoption; do not infer complete or effective implementation from a description.",
+      "evidence_expectations": [
+        "Provenance record",
+        "Artifact reference"
+      ],
+      "verification_notes": "Inspect whether the reference identifies the described version; provenance truth and authenticity require separate evaluation.",
+      "version_introduced": null,
+      "proposed_version_introduced": "0.0.0-public-review.2",
+      "release_id": null,
+      "status": "candidate",
+      "review_decision": null,
+      "normative_text_reference": {
+        "source_path": "docs/OAS_FIRST_REQUIREMENTS_REVIEW.md",
+        "anchor": "oas-1-req-0002"
+      },
+      "sources": [
+        {
+          "source_revision": "35d2bdfd3d8014658789430c2288d20418bc7dcb",
+          "source_path": "src/pages/oas/OASControlDomainsPage.jsx",
+          "source_section": "DOMAINS / ordinal 01",
+          "source_line": 105,
+          "exact_excerpt": "Establishes clear identity, provenance and ownership for agents, ensuring accountability throughout their lifecycle.",
+          "authority": "descriptive_or_near_normative_not_adopted"
+        }
+      ],
+      "open_question_ids": [
+        "Q01",
+        "Q04"
+      ],
+      "declaration_states": [
+        "applicable",
+        "not_applicable",
+        "declared_satisfied",
+        "not_declared",
+        "unknown"
+      ],
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0003",
+      "standard_id": "OAS-1",
+      "title": "Intended purpose",
+      "normative_text": "The provider MUST document the intended goals and use cases of the system version covered by the declaration in its description record.",
+      "domain_id": "OAS-1-D02",
+      "applicability": "Provider-authored description records for the specific system version and operating scope named in a provider declaration; this candidate does not impose a runtime effectiveness result.",
+      "requirement_level": "MUST",
+      "risk_levels": [],
+      "rationale": "Make intended purpose inspectable.",
+      "implementation_notes": "Proposed document obligation derived from existing OAS concepts. Review the stated open questions before adoption; do not infer complete or effective implementation from a description.",
+      "evidence_expectations": [
+        "Purpose documentation"
+      ],
+      "verification_notes": "Inspect for explicit goals and use cases; a purpose statement does not prove aligned behavior.",
+      "version_introduced": null,
+      "proposed_version_introduced": "0.0.0-public-review.2",
+      "release_id": null,
+      "status": "candidate",
+      "review_decision": null,
+      "normative_text_reference": {
+        "source_path": "docs/OAS_FIRST_REQUIREMENTS_REVIEW.md",
+        "anchor": "oas-1-req-0003"
+      },
+      "sources": [
+        {
+          "source_revision": "35d2bdfd3d8014658789430c2288d20418bc7dcb",
+          "source_path": "src/pages/oas/OASPurposeBoundariesPage.jsx",
+          "source_section": "IN_PRACTICE / Define the agent's purpose",
+          "source_line": 141,
+          "exact_excerpt": "Document the intended goals and use cases.",
+          "authority": "descriptive_or_near_normative_not_adopted"
+        }
+      ],
+      "open_question_ids": [
+        "Q01"
+      ],
+      "declaration_states": [
+        "applicable",
+        "not_applicable",
+        "declared_satisfied",
+        "not_declared",
+        "unknown"
+      ],
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0004",
+      "standard_id": "OAS-1",
+      "title": "Operating boundaries",
+      "normative_text": "The provider MUST document the permitted operating scope and excluded actions or uses of the system version covered by the declaration in its description record.",
+      "domain_id": "OAS-1-D02",
+      "applicability": "Provider-authored description records for the specific system version and operating scope named in a provider declaration; this candidate does not impose a runtime effectiveness result.",
+      "requirement_level": "MUST",
+      "risk_levels": [],
+      "rationale": "Make claimed boundaries distinguishable from capability.",
+      "implementation_notes": "Proposed document obligation derived from existing OAS concepts. Review the stated open questions before adoption; do not infer complete or effective implementation from a description.",
+      "evidence_expectations": [
+        "Scope specification",
+        "Boundary policy"
+      ],
+      "verification_notes": "Inspect for both permitted scope and exclusions; documentation is not enforcement.",
+      "version_introduced": null,
+      "proposed_version_introduced": "0.0.0-public-review.2",
+      "release_id": null,
+      "status": "candidate",
+      "review_decision": null,
+      "normative_text_reference": {
+        "source_path": "docs/OAS_FIRST_REQUIREMENTS_REVIEW.md",
+        "anchor": "oas-1-req-0004"
+      },
+      "sources": [
+        {
+          "source_revision": "35d2bdfd3d8014658789430c2288d20418bc7dcb",
+          "source_path": "src/pages/oas/OASPurposeBoundariesPage.jsx",
+          "source_section": "IN_PRACTICE / Establish boundaries",
+          "source_line": 146,
+          "exact_excerpt": "Specify what the agent can and cannot do.",
+          "authority": "descriptive_or_near_normative_not_adopted"
+        }
+      ],
+      "open_question_ids": [
+        "Q01"
+      ],
+      "declaration_states": [
+        "applicable",
+        "not_applicable",
+        "declared_satisfied",
+        "not_declared",
+        "unknown"
+      ],
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0005",
+      "standard_id": "OAS-1",
+      "title": "Purpose and boundary review",
+      "normative_text": "The provider MUST record a review of the documented purpose and boundaries when the declared system version changes its capabilities, permissions, operating context or intended use.",
+      "domain_id": "OAS-1-D02",
+      "applicability": "Provider-authored description records for the specific system version and operating scope named in a provider declaration; this candidate does not impose a runtime effectiveness result.",
+      "requirement_level": "MUST",
+      "risk_levels": [],
+      "rationale": "Apply the existing evolution/reassessment concept at an observable change trigger.",
+      "implementation_notes": "Proposed document obligation derived from existing OAS concepts. Review the stated open questions before adoption; do not infer complete or effective implementation from a description.",
+      "evidence_expectations": [
+        "Change review record"
+      ],
+      "verification_notes": "For a sampled in-scope change, inspect a linked review record; no review interval or risk tier is inferred.",
+      "version_introduced": null,
+      "proposed_version_introduced": "0.0.0-public-review.2",
+      "release_id": null,
+      "status": "candidate",
+      "review_decision": null,
+      "normative_text_reference": {
+        "source_path": "docs/OAS_FIRST_REQUIREMENTS_REVIEW.md",
+        "anchor": "oas-1-req-0005"
+      },
+      "sources": [
+        {
+          "source_revision": "35d2bdfd3d8014658789430c2288d20418bc7dcb",
+          "source_path": "src/pages/oas/OASPurposeBoundariesPage.jsx",
+          "source_section": "IN_PRACTICE / Validate and maintain",
+          "source_line": 151,
+          "exact_excerpt": "Regularly review purpose and boundaries as the agent evolves.",
+          "authority": "descriptive_or_near_normative_not_adopted"
+        }
+      ],
+      "open_question_ids": [
+        "Q01",
+        "Q02"
+      ],
+      "declaration_states": [
+        "applicable",
+        "not_applicable",
+        "declared_satisfied",
+        "not_declared",
+        "unknown"
+      ],
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0006",
+      "standard_id": "OAS-1",
+      "title": "Capability inventory",
+      "normative_text": "The provider MUST list the capabilities made available within the operating scope of the system version covered by the declaration in its description record.",
+      "domain_id": "OAS-1-D03",
+      "applicability": "Provider-authored description records for the specific system version and operating scope named in a provider declaration; this candidate does not impose a runtime effectiveness result.",
+      "requirement_level": "MUST",
+      "risk_levels": [],
+      "rationale": "Distinguish declared capabilities from purpose and permissions.",
+      "implementation_notes": "Proposed document obligation derived from existing OAS concepts. Review the stated open questions before adoption; do not infer complete or effective implementation from a description.",
+      "evidence_expectations": [
+        "Capability manifest"
+      ],
+      "verification_notes": "Compare listed capabilities with an independently supplied scoped interface inventory; completeness is an evaluation question.",
+      "version_introduced": null,
+      "proposed_version_introduced": "0.0.0-public-review.2",
+      "release_id": null,
+      "status": "candidate",
+      "review_decision": null,
+      "normative_text_reference": {
+        "source_path": "docs/OAS_FIRST_REQUIREMENTS_REVIEW.md",
+        "anchor": "oas-1-req-0006"
+      },
+      "sources": [
+        {
+          "source_revision": "35d2bdfd3d8014658789430c2288d20418bc7dcb",
+          "source_path": "src/pages/oas/OASControlDomainsPage.jsx",
+          "source_section": "DOMAINS / ordinal 03",
+          "source_line": 119,
+          "exact_excerpt": "Specifies the agent's capabilities, required resources and any external tools or systems it can access.",
+          "authority": "descriptive_or_near_normative_not_adopted"
+        }
+      ],
+      "open_question_ids": [
+        "Q01",
+        "Q05"
+      ],
+      "declaration_states": [
+        "applicable",
+        "not_applicable",
+        "declared_satisfied",
+        "not_declared",
+        "unknown"
+      ],
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0007",
+      "standard_id": "OAS-1",
+      "title": "Resources and external dependencies",
+      "normative_text": "The provider MUST identify the resources, external tools and external systems used by the system version within the declared operating scope in its description record.",
+      "domain_id": "OAS-1-D03",
+      "applicability": "Provider-authored description records for the specific system version and operating scope named in a provider declaration; this candidate does not impose a runtime effectiveness result.",
+      "requirement_level": "MUST",
+      "risk_levels": [],
+      "rationale": "Make resource/tool dependencies inspectable.",
+      "implementation_notes": "Proposed document obligation derived from existing OAS concepts. Review the stated open questions before adoption; do not infer complete or effective implementation from a description.",
+      "evidence_expectations": [
+        "Dependency inventory",
+        "Interface definition"
+      ],
+      "verification_notes": "Inspect inventory entries and their relationship to declared capabilities; do not expose credentials in evidence.",
+      "version_introduced": null,
+      "proposed_version_introduced": "0.0.0-public-review.2",
+      "release_id": null,
+      "status": "candidate",
+      "review_decision": null,
+      "normative_text_reference": {
+        "source_path": "docs/OAS_FIRST_REQUIREMENTS_REVIEW.md",
+        "anchor": "oas-1-req-0007"
+      },
+      "sources": [
+        {
+          "source_revision": "35d2bdfd3d8014658789430c2288d20418bc7dcb",
+          "source_path": "src/pages/oas/OASControlDomainsPage.jsx",
+          "source_section": "DOMAINS / ordinal 03",
+          "source_line": 119,
+          "exact_excerpt": "Specifies the agent's capabilities, required resources and any external tools or systems it can access.",
+          "authority": "descriptive_or_near_normative_not_adopted"
+        }
+      ],
+      "open_question_ids": [
+        "Q01",
+        "Q04",
+        "Q05"
+      ],
+      "declaration_states": [
+        "applicable",
+        "not_applicable",
+        "declared_satisfied",
+        "not_declared",
+        "unknown"
+      ],
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0008",
+      "standard_id": "OAS-1",
+      "title": "Access and action permissions",
+      "normative_text": "The provider MUST document the data, systems and actions that the described system version is authorized to access or perform within the declared operating scope in its description record.",
+      "domain_id": "OAS-1-D04",
+      "applicability": "Provider-authored description records for the specific system version and operating scope named in a provider declaration; this candidate does not impose a runtime effectiveness result.",
+      "requirement_level": "MUST",
+      "risk_levels": [],
+      "rationale": "Make access permissions explicit and separate from capability.",
+      "implementation_notes": "Proposed document obligation derived from existing OAS concepts. Review the stated open questions before adoption; do not infer complete or effective implementation from a description.",
+      "evidence_expectations": [
+        "Permission policy",
+        "Configuration evidence"
+      ],
+      "verification_notes": "Inspect permitted resources/actions and scope; a documented permission does not establish Registry authorization.",
+      "version_introduced": null,
+      "proposed_version_introduced": "0.0.0-public-review.2",
+      "release_id": null,
+      "status": "candidate",
+      "review_decision": null,
+      "normative_text_reference": {
+        "source_path": "docs/OAS_FIRST_REQUIREMENTS_REVIEW.md",
+        "anchor": "oas-1-req-0008"
+      },
+      "sources": [
+        {
+          "source_revision": "35d2bdfd3d8014658789430c2288d20418bc7dcb",
+          "source_path": "src/pages/oas/OASControlDomainsPage.jsx",
+          "source_section": "DOMAINS / ordinal 04",
+          "source_line": 126,
+          "exact_excerpt": "Controls what the agent can access, including data, systems and actions, with appropriate authorization mechanisms.",
+          "authority": "descriptive_or_near_normative_not_adopted"
+        }
+      ],
+      "open_question_ids": [
+        "Q01",
+        "Q05"
+      ],
+      "declaration_states": [
+        "applicable",
+        "not_applicable",
+        "declared_satisfied",
+        "not_declared",
+        "unknown"
+      ],
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0009",
+      "standard_id": "OAS-1",
+      "title": "Authorization mechanism references",
+      "normative_text": "The provider MUST identify the authorization mechanism associated with each documented data, system or action permission in the description record for the declared system version.",
+      "domain_id": "OAS-1-D04",
+      "applicability": "Provider-authored description records for the specific system version and operating scope named in a provider declaration; this candidate does not impose a runtime effectiveness result.",
+      "requirement_level": "MUST",
+      "risk_levels": [],
+      "rationale": "Relate access claims to their claimed authorization mechanism.",
+      "implementation_notes": "Proposed document obligation derived from existing OAS concepts. Review the stated open questions before adoption; do not infer complete or effective implementation from a description.",
+      "evidence_expectations": [
+        "Authorization interface definition",
+        "Policy configuration reference"
+      ],
+      "verification_notes": "Inspect permission-to-mechanism references; mechanism efficacy is not inferred from reference presence.",
+      "version_introduced": null,
+      "proposed_version_introduced": "0.0.0-public-review.2",
+      "release_id": null,
+      "status": "candidate",
+      "review_decision": null,
+      "normative_text_reference": {
+        "source_path": "docs/OAS_FIRST_REQUIREMENTS_REVIEW.md",
+        "anchor": "oas-1-req-0009"
+      },
+      "sources": [
+        {
+          "source_revision": "35d2bdfd3d8014658789430c2288d20418bc7dcb",
+          "source_path": "src/pages/oas/OASControlDomainsPage.jsx",
+          "source_section": "DOMAINS / ordinal 04",
+          "source_line": 126,
+          "exact_excerpt": "Controls what the agent can access, including data, systems and actions, with appropriate authorization mechanisms.",
+          "authority": "descriptive_or_near_normative_not_adopted"
+        }
+      ],
+      "open_question_ids": [
+        "Q01",
+        "Q05"
+      ],
+      "declaration_states": [
+        "applicable",
+        "not_applicable",
+        "declared_satisfied",
+        "not_declared",
+        "unknown"
+      ],
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0010",
+      "standard_id": "OAS-1",
+      "title": "Prohibited actions",
+      "normative_text": "The provider MUST list the actions prohibited for the system version within the declared operating scope in its description record.",
+      "domain_id": "OAS-1-D05",
+      "applicability": "Provider-authored description records for the specific system version and operating scope named in a provider declaration; this candidate does not impose a runtime effectiveness result.",
+      "requirement_level": "MUST",
+      "risk_levels": [],
+      "rationale": "Make declared prohibitions explicit rather than relying on a vague safety claim.",
+      "implementation_notes": "Proposed document obligation derived from existing OAS concepts. Review the stated open questions before adoption; do not infer complete or effective implementation from a description.",
+      "evidence_expectations": [
+        "Prohibited-action policy"
+      ],
+      "verification_notes": "Inspect a scoped explicit list; reviewers must decide whether an empty list can ever be justified.",
+      "version_introduced": null,
+      "proposed_version_introduced": "0.0.0-public-review.2",
+      "release_id": null,
+      "status": "candidate",
+      "review_decision": null,
+      "normative_text_reference": {
+        "source_path": "docs/OAS_FIRST_REQUIREMENTS_REVIEW.md",
+        "anchor": "oas-1-req-0010"
+      },
+      "sources": [
+        {
+          "source_revision": "35d2bdfd3d8014658789430c2288d20418bc7dcb",
+          "source_path": "src/pages/oas/OASControlDomainsPage.jsx",
+          "source_section": "DOMAINS / ordinal 05",
+          "source_line": 133,
+          "exact_excerpt": "Defines safety requirements, prohibited actions and guardrails to prevent harmful behavior.",
+          "authority": "descriptive_or_near_normative_not_adopted"
+        }
+      ],
+      "open_question_ids": [
+        "Q01",
+        "Q06"
+      ],
+      "declaration_states": [
+        "applicable",
+        "not_applicable",
+        "declared_satisfied",
+        "not_declared",
+        "unknown"
+      ],
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0011",
+      "standard_id": "OAS-1",
+      "title": "Guardrail control references",
+      "normative_text": "The provider MUST identify the control or guardrail intended to prevent each listed prohibited action in the description record for the declared system version.",
+      "domain_id": "OAS-1-D05",
+      "applicability": "Provider-authored description records for the specific system version and operating scope named in a provider declaration; this candidate does not impose a runtime effectiveness result.",
+      "requirement_level": "MUST",
+      "risk_levels": [],
+      "rationale": "Connect each prohibition to a claimed prevention control.",
+      "implementation_notes": "Proposed document obligation derived from existing OAS concepts. Review the stated open questions before adoption; do not infer complete or effective implementation from a description.",
+      "evidence_expectations": [
+        "Control configuration",
+        "Guardrail design reference"
+      ],
+      "verification_notes": "Inspect prohibition-to-control links; prevention effectiveness requires independent evaluation.",
+      "version_introduced": null,
+      "proposed_version_introduced": "0.0.0-public-review.2",
+      "release_id": null,
+      "status": "candidate",
+      "review_decision": null,
+      "normative_text_reference": {
+        "source_path": "docs/OAS_FIRST_REQUIREMENTS_REVIEW.md",
+        "anchor": "oas-1-req-0011"
+      },
+      "sources": [
+        {
+          "source_revision": "35d2bdfd3d8014658789430c2288d20418bc7dcb",
+          "source_path": "src/pages/oas/OASControlDomainsPage.jsx",
+          "source_section": "DOMAINS / ordinal 05",
+          "source_line": 133,
+          "exact_excerpt": "Defines safety requirements, prohibited actions and guardrails to prevent harmful behavior.",
+          "authority": "descriptive_or_near_normative_not_adopted"
+        }
+      ],
+      "open_question_ids": [
+        "Q01",
+        "Q06"
+      ],
+      "declaration_states": [
+        "applicable",
+        "not_applicable",
+        "declared_satisfied",
+        "not_declared",
+        "unknown"
+      ],
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0012",
+      "standard_id": "OAS-1",
+      "title": "Human authority and intervention",
+      "normative_text": "The provider MUST document the human role authorized to oversee, override or stop the described system version and the interface by which that role can exercise each documented intervention.",
+      "domain_id": "OAS-1-D06",
+      "applicability": "Provider-authored description records for the specific system version and operating scope named in a provider declaration; this candidate does not impose a runtime effectiveness result.",
+      "requirement_level": "MUST",
+      "risk_levels": [],
+      "rationale": "Describe human control and its claimed interface.",
+      "implementation_notes": "Proposed document obligation derived from existing OAS concepts. Review the stated open questions before adoption; do not infer complete or effective implementation from a description.",
+      "evidence_expectations": [
+        "Human authority policy",
+        "Intervention interface definition"
+      ],
+      "verification_notes": "Inspect named roles and intervention interfaces; no universal intervention latency or runtime availability claim is introduced.",
+      "version_introduced": null,
+      "proposed_version_introduced": "0.0.0-public-review.2",
+      "release_id": null,
+      "status": "candidate",
+      "review_decision": null,
+      "normative_text_reference": {
+        "source_path": "docs/OAS_FIRST_REQUIREMENTS_REVIEW.md",
+        "anchor": "oas-1-req-0012"
+      },
+      "sources": [
+        {
+          "source_revision": "35d2bdfd3d8014658789430c2288d20418bc7dcb",
+          "source_path": "src/pages/oas/OASControlDomainsPage.jsx",
+          "source_section": "DOMAINS / ordinal 06",
+          "source_line": 140,
+          "exact_excerpt": "Clarifies human oversight, authority structures and escalation paths for critical decisions.",
+          "authority": "descriptive_or_near_normative_not_adopted"
+        }
+      ],
+      "open_question_ids": [
+        "Q01",
+        "Q07"
+      ],
+      "declaration_states": [
+        "applicable",
+        "not_applicable",
+        "declared_satisfied",
+        "not_declared",
+        "unknown"
+      ],
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0013",
+      "standard_id": "OAS-1",
+      "title": "Escalation path",
+      "normative_text": "The provider MUST document the conditions that trigger human escalation and the receiving human role or contact route for the described system version within the declared operating scope.",
+      "domain_id": "OAS-1-D06",
+      "applicability": "Provider-authored description records for the specific system version and operating scope named in a provider declaration; this candidate does not impose a runtime effectiveness result.",
+      "requirement_level": "MUST",
+      "risk_levels": [],
+      "rationale": "Make escalation conditions and destination inspectable.",
+      "implementation_notes": "Proposed document obligation derived from existing OAS concepts. Review the stated open questions before adoption; do not infer complete or effective implementation from a description.",
+      "evidence_expectations": [
+        "Escalation policy",
+        "Routing configuration"
+      ],
+      "verification_notes": "Inspect trigger-to-destination descriptions; response adequacy is separate from declaration validity.",
+      "version_introduced": null,
+      "proposed_version_introduced": "0.0.0-public-review.2",
+      "release_id": null,
+      "status": "candidate",
+      "review_decision": null,
+      "normative_text_reference": {
+        "source_path": "docs/OAS_FIRST_REQUIREMENTS_REVIEW.md",
+        "anchor": "oas-1-req-0013"
+      },
+      "sources": [
+        {
+          "source_revision": "35d2bdfd3d8014658789430c2288d20418bc7dcb",
+          "source_path": "src/pages/oas/OASControlDomainsPage.jsx",
+          "source_section": "DOMAINS / ordinal 06",
+          "source_line": 140,
+          "exact_excerpt": "Clarifies human oversight, authority structures and escalation paths for critical decisions.",
+          "authority": "descriptive_or_near_normative_not_adopted"
+        }
+      ],
+      "open_question_ids": [
+        "Q01",
+        "Q07"
+      ],
+      "declaration_states": [
+        "applicable",
+        "not_applicable",
+        "declared_satisfied",
+        "not_declared",
+        "unknown"
+      ],
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0014",
+      "standard_id": "OAS-1",
+      "title": "Verification and monitoring plan",
+      "normative_text": "The provider MUST document the verification methods and performance-monitoring measures intended for the described system version within the declared operating scope.",
+      "domain_id": "OAS-1-D07",
+      "applicability": "Provider-authored description records for the specific system version and operating scope named in a provider declaration; this candidate does not impose a runtime effectiveness result.",
+      "requirement_level": "MUST",
+      "risk_levels": [],
+      "rationale": "Make the existing verification/monitoring concept inspectable.",
+      "implementation_notes": "Proposed document obligation derived from existing OAS concepts. Review the stated open questions before adoption; do not infer complete or effective implementation from a description.",
+      "evidence_expectations": [
+        "Verification plan",
+        "Monitoring specification"
+      ],
+      "verification_notes": "Inspect named methods and measures; neither a plan nor an unexecuted test is a passing result.",
+      "version_introduced": null,
+      "proposed_version_introduced": "0.0.0-public-review.2",
+      "release_id": null,
+      "status": "candidate",
+      "review_decision": null,
+      "normative_text_reference": {
+        "source_path": "docs/OAS_FIRST_REQUIREMENTS_REVIEW.md",
+        "anchor": "oas-1-req-0014"
+      },
+      "sources": [
+        {
+          "source_revision": "35d2bdfd3d8014658789430c2288d20418bc7dcb",
+          "source_path": "src/pages/oas/OASControlDomainsPage.jsx",
+          "source_section": "DOMAINS / ordinal 07",
+          "source_line": 147,
+          "exact_excerpt": "Establishes verification methods, performance monitoring and evidence requirements.",
+          "authority": "descriptive_or_near_normative_not_adopted"
+        }
+      ],
+      "open_question_ids": [
+        "Q01",
+        "Q08"
+      ],
+      "declaration_states": [
+        "applicable",
+        "not_applicable",
+        "declared_satisfied",
+        "not_declared",
+        "unknown"
+      ],
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0015",
+      "standard_id": "OAS-1",
+      "title": "Evidence expectations and references",
+      "normative_text": "The provider MUST identify the evidence types expected to support each requirement it declares satisfied and provide references to the evidence offered for that declaration.",
+      "domain_id": "OAS-1-D07",
+      "applicability": "Provider-authored description records for the specific system version and operating scope named in a provider declaration; this candidate does not impose a runtime effectiveness result.",
+      "requirement_level": "MUST",
+      "risk_levels": [],
+      "rationale": "Distinguish evidence expectations from actual offered evidence.",
+      "implementation_notes": "Proposed document obligation derived from existing OAS concepts. Review the stated open questions before adoption; do not infer complete or effective implementation from a description.",
+      "evidence_expectations": [
+        "Evidence index",
+        "Test result reference",
+        "Audit record reference"
+      ],
+      "verification_notes": "Inspect requirement-to-evidence-type/reference relationships; presence does not establish conformance or Trust Bureau assessment.",
+      "version_introduced": null,
+      "proposed_version_introduced": "0.0.0-public-review.2",
+      "release_id": null,
+      "status": "candidate",
+      "review_decision": null,
+      "normative_text_reference": {
+        "source_path": "docs/OAS_FIRST_REQUIREMENTS_REVIEW.md",
+        "anchor": "oas-1-req-0015"
+      },
+      "sources": [
+        {
+          "source_revision": "35d2bdfd3d8014658789430c2288d20418bc7dcb",
+          "source_path": "src/pages/oas/OASControlDomainsPage.jsx",
+          "source_section": "DOMAINS / ordinal 07",
+          "source_line": 147,
+          "exact_excerpt": "Establishes verification methods, performance monitoring and evidence requirements.",
+          "authority": "descriptive_or_near_normative_not_adopted"
+        }
+      ],
+      "open_question_ids": [
+        "Q01",
+        "Q08"
+      ],
+      "declaration_states": [
+        "applicable",
+        "not_applicable",
+        "declared_satisfied",
+        "not_declared",
+        "unknown"
+      ],
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0016",
+      "standard_id": "OAS-1",
+      "title": "Version and lifecycle description",
+      "normative_text": "The provider MUST record the system version and its provider-defined lifecycle state in the description record covered by the declaration.",
+      "domain_id": "OAS-1-D08",
+      "applicability": "Provider-authored description records for the specific system version and operating scope named in a provider declaration; this candidate does not impose a runtime effectiveness result.",
+      "requirement_level": "MUST",
+      "risk_levels": [],
+      "rationale": "Make the described version and lifecycle claim explicit.",
+      "implementation_notes": "Proposed document obligation derived from existing OAS concepts. Review the stated open questions before adoption; do not infer complete or effective implementation from a description.",
+      "evidence_expectations": [
+        "Version record",
+        "Lifecycle record"
+      ],
+      "verification_notes": "Inspect explicit version/state values; this is a provider lifecycle description, not Registry-issued lifecycle status.",
+      "version_introduced": null,
+      "proposed_version_introduced": "0.0.0-public-review.2",
+      "release_id": null,
+      "status": "candidate",
+      "review_decision": null,
+      "normative_text_reference": {
+        "source_path": "docs/OAS_FIRST_REQUIREMENTS_REVIEW.md",
+        "anchor": "oas-1-req-0016"
+      },
+      "sources": [
+        {
+          "source_revision": "35d2bdfd3d8014658789430c2288d20418bc7dcb",
+          "source_path": "src/pages/oas/OASControlDomainsPage.jsx",
+          "source_section": "DOMAINS / ordinal 08",
+          "source_line": 154,
+          "exact_excerpt": "Covers the full lifecycle from development to decommissioning, including ongoing accountability and impact assessment.",
+          "authority": "descriptive_or_near_normative_not_adopted"
+        }
+      ],
+      "open_question_ids": [
+        "Q01",
+        "Q09"
+      ],
+      "declaration_states": [
+        "applicable",
+        "not_applicable",
+        "declared_satisfied",
+        "not_declared",
+        "unknown"
+      ],
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0017",
+      "standard_id": "OAS-1",
+      "title": "Retirement accountability",
+      "normative_text": "The provider MUST identify the responsible role and the process for retiring the described system version in its description record.",
+      "domain_id": "OAS-1-D08",
+      "applicability": "Provider-authored description records for the specific system version and operating scope named in a provider declaration; this candidate does not impose a runtime effectiveness result.",
+      "requirement_level": "MUST",
+      "risk_levels": [],
+      "rationale": "Carry lifecycle accountability through decommissioning.",
+      "implementation_notes": "Proposed document obligation derived from existing OAS concepts. Review the stated open questions before adoption; do not infer complete or effective implementation from a description.",
+      "evidence_expectations": [
+        "Retirement procedure",
+        "Responsibility record"
+      ],
+      "verification_notes": "Inspect a role and retirement process; no operational deletion or Registry retirement is performed by this requirement.",
+      "version_introduced": null,
+      "proposed_version_introduced": "0.0.0-public-review.2",
+      "release_id": null,
+      "status": "candidate",
+      "review_decision": null,
+      "normative_text_reference": {
+        "source_path": "docs/OAS_FIRST_REQUIREMENTS_REVIEW.md",
+        "anchor": "oas-1-req-0017"
+      },
+      "sources": [
+        {
+          "source_revision": "35d2bdfd3d8014658789430c2288d20418bc7dcb",
+          "source_path": "src/pages/oas/OASControlDomainsPage.jsx",
+          "source_section": "DOMAINS / ordinal 08",
+          "source_line": 154,
+          "exact_excerpt": "Covers the full lifecycle from development to decommissioning, including ongoing accountability and impact assessment.",
+          "authority": "descriptive_or_near_normative_not_adopted"
+        }
+      ],
+      "open_question_ids": [
+        "Q01",
+        "Q09"
+      ],
+      "declaration_states": [
+        "applicable",
+        "not_applicable",
+        "declared_satisfied",
+        "not_declared",
+        "unknown"
+      ],
+      "supersedes": [],
+      "superseded_by": []
+    }
+  ],
+  "open_questions": [
+    {
+      "question_id": "Q01",
+      "title": "Actor and applicability",
+      "detail": "Approve whether this first set governs provider description records only, or must also specify runtime behavior. All candidates explicitly target description records; no runtime efficacy follows.",
+      "scope": "all",
+      "status": "open"
+    },
+    {
+      "question_id": "Q02",
+      "title": "Risk applicability",
+      "detail": "Define R0–R4 assignment criteria, decision authority, reassessment and conflict rules before risk-conditioned obligations.",
+      "scope": "risk model",
+      "status": "open"
+    },
+    {
+      "question_id": "Q03",
+      "title": "Ownership",
+      "detail": "Clarify accountable owner versus legal ownership, multiple owners, and acceptable organization identifiers.",
+      "scope": "OAS-1-REQ-0001",
+      "status": "open"
+    },
+    {
+      "question_id": "Q04",
+      "title": "Provenance",
+      "detail": "Approve minimum provenance granularity and treatment of composite, externally hosted or continuously updated systems.",
+      "scope": "OAS-1-REQ-0002",
+      "status": "open"
+    },
+    {
+      "question_id": "Q05",
+      "title": "Permissions and capability completeness",
+      "detail": "Approve scope boundaries, dynamically discovered tools, permission exceptions and whether runtime denial behavior belongs in release 1.",
+      "scope": "OAS-1-REQ-0006–0009",
+      "status": "open"
+    },
+    {
+      "question_id": "Q06",
+      "title": "Prohibited actions and guardrails",
+      "detail": "Identify who defines prohibited actions and context-specific policies; decide whether effectiveness criteria are required. No universal legal or safety prohibition list is invented.",
+      "scope": "OAS-1-REQ-0010–0011",
+      "status": "open"
+    },
+    {
+      "question_id": "Q07",
+      "title": "Human control",
+      "detail": "Review override feasibility, escalation thresholds, response latency and failure behavior. No unsupported latency or always-on human mandate is authored.",
+      "scope": "OAS-1-REQ-0012–0013",
+      "status": "open"
+    },
+    {
+      "question_id": "Q08",
+      "title": "Evidence and verification",
+      "detail": "Review minimum test methods, evidence accessibility, privacy, retention and whether evidence plans alone suffice. No completeness or conformance follows from evidence presence.",
+      "scope": "OAS-1-REQ-0014–0015",
+      "status": "open"
+    },
+    {
+      "question_id": "Q09",
+      "title": "Lifecycle",
+      "detail": "Approve lifecycle vocabulary, version identity, retirement responsibilities and record retention; Registry lifecycle remains separate.",
+      "scope": "OAS-1-REQ-0016–0017",
+      "status": "open"
+    },
+    {
+      "question_id": "Q10",
+      "title": "Governance approval authority",
+      "detail": "OAS must identify its authorized adopter, decision procedure/quorum and approval record. None is established by repository code.",
+      "scope": "all",
+      "status": "open"
+    },
+    {
+      "question_id": "Q11",
+      "title": "Legacy domain mapping",
+      "detail": "Review every ambiguous reporting label and approve migration disposition before canonical report adoption.",
+      "scope": "domain mapping",
+      "status": "open"
+    },
+    {
+      "question_id": "Q12",
+      "title": "Release scope adequacy",
+      "detail": "Decide whether these traceable description obligations constitute a useful complete first standard; no claim of complete autonomous-system governance is made.",
+      "scope": "all",
+      "status": "open"
+    }
+  ],
+  "evaluation_status": "NOT_EVALUATED"
+}

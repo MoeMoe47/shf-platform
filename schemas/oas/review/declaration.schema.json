@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oas:schema:review:declaration:1",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.1.0-review.1"
+    },
+    "review_only": {
+      "const": true
+    },
+    "authoring_reference": {
+      "type": "object",
+      "properties": {
+        "standard_id": {
+          "const": "OAS-1"
+        },
+        "proposed_standard_version": {
+          "const": "0.0.0-public-review.2"
+        },
+        "review_source_checksum": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "standard_id",
+        "proposed_standard_version",
+        "review_source_checksum"
+      ],
+      "additionalProperties": false
+    },
+    "profile_reference": {
+      "type": "null"
+    },
+    "declaration_scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "declared_by": {
+      "type": "string",
+      "minLength": 1
+    },
+    "declared_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "declaration_status": {
+      "enum": [
+        "declared",
+        "withdrawn"
+      ]
+    },
+    "requirement_declarations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "requirement_id": {
+            "type": "string",
+            "pattern": "^OAS-1-REQ-[0-9]{4,}$"
+          },
+          "statement_checksum": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          },
+          "state": {
+            "enum": [
+              "applicable",
+              "not_applicable",
+              "declared_satisfied",
+              "not_declared",
+              "unknown"
+            ]
+          },
+          "reason": {
+            "type": "string"
+          },
+          "evidence_references": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "requirement_id",
+          "statement_checksum",
+          "state",
+          "reason",
+          "evidence_references"
+        ],
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "state": {
+                  "const": "not_applicable"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "reason": {
+                  "type": "string",
+                  "pattern": "\\S"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "state": {
+                  "const": "declared_satisfied"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "evidence_references": {
+                  "type": "array",
+                  "minItems": 1
+                }
+              }
+            }
+          }
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "notes": {
+      "type": "string"
+    },
+    "evaluation_status": {
+      "const": "NOT_EVALUATED"
+    }
+  },
+  "required": [
+    "schema_version",
+    "review_only",
+    "authoring_reference",
+    "profile_reference",
+    "declaration_scope",
+    "declared_by",
+    "declared_at",
+    "declaration_status",
+    "requirement_declarations",
+    "notes",
+    "evaluation_status"
+  ],
+  "additionalProperties": false
+}

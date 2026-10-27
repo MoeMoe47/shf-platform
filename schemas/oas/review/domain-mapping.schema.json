@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oas:schema:review:domain-mapping:1",
+  "type": "object",
+  "properties": {
+    "mapping_schema_version": {
+      "const": "1.0.0"
+    },
+    "mappings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "namespace": {
+            "enum": [
+              "oas-public",
+              "shs-oas-reporting-v1"
+            ]
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "classification": {
+            "enum": [
+              "canonical",
+              "alias",
+              "ambiguous",
+              "unmapped"
+            ]
+          },
+          "canonical_domain_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^OAS-1-D0[1-8]$"
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          },
+          "decision_status": {
+            "enum": [
+              "existing_canonical",
+              "existing_canonical_alias",
+              "requires_governance_review"
+            ]
+          },
+          "related_domain_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^OAS-1-D0[1-8]$"
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "namespace",
+          "label",
+          "classification",
+          "canonical_domain_ids",
+          "rationale",
+          "decision_status",
+          "related_domain_ids"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "report_taxonomy_migration_status": {
+      "const": "blocked"
+    }
+  },
+  "required": [
+    "mapping_schema_version",
+    "mappings",
+    "report_taxonomy_migration_status"
+  ],
+  "additionalProperties": false
+}

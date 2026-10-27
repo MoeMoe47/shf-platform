@@ -1,0 +1,184 @@
+{
+  "mapping_schema_version": "1.0.0",
+  "mappings": [
+    {
+      "namespace": "oas-public",
+      "label": "Identity & Ownership",
+      "classification": "canonical",
+      "canonical_domain_ids": [
+        "OAS-1-D01"
+      ],
+      "rationale": "Exact canonical public domain label.",
+      "decision_status": "existing_canonical",
+      "related_domain_ids": []
+    },
+    {
+      "namespace": "oas-public",
+      "label": "Purpose & Boundaries",
+      "classification": "canonical",
+      "canonical_domain_ids": [
+        "OAS-1-D02"
+      ],
+      "rationale": "Exact canonical public domain label.",
+      "decision_status": "existing_canonical",
+      "related_domain_ids": []
+    },
+    {
+      "namespace": "oas-public",
+      "label": "Capabilities & Resources",
+      "classification": "canonical",
+      "canonical_domain_ids": [
+        "OAS-1-D03"
+      ],
+      "rationale": "Exact canonical public domain label.",
+      "decision_status": "existing_canonical",
+      "related_domain_ids": []
+    },
+    {
+      "namespace": "oas-public",
+      "label": "Permissions & Access",
+      "classification": "canonical",
+      "canonical_domain_ids": [
+        "OAS-1-D04"
+      ],
+      "rationale": "Exact canonical public domain label.",
+      "decision_status": "existing_canonical",
+      "related_domain_ids": []
+    },
+    {
+      "namespace": "oas-public",
+      "label": "Safety & Prohibited Actions",
+      "classification": "canonical",
+      "canonical_domain_ids": [
+        "OAS-1-D05"
+      ],
+      "rationale": "Exact canonical public domain label.",
+      "decision_status": "existing_canonical",
+      "related_domain_ids": []
+    },
+    {
+      "namespace": "oas-public",
+      "label": "Human Authority",
+      "classification": "canonical",
+      "canonical_domain_ids": [
+        "OAS-1-D06"
+      ],
+      "rationale": "Exact canonical public domain label.",
+      "decision_status": "existing_canonical",
+      "related_domain_ids": []
+    },
+    {
+      "namespace": "oas-public",
+      "label": "Validation & Evidence",
+      "classification": "canonical",
+      "canonical_domain_ids": [
+        "OAS-1-D07"
+      ],
+      "rationale": "Exact canonical public domain label.",
+      "decision_status": "existing_canonical",
+      "related_domain_ids": []
+    },
+    {
+      "namespace": "oas-public",
+      "label": "Lifecycle & Accountability",
+      "classification": "canonical",
+      "canonical_domain_ids": [
+        "OAS-1-D08"
+      ],
+      "rationale": "Exact canonical public domain label.",
+      "decision_status": "existing_canonical",
+      "related_domain_ids": []
+    },
+    {
+      "namespace": "shs-oas-reporting-v1",
+      "label": "Identity and Purpose",
+      "classification": "ambiguous",
+      "canonical_domain_ids": [],
+      "rationale": "Concept may span domains or add unspecified obligations; suggested related concepts are not approved equivalence.",
+      "decision_status": "requires_governance_review",
+      "related_domain_ids": [
+        "OAS-1-D01",
+        "OAS-1-D02"
+      ]
+    },
+    {
+      "namespace": "shs-oas-reporting-v1",
+      "label": "Autonomy and Agency",
+      "classification": "unmapped",
+      "canonical_domain_ids": [],
+      "rationale": "No single canonical domain with equivalent documented meaning exists.",
+      "decision_status": "requires_governance_review",
+      "related_domain_ids": []
+    },
+    {
+      "namespace": "shs-oas-reporting-v1",
+      "label": "Safety and Risk",
+      "classification": "ambiguous",
+      "canonical_domain_ids": [],
+      "rationale": "Concept may span domains or add unspecified obligations; suggested related concepts are not approved equivalence.",
+      "decision_status": "requires_governance_review",
+      "related_domain_ids": [
+        "OAS-1-D05"
+      ]
+    },
+    {
+      "namespace": "shs-oas-reporting-v1",
+      "label": "Transparency and Explainability",
+      "classification": "ambiguous",
+      "canonical_domain_ids": [],
+      "rationale": "Concept may span domains or add unspecified obligations; suggested related concepts are not approved equivalence.",
+      "decision_status": "requires_governance_review",
+      "related_domain_ids": [
+        "OAS-1-D01",
+        "OAS-1-D07"
+      ]
+    },
+    {
+      "namespace": "shs-oas-reporting-v1",
+      "label": "Human Oversight",
+      "classification": "alias",
+      "canonical_domain_ids": [
+        "OAS-1-D06"
+      ],
+      "rationale": "The canonical catalog already records Human Oversight as an alias of D06. This resolves the label only, never report ordinal 05 as canonical D05.",
+      "decision_status": "existing_canonical_alias",
+      "related_domain_ids": [
+        "OAS-1-D06"
+      ]
+    },
+    {
+      "namespace": "shs-oas-reporting-v1",
+      "label": "Data and Privacy",
+      "classification": "ambiguous",
+      "canonical_domain_ids": [],
+      "rationale": "Concept may span domains or add unspecified obligations; suggested related concepts are not approved equivalence.",
+      "decision_status": "requires_governance_review",
+      "related_domain_ids": [
+        "OAS-1-D04",
+        "OAS-1-D05"
+      ]
+    },
+    {
+      "namespace": "shs-oas-reporting-v1",
+      "label": "Interoperability",
+      "classification": "unmapped",
+      "canonical_domain_ids": [],
+      "rationale": "No single canonical domain with equivalent documented meaning exists.",
+      "decision_status": "requires_governance_review",
+      "related_domain_ids": []
+    },
+    {
+      "namespace": "shs-oas-reporting-v1",
+      "label": "Accountability and Governance",
+      "classification": "ambiguous",
+      "canonical_domain_ids": [],
+      "rationale": "Concept may span domains or add unspecified obligations; suggested related concepts are not approved equivalence.",
+      "decision_status": "requires_governance_review",
+      "related_domain_ids": [
+        "OAS-1-D06",
+        "OAS-1-D08"
+      ]
+    }
+  ],
+  "report_taxonomy_migration_status": "blocked"
+}

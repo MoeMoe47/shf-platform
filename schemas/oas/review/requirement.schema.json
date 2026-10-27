@@ -1,0 +1,247 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oas:schema:review:requirement:1",
+  "type": "object",
+  "properties": {
+    "requirement_id": {
+      "type": "string",
+      "pattern": "^OAS-1-REQ-[0-9]{4,}$"
+    },
+    "standard_id": {
+      "const": "OAS-1"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "normative_text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "domain_id": {
+      "type": "string",
+      "pattern": "^OAS-1-D0[1-8]$"
+    },
+    "applicability": {
+      "type": "string",
+      "minLength": 1
+    },
+    "requirement_level": {
+      "enum": [
+        "MUST",
+        "MUST NOT",
+        "SHOULD",
+        "SHOULD NOT",
+        "MAY"
+      ]
+    },
+    "risk_levels": {
+      "const": []
+    },
+    "rationale": {
+      "type": "string",
+      "minLength": 1
+    },
+    "implementation_notes": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence_expectations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "verification_notes": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version_introduced": {
+      "type": "null"
+    },
+    "proposed_version_introduced": {
+      "const": "0.0.0-public-review.2"
+    },
+    "release_id": {
+      "type": "null"
+    },
+    "status": {
+      "enum": [
+        "candidate",
+        "review_approved",
+        "rejected"
+      ]
+    },
+    "review_decision": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "decision": {
+              "enum": [
+                "approved",
+                "rejected",
+                "deferred"
+              ]
+            },
+            "decided_by": {
+              "type": "string",
+              "minLength": 1
+            },
+            "decided_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "statement_checksum": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            "decision_record_reference": {
+              "type": "string",
+              "minLength": 1
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "decision",
+            "decided_by",
+            "decided_at",
+            "statement_checksum",
+            "decision_record_reference",
+            "rationale"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "normative_text_reference": {
+      "type": "object",
+      "properties": {
+        "source_path": {
+          "const": "docs/OAS_FIRST_REQUIREMENTS_REVIEW.md"
+        },
+        "anchor": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "source_path",
+        "anchor"
+      ],
+      "additionalProperties": false
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "source_revision": {
+            "const": "35d2bdfd3d8014658789430c2288d20418bc7dcb"
+          },
+          "source_path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_section": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_line": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "exact_excerpt": {
+            "type": "string",
+            "minLength": 1
+          },
+          "authority": {
+            "const": "descriptive_or_near_normative_not_adopted"
+          }
+        },
+        "required": [
+          "source_revision",
+          "source_path",
+          "source_section",
+          "source_line",
+          "exact_excerpt",
+          "authority"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "open_question_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "declaration_states": {
+      "const": [
+        "applicable",
+        "not_applicable",
+        "declared_satisfied",
+        "not_declared",
+        "unknown"
+      ]
+    },
+    "supersedes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^OAS-1-REQ-[0-9]{4,}$"
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "superseded_by": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^OAS-1-REQ-[0-9]{4,}$"
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "requirement_id",
+    "standard_id",
+    "title",
+    "normative_text",
+    "domain_id",
+    "applicability",
+    "requirement_level",
+    "risk_levels",
+    "rationale",
+    "implementation_notes",
+    "evidence_expectations",
+    "verification_notes",
+    "version_introduced",
+    "proposed_version_introduced",
+    "release_id",
+    "status",
+    "review_decision",
+    "normative_text_reference",
+    "sources",
+    "open_question_ids",
+    "declaration_states",
+    "supersedes",
+    "superseded_by"
+  ],
+  "additionalProperties": false
+}

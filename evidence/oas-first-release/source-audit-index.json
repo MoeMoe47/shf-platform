@@ -1,0 +1,2186 @@
+{
+  "baseline": "35d2bdfd3d8014658789430c2288d20418bc7dcb",
+  "tracked_files_scanned": 8329,
+  "uppercase_pattern": "(^|[^[:alnum:]_])(MUST|SHALL|REQUIRED|SHOULD|MAY)([^[:alnum:]_]|$)",
+  "keyword_match_count": 351,
+  "keyword_files": {
+    "AGENTS.md": 5,
+    "SALES_AUDIT_0/04_SALES_UI.txt": 1,
+    "SALES_AUDIT_0/05_ACCOUNTS_RELATIONSHIPS.txt": 5,
+    "SALES_AUDIT_0/06_PRODUCTS_PROGRAMS_SERVICES.txt": 17,
+    "SALES_AUDIT_0/07_FUNDING.txt": 42,
+    "SALES_AUDIT_0/08_COMMERCIAL_LOGIC.txt": 2,
+    "SALES_AUDIT_0/09_ONBOARDING.txt": 2,
+    "SALES_AUDIT_0/10_RETENTION_EXPANSION.txt": 1,
+    "SALES_AUDIT_0/11_MEETINGS_ZOOM.txt": 1,
+    "SALES_AUDIT_0/12_AI_ORCHESTRATION.txt": 2,
+    "SALES_AUDIT_0/13_EVIDENCE_TRUTH.txt": 5,
+    "SALES_AUDIT_0/14_DATABASE_MODELS.txt": 3,
+    "SALES_AUDIT_0/CONDENSED/11_MEETINGS_ZOOM.txt": 1,
+    "SALES_AUDIT_0/SHU_SALES_AUDIT_CONDENSED.txt": 1,
+    "apps/shs-api/migrations/104_government_program_assurance_monitoring_audit.sql": 1,
+    "apps/shs-api/migrations/141_accessibility_accommodation_lifecycle.sql": 1,
+    "apps/shs-api/migrations/142_accessibility_operations.sql": 1,
+    "apps/shs-api/migrations/153_commercial_product_registry_foundation.sql": 1,
+    "apps/shs-api/src/domain/accessibility-operations/service/operations-service.ts": 2,
+    "apps/shs-api/src/domain/commercial-product-registry/api/routes.ts": 1,
+    "apps/shs-api/src/domain/commercial-product-registry/repo/commercial-product-registry-repository.ts": 2,
+    "apps/shs-api/src/domain/commercial-product-registry/repo/postgres-commercial-product-registry-repo.ts": 1,
+    "apps/shs-api/src/domain/commercial-product-registry/service/commercial-product-registry-service.ts": 2,
+    "apps/shs-api/src/domain/completion-policy/model/completion-policy.ts": 1,
+    "apps/shs-api/src/domain/completion-policy/service/completion-policy-service.ts": 1,
+    "apps/shs-api/src/domain/documentation/api/agreement-routes.ts": 1,
+    "apps/shs-api/src/domain/documentation/api/instance-routes.ts": 1,
+    "apps/shs-api/src/domain/documentation/api/signature-routes.ts": 1,
+    "apps/shs-api/src/domain/government-assurance/service/assurance-cycle-service.ts": 1,
+    "apps/shs-api/src/domain/government-assurance/service/monitoring-audit-service.ts": 1,
+    "apps/shs-api/src/domain/metaverse/missions/mission-authority-adapter.ts": 2,
+    "apps/shs-api/src/domain/metaverse/missions/mission-contract.ts": 1,
+    "apps/shs-api/src/domain/metaverse/orchestration/service/city-orchestration-service.ts": 2,
+    "apps/shs-api/src/domain/metaverse/passport/api/routes.ts": 1,
+    "apps/shs-api/src/domain/orientation/model/orientation-resolver.ts": 2,
+    "apps/shs-api/src/domain/orientation/service/orientation-context-service.ts": 4,
+    "apps/shs-api/src/domain/studio/api/studio-collaboration-routes.ts": 1,
+    "apps/shs-api/tests/career-pathway-integration.test.ts": 1,
+    "apps/shs-api/tests/civicsure-provider-self-service.test.ts": 1,
+    "apps/shs-api/tests/commercial-product-registry-routes.integration.test.ts": 2,
+    "apps/shs-api/tests/commercial-product-registry-service-postgres.acceptance.test.ts": 1,
+    "apps/shs-api/tests/commercial-product-registry-service.test.ts": 1,
+    "apps/shs-api/tests/completion-policy-engine.test.ts": 1,
+    "apps/shs-api/tests/government-program-assurance-monitoring-audit.test.ts": 1,
+    "apps/shs-api/tests/government-program-assurance-wave3hb-live.integration.test.ts": 1,
+    "apps/shs-api/tests/metaverse-city-orchestration.test.ts": 1,
+    "apps/shs-api/tests/metaverse-mission-integration.test.ts": 2,
+    "apps/shs-api/tests/metaverse-mission-runtime.test.ts": 1,
+    "apps/shs-api/tests/ogl2-orientation-context.test.ts": 1,
+    "docs/AGENT_FABRIC_COMMAND_CENTER_MASTER_PLAN.md": 2,
+    "docs/AGENT_FABRIC_COMMAND_CENTER_V1_ACCEPTANCE.md": 1,
+    "docs/CAREER_PRIMARY_FUNNEL.md": 2,
+    "docs/FABRIC_PRODUCTION_ORIGIN_V3.md": 1,
+    "docs/FUNNEL.md": 1,
+    "docs/SHF_ACCESSIBILITY_INCLUSIVE_EXPERIENCE_CONSTITUTION_V1.md": 26,
+    "docs/SHF_AIEL_PERSISTENCE_API_CONTRACT_V1.md": 1,
+    "docs/SHF_AIEL_PROFILE_CONTRACT_V1.md": 2,
+    "docs/SHF_SYSTEM_CONTRACT.md": 2,
+    "docs/SHS_PRODUCTION_IDENTITY_PROVIDER_DECISION.md": 1,
+    "docs/architecture/AX-4_INSTITUTIONAL_ACCESSIBILITY_ACCOMMODATION_WORKFLOWS.md": 1,
+    "docs/architecture/AX-5_ACCESSIBILITY_ASSURANCE_GATE_CONTINUOUS_TESTING.md": 14,
+    "docs/architecture/DGAL-6_MICRO_GAP_AUDIT.md": 5,
+    "docs/architecture/DGAL-6_MICRO_GAP_REMEDIATION.md": 2,
+    "docs/architecture/DGAL-6_PREMIUM_DOCUMENT_CENTER_ADMIN_NOTIFICATIONS_SERVICE_ACCEPTANCE.md": 1,
+    "docs/architecture/EXR_OWNER_DECISION_LOCK.md": 1,
+    "docs/architecture/OGL-1_CANONICAL_ORIENTATION_REGISTRY_CONTRACTS.md": 1,
+    "docs/architecture/OGL-2_CONTEXT_GUIDANCE_RESOLVER.md": 1,
+    "docs/architecture/OGL-3_PREMIUM_TOUR_RUNTIME_ACCESSIBLE_GUIDANCE_PRIMITIVES.md": 1,
+    "docs/architecture/SEA-1_SERVICE_CAPABILITY_EXPERIENCE_CONTRACTS.md": 1,
+    "docs/architecture/SEA-2_CANONICAL_DASHBOARD_WORKFLOW_ARCHITECTURE.md": 1,
+    "docs/architecture/SHU_U7_AUTHORITY_RECHECK_ECOSYSTEM_REPORTING_CLOSEOUT.md": 2,
+    "docs/architecture/SHU_UNIVERSAL_REPORTING_CREDENTIAL_FINAL_DESIGN_LOCK.md": 2,
+    "docs/architecture/SYS-3A5C_FINAL_LAST_MILE_ACCEPTANCE_COMPLETION_REPORT.md": 1,
+    "docs/architecture/SYSTEMWIDE_WORKFLOW_COMPLETION_ROADMAP.md": 1,
+    "docs/career/data-center-employer-validation/DATA_CENTER_EMPLOYER_VALIDATION_RECORD_V1.json": 1,
+    "docs/career/data-center-employer-validation/outreach/DATA_CENTER_WAVE1_CONTACT_ROUTING_V1.md": 3,
+    "docs/contracts/admin/app-registry.ui-contract.md": 4,
+    "docs/governance/IGLS_1_IMPLEMENTATION_GOVERNANCE_LIFECYCLE_STANDARD.json": 1,
+    "docs/governance/IGLS_1_IMPLEMENTATION_GOVERNANCE_LIFECYCLE_STANDARD.md": 2,
+    "docs/metaverse/MET-7_CURRICULUM_ASSIGNMENT_ARCADE_INTEGRATION.md": 1,
+    "docs/readiness/BUSINESS_FINANCIAL_OPERATIONS_READINESS_PASS_2_IMPLEMENTATION_WORK_ORDER.md": 1,
+    "docs/readiness/BUSINESS_FINANCIAL_OPERATIONS_READINESS_SOURCE_CURRICULUM_PLAN.md": 4,
+    "docs/readiness/DATA_CENTER_CRITICAL_FACILITIES_PASS_2_IMPLEMENTATION_WORK_ORDER.md": 1,
+    "docs/readiness/READINESS_COURSE_AGENT_WORK_ORDER_TEMPLATE.md": 1,
+    "docs/releases/PACKAGE_H_BATCH_02_ACCEPTANCE_RECONCILIATION_REPORT.json": 15,
+    "docs/releases/PACKAGE_H_BATCH_02_ACCEPTANCE_RECONCILIATION_REPORT.md": 9,
+    "docs/releases/PACKAGE_H_BATCH_02_GOVERNANCE_LOCK.json": 1,
+    "docs/releases/PACKAGE_H_BATCH_02_GOVERNANCE_LOCK.md": 1,
+    "docs/releases/PACKAGE_H_BATCH_03_PHASE_1/MISSION_RISK_REGISTER.json": 1,
+    "docs/releases/PACKAGE_H_BATCH_03_PHASE_1/MISSION_RISK_REGISTER.md": 1,
+    "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md": 8,
+    "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md": 9,
+    "docs/sales/commercial-product-registry-design/commercial-product-relationship-model.json": 1,
+    "docs/shs-bos/SHS_BOS_CORE_V1_FREEZE_2026-09-06.md": 1,
+    "docs/ui/foundation-donation/FINAL_PRODUCTION_READINESS.md": 1,
+    "scripts/check_igls_1.py": 1,
+    "scripts/check_shs_bos_v1_2_package_h_batch_02_owner_onboarding.py": 1,
+    "scripts/check_shs_bos_v1_layer_audit.py": 2,
+    "scripts/validate-manifests.mjs": 3,
+    "scripts/validate-sea-contracts.mjs": 1,
+    "scripts/validate-sea-dashboard-architecture.mjs": 3,
+    "scripts/validate-sea-visual-contracts.mjs": 1,
+    "services/_graveyard/shf-agent-fabric-backups/._backup_fix_future_20260305_083050/test_funding_integrity_gate.py": 1,
+    "services/_graveyard/shf-agent-fabric-backups/._backup_fix_outcomes_tests_20260305_082532/test_funding_integrity_gate.py": 1,
+    "services/_graveyard/shf-agent-fabric-backups/._backup_fix_testclient_timeout_20260305_085916/test_funding_integrity_gate.py": 1,
+    "services/_graveyard/shf-agent-fabric-backups/._backup_remove_testclient_timeout_20260305_101716/test_funding_integrity_gate.py": 1,
+    "services/_graveyard/shf-agent-fabric-backups/._backup_remove_testclient_timeout_20260305_102001/test_funding_integrity_gate.py": 1,
+    "services/shf-agent-fabric/contracts/registry_entity.contract.ts": 2,
+    "services/shf-agent-fabric/fabric/registry_event_ledger.py": 1,
+    "services/shf-agent-fabric/routers/run_routes.py": 1,
+    "services/shf-agent-fabric/services/truth_migration.py": 1,
+    "services/shf-agent-fabric/services/truth_spine_service.py": 1,
+    "services/shf-agent-fabric/tests/test_funding_integrity_gate.py": 1,
+    "src/_archive/_header_cosmic_reset/lordOutcomes.main.jsx": 1,
+    "src/_archive/_header_reset/lordOutcomes.main.jsx": 1,
+    "src/apps/allocation/sources/extracts/ohio-drc-fact-sheet.txt": 2,
+    "src/content/lessons/asl-student/student.asl-59.json": 3,
+    "src/content/lessons/asl-student/student.asl-63.json": 1,
+    "src/content/lessons/shu-universal-career-readiness-student/ucr-52-reading-career-paths-job-requirements.json": 1,
+    "src/pages/admin/agent-fabric-command/agent-fabric-command.css": 1,
+    "src/pages/admin/release-assurance/ReleaseAssurancePage.jsx": 1,
+    "src/pages/exchange/unified-truth/SHSUnifiedTruthShell.css": 1,
+    "src/pages/exchange/unified-truth/shs-unified-truth-shell.css": 1,
+    "src/pages/exchange/unified-truth/shs-unified-truth-shell.css.bak-before-v7f-css-test": 1,
+    "src/pages/exchange/unified-truth/shs-unified-truth-shell.css.bak-blue-base-lock": 1,
+    "src/pages/exchange/unified-truth/shs-unified-truth-shell.css.bak-blue-surface-glaze": 1,
+    "src/pages/exchange/unified-truth/shs-unified-truth-shell.css.bak-clean-stacked-map-css-20260524_193553": 1,
+    "src/pages/exchange/unified-truth/shs-unified-truth-shell.css.bak-direct-mapbox-surface-overlay": 1,
+    "src/pages/exchange/unified-truth/shs-unified-truth-shell.css.bak-final-blue-depth-lock": 1,
+    "src/pages/exchange/unified-truth/shs-unified-truth-shell.css.bak-final-surface-balance": 1,
+    "src/pages/exchange/unified-truth/shs-unified-truth-shell.css.bak-light-mapbox-base-test": 1,
+    "src/pages/exchange/unified-truth/shs-unified-truth-shell.css.bak-lock-mock-blue-map-surface": 1,
+    "src/pages/exchange/unified-truth/shs-unified-truth-shell.css.bak-match-right-card-surface": 1,
+    "src/pages/exchange/unified-truth/shs-unified-truth-shell.css.bak-option-b-clean-color-20260524_192822": 1,
+    "src/pages/exchange/unified-truth/shs-unified-truth-shell.css.bak-replace-gray-with-blue-base": 1,
+    "src/pages/exchange/unified-truth/shs-unified-truth-shell.css.bak-surface-color-lock-only": 1,
+    "src/pages/exchange/unified-truth/shs-unified-truth-shell.css.bak-white-light-blue-surface": 1,
+    "src/pages/shf-command/SHFImpactCommandCenter.jsx": 1,
+    "src/pages/universe-v1/universeDestinationRegistry.js": 2,
+    "src/styles/shell.css": 1,
+    "src/system/accessibility/accessibilityFindingSchema.js": 1,
+    "src/system/orientation/orientationContract.js": 1,
+    "src/system/orientation/orientationRegistry.js": 10,
+    "src/system/sea/dashboardArchitecture.js": 1,
+    "src/system/sea/serviceExperienceContracts.js": 2,
+    "tests/afcc-command-center-browser.spec.mjs": 1,
+    "tests/fabricProductionOriginV3.test.mjs": 1,
+    "tests/publicAggregateEducationActivityPolicyDecisionPacket.test.mjs": 1,
+    "tests/sea4-final-evidence-harness.spec.mjs": 1,
+    "tests/ui/appRegistry.styles.spec.mjs": 1,
+    "tests/ui/classical-arcade-room-visual.spec.mjs": 1
+  },
+  "oas_referencing_files": [
+    "SALES_AUDIT_0/05_ACCOUNTS_RELATIONSHIPS.txt",
+    "SALES_AUDIT_0/06_PRODUCTS_PROGRAMS_SERVICES.txt",
+    "SALES_AUDIT_0/07_FUNDING.txt",
+    "SALES_AUDIT_0/12_AI_ORCHESTRATION.txt",
+    "SALES_AUDIT_0/13_EVIDENCE_TRUTH.txt",
+    "apps/shs-api/src/domain/metaverse/registry/city-registry.ts",
+    "apps/shs-api/src/domain/reporting/report-template-registry.ts",
+    "apps/shs-api/src/domain/reporting/studio-oas-report-adapters.ts",
+    "apps/shs-api/tests/report-u2-studio-oas.test.ts",
+    "apps/shs-api/tests/report-u5-registry-solutions.test.ts",
+    "docs/OAS_CANONICAL_CATALOG_MIGRATION.md",
+    "docs/OAS_MACHINE_AUTHORITY.md",
+    "docs/SHU_PAGE_2_ASSET_AND_BACKGROUND_AUDIT.md",
+    "docs/architecture/ECOSYSTEM_RUNTIME_ROUTE_ACCEPTANCE_REPORT.md",
+    "docs/architecture/FE-0_APPLICATION_DESTINATION_NAVIGATION_ASSIGNMENT_REPORT.md",
+    "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+    "docs/architecture/PR-0_HISTORICAL_GAP_CLOSURE_AUDIT.md",
+    "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+    "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+    "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+    "docs/architecture/SHU_UNIVERSAL_REPORTING_U2_STUDIO_OAS_ADAPTERS.md",
+    "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_ASSET_MANIFEST_V1.md",
+    "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_CANONICAL_LANDING_V1.md",
+    "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_MASTER_INTERACTION_MAP_V1.md",
+    "evidence/oas-canonical-catalog/CHANGED_FILES.md",
+    "evidence/oas-canonical-catalog/DISCOVERY.md",
+    "evidence/oas-canonical-catalog/DOMAIN_RECONCILIATION.md",
+    "evidence/oas-canonical-catalog/IDENTIFIER_RULES.md",
+    "evidence/oas-canonical-catalog/REGISTRY_INTEGRATION_READINESS.md",
+    "evidence/oas-canonical-catalog/oas-build.log",
+    "oas-1.html",
+    "oas-control-domains.html",
+    "oas-purpose-boundaries.html",
+    "oas-risk-classification.html",
+    "oas.html",
+    "public/oas/catalogs/OAS-1@0.0.0-public-review.1.json",
+    "schemas/oas/catalog-source.schema.json",
+    "schemas/oas/catalog.schema.json",
+    "scripts/oas-catalog.mjs",
+    "src/_archive/universe-legacy-pre-canonical-v1/data/universe/universeWorldCatalog.js",
+    "src/_archive/universe-legacy-pre-canonical-v1/tests/universe.spec.mjs",
+    "src/entries/oas-1.main.jsx",
+    "src/entries/oas-control-domains.main.jsx",
+    "src/entries/oas.main.jsx",
+    "src/pages/admin/agent-fabric-command/ecosystemTopology.js",
+    "src/pages/oas/OAS1Page.jsx",
+    "src/pages/oas/OASControlDomainsPage.jsx",
+    "src/pages/oas/OASLandingPage.jsx",
+    "src/pages/oas/OASPurposeBoundariesPage.jsx",
+    "src/pages/oas/OASRiskClassificationPage.jsx",
+    "src/pages/oas/oas-control-domains.css",
+    "src/pages/oas/oas-landing.css",
+    "src/pages/oas/oas-purpose-boundaries.css",
+    "src/pages/oas/oas-risk-classification.css",
+    "src/pages/oas/oas1-page.css",
+    "src/pages/oas/oasShared.jsx",
+    "src/pages/universe-v1/gateway/UniverseGateway.jsx",
+    "src/pages/universe-v1/universeDestinationRegistry.js",
+    "src/system/sea/serviceExperienceContracts.js",
+    "standards/oas/catalog.json",
+    "tests/oasCanonicalCatalog.test.mjs",
+    "vite.config.js"
+  ],
+  "oas_keyword_excerpts": [],
+  "oas_near_normative_excerpts": [
+    {
+      "path": "apps/shs-api/src/domain/metaverse/registry/city-registry.ts",
+      "line": 559,
+      "excerpt": "description: \"MET-13 scenario grounded in the existing Data Center & AI Infrastructure pathway record; no career pathway required to attempt.\","
+    },
+    {
+      "path": "apps/shs-api/src/domain/metaverse/registry/city-registry.ts",
+      "line": 624,
+      "excerpt": "description: \"MET-13 orientation Side Mission across city districts/facilities; no career pathway or program enrollment required.\","
+    },
+    {
+      "path": "apps/shs-api/src/domain/metaverse/registry/city-registry.ts",
+      "line": 658,
+      "excerpt": "universe_relationship: \"Universe is an ecosystem navigation shell that may later link into this city; it is not the metaverse city registry.\","
+    },
+    {
+      "path": "apps/shs-api/src/domain/metaverse/registry/city-registry.ts",
+      "line": 665,
+      "excerpt": "access_requirements: [\"MET-3 learner unlock projection required before gated access is enforced.\"],"
+    },
+    {
+      "path": "apps/shs-api/src/domain/metaverse/registry/city-registry.ts",
+      "line": 671,
+      "excerpt": "\"All districts and destinations must be reachable through a non-spatial list/search/tree view.\","
+    },
+    {
+      "path": "apps/shs-api/src/domain/metaverse/registry/city-registry.ts",
+      "line": 672,
+      "excerpt": "\"Every future spatial activity must define keyboard, screen-reader, reduced-motion, and task-equivalent alternatives.\","
+    },
+    {
+      "path": "apps/shs-api/src/domain/reporting/studio-oas-report-adapters.ts",
+      "line": 12,
+      "excerpt": "[\"05\", \"Human Oversight\"],"
+    },
+    {
+      "path": "apps/shs-api/src/domain/reporting/studio-oas-report-adapters.ts",
+      "line": 26,
+      "excerpt": "function required(value: unknown, code: string) {"
+    },
+    {
+      "path": "apps/shs-api/src/domain/reporting/studio-oas-report-adapters.ts",
+      "line": 99,
+      "excerpt": "const family = required(input?.reportFamily || input?.report_family, \"REPORT_FAMILY_REQUIRED\");"
+    },
+    {
+      "path": "apps/shs-api/src/domain/reporting/studio-oas-report-adapters.ts",
+      "line": 101,
+      "excerpt": "const projectId = required(input?.projectId || input?.project_id || input?.subjectReference, \"STUDIO_PROJECT_REQUIRED\");"
+    },
+    {
+      "path": "apps/shs-api/src/domain/reporting/studio-oas-report-adapters.ts",
+      "line": 121,
+      "excerpt": "provenance: { adapter: \"studio-product-reporting\", sourceAuthority: \"Studio\", reportType },"
+    },
+    {
+      "path": "apps/shs-api/src/domain/reporting/studio-oas-report-adapters.ts",
+      "line": 137,
+      "excerpt": "{ title: \"Gaps and Boundaries\", notes: [\"All requirements are marked NOT_EVALUATED because this repository does not contain a canonical OAS subject/evidence/test authority. Missing evidence is not treated as non-conformance.\", \"OAS Standard ≠ Autonomous Registry ≠ Trust Bureau.\"] },"
+    },
+    {
+      "path": "apps/shs-api/src/domain/reporting/studio-oas-report-adapters.ts",
+      "line": 149,
+      "excerpt": "const family = required(input?.reportFamily || input?.report_family, \"REPORT_FAMILY_REQUIRED\");"
+    },
+    {
+      "path": "apps/shs-api/src/domain/reporting/studio-oas-report-adapters.ts",
+      "line": 151,
+      "excerpt": "const subject = required(input?.subjectReference || input?.subject_reference || input?.subject, \"OAS_SUBJECT_REQUIRED\");"
+    },
+    {
+      "path": "apps/shs-api/src/domain/reporting/studio-oas-report-adapters.ts",
+      "line": 159,
+      "excerpt": "return createAuthorizedReportProjection({ productKey: \"oas\", reportFamily: family, subject, scope: { organizationId: scope.organizationId, tenantId: scope.tenantId, subjectReference: subject }, reportingPeriod: standardVersion, classification: \"INTERNAL\", generatedAt, canonicalReferences: refs, sourceVersions: [{ authority: \"oas\", standardVersion }], provenance: { adapter: \"oas-product-reporting\", sourceAuthority: \"OAS public working-draft definitions\" }, payload: { reportType, reportVersion: 1, scope: { subjectReference: subject, reportingPeriod: standardVersion }, classification: \"INTERNAL\", generatedAt, canonicalReferences: refs, presentation, oas: { standardVersion, subject, status: \"NOT_EVALUATED\" } } });"
+    },
+    {
+      "path": "docs/OAS_CANONICAL_CATALOG_MIGRATION.md",
+      "line": 13,
+      "excerpt": "Public page domain names are canonical; all three public domain-list pages now use the OAS source adapter. Existing descriptions, markup, route paths and layout remain intact. Canonical domain 06 records contextual alias Human Oversight. Deployment is risk guidance across domains, not a ninth domain. The complete conflicting SHS reporting vocabulary is retained under legacy taxonomy shs-oas-reporting-v1, with canonical_domain_id null and migration_status requires_semantic_review on every row. Numeric-position mapping is prohibited. Legacy reports retain original labels, references, input versions and NOT_EVALUATED. A future report contract version must adopt canonical IDs and precise reviewed semantic mappings; no existing report is relabeled retroactively."
+    },
+    {
+      "path": "docs/OAS_CANONICAL_CATALOG_MIGRATION.md",
+      "line": 21,
+      "excerpt": "Schema/catalog structure exists; population_status not_defined and profiles empty. No fictional Registry display profiles are imported. OAS must author profiles, their versioned standard relationship, domains and actual requirement membership before a profile reference resolves. R0–R4 are risk levels, not profiles."
+    },
+    {
+      "path": "docs/OAS_CANONICAL_CATALOG_MIGRATION.md",
+      "line": 25,
+      "excerpt": "Requirement identifiers and schema support exact normative wording, repository-relative text reference/anchor, domain, risk levels, release relationship, status and replacement links. The catalog is empty with normative_source_not_published. Overview prose and matrix bands cannot be silently promoted to normative requirements. OAS must author/adopt individual requirements against a real specification before requirement-level integration. Populate one authoritative source and migrate future UI requirement views to it. Existing public overviews remain summaries; do not copy them as normative text."
+    },
+    {
+      "path": "docs/OAS_CANONICAL_CATALOG_MIGRATION.md",
+      "line": 33,
+      "excerpt": "Ready for repository-based, bounded read-only resolution of OAS-1, the explicit draft snapshot, public domains, empty populations, declaration shape and provenance. Not ready for adopted-standard, profile, normative requirement, conformance or certification claims. Remaining gates: publish the normative specification and individual requirements, govern any profiles, approve release/effective dates and publication location/transport, review legacy-report semantic mappings, and implement Registry consumption in a separate phase. See REGISTRY_INTEGRATION_READINESS.md. No Registry code, Registry-owned OAS catalog, authentication, lifecycle or trust scoring is introduced."
+    },
+    {
+      "path": "docs/OAS_MACHINE_AUTHORITY.md",
+      "line": 5,
+      "excerpt": "Autonomous Registry independently owns identity, registration, provenance, agent version, lifecycle and public records. Registry may resolve and record pinned OAS references and attributed provider declarations. Registry may cache the exact OAS artifact with provenance; it may not maintain a competing standards catalog, redefine identifiers, populate fictional OAS profiles, rewrite normative wording, convert draft status to release, or infer certification. External systems cannot write directly to canonical Registry records."
+    },
+    {
+      "path": "docs/OAS_MACHINE_AUTHORITY.md",
+      "line": 21,
+      "excerpt": "Every published snapshot, including a public-review pin, is immutable. Allocate another explicit version for content changes. Maintain older artifacts and Git commits. The live editorial catalog may add replacement observations, but historical snapshots and declarations retain original pins; latest status is an as-of observation in a newer catalog, not a mutation of history. No floating latest is authoritative."
+    },
+    {
+      "path": "docs/OAS_MACHINE_AUTHORITY.md",
+      "line": 25,
+      "excerpt": "Commit canonical inputs before running `npm run oas:generate`. The generator reads exact input bytes from their last source commit and refuses uncommitted input drift. source_revision is that full commit, generated_at is its committer time normalized to UTC (a deterministic generation epoch, not execution wall-clock time), source_files lists SHA-256 digests of catalog/schema/generator bytes. source_checksum hashes the serialized manifest. Each release carries the same snapshot provenance. artifact_checksum hashes the public artifact with only artifact_checksum omitted, serialized as two-space JSON plus one LF. `npm run oas:check` reproduces the file from Git and compares bytes. Digests detect byte changes; no signatures, identity proof, external timestamping or cryptographic trust chain is implemented."
+    },
+    {
+      "path": "docs/OAS_MACHINE_AUTHORITY.md",
+      "line": 27,
+      "excerpt": "For another snapshot, allocate a new prerelease/version and versioned output path in the generator; never overwrite existing unequal bytes. For an adopted release, publish reviewed normative content and dates through OAS governance first. No automated release-status promotion exists. New schema contracts require explicit schema-version migration."
+    },
+    {
+      "path": "docs/SHU_PAGE_2_ASSET_AND_BACKGROUND_AUDIT.md",
+      "line": 148,
+      "excerpt": "- Earth horizon collision: existing planet cards scroll over a fixed background, so lower rows may pass over the Earth band."
+    },
+    {
+      "path": "docs/SHU_PAGE_2_ASSET_AND_BACKGROUND_AUDIT.md",
+      "line": 150,
+      "excerpt": "- Mobile: showing the entire Earth is not realistic; text and navigation must remain primary."
+    },
+    {
+      "path": "docs/SHU_PAGE_2_ASSET_AND_BACKGROUND_AUDIT.md",
+      "line": 151,
+      "excerpt": "- Image size: 2.1 MB PNG is acceptable relative to existing masters and smaller than many current planet assets; no derivative is required in this pass."
+    },
+    {
+      "path": "docs/SHU_PAGE_2_ASSET_AND_BACKGROUND_AUDIT.md",
+      "line": 166,
+      "excerpt": "The approved future Page 2 direction is to preserve the planet-directory experience while eventually adding Universal SHU Search, Programs, Careers, Organizations, Projects, Places, Opportunities, Discover Across Silicon Heartland, Featured Stories, and Quick Access. These additions should borrow structural discipline from modern portal/explorer systems while preserving the canonical SHU black/ivory cosmic visual identity. The new production Earth-horizon background should be treated as the visual foundation for that future upgrade."
+    },
+    {
+      "path": "docs/architecture/ECOSYSTEM_RUNTIME_ROUTE_ACCEPTANCE_REPORT.md",
+      "line": 28,
+      "excerpt": "**WRONG DEVELOPMENT SERVER / PORT OWNERSHIP**, caused by dual IPv4/IPv6 loopback listeners and hostname resolution. No root MPA, HTML-entry, registry, router, proxy, service-worker, or browser-cache defect was found."
+    },
+    {
+      "path": "docs/architecture/ECOSYSTEM_RUNTIME_ROUTE_ACCEPTANCE_REPORT.md",
+      "line": 72,
+      "excerpt": "## 8. Application Boundaries"
+    },
+    {
+      "path": "docs/architecture/ECOSYSTEM_RUNTIME_ROUTE_ACCEPTANCE_REPORT.md",
+      "line": 75,
+      "excerpt": "- It is a separate package and must not serve the root ecosystem MPA."
+    },
+    {
+      "path": "docs/architecture/ECOSYSTEM_RUNTIME_ROUTE_ACCEPTANCE_REPORT.md",
+      "line": 107,
+      "excerpt": "3. No redirect hack or application redesign is required."
+    },
+    {
+      "path": "docs/architecture/FE-0_APPLICATION_DESTINATION_NAVIGATION_ASSIGNMENT_REPORT.md",
+      "line": 33,
+      "excerpt": "| Autonomous Registry | External repository reference | Configured external origin | Registration/provenance authority | EXTERNAL |"
+    },
+    {
+      "path": "docs/architecture/FE-0_APPLICATION_DESTINATION_NAVIGATION_ASSIGNMENT_REPORT.md",
+      "line": 89,
+      "excerpt": "## 17. Route Ownership"
+    },
+    {
+      "path": "docs/architecture/FE-0_APPLICATION_DESTINATION_NAVIGATION_ASSIGNMENT_REPORT.md",
+      "line": 109,
+      "excerpt": "## 20. Auth Boundaries"
+    },
+    {
+      "path": "docs/architecture/FE-0_APPLICATION_DESTINATION_NAVIGATION_ASSIGNMENT_REPORT.md",
+      "line": 275,
+      "excerpt": "No P0 destination gaps remain. No P1 gap remains for the active repository-local application set. CivicSure's disconnected package remains a documented P2 consumer/mounting decision, not a fabricated live destination. The package should be revisited only when a canonical mounted consumer and live data contract are authorized."
+    },
+    {
+      "path": "docs/architecture/FE-0_APPLICATION_DESTINATION_NAVIGATION_ASSIGNMENT_REPORT.md",
+      "line": 287,
+      "excerpt": "Actual existing shells include the root Universe/product MPA set, protected admin/control center, OAS, and the separate `apps/shf-web` package. OAS and Agent Fabric were the concrete destination/navigation assignments completed here. Shared infrastructure remains without standalone apps. The Universe Directory is the canonical ecosystem launcher, destination paths correspond to existing mounted/build entries for the wired changes, auth boundaries remain intact, and no new app or backend authority was created."
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 17,
+      "excerpt": "versioned reorientation model, persistent cross-service checklist, or distinct"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 20,
+      "excerpt": "The safest future direction is composition. OGL should register and present"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 23,
+      "excerpt": "workflow locations. It must not become a second workflow, entitlement,"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 53,
+      "excerpt": "The five required modes are all represented conceptually in the repository,"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 135,
+      "excerpt": "| Organization onboarding | Onboarding lifecycle service | `organization-onboarding-service.ts` and routes | Consume lifecycle stage and required agreement state |"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 151,
+      "excerpt": "- required/optional/waiting/blocked/reference/completed categories;"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 156,
+      "excerpt": "OGL should consume DGAL guidance IDs, requirement IDs, action targets,"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 158,
+      "excerpt": "must not copy DGAL requirement state or create a second Document Center"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 188,
+      "excerpt": "Assessment: **PARTIAL**. OGL-3 should harden a single accessible primitive and"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 214,
+      "excerpt": "OGL should reuse the Universe/application registries for destination identity,"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 215,
+      "excerpt": "then layer orientation metadata on top. It should not create a competing"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 243,
+      "excerpt": "OGL must resolve effective permissions and active organization server-side;"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 248,
+      "excerpt": "| Destination / route | Role(s) | Welcome/orientation | Tour | Checklist / next steps | DGAL | Companion | Accessible alternative | Versioned | Current status |"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 261,
+      "excerpt": "| `/admin.html#/truth-spine` | truth/auditor/admin | Authority shell | No OGL tour found | Truth workflows | DGAL must not own Truth | No | Route permission boundary | Truth versions | PARTIAL |"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 262,
+      "excerpt": "| `/admin.html#/oracle` | admin/oracle roles | Authority shell | No OGL tour found | Oracle workflows | DGAL must not own Oracle | No | Route permission boundary | Oracle versions | PARTIAL |"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 268,
+      "excerpt": "| `/sales.html#/dashboard` | client/admin | Hub/business tours may apply | Hub tours on related pages | Sales pipeline actions | Optional DGAL | No direct integration | Existing controls | Hardcoded tour configs | PARTIAL |"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 292,
+      "excerpt": "| Versioning | WEAK; domain versions exist, tour definitions are not versioned |"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 302,
+      "excerpt": "Recommendation: OGL-2/OGL-4 should compose a checklist projection from these"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 329,
+      "excerpt": "versioned. Tour definitions and Hub step registries are not versioned as"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 338,
+      "excerpt": "invoked, or next-action reached. Existing operational/audit events must not be"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 339,
+      "excerpt": "reused as experience telemetry without classification. OGL telemetry should be"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 376,
+      "excerpt": "Public destinations should receive lightweight explanation and orientation only:"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 378,
+      "excerpt": "learning/civic surfaces. Authenticated destinations should receive role,"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 392,
+      "excerpt": "- tour completion is local React state and must never be projected as workflow"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 395,
+      "excerpt": "- Companion client storage is appropriate for preferences but must not store"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 397,
+      "excerpt": "- raw route and resource context must continue to be reauthorized after org"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 426,
+      "excerpt": "| Versioned/reorientation experience | WEAK | Domain versioning, no tour version/reoffer model |"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 477,
+      "excerpt": "| OGL-GAP-006 | P1 | No persistent OGL checklist projection over DGAL and domain next-actions | CivicSure, onboarding, Curriculum, Career, Hub | OGL-2/OGL-4 | Required/optional/waiting items compose without duplicating completion authority |"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 484,
+      "excerpt": "| OGL-GAP-013 | P2 | No progressive guidance adaptation based on experience/prior orientation | Curriculum, Career, service onboarding | OGL-2/OGL-5 | Experience-level policy reduces repetition without hiding required guidance |"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 509,
+      "excerpt": "OGL Orientation Registry and Versioned Contracts"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 532,
+      "excerpt": "## 34. OGL Data Ownership"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 534,
+      "excerpt": "OGL may persist:"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 544,
+      "excerpt": "OGL must not persist as authority:"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 558,
+      "excerpt": "orientation version. Reauthorization must apply on every resume. Domain state"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 564,
+      "excerpt": "target, and accessibility primitives with the DGAL Document Center. It should"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 565,
+      "excerpt": "consume DGAL documents/requirements and service guidance but should not merge"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 571,
+      "excerpt": "immediately. Introduce an adapter from Hub/page step configs into one versioned"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 573,
+      "excerpt": "parity. Required hardening: focus management, escape/close semantics, reduced"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 626,
+      "excerpt": "reuse decisions, gap register, phase assignments, architecture, ownership,"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 643,
+      "excerpt": "| OGL-GAP-001 | RESOLVED | Canonical Orientation Contract, destination binding, ownership, lifecycle, versioning, and fail-closed validator |"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 693,
+      "excerpt": "| OGL-GAP-005 | RESOLVED | Migration 139 and `/orientation/experience` persist exact versioned, organization-scoped UX state; workflow completion remains outside OGL |"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 716,
+      "excerpt": "14. **Versioned:** No shared tour definition/version model."
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 729,
+      "excerpt": "27. **Tour as institutional completion:** No current direct misuse found; boundary must remain explicit."
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 739,
+      "excerpt": "37. **Necessary OGL persistence:** Versioned definitions, audience associations, actor/org experience state, reorientation state, and bounded telemetry."
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 791,
+      "excerpt": "acceptance, legacy consumer migration, and BOS identity ownership still lack"
+    },
+    {
+      "path": "docs/architecture/OGL-0_SYSTEM_WIDE_ORIENTATION_GUIDANCE_AUDIT.md",
+      "line": 802,
+      "excerpt": "The CivicSure Operator and Executive Command repository-local OGL contract/mount work is now represented in the registry, server catalog, protected routes, and semantic anchors. OGL-GAP-015 remains OPEN because BOS identity ownership, active Sales compatibility consumers, and destination-specific authenticated browser fixtures are unresolved; no later-phase gap is changed."
+    },
+    {
+      "path": "docs/architecture/PR-0_HISTORICAL_GAP_CLOSURE_AUDIT.md",
+      "line": 71,
+      "excerpt": "| BLOCKED — EXTERNAL DEPENDENCY | Internal repository work is complete enough for the current contract, but a third-party, legal, institutional, credential, or deployment action is required. |"
+    },
+    {
+      "path": "docs/architecture/PR-0_HISTORICAL_GAP_CLOSURE_AUDIT.md",
+      "line": 76,
+      "excerpt": "| ID | Domain | Gap | Evidence | Classification | Severity | Production Impact | Pilot Impact | External Dependency | Owner Phase | Closure Evidence Required |"
+    },
+    {
+      "path": "docs/architecture/PR-0_HISTORICAL_GAP_CLOSURE_AUDIT.md",
+      "line": 80,
+      "excerpt": "| PR0-GAP-003 | Federation / SCIM | PR-1 records runtime references for federation provider/mapping, but enterprise federation and SCIM are not externally configured or accepted. | `docs/SHS_PRODUCTION_IDENTITY_PROVIDER_DECISION.md`; `docs/government-program-assurance/county-pilot-acceptance/32_IDENTITY_FEDERATION_READINESS.md`; `apps/shs-api/src/security/pr1-production-security-readiness.ts` | BLOCKED — EXTERNAL DEPENDENCY | N/A | Enterprise/customer identity lifecycle is not production-ready. | May block government/institution pilots. | Customer IdP and Auth0 federation/SCIM setup. | PR-1 | SAML/OIDC federation proof, scoped membership mapping, deprovisioning, and audit trail. |"
+    },
+    {
+      "path": "docs/architecture/PR-0_HISTORICAL_GAP_CLOSURE_AUDIT.md",
+      "line": 83,
+      "excerpt": "| PR0-GAP-006 | Secrets / keys | PR-1 added production readiness checks for secret refs/rotation refs and removed production browser-bundle private admin-key reads. Secret store provisioning and rotation execution remain external. | `infra/azure/`; `apps/shs-api/src/security/external-secret-cipher.ts`; `apps/shs-api/src/security/pr1-production-security-readiness.ts`; `tests/pr1FrontendSecretExposure.test.mjs` | BLOCKED — EXTERNAL DEPENDENCY | N/A | Production startup fails closed without required secret references. | Blocks pilot environment readiness until secret store is provisioned. | Azure/approved secret store access. | PR-1 | Secret inventory, no hardcoded production secrets, injected references, rotation/revocation proof, and log redaction proof. |"
+    },
+    {
+      "path": "docs/architecture/PR-0_HISTORICAL_GAP_CLOSURE_AUDIT.md",
+      "line": 84,
+      "excerpt": "| PR0-GAP-007 | Agent Fabric unrestricted execution | Unrestricted production Agent Fabric execution remains intentionally disabled. PR-5 verified the bounded, server-authoritative safe runner and negative denial controls without enabling unrestricted autonomy. | `docs/architecture/SYS-6A_AGENT_FABRIC_PRODUCTION_EXECUTION_GOVERNANCE_REBASELINE_SAFETY_GAP_AUDIT_REPORT.md`; `docs/architecture/SYS-6C_DURABLE_GOVERNED_TASK_EXECUTION_RECOVERY_CANCELLATION_FOUNDATION_REPORT.md`; `docs/architecture/PR-5_AGENT_FABRIC_CONTROLLED_PRODUCTION_PILOT_REPORT.md`; `apps/shs-api/tests/pr5-controlled-pilot-acceptance.test.ts` | INTENTIONAL SAFETY/POLICY LIMIT | N/A | Prevents autonomous production side effects. | Bounded supervised pilot evidence is accepted; unrestricted autonomy remains prohibited. | N/A. | PR-5 | A future explicit policy decision and separately authorized production-worker design would be required to change this limit. |"
+    },
+    {
+      "path": "docs/architecture/PR-0_HISTORICAL_GAP_CLOSURE_AUDIT.md",
+      "line": 86,
+      "excerpt": "| PR0-GAP-009 | External provider activation | PR-4 inventoried existing provider boundaries and added safe configuration health, normalized errors, idempotent retry, callback scope, production test-adapter isolation, and activation runbook. No real provider is activated. | `docs/architecture/SYS-7A_EXTERNAL_INTEGRATIONS_STORAGE_PROVIDER_ADAPTER_REBASELINE_GAP_AUDIT_REPORT.md`; `apps/shs-api/src/domain/external-integrations/integration-readiness.ts`; `apps/shs-api/tests/pr4-integration-readiness.test.ts`; `docs/architecture/PR-4_EXTERNAL_INTEGRATION_ACTIVATION_RUNBOOK.md`; `docs/architecture/PR-4_EXTERNAL_INTEGRATIONS_PROVIDER_ACTIVATION_REPORT.md` | BLOCKED — EXTERNAL DEPENDENCY | N/A | Production cannot depend on real external services until accounts, credentials, and provider acceptance exist. | Pilot scope must avoid or explicitly provision providers. | Provider accounts/credentials, quotas, OAuth approvals, sandbox/live tests. | PR-4 | Per-provider sandbox and production-adjacent tests, outage behavior, idempotency, scope, and credential proof. |"
+    },
+    {
+      "path": "docs/architecture/PR-0_HISTORICAL_GAP_CLOSURE_AUDIT.md",
+      "line": 91,
+      "excerpt": "| PR0-GAP-014 | Observability / alerting | Repository telemetry, health/readiness, thresholds, and alert predicates are implemented; production dashboards, alert destinations, owners, and escalation remain external. | `apps/shs-api/src/observability/operational-telemetry.ts`; `apps/shs-api/src/observability/pr6-operational-readiness.ts`; `docs/architecture/PR-6_PERFORMANCE_OBSERVABILITY_DISASTER_RECOVERY_REPORT.md`; PR-6 tests | BLOCKED — EXTERNAL DEPENDENCY | P1 | Failures require hosted monitoring to be actionable. | Blocks production-like pilot operations. | Monitoring provider, alert destination, and on-call ownership. | PR-6 | Hosted dashboards/alerts for auth/reporting/storage/jobs/providers/security and test-alert evidence. |"
+    },
+    {
+      "path": "docs/architecture/PR-0_HISTORICAL_GAP_CLOSURE_AUDIT.md",
+      "line": 97,
+      "excerpt": "| PR0-GAP-020 | Production deployment / infrastructure | Azure model is code-complete, but subscription auth, images, apply, domains/TLS, ingress, private network, process ownership, and staging proof remain incomplete. | `docs/SHF_TRUSTED_REPORTING_PRODUCTION_HARDENING_AUDIT.md`; `docs/SHF_TRUSTED_REPORTING_STAGING_DEPLOYMENT_PROOF.md`; `infra/azure/` | BLOCKED — EXTERNAL DEPENDENCY | N/A | No production environment is proven. | Blocks real pilot hosting. | Azure credentials/subscription/domain. | PR-6 | Authenticated plan/apply, immutable images, ingress/TLS, private service checks, env config validation, health checks, and smoke test. |"
+    },
+    {
+      "path": "docs/architecture/PR-0_HISTORICAL_GAP_CLOSURE_AUDIT.md",
+      "line": 99,
+      "excerpt": "| PR0-GAP-022 | Rollback procedure | Application/database rollback decision guidance and recovery checklist are documented; deployed rollback and timed drill remain external. | `docs/operations/PRODUCTION_OPERATIONS_AND_RECOVERY_PACKET.md`; PR-6 report | BLOCKED — EXTERNAL DEPENDENCY | P1 | Bad deployment recovery requires deployed rehearsal. | Blocks production-like pilot. | Deployment environment. | PR-6 | Versioned app rollback, DB rollback/forward-fix policy, publication revocation proof, and timed drill. |"
+    },
+    {
+      "path": "docs/architecture/PR-0_HISTORICAL_GAP_CLOSURE_AUDIT.md",
+      "line": 100,
+      "excerpt": "| PR0-GAP-023 | Performance / load / concurrency | Bounded local percentile/concurrency probe and operational limits are implemented; production-like datasets, load environment, and scale thresholds remain external. | `apps/shs-api/src/observability/pr6-operational-readiness.ts`; `apps/shs-api/tests/pr6-operational-readiness.test.ts`; PR-6 report | BLOCKED — EXTERNAL DEPENDENCY | P1 | Capacity and degradation behavior require production-like evidence. | Blocks anything beyond bounded pilot; pilot must be capped. | Production-like environment and representative data. | PR-6 | Load plan, representative datasets, concurrent user/job tests, report generation at scale, rate limits, SLO thresholds. |"
+    },
+    {
+      "path": "docs/architecture/PR-0_HISTORICAL_GAP_CLOSURE_AUDIT.md",
+      "line": 102,
+      "excerpt": "| PR0-GAP-025 | Recompute / correction propagation | PR-2 added a correction propagation contract requiring source-correction event detection, recompute, projection refresh, metric refresh, report supersession, and public projection refresh; report/public supersession boundaries are test-covered. | `apps/shs-api/src/recovery/pr2-data-governance.ts`; `apps/shs-api/tests/pr2-data-governance-recovery.test.ts`; `tests/pr2LineagePrivacyRecovery.test.mjs`; publication boundary tests | RESOLVED | N/A | Repository-local stale-data propagation behavior is defined. | Supports bounded pilot reporting; real-data proof is tracked by PR0-GAP-024. | None for repository-local PR-2 scope. | PR-2 | Closed by PR-2 correction propagation contract and regression tests; real-data acceptance remains PR0-GAP-024. |"
+    },
+    {
+      "path": "docs/architecture/PR-0_HISTORICAL_GAP_CLOSURE_AUDIT.md",
+      "line": 104,
+      "excerpt": "| PR0-GAP-027 | CivicSure provider self-service | Provider-scoped workspace API/UI now supports obligation/evidence-request visibility, canonical evidence upload, finding responses, corrective-action responses, status visibility, provenance, and fail-closed cross-provider access. Provider authority explicitly excludes verification, publication, and payment. | `apps/shs-api/src/domain/government-assurance/service/provider-self-service-service.ts`; `apps/shs-api/src/domain/government-assurance/api/routes.ts`; `src/pages/civicsure/CivicSureApp.jsx`; `apps/shs-api/tests/civicsure-provider-self-service.test.ts`; isolated DB-backed migration/acceptance evidence | RESOLVED | N/A | Repository-local provider self-service is available within canonical CivicSure authority boundaries; external provider participant UAT remains part of PR0-GAP-028. | Supports bounded provider-shaped pilot. | None for repository-local closure. | PR-7 | Provider-scoped API/UI, canonical evidence provenance, response/correction workflows, cross-provider denial, authority-boundary tests. |"
+    },
+    {
+      "path": "docs/architecture/PR-0_HISTORICAL_GAP_CLOSURE_AUDIT.md",
+      "line": 107,
+      "excerpt": "| PR0-GAP-030 | Support / escalation / runbooks | Repository runbooks, incident/recovery packet, and PR-7 handoff checklist exist; named production support ownership, escalation contacts, SLA policy, and tabletop remain external. | `docs/operator-runbook/*`; `docs/operations/PRODUCTION_OPERATIONS_AND_RECOVERY_PACKET.md`; `docs/operations/PR-7_REAL_ORGANIZATION_PILOT_ACCEPTANCE_PACKET.md` | BLOCKED — EXTERNAL DEPENDENCY | P1 | Production incidents and customer requests require assigned operational ownership. | Blocks real org pilot handoff. | Customer support staffing and operational owner assignment. | PR-7 | Runbook index, escalation contacts, severity/SLA policy, support queue, incident tabletop, audit packet template, pilot handoff packet. |"
+    },
+    {
+      "path": "docs/architecture/PR-0_HISTORICAL_GAP_CLOSURE_AUDIT.md",
+      "line": 141,
+      "excerpt": "| PR0-EXT-006 | Institutional/legal/financial operating prerequisites | Legal readiness packages and boundaries | Counsel, accounting, insurance, banking, tax, payment merchant, DPAs, procurement/vendor approvals | Yes for real org/payment pilots | Yes |"
+    },
+    {
+      "path": "docs/architecture/PR-0_HISTORICAL_GAP_CLOSURE_AUDIT.md",
+      "line": 145,
+      "excerpt": "| ID | Limit | Reason | Safety/Policy Basis | What Would Be Required To Change It |"
+    },
+    {
+      "path": "docs/architecture/PR-0_HISTORICAL_GAP_CLOSURE_AUDIT.md",
+      "line": 181,
+      "excerpt": "Canonical identity authority is the SHS identity/auth domain: provider authentication is separate from SHS memberships, roles, permissions, organization, tenant, and service entitlements. SYS-8B2 proved active org context, multi-org-safe headers, role/permission denial, legal/composition/funding boundaries, direct-ID isolation, revocation, and restart reconstruction. Frontend route guards are convenience gates; backend authorization is authoritative."
+    },
+    {
+      "path": "docs/architecture/PR-0_HISTORICAL_GAP_CLOSURE_AUDIT.md",
+      "line": 189,
+      "excerpt": "Truth Spine write boundaries are sound for current repository contracts. Canonical writes require eligible provenance, admissible Evidence, and human verification; public approval is separate. `npm run check:truth` passed. No frontend, Agent Fabric, Oracle, Reporting, Funding, Studio, or unrelated domain can mint arbitrary accepted Truth facts based on inspected evidence."
+    },
+    {
+      "path": "docs/architecture/PR-0_HISTORICAL_GAP_CLOSURE_AUDIT.md",
+      "line": 193,
+      "excerpt": "Evidence authority is sound for current repository contracts. Evidence preserves provenance, source attribution, classification/scope, and history where intended. Raw agent/provider/source/funding records are not automatically verified Evidence. Public projections do not expose protected Evidence payloads."
+    },
+    {
+      "path": "docs/architecture/PR-0_HISTORICAL_GAP_CLOSURE_AUDIT.md",
+      "line": 201,
+      "excerpt": "Metric Registry/MetricTruth is repository-complete for current contracts: versioned definitions, scoped results, input eligibility, lineage, deduplication, and report/public alignment were accepted in SYS-8B4. PR-2 resolved the repository-local recompute/correction propagation contract; real-data lineage acceptance remains PR0-GAP-024."
+    },
+    {
+      "path": "docs/architecture/PR-0_HISTORICAL_GAP_CLOSURE_AUDIT.md",
+      "line": 231,
+      "excerpt": "| OAS subentries | `/oas-1.html`, `/oas-control-domains.html`, `/oas-purpose-boundaries.html`, `/oas-risk-classification.html` | Public | No | N/A | N/A | Yes | Runtime tests/build | RESOLVED |"
+    },
+    {
+      "path": "docs/architecture/PR-0_HISTORICAL_GAP_CLOSURE_AUDIT.md",
+      "line": 258,
+      "excerpt": "PR-3 implements hosted/tokenized collection as the required boundary, no-raw-card schema protection, signed webhook verification in the adapter contract, idempotency, replay protection, amount/currency/environment checks, refund ceilings, and server-side secret boundaries. Live processor configuration and production PCI evidence remain external under PR0-GAP-019."
+    },
+    {
+      "path": "docs/architecture/PR-0_HISTORICAL_GAP_CLOSURE_AUDIT.md",
+      "line": 286,
+      "excerpt": "Local Vite/API success is not production readiness. Azure Terraform has been validated locally, but authenticated deployment, TLS/domains, ingress/private networking, env/secrets injection, migrations, worker process ownership, reverse proxy, asset hosting, logs, health, monitoring, and rollback are not proven. See PR0-GAP-020 through PR0-GAP-022."
+    },
+    {
+      "path": "docs/architecture/PR-0_HISTORICAL_GAP_CLOSURE_AUDIT.md",
+      "line": 306,
+      "excerpt": "Entity authorization, counsel review, insurance, banking, tax treatment, nonprofit/for-profit boundaries, data-sharing agreements, vendor registration/procurement, terms/privacy, DPAs, student privacy agreements, IP assignment, contractor agreements, and payment processor/merchant setup are external dependencies. See PR0-GAP-029 and PR0-EXT-006."
+    },
+    {
+      "path": "docs/architecture/PR-0_HISTORICAL_GAP_CLOSURE_AUDIT.md",
+      "line": 364,
+      "excerpt": "The roadmap remains finite: PR-0 through PR-7. PR-1 and PR-2 repository-local work are complete. PR-3 through PR-7 should consume this register without inventing PR-8 or reopening completed SYS/FE work unless new evidence proves regression."
+    },
+    {
+      "path": "docs/architecture/PR-0_HISTORICAL_GAP_CLOSURE_AUDIT.md",
+      "line": 394,
+      "excerpt": "- Validation-generated build output may have been refreshed by the requested `npm run build`; no product source code was modified for PR-0."
+    },
+    {
+      "path": "docs/architecture/PR-0_HISTORICAL_GAP_CLOSURE_AUDIT.md",
+      "line": 425,
+      "excerpt": "| 14 | Are Truth write boundaries sound? | Yes. |"
+    },
+    {
+      "path": "docs/architecture/PR-0_HISTORICAL_GAP_CLOSURE_AUDIT.md",
+      "line": 426,
+      "excerpt": "| 15 | Are Evidence boundaries sound? | Yes. |"
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 54,
+      "excerpt": "| OAS subpages | `oas-1.html`, `oas-control-domains.html`, `oas-purpose-boundaries.html`, `oas-risk-classification.html` | OAS documentation surfaces | Public-first | Dedicated entries |"
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 71,
+      "excerpt": "| Registry | `PARTIAL` / `ROUTE_ONLY` | Universe destination record, admin `/registry`, `/ops/system-registry`; autonomous registry may be separate repository | No single canonical frontend product entry in this repository |"
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 77,
+      "excerpt": "The Universe destination registry explicitly documents that BOS and SHF are served by this repository, while Autonomous Registry is a genuinely separate application/repository with an environment-configurable origin. That distinction must be preserved in any host registry."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 125,
+      "excerpt": "The adapter must validate the complete hostname, reject unknown hosts, and never derive Organization/Tenant from the host. Host selects product experience; authenticated Identity and canonical Organization/Tenant membership select data scope."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 127,
+      "excerpt": "Unknown hosts must return an edge 404 or redirect to the SHU gateway. They must never default to `index.html` in a way that exposes CivicSure or another authenticated product."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 138,
+      "excerpt": "- `foundation.html` and `solutions.html` include literal `/@vite/client` and `/@react-refresh` script references, which are development-specific and should be removed or gated before production serving."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 139,
+      "excerpt": "- Relative/shared chunks are safe at a host root but must be tested under every edge rewrite."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 200,
+      "excerpt": "Recommend a shared central login domain with product-local entry redirects. This avoids duplicating login UX while preserving host-only application sessions and a clear identity trust boundary. `civicsure.siliconheartland.org/login` can redirect to the central identity entry with a validated return URL; it should not become a second authentication authority."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 204,
+      "excerpt": "The frontend stores the active organization ID in origin-local storage and clients send `x-shs-organization-id`; backend services validate membership and derive tenant context from canonical identity/session state. The host must not select tenant or organization. A host can select CivicSure versus OAS, but organization, tenant, classification, purpose, and data permissions must remain authenticated backend context."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 206,
+      "excerpt": "A product transition must clear or revalidate stale UI organization state against the current session. Public hosts must not inherit an authenticated operator organization context."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 217,
+      "excerpt": "All planned hosts can call one shared API, but production configuration needs a single documented origin strategy. Relative `/api` through an edge gateway is simplest for same-deployment products; absolute API origin is workable if CORS and credentials are explicit. Legacy hard-coded localhost defaults should be treated as a pre-production configuration risk."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 223,
+      "excerpt": "Each approved product origin will need an explicit allowlist entry or a carefully implemented controlled origin function. Do not use `*` with credentials. UAT and production origins should have separate environment configuration and tests."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 229,
+      "excerpt": "Before subdomains go live, define vendor-neutral edge headers with per-product `connect-src` and approved identity/API origins. `frame-ancestors` should be explicit, HSTS should be enabled only when the domain topology is ready, and asset/CDN origins must be known. Public and authenticated products may require different policies."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 248,
+      "excerpt": "| Registry | Mixed; public registry and restricted operations must be separated by canonical policy |"
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 254,
+      "excerpt": "Do not serve public and authenticated applications under one ambiguous host fallback. CivicSure public transparency should remain a policy-controlled route, not a consequence of accepting internal Truth."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 258,
+      "excerpt": "Vite and HTML entries use root-relative asset paths. This is compatible with host-root deployments but not automatically with path-prefix mounting. Image imports and generated chunks are generally Vite-managed; public assets are served from root-relative paths. The edge should preserve host-root semantics or the build should explicitly configure a product base."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 260,
+      "excerpt": "The OAS entry intentionally does not import shared SHF/SHS global CSS, which is a useful product isolation precedent. Foundation and Solutions development HMR script literals must be removed/gated before production. HTML entry and asset smoke tests are required per hostname."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 272,
+      "excerpt": "| Reporting/AI | Shared authority, environment-specific endpoints/config | Preserve canonical service boundaries |"
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 273,
+      "excerpt": "| Secret references | Server/secret-store only | Azure Key Vault is present; frontend must not receive secret values |"
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 277,
+      "excerpt": "Product identity is currently distributed among HTML titles, entry modules, app manifests, Universe destination records, and page-local labels. There is no single host/product manifest. A future bounded registry should include `productKey`, approved hostnames, entry key, display name, shell, auth mode, public route, API policy, and environment. It must be configuration metadata, not a duplicate Organization/Tenant or authorization authority."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 283,
+      "excerpt": "Do not create a wildcard that causes every arbitrary subdomain to serve the root app. The DNS design must make the approved-host registry authoritative at the edge."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 287,
+      "excerpt": "Use managed TLS from the chosen hosting/edge provider. Per-host managed certificates are simplest for a small, explicit product set. A wildcard certificate can reduce certificate administration if the provider manages renewal and the organization accepts the broader certificate scope. No manual certificate provisioning is required by current repository evidence."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 291,
+      "excerpt": "The current repository does not contain Nginx, Cloudflare, Vercel, Netlify, or other product-host edge rules. Azure Container Apps provides an optional frontend ingress but no checked-in custom-domain mapping was found. A vendor-neutral edge/reverse-proxy layer is therefore required for hostname-to-entry mapping, TLS, unknown-host rejection, cache policy, and security headers."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 293,
+      "excerpt": "The edge should either:"
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 298,
+      "excerpt": "The second is clearer for public OAS/Foundation/Solutions entries; the first avoids rebuilding CivicSure into a second runtime. The choice should be captured in a product host registry and tested before DNS creation."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 318,
+      "excerpt": "One shared deployment means a broken shared chunk, root shell, or Vite config can affect all products. Separate deployments improve rollback independence but multiply operations. A practical mitigation for Option A is immutable artifact deployment, fast whole-artifact rollback, per-host smoke tests, and product-specific feature gating. CivicSure should be the first candidate for a separately rollbackable deployment only if it becomes a materially higher-risk authenticated product than the public entries."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 322,
+      "excerpt": "No unified product/hostname tagging system was found in the frontend audit. Minimum future telemetry fields should be `product_key`, `hostname`, `environment`, `route`, and authenticated organization/tenant identifiers only where policy permits. API and edge logs should preserve host, request ID, origin, and outcome without logging tokens or sensitive payloads."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 326,
+      "excerpt": "The repository contains environment base URL configuration such as `SHF_FRONTEND_BASE_URL` and return-path guards, but no product-host registry controlling all absolute links. Invitations, password resets, report links, notifications, and public links should use an approved product/environment base URL from server-side configuration. Never accept arbitrary browser-provided base URLs."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 330,
+      "excerpt": "Current CivicSure reporting uses the canonical Reporting authority and API paths; report artifact authority is not tied to a product hostname. Future links should resolve through a configured CivicSure base such as `https://civicsure.siliconheartland.org/...`, while authorization, tenant scope, classification, and Public Disclosure remain server-side. A hostname change must not create a second artifact authority."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 334,
+      "excerpt": "OAS has a title and description in its HTML. Other entries often have only a title, and no systematic per-host canonical URL, Open Graph, robots, or sitemap strategy was found. Each public hostname should receive independent title, description, canonical URL, Open Graph metadata, robots policy, and sitemap ownership. Authenticated CivicSure/admin hosts should generally discourage indexing."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 340,
+      "excerpt": "Do not require developers to run a separate infrastructure stack per product. The dev harness should be able to select a host and entry deterministically while retaining the same API proxy."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 349,
+      "excerpt": "| Registry | `registry.siliconheartland.org` | No single entry; Universe/admin/separate repo references | `/registry`, `/ops/system-registry`, external origin possibility | Separate explicit product mapping after ownership is confirmed | Mixed | Policy-dependent | CODE_ADAPTER, HOSTING_CONFIG, AUTH_CONFIG |"
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 357,
+      "excerpt": "`siliconheartland.org` should be the ecosystem gateway, directory, and trust front door. The existing Universe page and `universeDestinationRegistry.js` are the strongest current candidates. It should explain the SHU product family and route to approved product hosts, not silently mount every authenticated product inside one generic page."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 361,
+      "excerpt": "An unknown host such as `unknown.siliconheartland.org` must fail closed at the edge with a 404 or redirect to the SHU gateway. It must not default to the root MPA, CivicSure, Admin, or an authenticated page. Host allowlisting should be tested for production, UAT, and local development behavior."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 397,
+      "excerpt": "| Shared API | One API | Separate trust boundaries | Shared API with explicit origins/auth |"
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 402,
+      "excerpt": "| Public/auth mixed host | Fewer hosts | Separate public/auth trust boundaries | Separate host or explicit public projection |"
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 405,
+      "excerpt": "## 39. Required Change Matrix"
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 407,
+      "excerpt": "| Product | Required change classes |"
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 412,
+      "excerpt": "| Registry | CODE_ADAPTER, HOSTING_CONFIG, AUTH_CONFIG; ownership decision first |"
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 440,
+      "excerpt": "Pilot `civicsure.siliconheartland.org` with the existing GPA shell and routes, smoke-test direct URLs, refresh, auth, reports, public-safe boundaries, and rollback."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 444,
+      "excerpt": "Add OAS, Foundation, Solutions, Studio, BOS, and Registry only after each has a confirmed entry/ownership/auth posture and host-specific acceptance evidence."
+    },
+    {
+      "path": "docs/architecture/SHU_DOMAIN_MULTI_APP_ROUTING_AUDIT.md",
+      "line": 458,
+      "excerpt": "The product can proceed as a configuration/routing implementation wave without changing GPA canonical APIs or migration 105. The accepted GPA tag and authorization boundaries should remain the reference baseline while host routing is introduced."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 17,
+      "excerpt": "1. CivicSure is the current reference implementation for immutable report payloads, versioned templates, HTML/PDF rendering, durable rendered files, hashes, scoped retrieval, history, and Public Disclosure separation."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 19,
+      "excerpt": "3. The repository contains a second frontend-oriented SHS report registry, lifecycle, storage, seed, and presentation surface under `src/data/shsReports` and `src/pages/admin/reports`. Its ownership must be clarified before consolidation; it must not become a competing artifact authority."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 20,
+      "excerpt": "4. Allocation, Credit, civic portfolio, treasury, curriculum, career, employer, sales, and other screens contain local JSON exports or `window.print()` paths. These are not equivalent to governed reports and should remain convenience exports or migrate to Shared Reporting only when they become official artifacts."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 26,
+      "excerpt": "The repository can support one Universal Reporting Architecture by reusing the existing CivicSure Reporting authority as the shared artifact, template, rendering, storage, retrieval, history, classification, and Public Disclosure boundary. Product teams should own only authorized domain projections and report contracts. No duplicate Reporting authority should be created."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 52,
+      "excerpt": "This is the correct authority to reuse. It should be generalized through a bounded adapter contract, not replaced or duplicated."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 61,
+      "excerpt": "| Template version | COMPLETE | `report_templates` and registry support versioned templates. |"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 67,
+      "excerpt": "| Safe filename | COMPLETE / PRODUCT-SPECIFIC | Current implementation is CivicSure-branded and must become product-parameterized. |"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 83,
+      "excerpt": "Its authoritative source is the Government Program Assurance domain. Its projections consume canonical funding, program, provider, claim, verification, metric, Truth, monitoring, reconciliation, data quality, finding, corrective action, audit, and source-health authorities. It supports immutable payloads, HTML/PDF rendering, durable files, history, classification, scoped retrieval, and Public Disclosure separation. CivicSure must be treated as the strongest implementation of Shared Reporting, not as the owner of ecosystem reporting."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 87,
+      "excerpt": "OAS has dedicated public MPA entrypoints and pages for the Open Autonomous Standard, control domains, purpose boundaries, risk classification, and OAS-1 content. The audited repository did not show a dedicated OAS report artifact service or Shared Reporting projection."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 89,
+      "excerpt": "Potential report families are Standard Conformance, Agent Specification, OAS Compliance/Conformance Summary, Testing and Evidence, Standards Traceability, and Standards Version/Change. These remain proposed until an OAS canonical projection, audience, classification policy, and approval boundary are defined. OAS standard authority must remain distinct from Registry and Trust Bureau authority."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 93,
+      "excerpt": "The repository does not expose a verified Autonomous Registry report generator comparable to CivicSure. Registry-like records and agent-registry concepts must be kept distinct from standards, conformance, and trust decisions."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 95,
+      "excerpt": "Potential report families are Registry Record, Agent Registration Summary, Registration Status, Verification History, Trust/Status, Ownership/Operator Record, and Conformance Evidence Summary. These should be generated only from a Registry-owned projection and must not cause Shared Reporting to become a registry or trust authority."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 101,
+      "excerpt": "Potential report families are Project Report, Build Packet, QA Report, Review Report, Approval Report, Student/Team Evidence Packet, Project Completion Report, and Portfolio Evidence Export. Build Packets and Portfolio artifacts remain their own authorities; a governed report should project authorized references into Shared Reporting rather than replace them."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 107,
+      "excerpt": "Potential report families are Operating Review, Workflow Performance, Governance/Control, AI Workforce Activity, Release Assurance, Evidence Packet, Organization Operating Summary, and Control Exception. ARAG-1 and other commercial products must retain distinct authority where applicable. Shared Reporting may render their authorized projections without merging their operational models."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 119,
+      "excerpt": "Potential report families are Client Operating, Service Delivery, Executive Business Review, Implementation Status, Assurance/Compliance, and Operational Improvement. Customer and service data should be projected by Solutions authority and passed to Shared Reporting only after audience, organization, tenant, and classification authorization."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 125,
+      "excerpt": "Potential report families include Student Progress, Course Completion, Evidence, Assessment, Skill Profile, Portfolio, Instructor/Class, Cohort, Career Readiness, Credential Evidence, and Employer/Partner Outcome. Academic scoring must remain separate from technical conformance. Participant and student PII must be minimized and redacted by projection policy."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 131,
+      "excerpt": "The initial recommendation is to keep legal artifacts under their existing document/legal authority and use Shared Reporting only for an explicitly approved projection. Reporting must not become the legal record of authority or advice."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 137,
+      "excerpt": "Potential families are Agent Session, AI Governance Activity, Policy Enforcement, Tool Access, MCP Governance, Prompt Injection/Security Event Summary, AI Administration, and Release Assurance Evidence Packet. Reports must omit secrets, protected prompts, and restricted content unless a canonical policy explicitly permits them. AI can explain authorized report facts but cannot create official values or bypass domain reporting permissions."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 141,
+      "excerpt": "Truth Spine, operational events, Evidence, Metric Registry, Oracle, lineage, verification, and data-quality services are cross-domain canonical inputs. They should generally supply authorized product projections rather than generate product-neutral reports directly."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 143,
+      "excerpt": "A product-neutral report is justified only when an explicit cross-domain authority, audience, data contract, and authorization model exist. Shared Reporting must format the projection; it must not independently query Truth, Evidence, Metrics, or protected domains to expand access."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 145,
+      "excerpt": "## 16. Report Ownership Matrix"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 151,
+      "excerpt": "| Registry | Registration, status, verification history | Registry authority | Registry records, ownership, status | Operators, authorized public users | Future | Only approved records |"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 181,
+      "excerpt": "- **Second frontend report system:** `src/data/shsReports/*`, `src/pages/admin/reports/*`, `src/pages/admin/reporting/*`, and `src/system/persistence/repositories/reportsRepository.js` contain registry, lifecycle, storage, readiness, templates, history, and preview concepts. They should be mapped to the API Reporting authority before further expansion."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 182,
+      "excerpt": "- **Local convenience exports:** Allocation localStorage/JSON export, Credit Report JSON, civic Portfolio/Constitution/Treasury exports, and various domain exports. These should not be treated as official reports unless migrated through Shared Reporting."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 184,
+      "excerpt": "- **Separate artifact authorities:** Portfolio artifacts, Build Packets, evidence records, public impact projections, legal records, and audit workpapers must remain their own authorities and can feed authorized report projections."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 190,
+      "excerpt": "Recommended universal minimum is HTML, PDF, and governed Print, with JSON retained for machine-readable report payloads. CSV, DOCX, and XLSX should remain product-specific until a clear canonical use case and security contract exist."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 194,
+      "excerpt": "Existing Reporting permissions include `reports.view`, `reports.preview`, `reports.export`, and Public Disclosure/publication permissions. This is a usable base. Universal Reporting should require both:"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 199,
+      "excerpt": "Do not add a universal permission that can retrieve data across product boundaries. Future `reports.generate`, `reports.approve`, and `reports.release` should be introduced only if existing permissions and Decision/publication infrastructure cannot express the need."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 203,
+      "excerpt": "Reporting may format authorized data. Reporting must not independently expand access. A projection may include only fields and references that the requesting principal is authorized to see in the product/domain context."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 205,
+      "excerpt": "Product adapters must enforce organization, tenant, subject, classification, purpose, Data Use, provider/participant privacy, and restricted Investigation rules before creating an immutable payload. Shared Rendering receives a trusted payload; it does not query product databases or canonical services to fill gaps."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 211,
+      "excerpt": "They must not be implemented by giving Shared Reporting broad read access. Until those contracts exist, cross-product reports are deferred."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 219,
+      "excerpt": "The existing `ReportTemplateRegistry` should be extended conceptually, while retaining its authority, to include product identity and report-family metadata. Product adapters should register contracts; they should not register arbitrary database queries or bypass permissions."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 223,
+      "excerpt": "One renderer can serve all products. Product identity should be supplied by a trusted product report definition containing display name, logo/mark reference, design-token key, terminology map, classification treatment, and report-family template. CivicSure, OAS, Registry, Studio, BOS, Foundation, and Solutions should not require separate renderer engines."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 229,
+      "excerpt": "Universal design should own page sizing, print pagination, accessibility structure, classification markings, headers/footers, evidence and metadata appendix primitives, table safety, filename sanitization, artifact integrity, and retrieval security."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 231,
+      "excerpt": "Product design should own logo, accent colors, typography accents, cover composition, terminology, report sections, narrative rules, and product-specific evidence presentation. Product design must not change the universal artifact or security contract."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 241,
+      "excerpt": "This should initially be composition of trusted renderer primitives and template metadata rather than a large inheritance framework."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 245,
+      "excerpt": "The current shared schema supports `INTERNAL`, `RESTRICTED_EXTERNAL`, and `PUBLIC`. These are a workable initial ecosystem baseline and must not be weakened. Product-specific sensitivity, including participant, legal, investigative, AI security, and financial data, should be handled by canonical classification policy and projection redaction."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 247,
+      "excerpt": "Do not broaden the classification enum during this audit. A later extension should be a deliberate schema and policy change with migration and compatibility analysis."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 251,
+      "excerpt": "Shared Reporting does not imply public release. CivicSure public transparency, OAS public standards, Registry public records, and Foundation impact reports may be public only when the product’s Public Disclosure or publication authority determines eligibility, approves release, creates a safe snapshot, and controls distribution."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 253,
+      "excerpt": "Accepted Truth, a generated internal report, or `PUBLIC` metadata alone must not make a report public."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 257,
+      "excerpt": "High-risk domains include student/participant data, provider investigations, organization secrets, AI prompts, legal records, security events, and financial records. Product projections must omit unnecessary PII, investigative theories, secrets, protected prompts, and unsupported fraud language."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 259,
+      "excerpt": "Public and funder reports should prefer bounded aggregate facts and evidence references. Restricted matter indicators may be shown only where existing policy permits them."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 263,
+      "excerpt": "Report lifecycle should be product-specific. County executive, public impact, legal, and compliance reports commonly need `DRAFT → REVIEW → APPROVED → RELEASED`. Internal operational reports may stop at generated or reviewed."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 269,
+      "excerpt": "Shared Reporting should support product-specific retention and supersession metadata, but no legal retention period should be invented. Retention, deletion, archival, and legal hold decisions belong to the product/domain owner and applicable agreement or policy."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 273,
+      "excerpt": "`ReportFileStorage` is a strong starting point: scoped references, immutable bytes after generation, traversal protection, private retrieval, and SHA-256 integrity. For ecosystem use, the namespace should include product key, organization, tenant, artifact ID, and rendered-file ID, with collision-safe paths and no public directory."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 275,
+      "excerpt": "The current local filesystem boundary is suitable for controlled environments. Production object storage, backup, retention, and disaster recovery remain deployment decisions and must be explicit before broad rollout."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 289,
+      "excerpt": "Material report events should include `product_key`, `report_family`, organization, tenant, classification, artifact ID, template version, renderer version, format, generation duration, payload hash, file hash, actor/system actor, and success/failure. This supports auditability, cost analysis, product isolation, and incident review."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 297,
+      "excerpt": "Each product may present the flow in its own shell, but subject validation, classification, authorized scope, artifact status, format availability, and history should remain consistent. Empty, failed, denied, and superseded states must be explicit."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 301,
+      "excerpt": "Every report-capable product may expose **Print / Export Report**, but the action must distinguish governed report generation from a convenience print of the current screen. Official reports should use Shared Reporting to create a classified immutable artifact before download or print."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 305,
+      "excerpt": "**Screen Print** is a convenience rendering of the current UI state. It is not versioned, may reflect live data, and should not be presented as an official report."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 307,
+      "excerpt": "**Governed Report** is an immutable, versioned, classified artifact generated from an authorized product projection, with metadata, references, hash, retrieval controls, and history. Official ecosystem reporting must use the governed path."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 311,
+      "excerpt": "The safest near-term API boundary is to keep product-specific generation endpoints responsible for authorization and projection, then call the existing Shared Reporting services for artifact, snapshot, template, rendering, storage, and retrieval. A future shared route can accept a registered product/report-family contract, but it must not become a general-purpose cross-product query endpoint."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 334,
+      "excerpt": "The output is an authorized immutable payload containing only product-approved fields, canonical references, source/metric versions where available, and provenance. Domain payload fields should not be standardized beyond genuinely universal metadata."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 340,
+      "excerpt": "| P0/reference | CivicSure | Executive Assurance | Institutional program assurance | County executives, oversight | Internal/restricted | Approved transparency only |"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 355,
+      "excerpt": "- **P0:** Preserve CivicSure Shared Reporting as the reference authority; resolve duplicate frontend report ownership; keep Public Disclosure separate."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 376,
+      "excerpt": "Add privacy-aware impact, learning, career, and evidence projections with aggregate/public boundaries."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 388,
+      "excerpt": "No migration is required for this audit. Current migration `106` supports the CivicSure R1 artifact foundation. Its metadata can carry product identity through template and payload metadata today, but a durable product/report-family catalog query may eventually justify one bounded schema extension. That decision belongs in U1 and must not be bundled with unrelated work."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_CAPABILITY_AUDIT.md",
+      "line": 392,
+      "excerpt": "**Recommendation: Option A with a thin adapter boundary.** Existing CivicSure Reporting should become SHU Shared Reporting directly. Product-specific authorities should produce authorized projections and invoke the existing Reporting artifact, snapshot, template, renderer, storage, retrieval, history, classification, and Public Disclosure boundaries."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 23,
+      "excerpt": "The correct U1 boundary is a thin product/report-family adapter contract feeding Shared Reporting. No second artifact, rendering, history, storage, or publication authority should be created."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 68,
+      "excerpt": "| File | Current ownership observed | U0 disposition |"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 71,
+      "excerpt": "| `shsReportTypes.js` | UI report-type definitions and labels | `REUSE_AS_ADAPTER_INPUT`; canonical report identity must remain API-owned |"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 78,
+      "excerpt": "| `shsReportSeedData.js` | Demo/fixture presentation data | `LEGACY` or test-only after fixture ownership review; never production authority |"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 82,
+      "excerpt": "`ShsReportsCommandPage`, `ShsCreateReportPage`, `ShsReportHistoryPage`, `ShsExportMetadataPage`, `ShsPremiumReportPreviewPage`, their components, CSS, status cards, metadata panels, history tables, branding panels, and readiness panels form an administrative report experience. They are useful UI and presentation primitives, but they must consume Shared Reporting APIs for official artifact state."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 94,
+      "excerpt": "This is a frontend persistence/repository surface that can represent report-like UI state or local report data. It is not the API Reporting authority. Any official artifact or history persistence here is a duplicate and should migrate to Shared Reporting in a later bounded wave. Keep until consumers are mapped."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 100,
+      "excerpt": "| Report navigation/catalog | `KEEP_AS_PRODUCT_UI` | UI may organize available reports. |"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 102,
+      "excerpt": "| UI templates/preview components | `KEEP_AS_PRODUCT_UI` | They may render screens, not own durable artifacts. |"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 103,
+      "excerpt": "| UI lifecycle/readiness badges | `KEEP_AS_PRODUCT_UI` | Must reflect server state. |"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 105,
+      "excerpt": "| Product-specific evidence/briefing composition | `REUSE_AS_ADAPTER_INPUT` | Must name a canonical product owner. |"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 106,
+      "excerpt": "| Frontend seed/demo data | `LEGACY` / test-only | Must never become official production data. |"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 107,
+      "excerpt": "| Distinct legal, portfolio, QA, or evidence artifacts | `KEEP_SEPARATE_AUTHORITY` | Reporting may project them but cannot replace them. |"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 108,
+      "excerpt": "| Unclear report-like logic | `UNKNOWN` | Owner decision required before U1 migration. |"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 119,
+      "excerpt": "| `grantBinderClient.js` | Grant binder/domain artifact client | `STRUCTURED_DOMAIN_CLIENT`; may feed reports |"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 123,
+      "excerpt": "| `shsReportDraftClient.js` | Report draft client | `DRAFT CLIENT`; ownership must remain with draft authority until final artifact |"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 125,
+      "excerpt": "These clients do not create a second Shared Reporting authority by themselves. They require explicit scope, classification, and product ownership before adapter registration."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 138,
+      "excerpt": "| Grant binder/export panels | JSON/document-oriented output | Grant binder artifact | `KEEP_SEPARATE_AUTHORITY`; may feed a governed report |"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 142,
+      "excerpt": "No official report should use browser localStorage or sessionStorage as canonical storage."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 148,
+      "excerpt": "| `src/pages/AdminCompare.jsx` | `window.print()` | `SCREEN_PRINT` | Keep as convenience unless official comparison report is required |"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 154,
+      "excerpt": "Screen printing must not be represented as immutable official reporting."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 158,
+      "excerpt": "| Artifact | Canonical owner | Can feed Shared Reporting? | May Shared Reporting replace it? |"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 186,
+      "excerpt": "The current R3 service-level query defect (`gpa_data_quality_evaluations.created_at` versus schema `evaluated_at`) is an existing acceptance issue outside U0 scope and must be resolved before further universalization."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 190,
+      "excerpt": "Existing OAS public content includes standard definitions, control domains, purpose boundaries, risk classification, and OAS-1 pages. The repository does not show a completed OAS report generator."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 197,
+      "excerpt": "| Standards Change | `NEEDS_AUTHORITY_DECISION` | Establish version/change ownership |"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 205,
+      "excerpt": "Candidate Registration Record, Status, Verification History, Ownership/Operator, and Conformance Evidence reports are `NEEDS_PROJECTION`. Trust conclusions are `NEEDS_AUTHORITY_DECISION` and must not be inferred by Reporting."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 211,
+      "excerpt": "Project Report, QA Report, Review Report, Completion Report, and Portfolio Evidence Export are `READY_FOR_ADAPTER` only after a bounded Studio projection contract. A report may reference Build Packet and evidence IDs but must not replace or mutate them."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 229,
+      "excerpt": "Academic scoring must not be merged with OAS/technical conformance. Portfolio and credential artifacts remain independent authorities."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 241,
+      "excerpt": "Secrets, prompts, credentials, protected resources, and investigation content must not be copied into a report unless the AI Governance authority explicitly authorizes the exact projection."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 247,
+      "excerpt": "Shared Reporting must not become the legal record or legal advice authority."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 323,
+      "excerpt": "## 25. Frontend Registry Ownership"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 327,
+      "excerpt": "`src/data/shsReports` should remain a product UI catalog for labels, launch points, presentation hints, and route grouping. Official report family identity, supported formats, versions, renderer, classification behavior, and artifact lifecycle should move conceptually into the API Shared Reporting registry during U1/U2. No U0 migration or deletion is performed."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 329,
+      "excerpt": "## 26. Draft / Revision Ownership"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 331,
+      "excerpt": "Frontend draft/revision concepts are mixed. Some represent composition drafts, some document drafts, some UI state, and some report preview/readiness state. They must not be assumed to be immutable governed report revisions."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 335,
+      "excerpt": "## 27. History Ownership"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 343,
+      "excerpt": "## 28. Storage Ownership"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 345,
+      "excerpt": "`ReportFileStorage` and `report_rendered_files` own official rendered report storage and metadata. Browser `localStorage`, `sessionStorage`, frontend repositories, and UI seed stores must not own official report artifacts."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 349,
+      "excerpt": "## 29. Template Ownership"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 362,
+      "excerpt": "## 30. Publication Ownership"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 364,
+      "excerpt": "Report generation is private by default. Public release must use the product’s publication authority and, where applicable, Public Disclosure eligibility, approval, snapshot, and distribution. Public impact and transparency paths remain separate from internal artifact generation."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 366,
+      "excerpt": "## 31. Permission Ownership"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 368,
+      "excerpt": "The required composition is:"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 372,
+      "excerpt": "Existing report permissions include `reports.view`, `reports.preview`, and `reports.export`, with publication/public-disclosure permissions separately governed. A report permission must never expand access to Programs, Students, Providers, Investigations, AI resources, Legal records, or financial data."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 374,
+      "excerpt": "Future generate/approve/release permissions should be added only if existing controls cannot express the action."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 378,
+      "excerpt": "U1 should implement the smallest contract necessary to register product report families and route authorized projections:"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 390,
+      "excerpt": "The adapter receives principal, organization, tenant, subject, reporting period, classification, and purpose context. It returns a complete immutable payload with canonical references and provenance. Shared Reporting does not query product authorities to fill missing fields."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 396,
+      "excerpt": "Metadata-only storage can support initial experiments, but an ecosystem catalog, history filters, observability, collision-safe filenames, and product-scoped authorization need durable product identity. A single bounded migration after 106 should add or normalize product/report-family metadata only after U1 confirms exact query and compatibility requirements. Do not add a migration during U0."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 400,
+      "excerpt": "Current `ReportFileStorage.safeReportFilename` is CivicSure-specific and generates `CivicSure_<jurisdiction>_<reportType>_<period>_v<version>.<format>`. U1 must parameterize the product segment, report family label, subject, period, version, and extension while retaining strict sanitization."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 412,
+      "excerpt": "CivicSure assumptions currently appear in the renderer, R2/R3 HTML/CSS, CivicSure tokens, Ohio motif, report titles, template metadata, and filenames. U1 must separate:"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 421,
+      "excerpt": "U1 should add or standardize event/context fields for `product_key`, `report_family`, artifact ID, organization, tenant, classification, template version, renderer version, format, duration, actor/system actor, success/failure, payload hash, and rendered-file hash."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 423,
+      "excerpt": "Current CivicSure audit events and Reporting logs are the starting point. Product adapters must emit context without duplicating audit authority."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 427,
+      "excerpt": "U0 adds no migration. U1 should first prove metadata-only compatibility, then decide whether one bounded post-106 migration is required for first-class `product_key` and report-family catalog queries. No unrelated schema changes may be bundled."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 445,
+      "excerpt": "U1 may touch only:"
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 454,
+      "excerpt": "U1 must not refactor every product, replace Portfolio/Studio/Evidence/Audit/Legal authorities, redesign all Reports UI, add cross-product reads, broaden classifications, or implement every proposed report family."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 461,
+      "excerpt": "- **OAS:** public standard/control content exists, but conformance/test authority must be defined first."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U0_INVENTORY_DISPOSITION.md",
+      "line": 462,
+      "excerpt": "- **Foundation:** impact and grant data exist, but privacy, aggregation, and publication policy must be completed."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U2_STUDIO_OAS_ADAPTERS.md",
+      "line": 5,
+      "excerpt": "U2 proves that the U1 universal reporting contract supports non-CivicSure product projections without creating a second report engine. Studio and OAS projections enter the existing Shared Reporting authority, which owns immutable payload snapshots, versioned templates, HTML/PDF/JSON rendering, durable files, hashes, scoped retrieval, and history."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U2_STUDIO_OAS_ADAPTERS.md",
+      "line": 18,
+      "excerpt": "`apps/shs-api/src/domain/reporting/` remains the sole artifact, template, renderer, storage, history, and retrieval authority. Product adapters are responsible for domain authorization, subject validation, redaction, provenance, and canonical references. Shared Reporting never queries Studio or OAS tables as an independent data authority."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U2_STUDIO_OAS_ADAPTERS.md",
+      "line": 32,
+      "excerpt": "The adapter preserves project, Build Packet, QA, review, evidence, portfolio, and lifecycle ownership in their existing domains. Protected learner, reviewer, and submitted-work payload details are not copied into the report projection."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U2_STUDIO_OAS_ADAPTERS.md",
+      "line": 76,
+      "excerpt": "The existing R1, R2, R3, U1, API typecheck/build, root build, UI validation, and migration replay remain required regression checks."
+    },
+    {
+      "path": "docs/architecture/SHU_UNIVERSAL_REPORTING_U2_STUDIO_OAS_ADAPTERS.md",
+      "line": 84,
+      "excerpt": "Foundation, Curriculum, and Career adapters should follow the same contract but require additional authority and privacy decisions before implementation. Their projections must define participant-sensitive redaction, aggregate-vs-individual reporting, funder/publication policy, credentials, learner progress, and employer-outcome boundaries. No U3 report family is registered by U2."
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_ASSET_MANIFEST_V1.md",
+      "line": 10,
+      "excerpt": "This manifest controls the identity, role, order, and acceptance state of every approved visual scene. The approved pixels remain the visual authority. Implementers must not regenerate, reinterpret, relabel, recolor, crop destructively, or substitute a scene without written approval."
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_ASSET_MANIFEST_V1.md",
+      "line": 12,
+      "excerpt": "The approved scene files have now been reconciled against the chronological render history and bound to canonical production filenames. Original generated files remain preserved as immutable provenance sources. Nine superseded alternatives or rejected correction drafts were excluded. Every bound row records the approved source render, canonical master, dimensions, byte size, and SHA-256 in the binding ledger below."
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_ASSET_MANIFEST_V1.md",
+      "line": 22,
+      "excerpt": "- Independence: BOS, AOS, Open Autonomous Standard, Autonomous Registry, and Autonomous Trust Bureau remain distinct destinations; visual connection never implies ownership."
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_ASSET_MANIFEST_V1.md",
+      "line": 23,
+      "excerpt": "- Prohibited: colorful fantasy rendering, generic sci-fi dashboards, dense card walls, decorative data, duplicate labels, fake logos, excessive glow, low-resolution crops."
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_ASSET_MANIFEST_V1.md",
+      "line": 24,
+      "excerpt": "- UI copy must be rendered as live HTML wherever possible. Architectural labels approved inside scene art remain part of the approved pixels."
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_ASSET_MANIFEST_V1.md",
+      "line": 28,
+      "excerpt": "| Property | Required standard |"
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_ASSET_MANIFEST_V1.md",
+      "line": 42,
+      "excerpt": "The first fourteen working titles preserve the approved journey positions but must be reconciled against the actual approved files during ingest. Scenes 15–32 follow the locked destination sequence and approved naming decisions."
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_ASSET_MANIFEST_V1.md",
+      "line": 70,
+      "excerpt": "| 25 | Autonomous Registry interface | Present the approved institutional entry | **AUTONOMOUS REGISTRY**; **ENTER REGISTRY**; **RETURN TO UNIVERSE**; **REGISTRATION ACTIVE · PROVENANCE VERIFIED** | `shu-s25-registry-interface-v01.png` | BOUND_AND_VERIFIED |"
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_ASSET_MANIFEST_V1.md",
+      "line": 83,
+      "excerpt": "| Destination | Strategic identity | Must not be presented as |"
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_ASSET_MANIFEST_V1.md",
+      "line": 88,
+      "excerpt": "| Autonomous Registry | Independent registration, identity, provenance, and traceability authority | A BOS/AOS database or marketplace |"
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_ASSET_MANIFEST_V1.md",
+      "line": 103,
+      "excerpt": "The visual asset package is implementation-ready only when all 32 rows are `BOUND_AND_VERIFIED`, hashes are recorded, required responsive derivatives exist, and no scene relies on an unapproved regeneration."
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_CANONICAL_LANDING_V1.md",
+      "line": 14,
+      "excerpt": "that port; it is no longer a required runtime dependency for this"
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_CANONICAL_LANDING_V1.md",
+      "line": 54,
+      "excerpt": "## Retired implementation"
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_CANONICAL_LANDING_V1.md",
+      "line": 70,
+      "excerpt": "preserved for forensic/reference purposes and must never be wired back"
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_CANONICAL_LANDING_V1.md",
+      "line": 84,
+      "excerpt": "Two corrections were made to the ported registry, both required for"
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_CANONICAL_LANDING_V1.md",
+      "line": 111,
+      "excerpt": "All ecosystem \"Return to Universe\" controls must resolve to the"
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_CANONICAL_LANDING_V1.md",
+      "line": 135,
+      "excerpt": "| 5173 | This repository (SHRV1) — `npm run dev` | Now also serves the canonical Universe (`/`, `/universe`, `/universe.html`). Must bind `127.0.0.1` (see `vite.config.js`'s `server.host` — added during this migration; Vite's unconfigured default bound IPv6-only `[::1]` on this machine, silently breaking any `127.0.0.1`-based cross-app link). |"
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_CANONICAL_LANDING_V1.md",
+      "line": 137,
+      "excerpt": "| 5175 | The external Universe reference project — `npm run dev` | No longer a required dependency for `/universe` to work in this repository. Left running as the historical reference/source of the port; can be stopped without affecting this repository. (`.env.example` separately documents 5175 as `VITE_SHF_NEXT_BASE_URL` for an unrelated \"shf-next\" app — outside this migration's scope.) |"
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_CANONICAL_LANDING_V1.md",
+      "line": 144,
+      "excerpt": "ever binding its required (`--strictPort`) 5174. Resolved by stopping"
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_CANONICAL_LANDING_V1.md",
+      "line": 149,
+      "excerpt": "No future team may introduce a second independent Silicon Heartland"
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_CANONICAL_LANDING_V1.md",
+      "line": 151,
+      "excerpt": "decision recorded in this file. Any new `/universe`-adjacent work must"
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_MASTER_INTERACTION_MAP_V1.md",
+      "line": 32,
+      "excerpt": "- Shooting star: ambient event approximately once per minute with randomized safe timing; never a required interaction."
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_MASTER_INTERACTION_MAP_V1.md",
+      "line": 35,
+      "excerpt": "- Browser Back: returns one logical state at a time; it must never trap the user."
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_MASTER_INTERACTION_MAP_V1.md",
+      "line": 61,
+      "excerpt": "| 21–26 | Autonomous Registry | Journey → indexed arrival → archive gateway → Registry interior → interface → return | Concentric index bands align; provenance channels become disciplined paths | Scene 26 returns to universe and reveals Bureau route |"
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_MASTER_INTERACTION_MAP_V1.md",
+      "line": 72,
+      "excerpt": "- Provide `CONTINUE JOURNEY` and quiet `CANCEL` when confirmation is necessary; a repeat-visitor preference may allow one-action departure."
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_MASTER_INTERACTION_MAP_V1.md",
+      "line": 79,
+      "excerpt": "- Motion blur must be restrained and never destroy surface detail."
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_MASTER_INTERACTION_MAP_V1.md",
+      "line": 91,
+      "excerpt": "- Live controls must align with the approved composition but remain accessible DOM elements."
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_MASTER_INTERACTION_MAP_V1.md",
+      "line": 110,
+      "excerpt": "| Autonomous Registry | `ENTER REGISTRY` | `RETURN TO UNIVERSE` | `REGISTRATION ACTIVE · PROVENANCE VERIFIED` | Independent Registry authority |"
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_MASTER_INTERACTION_MAP_V1.md",
+      "line": 121,
+      "excerpt": "- On small phones, card mode may be offered prominently, but the cinematic mode remains available."
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_MASTER_INTERACTION_MAP_V1.md",
+      "line": 130,
+      "excerpt": "| Labels | Composition-aligned | Safe-area adjusted | Must pass phone-size legibility check |"
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_MASTER_INTERACTION_MAP_V1.md",
+      "line": 142,
+      "excerpt": "- Architectural text embedded in imagery must have equivalent accessible text in the DOM."
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_MASTER_INTERACTION_MAP_V1.md",
+      "line": 152,
+      "excerpt": "- Target smooth interaction on modern mobile hardware; visual fidelity may scale down, identity may not."
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_MASTER_INTERACTION_MAP_V1.md",
+      "line": 167,
+      "excerpt": "Journey progress itself should be session state, not dozens of URL entries. Browser history records meaningful navigation states only."
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_MASTER_INTERACTION_MAP_V1.md",
+      "line": 184,
+      "excerpt": "Events should contain destination slug, experience mode, device class, reduced-motion state, and duration bucket—never unnecessary personal data."
+    },
+    {
+      "path": "docs/architecture/universe/SILICON_HEARTLAND_UNIVERSE_MASTER_INTERACTION_MAP_V1.md",
+      "line": 201,
+      "excerpt": "Engineering may build the shell, routing, state machine, accessibility layer, and asset loader before file binding is complete. Final visual certification cannot pass until all 32 scene assets are `BOUND_AND_VERIFIED` in the asset manifest."
+    },
+    {
+      "path": "evidence/oas-canonical-catalog/DISCOVERY.md",
+      "line": 13,
+      "excerpt": "Vite/React multi-page app, root package.json and vite.config.js. `/oas.html` → `src/entries/oas.main.jsx` → `src/pages/oas/OASLandingPage.jsx` is the current OAS entry. Additional real entries: `/oas-1.html`, `/oas-control-domains.html`, `/oas-purpose-boundaries.html`, `/oas-risk-classification.html`, each with a corresponding src/entries module and OAS page. No production hostname is established by these sources; route paths are not host authority."
+    },
+    {
+      "path": "evidence/oas-canonical-catalog/DISCOVERY.md",
+      "line": 23,
+      "excerpt": "Public eight-domain taxonomy: 01 Identity & Ownership; 02 Purpose & Boundaries; 03 Capabilities & Resources; 04 Permissions & Access; 05 Safety & Prohibited Actions; 06 Human Authority; 07 Validation & Evidence; 08 Lifecycle & Accountability."
+    },
+    {
+      "path": "evidence/oas-canonical-catalog/DISCOVERY.md",
+      "line": 24,
+      "excerpt": "Reporting taxonomy in `apps/shs-api/src/domain/reporting/studio-oas-report-adapters.ts`: 01 Identity and Purpose; 02 Autonomy and Agency; 03 Safety and Risk; 04 Transparency and Explainability; 05 Human Oversight; 06 Data and Privacy; 07 Interoperability; 08 Accountability and Governance. Equal ordinals are not semantic equivalence."
+    },
+    {
+      "path": "evidence/oas-canonical-catalog/DISCOVERY.md",
+      "line": 25,
+      "excerpt": "R0–R4 are a legitimate descriptive risk-classification concept: Minimal/Informational, Low, Moderate, High, Critical. MATRIX_ROWS has five guidance bands (Purpose & Boundaries, Permissions & Access, Human Oversight, Validation & Evidence, Deployment). Human Oversight is contextual language for Human Authority; Deployment is cross-domain guidance, not a ninth domain. Matrix controls are not certification rules or individual normative requirements."
+    },
+    {
+      "path": "evidence/oas-canonical-catalog/DISCOVERY.md",
+      "line": 33,
+      "excerpt": "Existing focused test: `apps/shs-api/tests/report-u2-studio-oas.test.ts` asserts NOT_EVALUATED and authority boundaries. Root tests use node:test .mjs; API uses TS/tsx. Root includes Ajv 8, ajv-formats, TypeScript and Vite. Schemas exist in contracts and docs; no OAS schema convention exists. Use JSON Schema Draft 2020-12. Root commands: manifests:validate, ui:validate, build, check:registry, check:proposal, check:truth and other ecosystem checks. No root general unit-test/typecheck command is defined. API tsconfig targets NodeNext. CI contracts currently targets Registry UI; add an isolated OAS catalog check, not another Registry catalog."
+    },
+    {
+      "path": "evidence/oas-canonical-catalog/DOMAIN_RECONCILIATION.md",
+      "line": 7,
+      "excerpt": "| 01 | OAS-1-D01 Identity & Ownership | Identity and Purpose | Unmapped |"
+    },
+    {
+      "path": "evidence/oas-canonical-catalog/DOMAIN_RECONCILIATION.md",
+      "line": 8,
+      "excerpt": "| 02 | OAS-1-D02 Purpose & Boundaries | Autonomy and Agency | Unmapped |"
+    },
+    {
+      "path": "evidence/oas-canonical-catalog/DOMAIN_RECONCILIATION.md",
+      "line": 11,
+      "excerpt": "| 05 | OAS-1-D05 Safety & Prohibited Actions | Human Oversight | Unmapped |"
+    },
+    {
+      "path": "evidence/oas-canonical-catalog/DOMAIN_RECONCILIATION.md",
+      "line": 16,
+      "excerpt": "Rows show conflicts, not semantic aliases. All legacy rows remain in the source with null canonical IDs. A reviewed semantic mapping may be one-to-many and cannot be derived from ordinals. Preserve legacy reporting references OAS-1:01 etc as legacy references. Existing report behavior is unchanged."
+    },
+    {
+      "path": "evidence/oas-canonical-catalog/DOMAIN_RECONCILIATION.md",
+      "line": 18,
+      "excerpt": "Risk matrix Human Oversight is retained as contextual alias of public Human Authority; Deployment remains cross-domain guidance. Other matrix names coincide with public domains. TOC phrases Agent Identity, Purpose and Operating Boundaries, Safety Controls, Lifecycle Governance are document section headings, not additional domain IDs. No global replacement is applied to prose or historical documentation. Tests assert canonical labels/order, uniqueness, adapter usage and the exact preserved reporting vocabulary."
+    },
+    {
+      "path": "evidence/oas-canonical-catalog/IDENTIFIER_RULES.md",
+      "line": 5,
+      "excerpt": "Domain: `<standard_id>-D<two-digit ordinal>`, current D01–D08. Ordinal is a legacy public presentation key retained separately; new IDs are immutable and labels may evolve only in new snapshots. Report ordinals are a different namespace."
+    },
+    {
+      "path": "evidence/oas-canonical-catalog/REGISTRY_INTEGRATION_READINESS.md",
+      "line": 3,
+      "excerpt": "Bounded draft metadata integration: technically prepared through the Git repository, pending OAS review of this branch. Inputs: standard catalog, exact public-review snapshot, canonical domains/R-levels, explicit empty profile/requirement catalogs, declaration schema and semantic resolver, empty supersession graphs, source revision/manifest/checksums. Registry must pin the full source/artifact commit and exact release; legacy OAS-1 alone is not a version. The snapshot is public data without provider or internal governance payloads."
+    },
+    {
+      "path": "evidence/oas-canonical-catalog/REGISTRY_INTEGRATION_READINESS.md",
+      "line": 5,
+      "excerpt": "Full requested normative catalog integration: BLOCKED. The inspected repository does not publish the normative specification or individual normative requirements. No real profiles exist. This implementation refuses to invent either. OAS must author/adopt requirements, populate any actual profiles and govern releases/dates before those references become usable. Public hosting/transport/domain is also not adopted or deployed here. Legacy reporting semantic mappings require review; report input/output remains legacy and NOT_EVALUATED."
+    },
+    {
+      "path": "evidence/oas-canonical-catalog/REGISTRY_INTEGRATION_READINESS.md",
+      "line": 7,
+      "excerpt": "Registry may later consume the exact artifact and schemas, verify source manifest and artifact digest, resolve pins, record attributed provider declarations and publish an explicitly approved projection. Registry may not redefine standards, fill empty OAS catalogs, infer certification or use report ordinals as canonical IDs. No Registry files were changed. No external canonical writes, release certification, trust score or unrestricted authorization exists."
+    },
+    {
+      "path": "oas-purpose-boundaries.html",
+      "line": 7,
+      "excerpt": "<meta name=\"description\" content=\"OAS Domain 02 — Purpose & Boundaries: what the agent is intended to do, including its goals, scope and operational boundaries.\" />"
+    },
+    {
+      "path": "oas-purpose-boundaries.html",
+      "line": 8,
+      "excerpt": "<title>Purpose &amp; Boundaries — Open Autonomous Standard</title>"
+    },
+    {
+      "path": "oas-purpose-boundaries.html",
+      "line": 17,
+      "excerpt": "<script type=\"module\" src=\"/src/entries/oas-purpose-boundaries.main.jsx\"></script>"
+    },
+    {
+      "path": "oas-purpose-boundaries.html",
+      "line": 19,
+      "excerpt": "<noscript>Enable JavaScript to view Purpose &amp; Boundaries.</noscript>"
+    },
+    {
+      "path": "oas-risk-classification.html",
+      "line": 7,
+      "excerpt": "<meta name=\"description\" content=\"OAS Risk Classification — determines the level of risk an autonomous agent poses and the control escalation, oversight, and evidence that should apply.\" />"
+    },
+    {
+      "path": "oas-risk-classification.html",
+      "line": 17,
+      "excerpt": "oas-purpose-boundaries.html. -->"
+    },
+    {
+      "path": "oas.html",
+      "line": 15,
+      "excerpt": "own neutral standards identity and must not inherit SHF tokens"
+    },
+    {
+      "path": "public/oas/catalogs/OAS-1@0.0.0-public-review.1.json",
+      "line": 33,
+      "excerpt": "\"domain_name\": \"Identity & Ownership\","
+    },
+    {
+      "path": "public/oas/catalogs/OAS-1@0.0.0-public-review.1.json",
+      "line": 39,
+      "excerpt": "\"domain_name\": \"Purpose & Boundaries\","
+    },
+    {
+      "path": "public/oas/catalogs/OAS-1@0.0.0-public-review.1.json",
+      "line": 57,
+      "excerpt": "\"domain_name\": \"Safety & Prohibited Actions\","
+    },
+    {
+      "path": "public/oas/catalogs/OAS-1@0.0.0-public-review.1.json",
+      "line": 65,
+      "excerpt": "\"Human Oversight\""
+    },
+    {
+      "path": "public/oas/catalogs/OAS-1@0.0.0-public-review.1.json",
+      "line": 134,
+      "excerpt": "\"legacy_label\": \"Human Oversight\","
+    },
+    {
+      "path": "schemas/oas/catalog-source.schema.json",
+      "line": 52,
+      "excerpt": "\"required\": ["
+    },
+    {
+      "path": "schemas/oas/catalog-source.schema.json",
+      "line": 81,
+      "excerpt": "\"required\": ["
+    },
+    {
+      "path": "schemas/oas/catalog-source.schema.json",
+      "line": 121,
+      "excerpt": "\"required\": ["
+    },
+    {
+      "path": "schemas/oas/catalog-source.schema.json",
+      "line": 132,
+      "excerpt": "\"required\": ["
+    },
+    {
+      "path": "schemas/oas/catalog-source.schema.json",
+      "line": 168,
+      "excerpt": "\"required\": ["
+    },
+    {
+      "path": "schemas/oas/catalog.schema.json",
+      "line": 42,
+      "excerpt": "\"required\": ["
+    },
+    {
+      "path": "schemas/oas/catalog.schema.json",
+      "line": 80,
+      "excerpt": "\"required\": ["
+    },
+    {
+      "path": "schemas/oas/catalog.schema.json",
+      "line": 109,
+      "excerpt": "\"required\": ["
+    },
+    {
+      "path": "schemas/oas/catalog.schema.json",
+      "line": 149,
+      "excerpt": "\"required\": ["
+    },
+    {
+      "path": "schemas/oas/catalog.schema.json",
+      "line": 160,
+      "excerpt": "\"required\": ["
+    },
+    {
+      "path": "schemas/oas/catalog.schema.json",
+      "line": 221,
+      "excerpt": "\"required\": ["
+    },
+    {
+      "path": "schemas/oas/catalog.schema.json",
+      "line": 240,
+      "excerpt": "\"required\": ["
+    },
+    {
+      "path": "src/pages/oas/OAS1Page.jsx",
+      "line": 42,
+      "excerpt": "\"Purpose and Operating Boundaries\","
+    },
+    {
+      "path": "src/pages/oas/OAS1Page.jsx",
+      "line": 232,
+      "excerpt": "how they interact with systems, what evidence they must produce, and how they can be"
+    },
+    {
+      "path": "src/pages/oas/OASControlDomainsPage.jsx",
+      "line": 105,
+      "excerpt": "body: \"Establishes clear identity, provenance and ownership for agents, ensuring accountability throughout their lifecycle.\","
+    },
+    {
+      "path": "src/pages/oas/OASControlDomainsPage.jsx",
+      "line": 112,
+      "excerpt": "body: \"Defines what the agent is intended to do, including its goals, scope and operational boundaries.\","
+    },
+    {
+      "path": "src/pages/oas/OASControlDomainsPage.jsx",
+      "line": 119,
+      "excerpt": "body: \"Specifies the agent's capabilities, required resources and any external tools or systems it can access.\","
+    },
+    {
+      "path": "src/pages/oas/OASControlDomainsPage.jsx",
+      "line": 133,
+      "excerpt": "body: \"Defines safety requirements, prohibited actions and guardrails to prevent harmful behavior.\","
+    },
+    {
+      "path": "src/pages/oas/OASControlDomainsPage.jsx",
+      "line": 140,
+      "excerpt": "body: \"Clarifies human oversight, authority structures and escalation paths for critical decisions.\","
+    },
+    {
+      "path": "src/pages/oas/OASLandingPage.jsx",
+      "line": 45,
+      "excerpt": "// 01 Identity & Ownership"
+    },
+    {
+      "path": "src/pages/oas/OASLandingPage.jsx",
+      "line": 52,
+      "excerpt": "// 02 Purpose & Boundaries"
+    },
+    {
+      "path": "src/pages/oas/OASLandingPage.jsx",
+      "line": 76,
+      "excerpt": "// 05 Safety & Prohibited Actions"
+    },
+    {
+      "path": "src/pages/oas/OASLandingPage.jsx",
+      "line": 135,
+      "excerpt": "desc: \"What the agent must never do, under any circumstance.\","
+    },
+    {
+      "path": "src/pages/oas/OASLandingPage.jsx",
+      "line": 140,
+      "excerpt": "desc: \"How people retain oversight, override, and control.\","
+    },
+    {
+      "path": "src/pages/oas/OASLandingPage.jsx",
+      "line": 150,
+      "excerpt": "desc: \"How agents are versioned, retired, and held accountable.\","
+    },
+    {
+      "path": "src/pages/oas/OASLandingPage.jsx",
+      "line": 360,
+      "excerpt": "<p>Defines what must be true — rules, specifications, protocols, schemas, and evidence requirements.</p>"
+    },
+    {
+      "path": "src/pages/oas/OASPurposeBoundariesPage.jsx",
+      "line": 3,
+      "excerpt": "// OAS Domain 02 — Purpose & Boundaries detail page. Distinct from"
+    },
+    {
+      "path": "src/pages/oas/OASPurposeBoundariesPage.jsx",
+      "line": 8,
+      "excerpt": "// oas-purpose-boundaries.css."
+    },
+    {
+      "path": "src/pages/oas/OASPurposeBoundariesPage.jsx",
+      "line": 11,
+      "excerpt": "// (purpose-boundaries-final-background.png: horizon, dust, small"
+    },
+    {
+      "path": "src/pages/oas/OASPurposeBoundariesPage.jsx",
+      "line": 19,
+      "excerpt": "// live \"02 / Purpose & Boundaries\" text remains in the right column."
+    },
+    {
+      "path": "src/pages/oas/OASPurposeBoundariesPage.jsx",
+      "line": 36,
+      "excerpt": "import \"./oas-purpose-boundaries.css\";"
+    },
+    {
+      "path": "src/pages/oas/OASPurposeBoundariesPage.jsx",
+      "line": 133,
+      "excerpt": "body: \"Well-scoped agents create value while respecting human and societal boundaries.\","
+    },
+    {
+      "path": "src/pages/oas/OASPurposeBoundariesPage.jsx",
+      "line": 145,
+      "excerpt": "title: \"Establish boundaries\","
+    },
+    {
+      "path": "src/pages/oas/OASPurposeBoundariesPage.jsx",
+      "line": 151,
+      "excerpt": "body: \"Regularly review purpose and boundaries as the agent evolves.\","
+    },
+    {
+      "path": "src/pages/oas/OASPurposeBoundariesPage.jsx",
+      "line": 225,
+      "excerpt": "src=\"/assets/oas/purpose-boundaries-final-background.png\""
+    },
+    {
+      "path": "src/pages/oas/OASPurposeBoundariesPage.jsx",
+      "line": 244,
+      "excerpt": "Boundaries"
+    },
+    {
+      "path": "src/pages/oas/OASPurposeBoundariesPage.jsx",
+      "line": 248,
+      "excerpt": "boundaries."
+    },
+    {
+      "path": "src/pages/oas/OASPurposeBoundariesPage.jsx",
+      "line": 270,
+      "excerpt": "Boundaries"
+    },
+    {
+      "path": "src/pages/oas/OASPurposeBoundariesPage.jsx",
+      "line": 290,
+      "excerpt": "src=\"/assets/oas/purpose-boundaries-lower-background.png\""
+    },
+    {
+      "path": "src/pages/oas/OASPurposeBoundariesPage.jsx",
+      "line": 301,
+      "excerpt": "<nav className=\"oaspb-subnav\" aria-label=\"Purpose & Boundaries sections\">"
+    },
+    {
+      "path": "src/pages/oas/OASPurposeBoundariesPage.jsx",
+      "line": 317,
+      "excerpt": "<section className=\"oaspb-main\" id=\"overview\" aria-label=\"Purpose & Boundaries overview\">"
+    },
+    {
+      "path": "src/pages/oas/OASPurposeBoundariesPage.jsx",
+      "line": 327,
+      "excerpt": "Every autonomous agent must have a clearly defined purpose, with well-established goals,"
+    },
+    {
+      "path": "src/pages/oas/OASPurposeBoundariesPage.jsx",
+      "line": 328,
+      "excerpt": "scope, and operational boundaries. This ensures agents operate in alignment with human"
+    },
+    {
+      "path": "src/pages/oas/OASPurposeBoundariesPage.jsx",
+      "line": 374,
+      "excerpt": "Boundaries in OAS-1."
+    },
+    {
+      "path": "src/pages/oas/OASRiskClassificationPage.jsx",
+      "line": 4,
+      "excerpt": "// agent, and what level of control should apply?\" via a five-level"
+    },
+    {
+      "path": "src/pages/oas/OASRiskClassificationPage.jsx",
+      "line": 111,
+      "excerpt": "body: \"Meaningful risk of harm in specific contexts. Requires additional controls and oversight.\","
+    },
+    {
+      "path": "src/pages/oas/OASRiskClassificationPage.jsx",
+      "line": 117,
+      "excerpt": "body: \"Significant risk of harm. Higher autonomy or broader impact. Requires strong controls and human oversight.\","
+    },
+    {
+      "path": "src/pages/oas/OASRiskClassificationPage.jsx",
+      "line": 123,
+      "excerpt": "body: \"Severe risk of harm, including safety, rights, or societal impact. Deployment typically restricted or prohibited without exceptional justification.\","
+    },
+    {
+      "path": "src/pages/oas/OASRiskClassificationPage.jsx",
+      "line": 137,
+      "excerpt": "body: \"Appropriate risk classification ensures the right level of controls, oversight, and accountability.\","
+    },
+    {
+      "path": "src/pages/oas/OASRiskClassificationPage.jsx",
+      "line": 142,
+      "excerpt": "body: \"Risk level should be reviewed whenever capabilities, permissions, operating context, or intended use changes significantly.\","
+    },
+    {
+      "path": "src/pages/oas/OASRiskClassificationPage.jsx",
+      "line": 148,
+      "excerpt": "label: \"Purpose & Boundaries\","
+    },
+    {
+      "path": "src/pages/oas/OASRiskClassificationPage.jsx",
+      "line": 156,
+      "excerpt": "label: \"Human Oversight\","
+    },
+    {
+      "path": "src/pages/oas/OASRiskClassificationPage.jsx",
+      "line": 157,
+      "excerpt": "values: [\"Not required\", \"Recommended\", \"Required\", \"Required\", \"Continuous\"],"
+    },
+    {
+      "path": "src/pages/oas/OASRiskClassificationPage.jsx",
+      "line": 165,
+      "excerpt": "values: [\"Open\", \"Open\", \"Conditional\", \"Restricted\", \"Typically prohibited\"],"
+    },
+    {
+      "path": "src/pages/oas/OASRiskClassificationPage.jsx",
+      "line": 293,
+      "excerpt": "OAS uses a five-level risk classification to scale governance, oversight, and control"
+    },
+    {
+      "path": "src/pages/oas/OASRiskClassificationPage.jsx",
+      "line": 372,
+      "excerpt": "As risk increases, so do the expectations for governance, human oversight, evidence, and"
+    },
+    {
+      "path": "src/pages/universe-v1/gateway/UniverseGateway.jsx",
+      "line": 1106,
+      "excerpt": "// enterDestination, the retired UniverseDirectory) — same registry"
+    },
+    {
+      "path": "standards/oas/catalog.json",
+      "line": 30,
+      "excerpt": "\"domain_name\": \"Identity & Ownership\","
+    },
+    {
+      "path": "standards/oas/catalog.json",
+      "line": 36,
+      "excerpt": "\"domain_name\": \"Purpose & Boundaries\","
+    },
+    {
+      "path": "standards/oas/catalog.json",
+      "line": 54,
+      "excerpt": "\"domain_name\": \"Safety & Prohibited Actions\","
+    },
+    {
+      "path": "standards/oas/catalog.json",
+      "line": 62,
+      "excerpt": "\"Human Oversight\""
+    },
+    {
+      "path": "standards/oas/catalog.json",
+      "line": 131,
+      "excerpt": "\"legacy_label\": \"Human Oversight\","
+    }
+  ]
+}

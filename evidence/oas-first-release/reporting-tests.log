@@ -1,0 +1,40 @@
+TAP version 13
+# Subtest: U2 registers all Studio and OAS families through the shared template registry
+ok 1 - U2 registers all Studio and OAS families through the shared template registry
+  ---
+  duration_ms: 10.304653
+  type: 'test'
+  ...
+# Subtest: U2 Studio adapter delegates to Studio authorities and gates completion on canonical delivery
+ok 2 - U2 Studio adapter delegates to Studio authorities and gates completion on canonical delivery
+  ---
+  duration_ms: 20.27224
+  type: 'test'
+  ...
+# Subtest: U2 OAS adapter is deterministic and cannot imply Registry or Trust Bureau authority
+ok 3 - U2 OAS adapter is deterministic and cannot imply Registry or Trust Bureau authority
+  ---
+  duration_ms: 2.719358
+  type: 'test'
+  ...
+# Subtest: U2 product reports use the shared renderer and product branding
+ok 4 - U2 product reports use the shared renderer and product branding
+  ---
+  duration_ms: 2.176284
+  type: 'test'
+  ...
+# Subtest: U2 shared renderer produces hashed Letter PDF for an OAS family
+ok 5 - U2 shared renderer produces hashed Letter PDF for an OAS family
+  ---
+  duration_ms: 5969.424536
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7489.622569

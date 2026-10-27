@@ -1,0 +1,64 @@
+TAP version 13
+# Subtest: staged proposal is deterministic, clearly marked and unadopted, without a public final artifact
+ok 1 - staged proposal is deterministic, clearly marked and unadopted, without a public final artifact
+  ---
+  duration_ms: 12057.702045
+  type: 'test'
+  ...
+# Subtest: exact 14 IDs, all eight domains and original normative text are retained
+ok 2 - exact 14 IDs, all eight domains and original normative text are retained
+  ---
+  duration_ms: 5577.944332
+  type: 'test'
+  ...
+# Subtest: human dates cannot be guessed, invalid or precede release; fixture dates are only synthetic
+ok 3 - human dates cannot be guessed, invalid or precede release; fixture dates are only synthetic
+  ---
+  duration_ms: 4487.407964
+  type: 'test'
+  ...
+# Subtest: date-completed synthetic target validates existing final release/requirement primitives
+ok 4 - date-completed synthetic target validates existing final release/requirement primitives
+  ---
+  duration_ms: 13689.479634
+  type: 'test'
+  ...
+# Subtest: even rehashed membership, wording, profiles, authority or scope changes cannot materialize
+ok 5 - even rehashed membership, wording, profiles, authority or scope changes cannot materialize
+  ---
+  duration_ms: 23458.857705
+  type: 'test'
+  ...
+# Subtest: date or metadata selection changes hashes and cannot silently reuse earlier bindings
+ok 6 - date or metadata selection changes hashes and cannot silently reuse earlier bindings
+  ---
+  duration_ms: 22755.426244
+  type: 'test'
+  ...
+# Subtest: independent hashes cover proposal payload/file, metadata, final target and source files
+ok 7 - independent hashes cover proposal payload/file, metadata, final target and source files
+  ---
+  duration_ms: 14306.053944
+  type: 'test'
+  ...
+# Subtest: provider declarations reject staged proposal, and final-compatible synthetic data remains NOT_EVALUATED
+ok 8 - provider declarations reject staged proposal, and final-compatible synthetic data remains NOT_EVALUATED
+  ---
+  duration_ms: 20804.976184
+  type: 'test'
+  ...
+# Subtest: live package checks are exact while final human adoption/publication gates remain fail
+ok 9 - live package checks are exact while final human adoption/publication gates remain fail
+  ---
+  duration_ms: 60388.118891
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 179252.812947

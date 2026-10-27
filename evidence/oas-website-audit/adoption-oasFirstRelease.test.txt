@@ -1,0 +1,130 @@
+TAP version 13
+# Subtest: 17 traceable candidates cover exactly the existing eight domains without published requirements
+ok 1 - 17 traceable candidates cover exactly the existing eight domains without published requirements
+  ---
+  duration_ms: 86.300416
+  type: 'test'
+  ...
+# Subtest: duplicate IDs and whitespace/case-equivalent normative statements rejected
+ok 2 - duplicate IDs and whitespace/case-equivalent normative statements rejected
+  ---
+  duration_ms: 4.860209
+  type: 'test'
+  ...
+# Subtest: all candidates need canonical domains, normative text, applicability and exact source citation
+ok 3 - all candidates need canonical domains, normative text, applicability and exact source citation
+  ---
+  duration_ms: 10.609948
+  type: 'test'
+  ...
+# Subtest: candidate risk conditioning cannot silently introduce R0–R4 duties
+ok 4 - candidate risk conditioning cannot silently introduce R0–R4 duties
+  ---
+  duration_ms: 0.934574
+  type: 'test'
+  ...
+# Subtest: approved/released status cannot be asserted without review and governance
+ok 5 - approved/released status cannot be asserted without review and governance
+  ---
+  duration_ms: 2.678435
+  type: 'test'
+  ...
+# Subtest: a review decision is bound to exact wording and is not release adoption
+ok 6 - a review decision is bound to exact wording and is not release adoption
+  ---
+  duration_ms: 4.786297
+  type: 'test'
+  ...
+# Subtest: review declaration applicable validates and stays NOT_EVALUATED
+ok 7 - review declaration applicable validates and stays NOT_EVALUATED
+  ---
+  duration_ms: 3.331456
+  type: 'test'
+  ...
+# Subtest: review declaration not_applicable validates and stays NOT_EVALUATED
+ok 8 - review declaration not_applicable validates and stays NOT_EVALUATED
+  ---
+  duration_ms: 2.349683
+  type: 'test'
+  ...
+# Subtest: review declaration declared_satisfied validates and stays NOT_EVALUATED
+ok 9 - review declaration declared_satisfied validates and stays NOT_EVALUATED
+  ---
+  duration_ms: 2.154162
+  type: 'test'
+  ...
+# Subtest: review declaration not_declared validates and stays NOT_EVALUATED
+ok 10 - review declaration not_declared validates and stays NOT_EVALUATED
+  ---
+  duration_ms: 2.286989
+  type: 'test'
+  ...
+# Subtest: review declaration unknown validates and stays NOT_EVALUATED
+ok 11 - review declaration unknown validates and stays NOT_EVALUATED
+  ---
+  duration_ms: 3.097494
+  type: 'test'
+  ...
+# Subtest: declarations reject absent NA reason, absent offered evidence, unknown IDs, stale pins and conformance claims
+ok 12 - declarations reject absent NA reason, absent offered evidence, unknown IDs, stale pins and conformance claims
+  ---
+  duration_ms: 9.993734
+  type: 'test'
+  ...
+# Subtest: declaration review contract cannot masquerade as the existing published declaration schema
+ok 13 - declaration review contract cannot masquerade as the existing published declaration schema
+  ---
+  duration_ms: 0.407408
+  type: 'test'
+  ...
+# Subtest: aliases resolve deterministically by namespace and never by reporting ordinal
+ok 14 - aliases resolve deterministically by namespace and never by reporting ordinal
+  ---
+  duration_ms: 3.952382
+  type: 'test'
+  ...
+# Subtest: unreviewed aliases, unknown mapping domains, missing and duplicate dispositions rejected
+ok 15 - unreviewed aliases, unknown mapping domains, missing and duplicate dispositions rejected
+  ---
+  duration_ms: 1.422907
+  type: 'test'
+  ...
+# Subtest: candidate supersession rejects dangling and circular replacement links
+ok 16 - candidate supersession rejects dangling and circular replacement links
+  ---
+  duration_ms: 4.725537
+  type: 'test'
+  ...
+# Subtest: adopted requirements require a valid release, nonempty normative text and matching governance state
+ok 17 - adopted requirements require a valid release, nonempty normative text and matching governance state
+  ---
+  duration_ms: 2.27912
+  type: 'test'
+  ...
+# Subtest: release gates block RC, adoption and publication; generated metadata contains no invented approval
+ok 18 - release gates block RC, adoption and publication; generated metadata contains no invented approval
+  ---
+  duration_ms: 7.782831
+  type: 'test'
+  ...
+# Subtest: human review documents and checksums regenerate deterministically without manual divergence
+ok 19 - human review documents and checksums regenerate deterministically without manual divergence
+  ---
+  duration_ms: 24.361293
+  type: 'test'
+  ...
+# Subtest: all historical catalog inputs, reporting production code and public pin remain byte-for-byte unchanged
+ok 20 - all historical catalog inputs, reporting production code and public pin remain byte-for-byte unchanged
+  ---
+  duration_ms: 1017.330715
+  type: 'test'
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1662.398328

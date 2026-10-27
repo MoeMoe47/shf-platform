@@ -1,0 +1,46 @@
+TAP version 13
+# Subtest: real human adoption is recorded separately from withheld publication
+ok 1 - real human adoption is recorded separately from withheld publication
+  ---
+  duration_ms: 246.3262
+  type: 'test'
+  ...
+# Subtest: every explicit final binding and complete prepared package remains exact
+ok 2 - every explicit final binding and complete prepared package remains exact
+  ---
+  duration_ms: 60.251391
+  type: 'test'
+  ...
+# Subtest: even rehashed actor, time, authority, source/content, approval and publication mutations reject
+ok 3 - even rehashed actor, time, authority, source/content, approval and publication mutations reject
+  ---
+  duration_ms: 487.292109
+  type: 'test'
+  ...
+# Subtest: unsigned templates and Git actor metadata cannot fabricate a final adoption
+ok 4 - unsigned templates and Git actor metadata cannot fabricate a final adoption
+  ---
+  duration_ms: 48.850088
+  type: 'test'
+  ...
+# Subtest: decision is immutable and attributable; canonical JSON checksum is independently reproducible
+ok 5 - decision is immutable and attributable; canonical JSON checksum is independently reproducible
+  ---
+  duration_ms: 76.915694
+  type: 'test'
+  ...
+# Subtest: adoption leaves original pending preparation snapshots and issued/historical bytes unchanged
+ok 6 - adoption leaves original pending preparation snapshots and issued/historical bytes unchanged
+  ---
+  duration_ms: 213.664225
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1550.535141

@@ -1,0 +1,5 @@
+# Diagnostic execution context
+
+These are direct diagnostic runs of historical stage-specific suites against the later final publication snapshot. They are not the selected original-stage acceptance results. Historical suites that require a pre-publication state intentionally reject the existence of final publication. Initial sparse materialization also omitted some non-OAS test prerequisites (report adapter/history/source files); those prerequisites were supplied only in the temporary clone, after which the catalog/first-release diagnostic pair passed 35/35 (../publication-legacy-compatible-tests.txt).
+
+The unchanged originals pass 95/95 at their documented immutable adoption checkpoint. Final publication tests pass 9/9 at publication, with the independent literal-byte verifier passing. No source/assertion was changed or weakened. See ../TEST_COVERAGE.md and stage-appropriate-test-runs.json. The raw diagnostic failures are retained to avoid silently presenting every historical suite as a current-state pass.

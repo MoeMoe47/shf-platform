@@ -1,0 +1,52 @@
+TAP version 13
+# Subtest: human acceptance is independently retrievable from its exact committed decision and designation
+ok 1 - human acceptance is independently retrievable from its exact committed decision and designation
+  ---
+  duration_ms: 2997.872702
+  type: 'test'
+  ...
+# Subtest: pending, fabricated designation, actor, time or decision references cannot enter issuance
+ok 2 - pending, fabricated designation, actor, time or decision references cannot enter issuance
+  ---
+  duration_ms: 954.212015
+  type: 'test'
+  ...
+# Subtest: RC1 schema, all exact IDs, eight domains and deterministic bytes agree with accepted source
+ok 3 - RC1 schema, all exact IDs, eight domains and deterministic bytes agree with accepted source
+  ---
+  duration_ms: 10629.865488
+  type: 'test'
+  ...
+# Subtest: even rehashed membership, wording/source, date, decision or adoption changes fail the publication lock
+ok 4 - even rehashed membership, wording/source, date, decision or adoption changes fail the publication lock
+  ---
+  duration_ms: 19663.451113
+  type: 'test'
+  ...
+# Subtest: independent checksum computation verifies full artifact, payload, source manifest, acceptance and requirements
+ok 5 - independent checksum computation verifies full artifact, payload, source manifest, acceptance and requirements
+  ---
+  duration_ms: 586.254834
+  type: 'test'
+  ...
+# Subtest: real RC1 declarations resolve only pinned members and cannot create evaluation, profiles or certification
+ok 6 - real RC1 declarations resolve only pinned members and cannot create evaluation, profiles or certification
+  ---
+  duration_ms: 4260.404607
+  type: 'test'
+  ...
+# Subtest: historical public review and all accepted source documents remain unchanged; no final exists
+ok 7 - historical public review and all accepted source documents remain unchanged; no final exists
+  ---
+  duration_ms: 1256.0806
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 40924.262742

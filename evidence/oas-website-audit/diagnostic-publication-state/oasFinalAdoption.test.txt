@@ -1,0 +1,108 @@
+TAP version 13
+# Subtest: real human adoption is recorded separately from withheld publication
+not ok 1 - real human adoption is recorded separately from withheld publication
+  ---
+  duration_ms: 250.469149
+  type: 'test'
+  location: '/private/tmp/oas-website-audit-bn1nv8t9/frozen-release/tests/oasFinalAdoption.test.mjs:11:1'
+  failureType: 'testCodeFailure'
+  error: 'Unauthorized canonical final publication'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    ensure (file:///private/tmp/oas-website-audit-bn1nv8t9/frozen-release/scripts/oas-final-adoption.mjs:16:56)
+    verifyPreparedBindings (file:///private/tmp/oas-website-audit-bn1nv8t9/frozen-release/scripts/oas-final-adoption.mjs:64:2)
+    validateAdoption (file:///private/tmp/oas-website-audit-bn1nv8t9/frozen-release/scripts/oas-final-adoption.mjs:72:23)
+    TestContext.<anonymous> (file:///private/tmp/oas-website-audit-bn1nv8t9/frozen-release/tests/oasFinalAdoption.test.mjs:12:31)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: every explicit final binding and complete prepared package remains exact
+not ok 2 - every explicit final binding and complete prepared package remains exact
+  ---
+  duration_ms: 57.4496
+  type: 'test'
+  location: '/private/tmp/oas-website-audit-bn1nv8t9/frozen-release/tests/oasFinalAdoption.test.mjs:14:1'
+  failureType: 'testCodeFailure'
+  error: 'Unauthorized canonical final publication'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    ensure (file:///private/tmp/oas-website-audit-bn1nv8t9/frozen-release/scripts/oas-final-adoption.mjs:16:56)
+    verifyPreparedBindings (file:///private/tmp/oas-website-audit-bn1nv8t9/frozen-release/scripts/oas-final-adoption.mjs:64:2)
+    TestContext.<anonymous> (file:///private/tmp/oas-website-audit-bn1nv8t9/frozen-release/tests/oasFinalAdoption.test.mjs:15:23)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: even rehashed actor, time, authority, source/content, approval and publication mutations reject
+ok 3 - even rehashed actor, time, authority, source/content, approval and publication mutations reject
+  ---
+  duration_ms: 413.989054
+  type: 'test'
+  ...
+# Subtest: unsigned templates and Git actor metadata cannot fabricate a final adoption
+not ok 4 - unsigned templates and Git actor metadata cannot fabricate a final adoption
+  ---
+  duration_ms: 51.300689
+  type: 'test'
+  location: '/private/tmp/oas-website-audit-bn1nv8t9/frozen-release/tests/oasFinalAdoption.test.mjs:20:1'
+  failureType: 'testCodeFailure'
+  error: 'Unauthorized canonical final publication'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    ensure (file:///private/tmp/oas-website-audit-bn1nv8t9/frozen-release/scripts/oas-final-adoption.mjs:16:56)
+    verifyPreparedBindings (file:///private/tmp/oas-website-audit-bn1nv8t9/frozen-release/scripts/oas-final-adoption.mjs:64:2)
+    validateAdoption (file:///private/tmp/oas-website-audit-bn1nv8t9/frozen-release/scripts/oas-final-adoption.mjs:72:23)
+    TestContext.<anonymous> (file:///private/tmp/oas-website-audit-bn1nv8t9/frozen-release/tests/oasFinalAdoption.test.mjs:21:398)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: decision is immutable and attributable; canonical JSON checksum is independently reproducible
+ok 5 - decision is immutable and attributable; canonical JSON checksum is independently reproducible
+  ---
+  duration_ms: 91.220522
+  type: 'test'
+  ...
+# Subtest: adoption leaves original pending preparation snapshots and issued/historical bytes unchanged
+not ok 6 - adoption leaves original pending preparation snapshots and issued/historical bytes unchanged
+  ---
+  duration_ms: 194.956907
+  type: 'test'
+  location: '/private/tmp/oas-website-audit-bn1nv8t9/frozen-release/tests/oasFinalAdoption.test.mjs:26:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    true !== false
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///private/tmp/oas-website-audit-bn1nv8t9/frozen-release/tests/oasFinalAdoption.test.mjs:27:387)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 2
+# fail 4
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1459.391959

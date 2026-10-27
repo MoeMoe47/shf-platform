@@ -1,0 +1,112 @@
+TAP version 13
+# Subtest: all six blocking questions have exact issues, alternatives and bounded decisions
+ok 1 - all six blocking questions have exact issues, alternatives and bounded decisions
+  ---
+  duration_ms: 20.920426
+  type: 'test'
+  ...
+# Subtest: all three revised requirements receive final APPROVE with ten-criterion review
+ok 2 - all three revised requirements receive final APPROVE with ten-criterion review
+  ---
+  duration_ms: 2.335442
+  type: 'test'
+  ...
+# Subtest: all eight HOLDs close with five promotions and three explicit post-1.0 deferrals
+ok 3 - all eight HOLDs close with five promotions and three explicit post-1.0 deferrals
+  ---
+  duration_ms: 3.078379
+  type: 'test'
+  ...
+# Subtest: 14 approved requirements cover all eight concepts with no normative text/ID reuse
+ok 4 - 14 approved requirements cover all eight concepts with no normative text/ID reuse
+  ---
+  duration_ms: 0.98075
+  type: 'test'
+  ...
+# Subtest: deferred, rejected, duplicate or unknown requirements cannot enter scope
+ok 5 - deferred, rejected, duplicate or unknown requirements cannot enter scope
+  ---
+  duration_ms: 10.65445
+  type: 'test'
+  ...
+# Subtest: former deferred questions are resolved within scope or explicitly excluded
+ok 6 - former deferred questions are resolved within scope or explicitly excluded
+  ---
+  duration_ms: 1.029693
+  type: 'test'
+  ...
+# Subtest: mapping states terminate; all seven quarantines reject canonical projection
+ok 7 - mapping states terminate; all seven quarantines reject canonical projection
+  ---
+  duration_ms: 6.316323
+  type: 'test'
+  ...
+# Subtest: historical mapping preimage remains exact and current documentation is generated
+ok 8 - historical mapping preimage remains exact and current documentation is generated
+  ---
+  duration_ms: 1777.147586
+  type: 'test'
+  ...
+# Subtest: valid fully pinned declarations validate without producing conformance
+ok 9 - valid fully pinned declarations validate without producing conformance
+  ---
+  duration_ms: 2.819517
+  type: 'test'
+  ...
+# Subtest: not-applicable requires reason; unknown or unavailable applicability cannot assert satisfaction
+ok 10 - not-applicable requires reason; unknown or unavailable applicability cannot assert satisfaction
+  ---
+  duration_ms: 1.297103
+  type: 'test'
+  ...
+# Subtest: declarations reject missing/duplicate/deferred references and invented release pins or scores
+ok 11 - declarations reject missing/duplicate/deferred references and invented release pins or scores
+  ---
+  duration_ms: 1.678635
+  type: 'test'
+  ...
+# Subtest: RC format validates only exact scope membership, provenance fields and checksums
+ok 12 - RC format validates only exact scope membership, provenance fields and checksums
+  ---
+  duration_ms: 72.691643
+  type: 'test'
+  ...
+# Subtest: founding procedure is explicit and actual acceptance cannot be invented by a green suite
+ok 13 - founding procedure is explicit and actual acceptance cannot be invented by a green suite
+  ---
+  duration_ms: 1643.828229
+  type: 'test'
+  ...
+# Subtest: recorded real acceptance resolves both activation gates; all fifteen gates pass
+ok 14 - recorded real acceptance resolves both activation gates; all fifteen gates pass
+  ---
+  duration_ms: 1137.179445
+  type: 'test'
+  ...
+# Subtest: RC1 is issued separately; historical scope and public-review snapshot are immutable
+ok 15 - RC1 is issued separately; historical scope and public-review snapshot are immutable
+  ---
+  duration_ms: 6084.252854
+  type: 'test'
+  ...
+# Subtest: source and acceptance digests are separate, deterministic and independently computable
+ok 16 - source and acceptance digests are separate, deterministic and independently computable
+  ---
+  duration_ms: 99.867071
+  type: 'test'
+  ...
+# Subtest: all human views and effective catalog reproduce from the single pinned source/resolution
+ok 17 - all human views and effective catalog reproduce from the single pinned source/resolution
+  ---
+  duration_ms: 3787.143943
+  type: 'test'
+  ...
+1..17
+# tests 17
+# suites 0
+# pass 17
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 15261.017086

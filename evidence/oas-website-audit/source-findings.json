@@ -1,0 +1,818 @@
+[
+  {
+    "file": "src/pages/oas/OAS1Page.jsx",
+    "line": 13,
+    "text": "// Claims discipline: OAS-1 is a Public Working Draft only. No",
+    "classification": "source comment / verify against rendered behavior"
+  },
+  {
+    "file": "src/pages/oas/OAS1Page.jsx",
+    "line": 17,
+    "text": "// rendered as non-interactive (no href, aria-disabled) because no such",
+    "classification": "source comment / verify against rendered behavior"
+  },
+  {
+    "file": "src/pages/oas/OAS1Page.jsx",
+    "line": 19,
+    "text": "// schema, no full-spec page anywhere in the repo). The approved mock",
+    "classification": "source comment / verify against rendered behavior"
+  },
+  {
+    "file": "src/pages/oas/OAS1Page.jsx",
+    "line": 26,
+    "text": "import { VenusMark, PlannedItem, AnchorLink, OASFooter } from \"./oasShared.jsx\";",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OAS1Page.jsx",
+    "line": 39,
+    "text": "// The approved mock shows a 10-line preview of the 14-section spec",
+    "classification": "source comment / verify against rendered behavior"
+  },
+  {
+    "file": "src/pages/oas/OAS1Page.jsx",
+    "line": 44,
+    "text": "// (Risk/Conformance/Schemas are already in the header nav as planned",
+    "classification": "source comment / verify against rendered behavior"
+  },
+  {
+    "file": "src/pages/oas/OAS1Page.jsx",
+    "line": 66,
+    "text": "{ label: \"Status\", value: \"Public Review\", icon: \"clock\" },",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OAS1Page.jsx",
+    "line": 78,
+    "text": "// Measured against the approved mock: icons there render ~24px with a",
+    "classification": "source comment / verify against rendered behavior"
+  },
+  {
+    "file": "src/pages/oas/OAS1Page.jsx",
+    "line": 145,
+    "text": "function ActionRow({ icon, title, comingSoon, description }) {",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OAS1Page.jsx",
+    "line": 147,
+    "text": "<span className=\"oas1-action\" aria-disabled=\"true\" title=\"Coming soon \u2014 this file does not exist yet\">",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OAS1Page.jsx",
+    "line": 152,
+    "text": "{comingSoon && <span className=\"oas1-action__badge\">Coming Soon</span>}",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OAS1Page.jsx",
+    "line": 208,
+    "text": "<PlannedItem>Control Domains</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OAS1Page.jsx",
+    "line": 209,
+    "text": "<PlannedItem>Risk</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OAS1Page.jsx",
+    "line": 210,
+    "text": "<PlannedItem>Conformance</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OAS1Page.jsx",
+    "line": 211,
+    "text": "<PlannedItem>Schemas</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OAS1Page.jsx",
+    "line": 212,
+    "text": "<PlannedItem>Implementation</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OAS1Page.jsx",
+    "line": 276,
+    "text": "alt=\"OAS-1 publication cover: a cream book with the Venus mark, titled 'OAS-1, Open Autonomous Standard,' reading 'A more trustworthy AI future,' with a warm bronze planetary sweep across the lower-right corner, labeled Public Working Draft, Version 1.0, resting against a second volume.\"",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OAS1Page.jsx",
+    "line": 306,
+    "text": "section, per the approved mock \u2014 not three stacked sections. Each",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OAS1Page.jsx",
+    "line": 355,
+    "text": "<div className=\"oas1-textlink oas1-textlink--planned\">",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OAS1Page.jsx",
+    "line": 356,
+    "text": "<PlannedItem>View Full Table of Contents \u2192</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OAS1Page.jsx",
+    "line": 371,
+    "text": "<ActionRow icon=\"download\" title=\"Download PDF\" comingSoon description=\"A printable version of the OAS-1 standard.\" />",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas-purpose-boundaries.css",
+    "line": 92,
+    "text": ".oaspb .oas-header__nav button.oas__planned {",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas-purpose-boundaries.css",
+    "line": 145,
+    "text": "/* Trimmed from 36px 0 40px: with the emblem placeholder at its own",
+    "classification": "source comment / verify against rendered behavior"
+  },
+  {
+    "file": "src/pages/oas/oas-purpose-boundaries.css",
+    "line": 272,
+    "text": "earlier phase reserved (target, placeholder, or otherwise), so hero",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas-purpose-boundaries.css",
+    "line": 707,
+    "text": "copy and easing away by the time the placeholder begins. */",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas-risk-classification.css",
+    "line": 92,
+    "text": ".oasrc .oas-header__nav button.oas__planned {",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas-risk-classification.css",
+    "line": 108,
+    "text": "/* A disabled-looking button (wrapped in PlannedItem) never receives a",
+    "classification": "source comment / verify against rendered behavior"
+  },
+  {
+    "file": "src/pages/oas/oas-risk-classification.css",
+    "line": 110,
+    "text": ".oas__planned .oasrc-btn--rust {",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas-risk-classification.css",
+    "line": 313,
+    "text": "/* x/y positions tuned against the actual asset via pixel-sampled",
+    "classification": "source comment / verify against rendered behavior"
+  },
+  {
+    "file": "src/pages/oas/oas-risk-classification.css",
+    "line": 420,
+    "text": "the Phase 1 placeholder used (identical aspect-ratio/max-height), so",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas-risk-classification.css",
+    "line": 475,
+    "text": "unlike e.g. the hero visual placeholder elsewhere on this page. */",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas-risk-classification.css",
+    "line": 1135,
+    "text": "second line at this width \u2014 without this, the \"Coming Soon\" badge",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASControlDomainsPage.jsx",
+    "line": 12,
+    "text": "// The flywheel is a placeholder (FlywheelPlaceholder below) reserving",
+    "classification": "source comment / verify against rendered behavior"
+  },
+  {
+    "file": "src/pages/oas/OASControlDomainsPage.jsx",
+    "line": 23,
+    "text": "import { VenusMark, PlannedItem, AnchorLink, OASFooter } from \"./oasShared.jsx\";",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASControlDomainsPage.jsx",
+    "line": 97,
+    "text": "// approved mock's exact placement (top, then clockwise).",
+    "classification": "source comment / verify against rendered behavior"
+  },
+  {
+    "file": "src/pages/oas/OASControlDomainsPage.jsx",
+    "line": 158,
+    "text": "// 45deg clockwise \u2014 matches the approved mock's exact node order and",
+    "classification": "source comment / verify against rendered behavior"
+  },
+  {
+    "file": "src/pages/oas/OASControlDomainsPage.jsx",
+    "line": 173,
+    "text": "// positions on .oascd-flywheel (measured against the approved mock:",
+    "classification": "source comment / verify against rendered behavior"
+  },
+  {
+    "file": "src/pages/oas/OASControlDomainsPage.jsx",
+    "line": 405,
+    "text": "<PlannedItem>Risk</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASControlDomainsPage.jsx",
+    "line": 406,
+    "text": "<PlannedItem>Conformance</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASControlDomainsPage.jsx",
+    "line": 407,
+    "text": "<PlannedItem>Schemas</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASControlDomainsPage.jsx",
+    "line": 408,
+    "text": "<PlannedItem>Implementation</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASControlDomainsPage.jsx",
+    "line": 445,
+    "text": "{/* Quiet right-margin micro-copy from the approved mock \u2014 a",
+    "classification": "source comment / verify against rendered behavior"
+  },
+  {
+    "file": "src/pages/oas/OASControlDomainsPage.jsx",
+    "line": 481,
+    "text": "A shared standard for a more open future. <span aria-hidden=\"true\">\u2192</span>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas-landing.css",
+    "line": 80,
+    "text": ".oas__planned {",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas-landing.css",
+    "line": 154,
+    "text": ".oas-header__nav button.oas__planned {",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas-landing.css",
+    "line": 233,
+    "text": "/* Full-bleed dark cinematic hero per the approved Home mock \u2014 a",
+    "classification": "source comment / verify against rendered behavior"
+  },
+  {
+    "file": "src/pages/oas/oas-landing.css",
+    "line": 237,
+    "text": "dark area reserved for the future planet/atmosphere art \u2014 no CSS-",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas-landing.css",
+    "line": 296,
+    "text": "right edge, matching the mock's full-bleed composition. */",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas-landing.css",
+    "line": 339,
+    "text": "/* Neutral placeholder for the future planet/atmosphere art \u2014 no",
+    "classification": "source comment / verify against rendered behavior"
+  },
+  {
+    "file": "src/pages/oas/oas-landing.css",
+    "line": 341,
+    "text": "so there's no visible \"placeholder box\" seam against the copy",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas-landing.css",
+    "line": 366,
+    "text": "the mock. */",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas-landing.css",
+    "line": 414,
+    "text": "is a plain neutral placeholder (Phase 1: no final institutional",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas-landing.css",
+    "line": 617,
+    "text": "/* Phase 1: flat dark placeholder, no final landscape art yet. */",
+    "classification": "source comment / verify against rendered behavior"
+  },
+  {
+    "file": "src/pages/oas/oas-landing.css",
+    "line": 699,
+    "text": ".oas-footer__col .oas__planned {",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas-landing.css",
+    "line": 808,
+    "text": "/* Mobile hero: single column, art placeholder moves below copy",
+    "classification": "source comment / verify against rendered behavior"
+  },
+  {
+    "file": "src/pages/oas/oas1-page.css",
+    "line": 4,
+    "text": ".oas__eyebrow / .oas__rule / .oas__container / .oas__planned are all",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas1-page.css",
+    "line": 13,
+    "text": "landing page's gold/amber-led palette, per the approved OAS-1 mock.",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas1-page.css",
+    "line": 52,
+    "text": "/* Measured against the approved mock: header total height there is",
+    "classification": "source comment / verify against rendered behavior"
+  },
+  {
+    "file": "src/pages/oas/oas1-page.css",
+    "line": 56,
+    "text": "excess \"air\" above/below the row rather than the mock's tighter",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas1-page.css",
+    "line": 73,
+    "text": "(oas-landing.css) reads slightly looser than the mock's own ~26-28px",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas1-page.css",
+    "line": 111,
+    "text": "PlannedItems alike \u2014 recedes to one warm gray-brown so the active",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas1-page.css",
+    "line": 114,
+    "text": ".oas1 .oas-header__nav button.oas__planned {",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas1-page.css",
+    "line": 122,
+    "text": "hero's primary CTA, matching the mock's filled rust/orange button",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas1-page.css",
+    "line": 235,
+    "text": "bottom edge (matching the mock) instead of floating mid-air with",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas1-page.css",
+    "line": 253,
+    "text": "~330-365px range the approved mock shows; no border-radius, no",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas1-page.css",
+    "line": 271,
+    "text": "/* A small decorative word-stack echoing the approved mock's far-right",
+    "classification": "source comment / verify against rendered behavior"
+  },
+  {
+    "file": "src/pages/oas/oas1-page.css",
+    "line": 327,
+    "text": "directly against the approved mock (icon glyphs there render ~23-25px",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas1-page.css",
+    "line": 364,
+    "text": "columns side by side, matching the approved mock's horizontal",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas1-page.css",
+    "line": 365,
+    "text": "density. Proportions are 32% / 31% / 37% per the mock. */",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas1-page.css",
+    "line": 469,
+    "text": ".oas1-textlink--planned {",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas1-page.css",
+    "line": 698,
+    "text": "mock's horizontal density is a desktop-only composition. */",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASRiskClassificationPage.jsx",
+    "line": 11,
+    "text": "// for how it's integrated) rather than a placeholder.",
+    "classification": "source comment / verify against rendered behavior"
+  },
+  {
+    "file": "src/pages/oas/OASRiskClassificationPage.jsx",
+    "line": 33,
+    "text": "import { VenusMark, PlannedItem, AnchorLink, OASFooter } from \"./oasShared.jsx\";",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASRiskClassificationPage.jsx",
+    "line": 218,
+    "text": "<PlannedItem>Conformance</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASRiskClassificationPage.jsx",
+    "line": 219,
+    "text": "<PlannedItem>Schemas</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASRiskClassificationPage.jsx",
+    "line": 220,
+    "text": "<PlannedItem>Implementation</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASRiskClassificationPage.jsx",
+    "line": 274,
+    "text": "{/* Reserves the same footprint the Phase 1 placeholder used",
+    "classification": "source comment / verify against rendered behavior"
+  },
+  {
+    "file": "src/pages/oas/OASRiskClassificationPage.jsx",
+    "line": 276,
+    "text": "the background art fills this area, the placeholder's",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASRiskClassificationPage.jsx",
+    "line": 415,
+    "text": "safer, more open future.",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASRiskClassificationPage.jsx",
+    "line": 422,
+    "text": "PlannedItem) \u2014 flagged the same way OAS1Page flags its",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASRiskClassificationPage.jsx",
+    "line": 425,
+    "text": "<PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASRiskClassificationPage.jsx",
+    "line": 428,
+    "text": "<span className=\"oasrc-cta__badge\">Coming Soon</span>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASRiskClassificationPage.jsx",
+    "line": 430,
+    "text": "</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASPurposeBoundariesPage.jsx",
+    "line": 39,
+    "text": "import { VenusMark, PlannedItem, AnchorLink, OASFooter } from \"./oasShared.jsx\";",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASPurposeBoundariesPage.jsx",
+    "line": 201,
+    "text": "<PlannedItem>Risk</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASPurposeBoundariesPage.jsx",
+    "line": 202,
+    "text": "<PlannedItem>Conformance</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASPurposeBoundariesPage.jsx",
+    "line": 203,
+    "text": "<PlannedItem>Schemas</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASPurposeBoundariesPage.jsx",
+    "line": 204,
+    "text": "<PlannedItem>Implementation</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas-control-domains.css",
+    "line": 73,
+    "text": ".oascd .oas-header__nav button.oas__planned {",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas-control-domains.css",
+    "line": 235,
+    "text": "FRAMEWORK\" in the hero's upper third per the approved mock, roughly",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas-control-domains.css",
+    "line": 267,
+    "text": "against the approved hero mock (there, the node-center orbit sits at",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas-control-domains.css",
+    "line": 356,
+    "text": "approved mock's own corner dots \u2014 restrained (two only). */",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas-control-domains.css",
+    "line": 681,
+    "text": "Quiet decorative typographic flourish from the approved mock \u2014 same",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oas-control-domains.css",
+    "line": 808,
+    "text": "precisely (a minmax+1fr track left this closer to the mock by",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASLandingPage.jsx",
+    "line": 21,
+    "text": "// does not, it renders as non-interactive text via <PlannedItem>, per",
+    "classification": "source comment / verify against rendered behavior"
+  },
+  {
+    "file": "src/pages/oas/OASLandingPage.jsx",
+    "line": 26,
+    "text": "import { VenusMark, PlannedItem, AnchorLink, OASFooter } from \"./oasShared.jsx\";",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASLandingPage.jsx",
+    "line": 204,
+    "text": "<PlannedItem>Conformance</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASLandingPage.jsx",
+    "line": 205,
+    "text": "<PlannedItem>Schemas</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASLandingPage.jsx",
+    "line": 206,
+    "text": "<PlannedItem>Implementation</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASLandingPage.jsx",
+    "line": 220,
+    "text": "{/* Full-bleed dark cinematic hero per the approved Home mock.",
+    "classification": "source comment / verify against rendered behavior"
+  },
+  {
+    "file": "src/pages/oas/OASLandingPage.jsx",
+    "line": 222,
+    "text": "unstyled dark area reserving space for the future planet/",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASLandingPage.jsx",
+    "line": 225,
+    "text": "placeholder rather than being baked into art. */}",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASLandingPage.jsx",
+    "line": 246,
+    "text": "future for",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASLandingPage.jsx",
+    "line": 270,
+    "text": "<span>Future</span>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASLandingPage.jsx",
+    "line": 279,
+    "text": "<p className=\"oas-hero-strip__statement\">A shared standard. A safer, more open future.</p>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASLandingPage.jsx",
+    "line": 290,
+    "text": "architecture image yet (Phase 1: neutral placeholder only). */}",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASLandingPage.jsx",
+    "line": 296,
+    "text": "A shared foundation for a more trustworthy AI future.",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASLandingPage.jsx",
+    "line": 399,
+    "text": "{/* Phase 1: flat dark placeholder, no final landscape art yet. */}",
+    "classification": "source comment / verify against rendered behavior"
+  },
+  {
+    "file": "src/pages/oas/OASLandingPage.jsx",
+    "line": 402,
+    "text": "<h2 id=\"oas-opportunity-heading\">A more trustworthy autonomous future starts with shared rules.</h2>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oasShared.jsx",
+    "line": 3,
+    "text": "// landing page, OAS-1, and any future OAS document page) so they don't",
+    "classification": "source comment / verify against rendered behavior"
+  },
+  {
+    "file": "src/pages/oas/oasShared.jsx",
+    "line": 5,
+    "text": "// class names (.oas-venus-mark, .oas__planned), not on any page-specific",
+    "classification": "source comment / verify against rendered behavior"
+  },
+  {
+    "file": "src/pages/oas/oasShared.jsx",
+    "line": 24,
+    "text": "export function PlannedItem({ children }) {",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oasShared.jsx",
+    "line": 26,
+    "text": "<span className=\"oas__planned\" aria-disabled=\"true\" title=\"Planned \u2014 not yet published\">",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oasShared.jsx",
+    "line": 55,
+    "text": "A more trustworthy AI future.",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oasShared.jsx",
+    "line": 66,
+    "text": "<PlannedItem>Principles</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oasShared.jsx",
+    "line": 72,
+    "text": "<PlannedItem>News</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oasShared.jsx",
+    "line": 84,
+    "text": "<PlannedItem>Specification</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oasShared.jsx",
+    "line": 87,
+    "text": "<PlannedItem>Schemas</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oasShared.jsx",
+    "line": 90,
+    "text": "<PlannedItem>Conformance</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oasShared.jsx",
+    "line": 99,
+    "text": "<PlannedItem>Implementation Guides</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oasShared.jsx",
+    "line": 102,
+    "text": "<PlannedItem>Developer Resources</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oasShared.jsx",
+    "line": 105,
+    "text": "<PlannedItem>Use Cases</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oasShared.jsx",
+    "line": 108,
+    "text": "<PlannedItem>FAQ</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oasShared.jsx",
+    "line": 117,
+    "text": "<PlannedItem>Process</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oasShared.jsx",
+    "line": 120,
+    "text": "<PlannedItem>Public Comment</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oasShared.jsx",
+    "line": 123,
+    "text": "<PlannedItem>Version History</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oasShared.jsx",
+    "line": 126,
+    "text": "<PlannedItem>Contact</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oasShared.jsx",
+    "line": 142,
+    "text": "<span>\u00a9 {YEAR} Open Autonomous Standard. Public Working Draft \u2014 OAS-1.</span>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oasShared.jsx",
+    "line": 144,
+    "text": "<PlannedItem>Privacy</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oasShared.jsx",
+    "line": 145,
+    "text": "<PlannedItem>Terms</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/oasShared.jsx",
+    "line": 146,
+    "text": "<PlannedItem>Accessibility</PlannedItem>",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASPurposeBoundariesLowerMotion.jsx",
+    "line": 43,
+    "text": "// Piecewise-linear curve sampled at a handful of control points, both",
+    "classification": "source comment / verify against rendered behavior"
+  },
+  {
+    "file": "src/pages/oas/OASPurposeBoundariesLowerMotion.jsx",
+    "line": 47,
+    "text": "function sampleCurve(points, t) {",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "src/pages/oas/OASPurposeBoundariesLowerMotion.jsx",
+    "line": 231,
+    "text": "const shape = sampleCurve(H_CURVE, p.x / width) * sampleCurve(V_CURVE, p.y / height);",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "oas-1.html",
+    "line": 7,
+    "text": "<meta name=\"description\" content=\"OAS-1 \u2014 the Open Autonomous Standard's public working draft specification for autonomous agent identity, authority, interoperability, safety, evidence, and lifecycle governance.\" />",
+    "classification": "runtime content/style or implementation"
+  },
+  {
+    "file": "oas.html",
+    "line": 7,
+    "text": "<meta name=\"description\" content=\"Open Autonomous Standard (OAS) \u2014 a public working draft standard for autonomous agent identity, authority, interoperability, safety, evidence, and lifecycle governance.\" />",
+    "classification": "runtime content/style or implementation"
+  }
+]

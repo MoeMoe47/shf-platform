@@ -1,0 +1,82 @@
+TAP version 13
+# Subtest: human acceptance is independently retrievable from its exact committed decision and designation
+ok 1 - human acceptance is independently retrievable from its exact committed decision and designation
+  ---
+  duration_ms: 3153.631257
+  type: 'test'
+  ...
+# Subtest: pending, fabricated designation, actor, time or decision references cannot enter issuance
+ok 2 - pending, fabricated designation, actor, time or decision references cannot enter issuance
+  ---
+  duration_ms: 1036.916518
+  type: 'test'
+  ...
+# Subtest: RC1 schema, all exact IDs, eight domains and deterministic bytes agree with accepted source
+ok 3 - RC1 schema, all exact IDs, eight domains and deterministic bytes agree with accepted source
+  ---
+  duration_ms: 10766.406787
+  type: 'test'
+  ...
+# Subtest: even rehashed membership, wording/source, date, decision or adoption changes fail the publication lock
+ok 4 - even rehashed membership, wording/source, date, decision or adoption changes fail the publication lock
+  ---
+  duration_ms: 22092.790631
+  type: 'test'
+  ...
+# Subtest: independent checksum computation verifies full artifact, payload, source manifest, acceptance and requirements
+ok 5 - independent checksum computation verifies full artifact, payload, source manifest, acceptance and requirements
+  ---
+  duration_ms: 549.465921
+  type: 'test'
+  ...
+# Subtest: real RC1 declarations resolve only pinned members and cannot create evaluation, profiles or certification
+ok 6 - real RC1 declarations resolve only pinned members and cannot create evaluation, profiles or certification
+  ---
+  duration_ms: 4385.425104
+  type: 'test'
+  ...
+# Subtest: historical public review and all accepted source documents remain unchanged; no final exists
+not ok 7 - historical public review and all accepted source documents remain unchanged; no final exists
+  ---
+  duration_ms: 1.429068
+  type: 'test'
+  location: '/private/tmp/oas-website-audit-bn1nv8t9/frozen-release/tests/oasRc1Release.test.mjs:40:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+
+      [
+        'OAS-1@0.0.0-public-review.1.json',
+        'OAS-1@1.0.0-rc.1.json',
+    +   'OAS-1@1.0.0.json'
+      ]
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 'OAS-1@0.0.0-public-review.1.json'
+    1: 'OAS-1@1.0.0-rc.1.json'
+  actual:
+    0: 'OAS-1@0.0.0-public-review.1.json'
+    1: 'OAS-1@1.0.0-rc.1.json'
+    2: 'OAS-1@1.0.0.json'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///private/tmp/oas-website-audit-bn1nv8t9/frozen-release/tests/oasRc1Release.test.mjs:41:9)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 6
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 42696.510529

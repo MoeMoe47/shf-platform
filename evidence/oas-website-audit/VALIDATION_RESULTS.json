@@ -1,0 +1,45 @@
+{
+  "audit_status": "COMPLETE",
+  "website_status": "FUNCTIONAL_BUT_INCOMPLETE_NOT_LAUNCH_READY",
+  "product_changes": [],
+  "frozen_publication_commit": "9fc98273119dd1ccb43078b56abb1de02071214f",
+  "checks": [
+    {
+      "context": "immutable adoption snapshot 164798c8a684e4c3605fc89492918ca00552e70b",
+      "tests": 95,
+      "pass": 95,
+      "fail": 0,
+      "independent_verifiers": 3
+    },
+    {
+      "context": "immutable publication snapshot 9fc98273119dd1ccb43078b56abb1de02071214f",
+      "tests": 9,
+      "pass": 9,
+      "fail": 0,
+      "independent_verifiers": 1
+    },
+    {
+      "context": "current audited checkout OAS reporting",
+      "tests": 5,
+      "pass": 5,
+      "fail": 0
+    },
+    {
+      "context": "current audited checkout OAS-related routing/boundary",
+      "tests": 12,
+      "pass": 12,
+      "fail": 0
+    }
+  ],
+  "distinct_selected_tests": 121,
+  "scoped_oas_build": "PASS",
+  "live_pages_rendering": 5,
+  "anchor_instances": 61,
+  "unique_link_destinations": 19,
+  "broken_fragments": 2,
+  "contrast_nodes_across_routes": 31,
+  "reflow_320px": "FAIL on all five pages",
+  "no_product_changes": "PASS",
+  "normative_files_modified": false,
+  "source_snapshot_mismatch": "Documented P0; active checkout lacks public/oas"
+}

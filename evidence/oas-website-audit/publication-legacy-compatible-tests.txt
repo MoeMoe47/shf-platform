@@ -1,0 +1,220 @@
+TAP version 13
+# Subtest: catalog has exact draft identity, no invented release or normative population
+ok 1 - catalog has exact draft identity, no invented release or normative population
+  ---
+  duration_ms: 8.385748
+  type: 'test'
+  ...
+# Subtest: duplicate standard_id rejected even when other fields differ
+ok 2 - duplicate standard_id rejected even when other fields differ
+  ---
+  duration_ms: 2.620636
+  type: 'test'
+  ...
+# Subtest: duplicate release_id rejected even when other fields differ
+ok 3 - duplicate release_id rejected even when other fields differ
+  ---
+  duration_ms: 0.640561
+  type: 'test'
+  ...
+# Subtest: duplicate profile_id rejected even when other fields differ
+ok 4 - duplicate profile_id rejected even when other fields differ
+  ---
+  duration_ms: 0.472784
+  type: 'test'
+  ...
+# Subtest: duplicate requirement_id rejected even when other fields differ
+ok 5 - duplicate requirement_id rejected even when other fields differ
+  ---
+  duration_ms: 0.63692
+  type: 'test'
+  ...
+# Subtest: stable machine ID formats and no floating latest
+ok 6 - stable machine ID formats and no floating latest
+  ---
+  duration_ms: 2.71854
+  type: 'test'
+  ...
+# Subtest: canonical public labels/order preserved; legacy report collisions remain unmapped
+ok 7 - canonical public labels/order preserved; legacy report collisions remain unmapped
+  ---
+  duration_ms: 5.92581
+  type: 'test'
+  ...
+# Subtest: cross-reference, version and domain errors rejected
+ok 8 - cross-reference, version and domain errors rejected
+  ---
+  duration_ms: 3.722663
+  type: 'test'
+  ...
+# Subtest: releases: valid reciprocal supersession; dangling, self and cyclic links rejected
+ok 9 - releases: valid reciprocal supersession; dangling, self and cyclic links rejected
+  ---
+  duration_ms: 2.729283
+  type: 'test'
+  ...
+# Subtest: requirements: valid reciprocal supersession; dangling, self and cyclic links rejected
+ok 10 - requirements: valid reciprocal supersession; dangling, self and cyclic links rejected
+  ---
+  duration_ms: 2.194474
+  type: 'test'
+  ...
+# Subtest: profiles: valid reciprocal supersession; dangling, self and cyclic links rejected
+ok 11 - profiles: valid reciprocal supersession; dangling, self and cyclic links rejected
+  ---
+  duration_ms: 1.613643
+  type: 'test'
+  ...
+# Subtest: schema rejects extra fields, false release claims, invalid dates and certifications
+ok 12 - schema rejects extra fields, false release claims, invalid dates and certifications
+  ---
+  duration_ms: 2.529469
+  type: 'test'
+  ...
+# Subtest: declarations resolve pinned references and preserve historical declaration data
+ok 13 - declarations resolve pinned references and preserve historical declaration data
+  ---
+  duration_ms: 1.538765
+  type: 'test'
+  ...
+# Subtest: deterministic generation, provenance and independent digest tampering checks
+ok 14 - deterministic generation, provenance and independent digest tampering checks
+  ---
+  duration_ms: 27.321078
+  type: 'test'
+  ...
+# Subtest: committed public snapshot exists and reproduces from git
+ok 15 - committed public snapshot exists and reproduces from git
+  ---
+  duration_ms: 649.54384
+  type: 'test'
+  ...
+# Subtest: 17 traceable candidates cover exactly the existing eight domains without published requirements
+ok 16 - 17 traceable candidates cover exactly the existing eight domains without published requirements
+  ---
+  duration_ms: 114.27677
+  type: 'test'
+  ...
+# Subtest: duplicate IDs and whitespace/case-equivalent normative statements rejected
+ok 17 - duplicate IDs and whitespace/case-equivalent normative statements rejected
+  ---
+  duration_ms: 4.87183
+  type: 'test'
+  ...
+# Subtest: all candidates need canonical domains, normative text, applicability and exact source citation
+ok 18 - all candidates need canonical domains, normative text, applicability and exact source citation
+  ---
+  duration_ms: 12.818467
+  type: 'test'
+  ...
+# Subtest: candidate risk conditioning cannot silently introduce R0–R4 duties
+ok 19 - candidate risk conditioning cannot silently introduce R0–R4 duties
+  ---
+  duration_ms: 0.970615
+  type: 'test'
+  ...
+# Subtest: approved/released status cannot be asserted without review and governance
+ok 20 - approved/released status cannot be asserted without review and governance
+  ---
+  duration_ms: 3.469531
+  type: 'test'
+  ...
+# Subtest: a review decision is bound to exact wording and is not release adoption
+ok 21 - a review decision is bound to exact wording and is not release adoption
+  ---
+  duration_ms: 7.033646
+  type: 'test'
+  ...
+# Subtest: review declaration applicable validates and stays NOT_EVALUATED
+ok 22 - review declaration applicable validates and stays NOT_EVALUATED
+  ---
+  duration_ms: 4.458473
+  type: 'test'
+  ...
+# Subtest: review declaration not_applicable validates and stays NOT_EVALUATED
+ok 23 - review declaration not_applicable validates and stays NOT_EVALUATED
+  ---
+  duration_ms: 3.217504
+  type: 'test'
+  ...
+# Subtest: review declaration declared_satisfied validates and stays NOT_EVALUATED
+ok 24 - review declaration declared_satisfied validates and stays NOT_EVALUATED
+  ---
+  duration_ms: 2.439537
+  type: 'test'
+  ...
+# Subtest: review declaration not_declared validates and stays NOT_EVALUATED
+ok 25 - review declaration not_declared validates and stays NOT_EVALUATED
+  ---
+  duration_ms: 2.498429
+  type: 'test'
+  ...
+# Subtest: review declaration unknown validates and stays NOT_EVALUATED
+ok 26 - review declaration unknown validates and stays NOT_EVALUATED
+  ---
+  duration_ms: 4.889028
+  type: 'test'
+  ...
+# Subtest: declarations reject absent NA reason, absent offered evidence, unknown IDs, stale pins and conformance claims
+ok 27 - declarations reject absent NA reason, absent offered evidence, unknown IDs, stale pins and conformance claims
+  ---
+  duration_ms: 13.950462
+  type: 'test'
+  ...
+# Subtest: declaration review contract cannot masquerade as the existing published declaration schema
+ok 28 - declaration review contract cannot masquerade as the existing published declaration schema
+  ---
+  duration_ms: 0.554767
+  type: 'test'
+  ...
+# Subtest: aliases resolve deterministically by namespace and never by reporting ordinal
+ok 29 - aliases resolve deterministically by namespace and never by reporting ordinal
+  ---
+  duration_ms: 6.352007
+  type: 'test'
+  ...
+# Subtest: unreviewed aliases, unknown mapping domains, missing and duplicate dispositions rejected
+ok 30 - unreviewed aliases, unknown mapping domains, missing and duplicate dispositions rejected
+  ---
+  duration_ms: 2.957948
+  type: 'test'
+  ...
+# Subtest: candidate supersession rejects dangling and circular replacement links
+ok 31 - candidate supersession rejects dangling and circular replacement links
+  ---
+  duration_ms: 8.302323
+  type: 'test'
+  ...
+# Subtest: adopted requirements require a valid release, nonempty normative text and matching governance state
+ok 32 - adopted requirements require a valid release, nonempty normative text and matching governance state
+  ---
+  duration_ms: 3.108015
+  type: 'test'
+  ...
+# Subtest: release gates block RC, adoption and publication; generated metadata contains no invented approval
+ok 33 - release gates block RC, adoption and publication; generated metadata contains no invented approval
+  ---
+  duration_ms: 10.09423
+  type: 'test'
+  ...
+# Subtest: human review documents and checksums regenerate deterministically without manual divergence
+ok 34 - human review documents and checksums regenerate deterministically without manual divergence
+  ---
+  duration_ms: 21.239508
+  type: 'test'
+  ...
+# Subtest: all historical catalog inputs, reporting production code and public pin remain byte-for-byte unchanged
+ok 35 - all historical catalog inputs, reporting production code and public pin remain byte-for-byte unchanged
+  ---
+  duration_ms: 1197.380508
+  type: 'test'
+  ...
+1..35
+# tests 35
+# suites 0
+# pass 35
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2043.915887

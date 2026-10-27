@@ -1,0 +1,64 @@
+TAP version 13
+# Subtest: original bindings remain exact and prepared source commits every intended artifact
+ok 1 - original bindings remain exact and prepared source commits every intended artifact
+  ---
+  duration_ms: 463.80738
+  type: 'test'
+  ...
+# Subtest: exact fourteen IDs and all eight domains are independently fixed
+ok 2 - exact fourteen IDs and all eight domains are independently fixed
+  ---
+  duration_ms: 0.401059
+  type: 'test'
+  ...
+# Subtest: wrong revision, changed digest or altered membership cannot silently regenerate bindings
+ok 3 - wrong revision, changed digest or altered membership cannot silently regenerate bindings
+  ---
+  duration_ms: 160.166348
+  type: 'test'
+  ...
+# Subtest: historical pending record grants no authority; current human acceptance is separate
+ok 4 - historical pending record grants no authority; current human acceptance is separate
+  ---
+  duration_ms: 1695.823779
+  type: 'test'
+  ...
+# Subtest: synthetic positive acceptance validates structure without claiming real authority or consent
+ok 5 - synthetic positive acceptance validates structure without claiming real authority or consent
+  ---
+  duration_ms: 98.427784
+  type: 'test'
+  ...
+# Subtest: acceptance validation rejects stale source, wrong scope/digests, blanks and final-adoption claims
+ok 6 - acceptance validation rejects stale source, wrong scope/digests, blanks and final-adoption claims
+  ---
+  duration_ms: 3.281045
+  type: 'test'
+  ...
+# Subtest: the exact maintainer statement binds full membership, original request and validation-only issuance
+ok 7 - the exact maintainer statement binds full membership, original request and validation-only issuance
+  ---
+  duration_ms: 58.702925
+  type: 'test'
+  ...
+# Subtest: request/checksums and all package views reproduce deterministically
+ok 8 - request/checksums and all package views reproduce deterministically
+  ---
+  duration_ms: 5089.522999
+  type: 'test'
+  ...
+# Subtest: RC1 is separate from unchanged preparation/history; no final artifact exists
+ok 9 - RC1 is separate from unchanged preparation/history; no final artifact exists
+  ---
+  duration_ms: 4709.215961
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 14643.683302

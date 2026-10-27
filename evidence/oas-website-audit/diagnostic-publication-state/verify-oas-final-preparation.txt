@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/private/tmp/oas-website-audit-bn1nv8t9/frozen-release/scripts/verify-oas-final-preparation.py", line 87, in <module>
+    verify()
+  File "/private/tmp/oas-website-audit-bn1nv8t9/frozen-release/scripts/verify-oas-final-preparation.py", line 70, in verify
+    assert not (ROOT / bindings['publication_target']).exists()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

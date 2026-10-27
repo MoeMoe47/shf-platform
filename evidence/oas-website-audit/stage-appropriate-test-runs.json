@@ -1,0 +1,128 @@
+[
+  {
+    "command": [
+      "node",
+      "--test",
+      "tests/oasCanonicalCatalog.test.mjs"
+    ],
+    "context": "164798c8a684e4c3605fc89492918ca00552e70b",
+    "exit": 0,
+    "seconds": 1.19,
+    "log": "adoption-oasCanonicalCatalog.test.txt",
+    "tests": 15
+  },
+  {
+    "command": [
+      "node",
+      "--test",
+      "tests/oasFinalAdoption.test.mjs"
+    ],
+    "context": "164798c8a684e4c3605fc89492918ca00552e70b",
+    "exit": 0,
+    "seconds": 1.63,
+    "log": "adoption-oasFinalAdoption.test.txt",
+    "tests": 6
+  },
+  {
+    "command": [
+      "node",
+      "--test",
+      "tests/oasFinalAdoptionPreparation.test.mjs"
+    ],
+    "context": "164798c8a684e4c3605fc89492918ca00552e70b",
+    "exit": 0,
+    "seconds": 179.35,
+    "log": "adoption-oasFinalAdoptionPreparation.test.txt",
+    "tests": 9
+  },
+  {
+    "command": [
+      "node",
+      "--test",
+      "tests/oasFirstRelease.test.mjs"
+    ],
+    "context": "164798c8a684e4c3605fc89492918ca00552e70b",
+    "exit": 0,
+    "seconds": 1.75,
+    "log": "adoption-oasFirstRelease.test.txt",
+    "tests": 20
+  },
+  {
+    "command": [
+      "node",
+      "--test",
+      "tests/oasGovernanceReview.test.mjs"
+    ],
+    "context": "164798c8a684e4c3605fc89492918ca00552e70b",
+    "exit": 0,
+    "seconds": 2.25,
+    "log": "adoption-oasGovernanceReview.test.txt",
+    "tests": 12
+  },
+  {
+    "command": [
+      "node",
+      "--test",
+      "tests/oasRc1Acceptance.test.mjs"
+    ],
+    "context": "164798c8a684e4c3605fc89492918ca00552e70b",
+    "exit": 0,
+    "seconds": 14.73,
+    "log": "adoption-oasRc1Acceptance.test.txt",
+    "tests": 9
+  },
+  {
+    "command": [
+      "node",
+      "--test",
+      "tests/oasRc1Release.test.mjs"
+    ],
+    "context": "164798c8a684e4c3605fc89492918ca00552e70b",
+    "exit": 0,
+    "seconds": 41.01,
+    "log": "adoption-oasRc1Release.test.txt",
+    "tests": 7
+  },
+  {
+    "command": [
+      "node",
+      "--test",
+      "tests/oasScopeClosure.test.mjs"
+    ],
+    "context": "164798c8a684e4c3605fc89492918ca00552e70b",
+    "exit": 0,
+    "seconds": 15.34,
+    "log": "adoption-oasScopeClosure.test.txt",
+    "tests": 17
+  },
+  {
+    "command": [
+      "python3",
+      "scripts/verify-oas-final-adoption.py"
+    ],
+    "context": "164798c8a684e4c3605fc89492918ca00552e70b",
+    "exit": 0,
+    "seconds": 0.53,
+    "log": "adoption-verify-oas-final-adoption.txt"
+  },
+  {
+    "command": [
+      "python3",
+      "scripts/verify-oas-final-preparation.py"
+    ],
+    "context": "164798c8a684e4c3605fc89492918ca00552e70b",
+    "exit": 0,
+    "seconds": 1.0,
+    "log": "adoption-verify-oas-final-preparation.txt"
+  },
+  {
+    "command": [
+      "python3",
+      "scripts/verify-oas-rc1-checksums.py"
+    ],
+    "context": "164798c8a684e4c3605fc89492918ca00552e70b",
+    "exit": 0,
+    "seconds": 1.58,
+    "log": "adoption-verify-oas-rc1-checksums.txt"
+  }
+]

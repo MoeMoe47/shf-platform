@@ -1,0 +1,155 @@
+TAP version 13
+# Subtest: all six blocking questions have exact issues, alternatives and bounded decisions
+ok 1 - all six blocking questions have exact issues, alternatives and bounded decisions
+  ---
+  duration_ms: 22.540014
+  type: 'test'
+  ...
+# Subtest: all three revised requirements receive final APPROVE with ten-criterion review
+ok 2 - all three revised requirements receive final APPROVE with ten-criterion review
+  ---
+  duration_ms: 1.926844
+  type: 'test'
+  ...
+# Subtest: all eight HOLDs close with five promotions and three explicit post-1.0 deferrals
+ok 3 - all eight HOLDs close with five promotions and three explicit post-1.0 deferrals
+  ---
+  duration_ms: 2.988813
+  type: 'test'
+  ...
+# Subtest: 14 approved requirements cover all eight concepts with no normative text/ID reuse
+ok 4 - 14 approved requirements cover all eight concepts with no normative text/ID reuse
+  ---
+  duration_ms: 1.254305
+  type: 'test'
+  ...
+# Subtest: deferred, rejected, duplicate or unknown requirements cannot enter scope
+ok 5 - deferred, rejected, duplicate or unknown requirements cannot enter scope
+  ---
+  duration_ms: 10.033833
+  type: 'test'
+  ...
+# Subtest: former deferred questions are resolved within scope or explicitly excluded
+ok 6 - former deferred questions are resolved within scope or explicitly excluded
+  ---
+  duration_ms: 1.18802
+  type: 'test'
+  ...
+# Subtest: mapping states terminate; all seven quarantines reject canonical projection
+ok 7 - mapping states terminate; all seven quarantines reject canonical projection
+  ---
+  duration_ms: 6.442812
+  type: 'test'
+  ...
+# Subtest: historical mapping preimage remains exact and current documentation is generated
+not ok 8 - historical mapping preimage remains exact and current documentation is generated
+  ---
+  duration_ms: 43.960431
+  type: 'test'
+  location: '/private/tmp/oas-website-audit-bn1nv8t9/frozen-release/tests/oasScopeClosure.test.mjs:41:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, open '/private/tmp/oas-website-audit-bn1nv8t9/frozen-release/docs/history/OAS_DOMAIN_MAPPING.e1b6135.md'"
+  code: 'ENOENT'
+  stack: |-
+    readFileSync (node:fs:441:20)
+    TestContext.<anonymous> (file:///private/tmp/oas-website-audit-bn1nv8t9/frozen-release/tests/oasScopeClosure.test.mjs:42:133)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: valid fully pinned declarations validate without producing conformance
+ok 9 - valid fully pinned declarations validate without producing conformance
+  ---
+  duration_ms: 4.01703
+  type: 'test'
+  ...
+# Subtest: not-applicable requires reason; unknown or unavailable applicability cannot assert satisfaction
+ok 10 - not-applicable requires reason; unknown or unavailable applicability cannot assert satisfaction
+  ---
+  duration_ms: 1.150639
+  type: 'test'
+  ...
+# Subtest: declarations reject missing/duplicate/deferred references and invented release pins or scores
+ok 11 - declarations reject missing/duplicate/deferred references and invented release pins or scores
+  ---
+  duration_ms: 1.011551
+  type: 'test'
+  ...
+# Subtest: RC format validates only exact scope membership, provenance fields and checksums
+ok 12 - RC format validates only exact scope membership, provenance fields and checksums
+  ---
+  duration_ms: 612.57983
+  type: 'test'
+  ...
+# Subtest: founding procedure is explicit and actual acceptance cannot be invented by a green suite
+ok 13 - founding procedure is explicit and actual acceptance cannot be invented by a green suite
+  ---
+  duration_ms: 1737.660707
+  type: 'test'
+  ...
+# Subtest: recorded real acceptance resolves both activation gates; all fifteen gates pass
+ok 14 - recorded real acceptance resolves both activation gates; all fifteen gates pass
+  ---
+  duration_ms: 1132.086833
+  type: 'test'
+  ...
+# Subtest: RC1 is issued separately; historical scope and public-review snapshot are immutable
+not ok 15 - RC1 is issued separately; historical scope and public-review snapshot are immutable
+  ---
+  duration_ms: 1.501299
+  type: 'test'
+  location: '/private/tmp/oas-website-audit-bn1nv8t9/frozen-release/tests/oasScopeClosure.test.mjs:65:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+
+      [
+        'OAS-1@0.0.0-public-review.1.json',
+        'OAS-1@1.0.0-rc.1.json',
+    +   'OAS-1@1.0.0.json'
+      ]
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 'OAS-1@0.0.0-public-review.1.json'
+    1: 'OAS-1@1.0.0-rc.1.json'
+  actual:
+    0: 'OAS-1@0.0.0-public-review.1.json'
+    1: 'OAS-1@1.0.0-rc.1.json'
+    2: 'OAS-1@1.0.0.json'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///private/tmp/oas-website-audit-bn1nv8t9/frozen-release/tests/oasScopeClosure.test.mjs:66:216)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: source and acceptance digests are separate, deterministic and independently computable
+ok 16 - source and acceptance digests are separate, deterministic and independently computable
+  ---
+  duration_ms: 111.287163
+  type: 'test'
+  ...
+# Subtest: all human views and effective catalog reproduce from the single pinned source/resolution
+ok 17 - all human views and effective catalog reproduce from the single pinned source/resolution
+  ---
+  duration_ms: 4079.710469
+  type: 'test'
+  ...
+1..17
+# tests 17
+# suites 0
+# pass 15
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 8496.959357

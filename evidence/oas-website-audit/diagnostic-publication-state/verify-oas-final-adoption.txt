@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/private/tmp/oas-website-audit-bn1nv8t9/frozen-release/scripts/verify-oas-final-adoption.py", line 83, in <module>
+    verify()
+  File "/private/tmp/oas-website-audit-bn1nv8t9/frozen-release/scripts/verify-oas-final-adoption.py", line 75, in verify
+    assert not (ROOT / record['publication_target']).exists()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

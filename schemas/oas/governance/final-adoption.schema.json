@@ -1,0 +1,190 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oas:schema:governance:final-adoption:1",
+  "type": "object",
+  "properties": {
+    "record_version": {
+      "const": "1.0.0"
+    },
+    "record_kind": {
+      "const": "FINAL_ADOPTION_DECISION"
+    },
+    "state": {
+      "const": "ADOPTED"
+    },
+    "human_actor_reference": {
+      "const": "Mike Slate"
+    },
+    "authority_evidence_reference": {
+      "const": "f1060153361ef635c8d26fae91d8a33f031faf31:docs/OAS_FOUNDING_MAINTAINER_DESIGNATION.md"
+    },
+    "human_statement": {
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "decision_timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "immutable_decision_reference": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}:docs/OAS_FINAL_ADOPTION_DECISION\\.md$"
+    },
+    "prepared_package_revision": {
+      "const": "c1048afb47cbb09decd23b4916149d51ae23d3e8"
+    },
+    "preparation_binding_checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "standard_id": {
+      "const": "OAS-1"
+    },
+    "release_id": {
+      "const": "OAS-1@1.0.0"
+    },
+    "release_date": {
+      "const": "2026-10-27"
+    },
+    "effective_date": {
+      "const": "2026-10-27"
+    },
+    "source_revision": {
+      "const": "6f145192af25c929c95181fd6cd38f32d7b5ace9"
+    },
+    "normative_source_revision": {
+      "const": "517cc23426e7485c352a1672c8fe4614291d552a"
+    },
+    "final_artifact_checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "final_artifact_payload_checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "requirements_checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "normative_content_checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "scope_checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "domain_mapping_checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "release_metadata_checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "schema_checksums": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^sha256:[a-f0-9]{64}$"
+      },
+      "minProperties": 5
+    },
+    "requirement_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^OAS-1-REQ-[0-9]{4}$"
+      },
+      "minItems": 14,
+      "maxItems": 14,
+      "uniqueItems": true
+    },
+    "domain_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^OAS-1-D0[1-8]$"
+      },
+      "minItems": 8,
+      "maxItems": 8,
+      "uniqueItems": true
+    },
+    "declaration_contract_version": {
+      "const": "1.1.0"
+    },
+    "profiles": {
+      "type": "array",
+      "maxItems": 0
+    },
+    "evaluation_status": {
+      "const": "NOT_EVALUATED"
+    },
+    "governance_model": {
+      "const": "FOUNDING GOVERNANCE"
+    },
+    "rc1_predecessor": {
+      "const": "OAS-1@1.0.0-rc.1"
+    },
+    "authorized": {
+      "const": true
+    },
+    "publication_authorized": {
+      "const": false
+    },
+    "publication_status": {
+      "const": "NOT PUBLISHED"
+    },
+    "published": {
+      "const": false
+    },
+    "publication_target": {
+      "const": "public/oas/catalogs/OAS-1@1.0.0.json"
+    },
+    "record_checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    }
+  },
+  "required": [
+    "record_version",
+    "record_kind",
+    "state",
+    "human_actor_reference",
+    "authority_evidence_reference",
+    "human_statement",
+    "decision_timestamp",
+    "immutable_decision_reference",
+    "prepared_package_revision",
+    "preparation_binding_checksum",
+    "standard_id",
+    "release_id",
+    "release_date",
+    "effective_date",
+    "source_revision",
+    "normative_source_revision",
+    "final_artifact_checksum",
+    "final_artifact_payload_checksum",
+    "requirements_checksum",
+    "normative_content_checksum",
+    "scope_checksum",
+    "domain_mapping_checksum",
+    "release_metadata_checksum",
+    "schema_checksums",
+    "requirement_ids",
+    "domain_ids",
+    "declaration_contract_version",
+    "profiles",
+    "evaluation_status",
+    "governance_model",
+    "rc1_predecessor",
+    "authorized",
+    "publication_authorized",
+    "publication_status",
+    "published",
+    "publication_target",
+    "record_checksum"
+  ],
+  "additionalProperties": false
+}

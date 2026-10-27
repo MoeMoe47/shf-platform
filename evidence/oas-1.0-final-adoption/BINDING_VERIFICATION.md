@@ -1,0 +1,9 @@
+# Exact adopted bindings
+
+The entire standards/oas/governance/final-1.0.0 and evidence/oas-1.0-final-adoption-preparation file sets present in c1048afb47cbb09decd23b4916149d51ae23d3e8 are compared byte-for-byte against that commit. The new adoption-decision.json is a subsequent non-public governance record, not a modification to the bound preparation snapshot.
+
+The validator independently reproduces the prospective target payload/file checksum, final record-set checksum, preview checksum, preparation binding checksum and source-file manifest. Every listed source and schema file matches its committed bytes/digest. The original normative source is inspected directly for every requirement's wording and domain. Fixed expected IDs require exactly 0001–0010, 0012, 0014, 0016, 0017; domain coverage is D01–D08. Release/effective dates remain 2026-10-27. Profiles remain empty; declaration 1.1.0 and NOT_EVALUATED stay fixed.
+
+Required values: source 6f145192af25c929c95181fd6cd38f32d7b5ace9; full artifact sha256:9ca2b2b9cc17acd419e9961387e65d0ca3de33fde557d5440f96856dc186892e; final requirement-record checksum sha256:37c09a8f92666b10d157d267e480296d9aa614c3299e10060aaa7b414ea50e5d; scope sha256:14be68339c76888fa1cac497564b6abd427352688ff68c531e8f46b61972d3c4. Actual record and machine verification receipts include all hashes and references.
+
+Any mismatch halts recording/verification. No fallback regeneration or rewriting is implemented. The new adoption checker is read-only. A strict record schema and negative tests reject altered actors, times, decision text/refs, source/membership/content, invented profiles/evaluation and publication-authorization claims even when the record's self-checksum is recomputed. A separate standard-library Python verifier checks actual JSON bytes and Git provenance independently.

@@ -1,0 +1,480 @@
+[
+  {
+    "name": "adoption-tests",
+    "command": [
+      "node",
+      "--test",
+      "tests/oasFinalAdoption.test.mjs"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:33:27.250827+00:00",
+    "completed_at": "2026-10-27T17:33:31.315038+00:00",
+    "log": "adoption-tests.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "adoption-record",
+    "command": [
+      "node",
+      "scripts/oas-final-adoption.mjs",
+      "verify"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:33:27.256868+00:00",
+    "completed_at": "2026-10-27T17:33:29.206715+00:00",
+    "log": "adoption-record.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "adoption-typecheck",
+    "command": [
+      "./node_modules/.bin/tsc",
+      "-p",
+      "tests/oas-final-adoption.tsconfig.json"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:33:29.206849+00:00",
+    "completed_at": "2026-10-27T17:33:34.924952+00:00",
+    "log": "adoption-typecheck.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "adoption-independent-checksums",
+    "command": [
+      "python3",
+      "scripts/verify-oas-final-adoption.py"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:33:31.315211+00:00",
+    "completed_at": "2026-10-27T17:33:32.617489+00:00",
+    "log": "adoption-independent-checksums.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "final-preparation-tests",
+    "command": [
+      "npm",
+      "run",
+      "oas:final:test"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:33:32.617636+00:00",
+    "completed_at": "2026-10-27T17:40:12.345409+00:00",
+    "log": "final-preparation-tests.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "final-preparation-check",
+    "command": [
+      "npm",
+      "run",
+      "oas:final:check"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:33:34.925152+00:00",
+    "completed_at": "2026-10-27T17:35:04.553481+00:00",
+    "log": "final-preparation-check.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "dated-adoptable-target",
+    "command": [
+      "npm",
+      "run",
+      "oas:final:require-adoptable-target"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:35:04.553714+00:00",
+    "completed_at": "2026-10-27T17:36:01.570653+00:00",
+    "log": "dated-adoptable-target.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "final-preparation-typecheck",
+    "command": [
+      "npm",
+      "run",
+      "oas:final:typecheck"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:36:01.570862+00:00",
+    "completed_at": "2026-10-27T17:36:07.907783+00:00",
+    "log": "final-preparation-typecheck.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "final-independent-checksums",
+    "command": [
+      "python3",
+      "scripts/verify-oas-final-preparation.py"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:36:07.907961+00:00",
+    "completed_at": "2026-10-27T17:36:10.421582+00:00",
+    "log": "final-independent-checksums.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "rc1-tests",
+    "command": [
+      "npm",
+      "run",
+      "oas:rc1:test"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:36:10.421687+00:00",
+    "completed_at": "2026-10-27T17:37:43.341935+00:00",
+    "log": "rc1-tests.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "scope-closure-tests",
+    "command": [
+      "npm",
+      "run",
+      "oas:closure:test"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:37:43.342242+00:00",
+    "completed_at": "2026-10-27T17:38:10.532360+00:00",
+    "log": "scope-closure-tests.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "governance-review-tests",
+    "command": [
+      "npm",
+      "run",
+      "oas:governance:test"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:38:10.532906+00:00",
+    "completed_at": "2026-10-27T17:38:14.478049+00:00",
+    "log": "governance-review-tests.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "canonical-catalog-tests",
+    "command": [
+      "npm",
+      "run",
+      "oas:test"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:38:14.478184+00:00",
+    "completed_at": "2026-10-27T17:38:17.140599+00:00",
+    "log": "canonical-catalog-tests.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "first-release-tests",
+    "command": [
+      "npm",
+      "run",
+      "oas:first:test"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:38:17.140729+00:00",
+    "completed_at": "2026-10-27T17:38:21.047829+00:00",
+    "log": "first-release-tests.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "rc1-release-check",
+    "command": [
+      "npm",
+      "run",
+      "oas:rc1:check"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:38:21.047919+00:00",
+    "completed_at": "2026-10-27T17:38:34.794440+00:00",
+    "log": "rc1-release-check.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "acceptance-check",
+    "command": [
+      "npm",
+      "run",
+      "oas:rc1:acceptance:check"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:38:34.794574+00:00",
+    "completed_at": "2026-10-27T17:38:51.786300+00:00",
+    "log": "acceptance-check.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "acceptance-bindings",
+    "command": [
+      "npm",
+      "run",
+      "oas:rc1:verify"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:38:51.786437+00:00",
+    "completed_at": "2026-10-27T17:38:57.684094+00:00",
+    "log": "acceptance-bindings.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "acceptance-gate",
+    "command": [
+      "npm",
+      "run",
+      "oas:rc1:require-acceptance"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:38:57.684299+00:00",
+    "completed_at": "2026-10-27T17:39:06.442458+00:00",
+    "log": "acceptance-gate.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "scope-schema",
+    "command": [
+      "npm",
+      "run",
+      "oas:closure:validate"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:39:06.442587+00:00",
+    "completed_at": "2026-10-27T17:39:11.504450+00:00",
+    "log": "scope-schema.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "governance-schema",
+    "command": [
+      "npm",
+      "run",
+      "oas:governance:validate"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:39:11.504581+00:00",
+    "completed_at": "2026-10-27T17:39:12.920531+00:00",
+    "log": "governance-schema.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "catalog-schema",
+    "command": [
+      "npm",
+      "run",
+      "oas:validate"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:39:12.920672+00:00",
+    "completed_at": "2026-10-27T17:39:13.872601+00:00",
+    "log": "catalog-schema.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "first-release-schema",
+    "command": [
+      "npm",
+      "run",
+      "oas:first:validate"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:39:13.872721+00:00",
+    "completed_at": "2026-10-27T17:39:15.151626+00:00",
+    "log": "first-release-schema.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "scope-reproduction",
+    "command": [
+      "npm",
+      "run",
+      "oas:closure:check"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:39:15.151755+00:00",
+    "completed_at": "2026-10-27T17:39:23.373896+00:00",
+    "log": "scope-reproduction.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "governance-reproduction",
+    "command": [
+      "npm",
+      "run",
+      "oas:governance:check"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:39:23.374023+00:00",
+    "completed_at": "2026-10-27T17:39:25.372448+00:00",
+    "log": "governance-reproduction.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "catalog-reproduction",
+    "command": [
+      "npm",
+      "run",
+      "oas:check"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:39:25.372577+00:00",
+    "completed_at": "2026-10-27T17:39:27.683984+00:00",
+    "log": "catalog-reproduction.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "first-release-reproduction",
+    "command": [
+      "npm",
+      "run",
+      "oas:first:check"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:39:27.684140+00:00",
+    "completed_at": "2026-10-27T17:39:29.254163+00:00",
+    "log": "first-release-reproduction.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "rc1-typecheck",
+    "command": [
+      "npm",
+      "run",
+      "oas:rc1:typecheck"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:39:29.254301+00:00",
+    "completed_at": "2026-10-27T17:39:35.397714+00:00",
+    "log": "rc1-typecheck.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "closure-typecheck",
+    "command": [
+      "npm",
+      "run",
+      "oas:closure:typecheck"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:39:35.397868+00:00",
+    "completed_at": "2026-10-27T17:39:40.380744+00:00",
+    "log": "closure-typecheck.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "governance-typecheck",
+    "command": [
+      "npm",
+      "run",
+      "oas:governance:typecheck"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:39:40.380903+00:00",
+    "completed_at": "2026-10-27T17:39:44.986252+00:00",
+    "log": "governance-typecheck.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "catalog-typecheck",
+    "command": [
+      "npm",
+      "run",
+      "oas:typecheck"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:39:44.986340+00:00",
+    "completed_at": "2026-10-27T17:39:50.674286+00:00",
+    "log": "catalog-typecheck.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "first-release-typecheck",
+    "command": [
+      "npm",
+      "run",
+      "oas:first:typecheck"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:39:50.674377+00:00",
+    "completed_at": "2026-10-27T17:39:55.071365+00:00",
+    "log": "first-release-typecheck.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "independent-checksums",
+    "command": [
+      "python3",
+      "scripts/verify-oas-rc1-checksums.py"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:39:55.071494+00:00",
+    "completed_at": "2026-10-27T17:39:57.881912+00:00",
+    "log": "independent-checksums.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "architecture-registry",
+    "command": [
+      "npm",
+      "run",
+      "check:registry"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:39:57.882034+00:00",
+    "completed_at": "2026-10-27T17:39:58.476378+00:00",
+    "log": "architecture-registry.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "architecture-proposal",
+    "command": [
+      "npm",
+      "run",
+      "check:proposal"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:39:58.476528+00:00",
+    "completed_at": "2026-10-27T17:39:59.023465+00:00",
+    "log": "architecture-proposal.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "architecture-truth",
+    "command": [
+      "npm",
+      "run",
+      "check:truth"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:39:59.023667+00:00",
+    "completed_at": "2026-10-27T17:39:59.592700+00:00",
+    "log": "architecture-truth.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "manifest-validation",
+    "command": [
+      "npm",
+      "run",
+      "manifests:validate"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:39:59.592839+00:00",
+    "completed_at": "2026-10-27T17:40:00.201844+00:00",
+    "log": "manifest-validation.log",
+    "execution_context": "workspace sandbox"
+  },
+  {
+    "name": "ui-contracts",
+    "command": [
+      "npm",
+      "run",
+      "ui:validate"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:40:00.201975+00:00",
+    "completed_at": "2026-10-27T17:40:00.803184+00:00",
+    "log": "ui-contracts.log",
+    "execution_context": "workspace sandbox"
+  }
+]

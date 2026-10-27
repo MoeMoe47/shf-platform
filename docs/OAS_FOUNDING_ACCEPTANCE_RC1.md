@@ -1,34 +1,9 @@
-# Founding acceptance for RC1 — MAINTAINER ACTION REQUIRED
+# Founding acceptance for RC1 — RECORDED
 
-FOUNDING ACCEPTANCE NOT RECORDED. No RC exists. This package is a request/verification result, not a governance acceptance, signature, vote, release artifact or adopted standard.
+OAS-1@1.0.0-rc.1 is issued for validation only. Final adoption: NOT ADOPTED. No implementation conformance, certification, Trust Bureau opinion, Registry authorization or unrestricted execution is asserted.
 
-The current task conditionally authorizes recording a real decision, but supplies no real maintainer identity/designation evidence. Repository governance prohibits deriving it from user.name, a remote owner, a technical review or a test fixture. Canonical record standards/oas/closure/founding-acceptance.json remains unchanged and pending.
+Mike Slate's human acceptance is recorded at f501c946cb0de2d848445d8e2af0b9c678175cf9:docs/OAS_RC1_ACCEPTANCE_DECISION.md; designation authority: f1060153361ef635c8d26fae91d8a33f031faf31:docs/OAS_FOUNDING_MAINTAINER_DESIGNATION.md; actual acceptance timestamp: 2026-10-27T14:10:43.232Z. Canonical record: standards/oas/closure/founding-acceptance.json. Its checksum is sha256:936a4afab1589ecf899a75056cd66e5770e6ed0c59bd7b97da93a75690386cb2.
 
-## Exact acceptance statement to provide
+The original immutable request remains sha256:88364ed78cb96c247359c0c55ebd6fe26e0367f78b8c84b93dd137d508296012, source 517cc23426e7485c352a1672c8fe4614291d552a, scope sha256:14be68339c76888fa1cac497564b6abd427352688ff68c531e8f46b61972d3c4, exactly 14 IDs and unchanged expected bindings. The historical request/template is retained at 356f757:docs/OAS_FOUNDING_ACCEPTANCE_RC1.md. Neither request nor expected bindings is regenerated.
 
-After reviewing all linked material, the actual maintainer must replace every angle-bracket field with real information and provide this statement through an attributable immutable decision record (or an explicit user reply accompanied by the required designation/control evidence and record reference). Do not copy this template as if it were already consent.
-
-```text
-I, <REAL MAINTAINER REFERENCE>, am the repository-designated OAS founding maintainer. My independently checkable designation/control evidence is <AUTHORITY EVIDENCE REFERENCE>. Under FOUNDING GOVERNANCE, I accept source revision 517cc23426e7485c352a1672c8fe4614291d552a, the exact 14 requirement IDs and wording, scope checksum sha256:14be68339c76888fa1cac497564b6abd427352688ff68c531e8f46b61972d3c4, governance authority model, OAS 1.0 scope, terminal domain mapping closure, declaration contract 1.1.0, release-candidate contract, and every prepared artifact digest bound by acceptance request sha256:88364ed78cb96c247359c0c55ebd6fe26e0367f78b8c84b93dd137d508296012. The unchanged expected bindings are at 3e3a6585da2117a37f959f8630dc7cf8300b648c:evidence/oas-governance-resolution/EXPECTED_ACCEPTANCE_BINDINGS.json. I authorize issuance of OAS-1@1.0.0-rc.1 for validation only. I do not adopt or authorize publication of final OAS-1@1.0.0. My actual decision timestamp is <ACTUAL UTC TIMESTAMP>, and the immutable acceptance decision record is <DECISION RECORD REFERENCE>.
-```
-
-## Exact membership
-
-- OAS-1-REQ-0001
-- OAS-1-REQ-0002
-- OAS-1-REQ-0003
-- OAS-1-REQ-0004
-- OAS-1-REQ-0005
-- OAS-1-REQ-0006
-- OAS-1-REQ-0007
-- OAS-1-REQ-0008
-- OAS-1-REQ-0009
-- OAS-1-REQ-0010
-- OAS-1-REQ-0012
-- OAS-1-REQ-0014
-- OAS-1-REQ-0016
-- OAS-1-REQ-0017
-
-The request at standards/oas/governance/rc1-acceptance-request.json contains exact source/scope/contract/supporting-file digests. Request checksum: sha256:88364ed78cb96c247359c0c55ebd6fe26e0367f78b8c84b93dd137d508296012. This is not an acceptance checksum. Original EXPECTED_ACCEPTANCE_BINDINGS.json was not changed or silently regenerated.
-
-Once the real identity/evidence/statement/time/reference are supplied and independently checked, populate the existing canonical record under its existing schema; do not add unsupported fields to that bound schema. The immutable statement/request binds full membership and wording through the exact scope/source digests. Then validate the decision and every gate before any issuance. Final adoption remains NOT ADOPTED and authorize_final_release stays false.
+RC artifact: public/oas/catalogs/OAS-1@1.0.0-rc.1.json. Published payload checksum: sha256:4b73ab577c41ea790aa199ff695947110b5f6e90e5c3342825a28b888c96c7ae. Complete file checksum: sha256:e18e8196dc38fdd3a835c5b098f00188c2ad8ad3bc0d0f49f520add1191b8fe5. Membership freeze: standards/oas/governance/rc1-publication-lock.json. Profiles remain empty; declaration 1.1.0 remains NOT_EVALUATED. RC issuance is separate from final adoption and publication, which remain unauthorized.

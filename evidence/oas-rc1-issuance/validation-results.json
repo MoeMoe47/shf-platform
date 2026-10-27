@@ -1,9 +1,9 @@
 {
-  "validated_at": "2026-10-27T12:07:25.794212+00:00",
-  "checkpoint": "3e3a6585da2117a37f959f8630dc7cf8300b648c",
-  "prepared_source_revision": "517cc23426e7485c352a1672c8fe4614291d552a",
-  "acceptance_recorded": false,
-  "rc_issued": false,
+  "validated_at": "2026-10-27T15:31:06.302185+00:00",
+  "accepted_source_revision": "517cc23426e7485c352a1672c8fe4614291d552a",
+  "acceptance_recorded": true,
+  "rc_issued": true,
+  "final_adoption_status": "NOT ADOPTED",
   "checks": [
     {
       "name": "acceptance-tests",
@@ -56,6 +56,23 @@
       "log": "catalog-tests.log"
     },
     {
+      "name": "reporting-tests",
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "--test",
+        "apps/shs-api/tests/report-u2-studio-oas.test.ts"
+      ],
+      "exit_code": 0,
+      "log": "reporting-tests-escalated.log",
+      "execution_context": "outside sandbox; Chrome launch required",
+      "initial_sandbox_exit_code": 1,
+      "initial_sandbox_log": "reporting-tests.log",
+      "test_count": 5,
+      "note": "Final tool-output chunk retained in log; earlier passing subtests are in execution transcript."
+    },
+    {
       "name": "acceptance-bindings",
       "command": [
         "npm",
@@ -74,6 +91,26 @@
       ],
       "exit_code": 0,
       "log": "acceptance-package.log"
+    },
+    {
+      "name": "require-acceptance",
+      "command": [
+        "npm",
+        "run",
+        "oas:rc1:require-acceptance"
+      ],
+      "exit_code": 0,
+      "log": "require-acceptance.log"
+    },
+    {
+      "name": "rc1-publication",
+      "command": [
+        "npm",
+        "run",
+        "oas:rc1:check"
+      ],
+      "exit_code": 0,
+      "log": "rc1-publication.log"
     },
     {
       "name": "closure-schemas",
@@ -256,6 +293,15 @@
       "log": "ui-contracts.log"
     },
     {
+      "name": "independent-checksums",
+      "command": [
+        "python3",
+        "scripts/verify-oas-rc1-checksums.py"
+      ],
+      "exit_code": 0,
+      "log": "independent-checksums.log"
+    },
+    {
       "name": "whitespace",
       "command": [
         "git",
@@ -263,7 +309,8 @@
         "--check"
       ],
       "exit_code": 0,
-      "log": "whitespace.log"
+      "log": "whitespace.log",
+      "note": "Rechecked after terminal-log normalization; initial output-format failure retained in initial_failed_attempts."
     },
     {
       "name": "focused-build",
@@ -273,7 +320,10 @@
         "oas:build"
       ],
       "exit_code": 0,
-      "log": "focused-build.log"
+      "log": "focused-build.log",
+      "execution_context": "outside sandbox; shared node_modules cache write required",
+      "initial_sandbox_exit_code": 1,
+      "initial_sandbox_log": "focused-build-sandbox.log"
     },
     {
       "name": "full-build",
@@ -283,8 +333,16 @@
         "build"
       ],
       "exit_code": 0,
-      "log": "full-build.log"
-    },
+      "log": "full-build.log",
+      "execution_context": "outside sandbox; shared node_modules cache write required",
+      "initial_sandbox_exit_code": 1,
+      "initial_sandbox_log": "full-build-sandbox.log"
+    }
+  ],
+  "oas_tests_passed": 80,
+  "reporting_tests_passed": 5,
+  "readiness_gates_passed": 15,
+  "initial_failed_attempts": [
     {
       "name": "reporting-tests",
       "command": [
@@ -294,17 +352,49 @@
         "--test",
         "apps/shs-api/tests/report-u2-studio-oas.test.ts"
       ],
-      "exit_code": 0,
+      "exit_code": 1,
       "log": "reporting-tests.log"
     },
     {
-      "name": "independent-checksums",
+      "name": "acceptance-package",
       "command": [
-        "python3",
-        "hashlib and git show verification"
+        "npm",
+        "run",
+        "oas:rc1:acceptance:check"
       ],
-      "exit_code": 0,
-      "log": "independent-checksums.log"
+      "exit_code": 13,
+      "log": "acceptance-package.log"
+    },
+    {
+      "name": "whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 2,
+      "log": "whitespace.log"
+    },
+    {
+      "name": "focused-build",
+      "command": [
+        "npm",
+        "run",
+        "oas:build"
+      ],
+      "exit_code": 1,
+      "log": "focused-build.log"
+    },
+    {
+      "name": "full-build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exit_code": 1,
+      "log": "full-build.log"
     }
-  ]
+  ],
+  "log_format": "Trailing whitespace and ANSI terminal formatting normalized; initial failures retained with successful retry context."
 }

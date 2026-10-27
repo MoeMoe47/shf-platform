@@ -1,4 +1,3 @@
-$ npm run oas:first:test
 
 > oas:first:test
 > node --test tests/oasFirstRelease.test.mjs
@@ -7,121 +6,121 @@ TAP version 13
 # Subtest: 17 traceable candidates cover exactly the existing eight domains without published requirements
 ok 1 - 17 traceable candidates cover exactly the existing eight domains without published requirements
   ---
-  duration_ms: 172.647457
+  duration_ms: 462.97293
   type: 'test'
   ...
 # Subtest: duplicate IDs and whitespace/case-equivalent normative statements rejected
 ok 2 - duplicate IDs and whitespace/case-equivalent normative statements rejected
   ---
-  duration_ms: 12.107579
+  duration_ms: 18.440062
   type: 'test'
   ...
 # Subtest: all candidates need canonical domains, normative text, applicability and exact source citation
 ok 3 - all candidates need canonical domains, normative text, applicability and exact source citation
   ---
-  duration_ms: 27.430692
+  duration_ms: 33.359243
   type: 'test'
   ...
 # Subtest: candidate risk conditioning cannot silently introduce R0–R4 duties
 ok 4 - candidate risk conditioning cannot silently introduce R0–R4 duties
   ---
-  duration_ms: 1.630871
+  duration_ms: 2.712772
   type: 'test'
   ...
 # Subtest: approved/released status cannot be asserted without review and governance
 ok 5 - approved/released status cannot be asserted without review and governance
   ---
-  duration_ms: 5.850534
+  duration_ms: 10.780851
   type: 'test'
   ...
 # Subtest: a review decision is bound to exact wording and is not release adoption
 ok 6 - a review decision is bound to exact wording and is not release adoption
   ---
-  duration_ms: 12.963775
+  duration_ms: 30.299408
   type: 'test'
   ...
 # Subtest: review declaration applicable validates and stays NOT_EVALUATED
 ok 7 - review declaration applicable validates and stays NOT_EVALUATED
   ---
-  duration_ms: 8.562511
+  duration_ms: 13.960761
   type: 'test'
   ...
 # Subtest: review declaration not_applicable validates and stays NOT_EVALUATED
 ok 8 - review declaration not_applicable validates and stays NOT_EVALUATED
   ---
-  duration_ms: 5.362593
+  duration_ms: 17.049869
   type: 'test'
   ...
 # Subtest: review declaration declared_satisfied validates and stays NOT_EVALUATED
 ok 9 - review declaration declared_satisfied validates and stays NOT_EVALUATED
   ---
-  duration_ms: 7.103315
+  duration_ms: 53.212949
   type: 'test'
   ...
 # Subtest: review declaration not_declared validates and stays NOT_EVALUATED
 ok 10 - review declaration not_declared validates and stays NOT_EVALUATED
   ---
-  duration_ms: 5.640873
+  duration_ms: 7.191651
   type: 'test'
   ...
 # Subtest: review declaration unknown validates and stays NOT_EVALUATED
 ok 11 - review declaration unknown validates and stays NOT_EVALUATED
   ---
-  duration_ms: 7.139323
+  duration_ms: 10.833202
   type: 'test'
   ...
 # Subtest: declarations reject absent NA reason, absent offered evidence, unknown IDs, stale pins and conformance claims
 ok 12 - declarations reject absent NA reason, absent offered evidence, unknown IDs, stale pins and conformance claims
   ---
-  duration_ms: 19.601998
+  duration_ms: 37.719204
   type: 'test'
   ...
 # Subtest: declaration review contract cannot masquerade as the existing published declaration schema
 ok 13 - declaration review contract cannot masquerade as the existing published declaration schema
   ---
-  duration_ms: 0.63821
+  duration_ms: 1.218507
   type: 'test'
   ...
 # Subtest: aliases resolve deterministically by namespace and never by reporting ordinal
 ok 14 - aliases resolve deterministically by namespace and never by reporting ordinal
   ---
-  duration_ms: 6.305119
+  duration_ms: 56.779526
   type: 'test'
   ...
 # Subtest: unreviewed aliases, unknown mapping domains, missing and duplicate dispositions rejected
 ok 15 - unreviewed aliases, unknown mapping domains, missing and duplicate dispositions rejected
   ---
-  duration_ms: 2.077377
+  duration_ms: 7.834193
   type: 'test'
   ...
 # Subtest: candidate supersession rejects dangling and circular replacement links
 ok 16 - candidate supersession rejects dangling and circular replacement links
   ---
-  duration_ms: 7.486198
+  duration_ms: 17.567291
   type: 'test'
   ...
 # Subtest: adopted requirements require a valid release, nonempty normative text and matching governance state
 ok 17 - adopted requirements require a valid release, nonempty normative text and matching governance state
   ---
-  duration_ms: 5.626909
+  duration_ms: 23.354656
   type: 'test'
   ...
 # Subtest: release gates block RC, adoption and publication; generated metadata contains no invented approval
 ok 18 - release gates block RC, adoption and publication; generated metadata contains no invented approval
   ---
-  duration_ms: 15.779163
+  duration_ms: 47.764457
   type: 'test'
   ...
 # Subtest: human review documents and checksums regenerate deterministically without manual divergence
 ok 19 - human review documents and checksums regenerate deterministically without manual divergence
   ---
-  duration_ms: 28.075487
+  duration_ms: 136.821334
   type: 'test'
   ...
 # Subtest: all historical catalog inputs, reporting production code and public pin remain byte-for-byte unchanged
 ok 20 - all historical catalog inputs, reporting production code and public pin remain byte-for-byte unchanged
   ---
-  duration_ms: 1305.094892
+  duration_ms: 3223.667542
   type: 'test'
   ...
 1..20
@@ -132,6 +131,4 @@ ok 20 - all historical catalog inputs, reporting production code and public pin 
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 2234.204026
-
-Exit code: 0
+# duration_ms 6729.727517

@@ -1,0 +1,28 @@
+[
+  {
+    "name": "focused-build",
+    "command": [
+      "npm",
+      "run",
+      "oas:build"
+    ],
+    "exit_code": 0,
+    "log": "focused-build.log",
+    "execution_context": "outside sandbox; shared node_modules cache write required",
+    "initial_sandbox_exit_code": 1,
+    "initial_sandbox_log": "focused-build-sandbox.log"
+  },
+  {
+    "name": "full-build",
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "exit_code": 0,
+    "log": "full-build.log",
+    "execution_context": "outside sandbox; shared node_modules cache write required",
+    "initial_sandbox_exit_code": 1,
+    "initial_sandbox_log": "full-build-sandbox.log"
+  }
+]

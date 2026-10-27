@@ -1,0 +1,7 @@
+
+> oas:rc1:acceptance:check
+> node scripts/oas-rc1-acceptance.mjs check
+
+Warning: Detected unsettled top-level await at file:///private/tmp/oas-rc1-issuance/scripts/oas-rc1-acceptance.mjs:96
+ else if(command==='check'&&loadAcceptance().state==='ACCEPTED'){const {checkRelease}=await import('./oas-rc1-release.mjs');checkRelease();console.log('Recorded acceptance and issued RC1 verified; final adoption NOT ADOPTED.');}
+                                                                                      ^

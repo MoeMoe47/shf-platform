@@ -1,4 +1,3 @@
-$ npm run oas:test
 
 > oas:test
 > node --test tests/oasCanonicalCatalog.test.mjs
@@ -7,91 +6,91 @@ TAP version 13
 # Subtest: catalog has exact draft identity, no invented release or normative population
 ok 1 - catalog has exact draft identity, no invented release or normative population
   ---
-  duration_ms: 9.744609
+  duration_ms: 17.995663
   type: 'test'
   ...
 # Subtest: duplicate standard_id rejected even when other fields differ
 ok 2 - duplicate standard_id rejected even when other fields differ
   ---
-  duration_ms: 3.667031
+  duration_ms: 5.226275
   type: 'test'
   ...
 # Subtest: duplicate release_id rejected even when other fields differ
 ok 3 - duplicate release_id rejected even when other fields differ
   ---
-  duration_ms: 0.534118
+  duration_ms: 1.464748
   type: 'test'
   ...
 # Subtest: duplicate profile_id rejected even when other fields differ
 ok 4 - duplicate profile_id rejected even when other fields differ
   ---
-  duration_ms: 0.334595
+  duration_ms: 1.233951
   type: 'test'
   ...
 # Subtest: duplicate requirement_id rejected even when other fields differ
 ok 5 - duplicate requirement_id rejected even when other fields differ
   ---
-  duration_ms: 0.619595
+  duration_ms: 2.776302
   type: 'test'
   ...
 # Subtest: stable machine ID formats and no floating latest
 ok 6 - stable machine ID formats and no floating latest
   ---
-  duration_ms: 1.509913
+  duration_ms: 7.006282
   type: 'test'
   ...
 # Subtest: canonical public labels/order preserved; legacy report collisions remain unmapped
 ok 7 - canonical public labels/order preserved; legacy report collisions remain unmapped
   ---
-  duration_ms: 5.54474
+  duration_ms: 9.32155
   type: 'test'
   ...
 # Subtest: cross-reference, version and domain errors rejected
 ok 8 - cross-reference, version and domain errors rejected
   ---
-  duration_ms: 3.228265
+  duration_ms: 6.874205
   type: 'test'
   ...
 # Subtest: releases: valid reciprocal supersession; dangling, self and cyclic links rejected
 ok 9 - releases: valid reciprocal supersession; dangling, self and cyclic links rejected
   ---
-  duration_ms: 3.031123
+  duration_ms: 4.685405
   type: 'test'
   ...
 # Subtest: requirements: valid reciprocal supersession; dangling, self and cyclic links rejected
 ok 10 - requirements: valid reciprocal supersession; dangling, self and cyclic links rejected
   ---
-  duration_ms: 1.332542
+  duration_ms: 3.344463
   type: 'test'
   ...
 # Subtest: profiles: valid reciprocal supersession; dangling, self and cyclic links rejected
 ok 11 - profiles: valid reciprocal supersession; dangling, self and cyclic links rejected
   ---
-  duration_ms: 0.909512
+  duration_ms: 2.709993
   type: 'test'
   ...
 # Subtest: schema rejects extra fields, false release claims, invalid dates and certifications
 ok 12 - schema rejects extra fields, false release claims, invalid dates and certifications
   ---
-  duration_ms: 2.011167
+  duration_ms: 6.225605
   type: 'test'
   ...
 # Subtest: declarations resolve pinned references and preserve historical declaration data
 ok 13 - declarations resolve pinned references and preserve historical declaration data
   ---
-  duration_ms: 1.996959
+  duration_ms: 5.061395
   type: 'test'
   ...
 # Subtest: deterministic generation, provenance and independent digest tampering checks
 ok 14 - deterministic generation, provenance and independent digest tampering checks
   ---
-  duration_ms: 25.670092
+  duration_ms: 47.674608
   type: 'test'
   ...
 # Subtest: committed public snapshot exists and reproduces from git
 ok 15 - committed public snapshot exists and reproduces from git
   ---
-  duration_ms: 588.472003
+  duration_ms: 1315.830021
   type: 'test'
   ...
 1..15
@@ -102,6 +101,4 @@ ok 15 - committed public snapshot exists and reproduces from git
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 1268.764577
-
-Exit code: 0
+# duration_ms 2820.629499

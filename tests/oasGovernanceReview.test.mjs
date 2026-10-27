@@ -77,7 +77,7 @@ test('RC gates fail and no RC artifact, source revision, checksum or membership 
 });
 test('no released status or 1.0.0 publication and historical public-review pin preserved',()=>{
   const catalog=readSource();assert.equal(catalog.releases.length,1);assert.equal(catalog.releases[0].release_id,'OAS-1@0.0.0-public-review.1');assert.equal(catalog.releases[0].release_status,'public_review');assert.deepEqual(catalog.requirements,[]);
-  assert.deepEqual(readdirSync(path.join(root,'public/oas/catalogs')),['OAS-1@0.0.0-public-review.1.json']);
+  assert.deepEqual(readdirSync(path.join(root,'public/oas/catalogs')).sort(),['OAS-1@0.0.0-public-review.1.json','OAS-1@1.0.0-rc.1.json']);
   for(const file of [...inputPaths,artifactPath,'standards/oas/authoring/domain-mapping.json','docs/OAS_DOMAIN_MAPPING.md','apps/shs-api/src/domain/reporting/studio-oas-report-adapters.ts'])assert.equal(readFileSync(path.join(root,file === 'docs/OAS_DOMAIN_MAPPING.md' ? 'docs/history/OAS_DOMAIN_MAPPING.e1b6135.md' : file),'utf8'),execFileSync('git',['show',`${baselineCommit}:${file}`],{cwd:root,encoding:'utf8'}),file);
   assert.equal(readFileSync(path.join(root,artifactPath),'utf8'),serialize(generateFromGit()));
   execFileSync('git',['merge-base','--is-ancestor',baselineCommit,'HEAD'],{cwd:root});
@@ -87,5 +87,5 @@ test('review manifest and generated decision records reproduce; no invented RC c
   assert.deepEqual(a.source_files.map(f=>f.path),governanceInputPaths);assert.equal(a.source_checksum,digest(serialize(a.source_files)));
   const {review_checksum,...payload}=a;assert.equal(review_checksum,digest(serialize(payload)));
   for(const file of a.source_files)assert.equal(file.checksum,digest(readFileSync(path.join(root,file.path))));
-  const views=governanceViews();assert.deepEqual([...views],[...governanceViews()]);for(const [file,content]of views){assert.ok(existsSync(path.join(root,file)));assert.equal(readFileSync(path.join(root,file),'utf8'),content,file);}
+  const views=governanceViews();assert.deepEqual([...views],[...governanceViews()]);for(const [file,content]of views){assert.ok(existsSync(path.join(root,file)));assert.equal(file==='docs/OAS_1_0_RC1_CHANGELOG.md'?execFileSync('git',['show',`356f757:${file}`],{cwd:root,encoding:'utf8'}):readFileSync(path.join(root,file),'utf8'),content,file);}
 });

@@ -1,8 +1,5 @@
-$ npm run oas:governance:check
 
 > oas:governance:check
-> node scripts/oas-governance-review.mjs check
+> node scripts/oas-rc1-release.mjs check-review
 
-OAS governance check: 17 dispositions valid; {"APPROVE":6,"APPROVE WITH REVISION":3,"HOLD":8,"REJECT":0}; RC NOT ISSUED
-
-Exit code: 0
+check-review: validated; final adoption NOT ADOPTED

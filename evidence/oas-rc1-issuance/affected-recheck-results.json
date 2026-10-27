@@ -1,0 +1,51 @@
+[
+  {
+    "name": "acceptance-tests",
+    "command": [
+      "npm",
+      "run",
+      "oas:rc1:test"
+    ],
+    "exit_code": 0,
+    "log": "acceptance-tests.log"
+  },
+  {
+    "name": "acceptance-package",
+    "command": [
+      "npm",
+      "run",
+      "oas:rc1:acceptance:check"
+    ],
+    "exit_code": 0,
+    "log": "acceptance-package.log"
+  },
+  {
+    "name": "acceptance-typecheck",
+    "command": [
+      "npm",
+      "run",
+      "oas:rc1:typecheck"
+    ],
+    "exit_code": 0,
+    "log": "acceptance-typecheck.log"
+  },
+  {
+    "name": "acceptance-bindings",
+    "command": [
+      "npm",
+      "run",
+      "oas:rc1:verify"
+    ],
+    "exit_code": 0,
+    "log": "acceptance-bindings.log"
+  },
+  {
+    "name": "independent-checksums",
+    "command": [
+      "python3",
+      "scripts/verify-oas-rc1-checksums.py"
+    ],
+    "exit_code": 0,
+    "log": "independent-checksums.log"
+  }
+]

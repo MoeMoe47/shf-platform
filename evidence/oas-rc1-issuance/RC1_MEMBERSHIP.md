@@ -1,6 +1,8 @@
-# Prepared membership — RC1 NOT ISSUED
+# RC1 immutable membership
 
-Proposed/verified count: 14. Accepted count: 0. Issued RC count: 0.
+OAS-1@1.0.0-rc.1 is issued for validation only. Final adoption: NOT ADOPTED. No implementation conformance, certification, Trust Bureau opinion, Registry authorization or unrestricted execution is asserted.
+
+Accepted and issued count: 14.
 
 - OAS-1-REQ-0001
 - OAS-1-REQ-0002
@@ -17,4 +19,4 @@ Proposed/verified count: 14. Accepted count: 0. Issued RC count: 0.
 - OAS-1-REQ-0016
 - OAS-1-REQ-0017
 
-These IDs are pinned by source 517cc23426e7485c352a1672c8fe4614291d552a, scope digest sha256:14be68339c76888fa1cac497564b6abd427352688ff68c531e8f46b61972d3c4, and request sha256:88364ed78cb96c247359c0c55ebd6fe26e0367f78b8c84b93dd137d508296012. Deferred IDs OAS-1-REQ-0011, OAS-1-REQ-0013, OAS-1-REQ-0015 remain excluded; no profile or extra requirement is added. Membership is frozen for this acceptance request; issued RC membership cannot be called frozen because no RC exists. Any drift invalidates verification and requires a new explicit governance review/request, never silent regeneration of these bindings.
+All eight domains represented. Deferred IDs OAS-1-REQ-0011, OAS-1-REQ-0013 and OAS-1-REQ-0015 are excluded. Profiles: intentionally empty. Requirement wording/content checksum: sha256:ac3e5aa8086552547b8b36c38c2826733585b9458f53584aa2ba0550643a1929. Lock: standards/oas/governance/rc1-publication-lock.json. Changing members, wording, dates or bytes requires a new RC and explicit human decision.

@@ -1,4 +1,4 @@
-import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+import {readFileSync,writeFileSync,mkdirSync,existsSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
@@ -58,8 +58,7 @@ export function validateAcceptanceCandidate(record,bindings=verifyBindings()){
  ensure(same(bindings.requirement_ids,expectedMembership)&&bindings.requirement_ids.length===14,'Accepted membership mismatch');
  return {structural_bindings_valid:true,authority_and_consent_verified_by_software:false,final_adoption_status:'NOT ADOPTED'};
 }
-export function acceptanceState(){
- const record=loadAcceptance();
+export function acceptanceState(record=loadAcceptance()){
  return {state:record.state,acceptance_recorded:record.state==='ACCEPTED',maintainer_reference:record.maintainer_reference,authority_evidence_reference:record.authority_evidence_reference,accepted_at:record.accepted_at,decision_record_reference:record.decision_record_reference,authorize_rc1:record.authorize_rc1,authorize_final_release:record.authorize_final_release};
 }
 export function requireRealAcceptance(){
@@ -76,8 +75,8 @@ export function acceptanceRequest(){
 export function acceptanceStatement(request=acceptanceRequest()){
  return `I, <REAL MAINTAINER REFERENCE>, am the repository-designated OAS founding maintainer. My independently checkable designation/control evidence is <AUTHORITY EVIDENCE REFERENCE>. Under FOUNDING GOVERNANCE, I accept source revision ${preparedRevision}, the exact 14 requirement IDs and wording, scope checksum ${request.verified_bindings.scope_checksum}, governance authority model, OAS 1.0 scope, terminal domain mapping closure, declaration contract 1.1.0, release-candidate contract, and every prepared artifact digest bound by acceptance request ${request.request_checksum}. The unchanged expected bindings are at ${checkpoint}:${expectedPath}. I authorize issuance of OAS-1@1.0.0-rc.1 for validation only. I do not adopt or authorize publication of final OAS-1@1.0.0. My actual decision timestamp is <ACTUAL UTC TIMESTAMP>, and the immutable acceptance decision record is <DECISION RECORD REFERENCE>.`;
 }
-export function generatedPackage(){
- const request=acceptanceRequest(),binding=request.verified_bindings,record=loadAcceptance(),out=new Map();
+export function generatedPackage(record=loadAcceptance()){
+ const request=acceptanceRequest(),binding=request.verified_bindings,out=new Map();
  ensure(record.state==='AWAITING_REAL_MAINTAINER_ACCEPTANCE'&&!record.authorize_rc1&&!record.authorize_final_release,'This fallback package must not overwrite or imply an actual acceptance; handle a real decision explicitly');
  const blocked='FOUNDING ACCEPTANCE NOT RECORDED. No RC exists. This package is a request/verification result, not a governance acceptance, signature, vote, release artifact or adopted standard.\n';
  out.set(requestPath,serialize(request));
@@ -94,6 +93,7 @@ export function generatedPackage(){
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
  const command=process.argv[2]||'verify';
  if(command==='require-acceptance'){requireRealAcceptance();console.log('Acceptance structurally valid; independent authority verification still required.');}
+ else if(command==='check'&&loadAcceptance().state==='ACCEPTED'){execFileSync(process.execPath,[path.join(root,'scripts/oas-rc1-release.mjs'),'check'],{cwd:root,stdio:'inherit'});console.log('Recorded acceptance and issued RC1 verified; final adoption NOT ADOPTED.');}
  else if(command==='generate'||command==='check'){for(const [file,content]of generatedPackage()){if(command==='generate'){mkdirSync(path.dirname(path.join(root,file)),{recursive:true});writeFileSync(path.join(root,file),content);}else ensure(readFileSync(path.join(root,file),'utf8')===content,`Acceptance package drift: ${file}`);}console.log('Acceptance package verified; real maintainer action required; RC1 NOT ISSUED.');}
- else{ensure(command==='verify','Unknown acceptance command');const bindings=verifyBindings();console.log(JSON.stringify({verified:bindings,acceptance:acceptanceState(),rc_issued:false},null,2));}
+ else{ensure(command==='verify','Unknown acceptance command');const bindings=verifyBindings();console.log(JSON.stringify({verified:bindings,acceptance:acceptanceState(),rc_issued:existsSync(path.join(root,'public/oas/catalogs/OAS-1@1.0.0-rc.1.json'))},null,2));}
 }

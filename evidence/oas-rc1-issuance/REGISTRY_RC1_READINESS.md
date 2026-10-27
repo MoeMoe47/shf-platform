@@ -1,15 +1,14 @@
 # Registry RC1 readiness
 
-| Field | Classification | Boundary |
-| --- | --- | --- |
-| Standard ID | READY | Existing OAS-1 only |
-| Domain IDs | READY | Existing D01–D08 |
-| RC release ID | BLOCKED | No RC exists |
-| Requirement IDs | BLOCKED | Prepared reserved IDs are not published RC membership |
-| Immutable RC membership | BLOCKED | No issued artifact; prepared request membership only |
-| Declaration contract | READY WITH CONDITIONS | Version 1.1.0 is prepared; cannot resolve nonexistent RC1; legacy historical v1 remains available |
-| Supersession/currentness | READY WITH CONDITIONS | Historical draft metadata only; no RC currentness or replacement event |
-| Profiles | READY WITH CONDITIONS | Intentionally empty; no profile reference resolves |
-| Conformance claims | BLOCKED | NOT_EVALUATED; no scoring, certification or Trust Bureau assessment |
+OAS-1@1.0.0-rc.1 is issued for validation only. Final adoption: NOT ADOPTED. No implementation conformance, certification, Trust Bureau opinion, Registry authorization or unrestricted execution is asserted.
 
-No field is READY FOR RC TESTING ONLY until a real RC is issued after valid acceptance. No Registry file or OAS consumption code was changed.
+| Surface | Status | Boundary |
+| --- | --- | --- |
+| OAS-1, D01–D08, exact 14 member IDs | READY FOR RC TESTING ONLY | Resolve immutable RC1 membership and source-bound wording |
+| RC release ID and publication lock | READY FOR RC TESTING ONLY | Verify explicit version, schema and digests; no floating upgrade |
+| Declaration contract 1.1.0 | READY FOR RC TESTING ONLY | Strict pinned references, null profile, NOT_EVALUATED |
+| Profiles | INTENTIONALLY EMPTY | No profile reference resolves |
+| Final adoption / conformance / certification | BLOCKED | Separate governance/evaluation needed |
+| Registry integration | NOT PERFORMED | No Autonomous Registry code, data, authorization or lifecycle change |
+
+This describes OAS artifact readiness for bounded consumer tests, not a verified Registry implementation or production-readiness claim.

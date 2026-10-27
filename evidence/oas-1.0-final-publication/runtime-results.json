@@ -1,0 +1,46 @@
+[
+  {
+    "name": "reporting-tests",
+    "command": [
+      "node",
+      "--import",
+      "tsx",
+      "--test",
+      "apps/shs-api/tests/report-u2-studio-oas.test.ts"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:59:04.751709+00:00",
+    "completed_at": "2026-10-27T18:00:11.540006+00:00",
+    "log": "reporting-tests.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "oas-build",
+    "command": [
+      "npm",
+      "run",
+      "oas:build"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:00:11.540236+00:00",
+    "completed_at": "2026-10-27T18:00:25.241010+00:00",
+    "log": "oas-build.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "full-build",
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:00:25.241105+00:00",
+    "completed_at": "2026-10-27T18:02:02.402623+00:00",
+    "log": "full-build.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  }
+]

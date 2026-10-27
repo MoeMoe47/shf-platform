@@ -1,0 +1,7 @@
+# Separate human publication authorization
+
+Final OAS-1@1.0.0 is ADOPTED, separately AUTHORIZED, PUBLISHED in the canonical repository catalog and FROZEN. This is repository publication/branch delivery; no external hosting deployment, merge or Autonomous Registry integration is performed.
+
+Human actor: Mike Slate. Execution UTC authorization timestamp: 2026-10-27T17:56:47.580Z. Immutable real human decision: cb09e8691855e32a89bbab4d7565bcff7dd711ce:docs/OAS_FINAL_PUBLICATION_AUTHORIZATION.md. Designation: f1060153361ef635c8d26fae91d8a33f031faf31:docs/OAS_FOUNDING_MAINTAINER_DESIGNATION.md. Canonical authorization: standards/oas/governance/final-1.0.0/publication-authorization.json; checksum: sha256:cfe01aa36ba78fde110a508a2301348f2983b3dd8d5a4021e32466bf392304bf.
+
+The exact supplied decision was transcribed into the immutable human record, verified against actual adoption 4e75ef05f802f512a05c04fce842eb8ad77b7b19:docs/OAS_FINAL_ADOPTION_DECISION.md, and recorded separately with publication_authorized=true, final_adoption_status=ADOPTED. It does not retroactively alter the original adoption-only decision's publication_authorized=false. Git user metadata, repository ownership and tests are not sources of human authority or consent. Structure/digests validate attribution/integrity, not cryptographic human authentication. The explicit current user instruction names Codex as mechanical release operator; no operator gains governance authority.

@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oas:schema:governance:final-publication-authorization:1",
+  "type": "object",
+  "properties": {
+    "record_version": {
+      "const": "1.0.0"
+    },
+    "human_actor_reference": {
+      "const": "Mike Slate"
+    },
+    "authority_evidence_reference": {
+      "const": "f1060153361ef635c8d26fae91d8a33f031faf31:docs/OAS_FOUNDING_MAINTAINER_DESIGNATION.md"
+    },
+    "human_statement": {
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "decision_timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_revision": {
+      "const": "6f145192af25c929c95181fd6cd38f32d7b5ace9"
+    },
+    "final_artifact_checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "final_artifact_payload_checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "requirements_checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "scope_checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "requirement_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^OAS-1-REQ-[0-9]{4}$"
+      },
+      "minItems": 14,
+      "maxItems": 14,
+      "uniqueItems": true
+    },
+    "domain_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^OAS-1-D0[1-8]$"
+      },
+      "minItems": 8,
+      "maxItems": 8,
+      "uniqueItems": true
+    },
+    "release_date": {
+      "const": "2026-10-27"
+    },
+    "effective_date": {
+      "const": "2026-10-27"
+    },
+    "declaration_contract_version": {
+      "const": "1.1.0"
+    },
+    "profiles": {
+      "type": "array",
+      "maxItems": 0
+    },
+    "evaluation_status": {
+      "const": "NOT_EVALUATED"
+    },
+    "record_checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "record_kind": {
+      "const": "FINAL_PUBLICATION_AUTHORIZATION"
+    },
+    "state": {
+      "const": "AUTHORIZED"
+    },
+    "immutable_decision_reference": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}:docs/OAS_FINAL_PUBLICATION_AUTHORIZATION\\.md$"
+    },
+    "adoption_decision_reference": {
+      "const": "4e75ef05f802f512a05c04fce842eb8ad77b7b19:docs/OAS_FINAL_ADOPTION_DECISION.md"
+    },
+    "adoption_checkpoint": {
+      "const": "164798c8a684e4c3605fc89492918ca00552e70b"
+    },
+    "adoption_record_checksum": {
+      "const": "sha256:25a868ad0a3d622cced2bc9f6cae81dbe84a1c82bf8bb8e6d69d353a07d87967"
+    },
+    "preparation_binding_checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "release_id": {
+      "const": "OAS-1@1.0.0"
+    },
+    "publication_target": {
+      "const": "public/oas/catalogs/OAS-1@1.0.0.json"
+    },
+    "operator_reference": {
+      "const": "Codex executing Mike Slate\u2019s explicit repository-publication instructions"
+    },
+    "publication_authorized": {
+      "const": true
+    },
+    "final_adoption_status": {
+      "const": "ADOPTED"
+    },
+    "external_deployment_authorized": {
+      "const": false
+    }
+  },
+  "required": [
+    "record_version",
+    "human_actor_reference",
+    "authority_evidence_reference",
+    "human_statement",
+    "decision_timestamp",
+    "source_revision",
+    "final_artifact_checksum",
+    "final_artifact_payload_checksum",
+    "requirements_checksum",
+    "scope_checksum",
+    "requirement_ids",
+    "domain_ids",
+    "release_date",
+    "effective_date",
+    "declaration_contract_version",
+    "profiles",
+    "evaluation_status",
+    "record_checksum",
+    "record_kind",
+    "state",
+    "immutable_decision_reference",
+    "adoption_decision_reference",
+    "adoption_checkpoint",
+    "adoption_record_checksum",
+    "preparation_binding_checksum",
+    "release_id",
+    "publication_target",
+    "operator_reference",
+    "publication_authorized",
+    "final_adoption_status",
+    "external_deployment_authorized"
+  ],
+  "additionalProperties": false
+}

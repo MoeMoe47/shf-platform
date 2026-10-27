@@ -1,0 +1,517 @@
+[
+  {
+    "name": "adoption-tests",
+    "command": [
+      "node",
+      "--test",
+      "tests/oasFinalAdoption.test.mjs"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:58:11.959245+00:00",
+    "completed_at": "2026-10-27T17:58:15.079360+00:00",
+    "log": "adoption-tests.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "adoption-record",
+    "command": [
+      "node",
+      "scripts/oas-final-adoption.mjs",
+      "verify"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:58:11.960444+00:00",
+    "completed_at": "2026-10-27T17:58:13.208911+00:00",
+    "log": "adoption-record.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "adoption-typecheck",
+    "command": [
+      "./node_modules/.bin/tsc",
+      "-p",
+      "tests/oas-final-adoption.tsconfig.json"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:58:13.209050+00:00",
+    "completed_at": "2026-10-27T17:58:18.717730+00:00",
+    "log": "adoption-typecheck.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "adoption-independent-checksums",
+    "command": [
+      "python3",
+      "scripts/verify-oas-final-adoption.py"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:58:15.079530+00:00",
+    "completed_at": "2026-10-27T17:58:16.152364+00:00",
+    "log": "adoption-independent-checksums.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "final-preparation-tests",
+    "command": [
+      "npm",
+      "run",
+      "oas:final:test"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:58:16.152490+00:00",
+    "completed_at": "2026-10-27T18:05:10.191844+00:00",
+    "log": "final-preparation-tests.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "final-preparation-check",
+    "command": [
+      "npm",
+      "run",
+      "oas:final:check"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:58:18.717862+00:00",
+    "completed_at": "2026-10-27T17:59:37.242019+00:00",
+    "log": "final-preparation-check.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "dated-adoptable-target",
+    "command": [
+      "npm",
+      "run",
+      "oas:final:require-adoptable-target"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:59:37.242162+00:00",
+    "completed_at": "2026-10-27T18:00:51.231525+00:00",
+    "log": "dated-adoptable-target.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "final-preparation-typecheck",
+    "command": [
+      "npm",
+      "run",
+      "oas:final:typecheck"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:00:51.231746+00:00",
+    "completed_at": "2026-10-27T18:01:03.385536+00:00",
+    "log": "final-preparation-typecheck.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "final-independent-checksums",
+    "command": [
+      "python3",
+      "scripts/verify-oas-final-preparation.py"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:01:03.385691+00:00",
+    "completed_at": "2026-10-27T18:01:06.301682+00:00",
+    "log": "final-independent-checksums.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "rc1-tests",
+    "command": [
+      "npm",
+      "run",
+      "oas:rc1:test"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:01:06.302017+00:00",
+    "completed_at": "2026-10-27T18:02:55.140648+00:00",
+    "log": "rc1-tests.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "scope-closure-tests",
+    "command": [
+      "npm",
+      "run",
+      "oas:closure:test"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:02:55.141945+00:00",
+    "completed_at": "2026-10-27T18:03:23.228712+00:00",
+    "log": "scope-closure-tests.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "governance-review-tests",
+    "command": [
+      "npm",
+      "run",
+      "oas:governance:test"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:03:23.228831+00:00",
+    "completed_at": "2026-10-27T18:03:27.584491+00:00",
+    "log": "governance-review-tests.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "canonical-catalog-tests",
+    "command": [
+      "npm",
+      "run",
+      "oas:test"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:03:27.584604+00:00",
+    "completed_at": "2026-10-27T18:03:30.224170+00:00",
+    "log": "canonical-catalog-tests.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "first-release-tests",
+    "command": [
+      "npm",
+      "run",
+      "oas:first:test"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:03:30.224288+00:00",
+    "completed_at": "2026-10-27T18:03:34.294666+00:00",
+    "log": "first-release-tests.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "rc1-release-check",
+    "command": [
+      "npm",
+      "run",
+      "oas:rc1:check"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:03:34.294855+00:00",
+    "completed_at": "2026-10-27T18:03:46.868217+00:00",
+    "log": "rc1-release-check.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "acceptance-check",
+    "command": [
+      "npm",
+      "run",
+      "oas:rc1:acceptance:check"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:03:46.868315+00:00",
+    "completed_at": "2026-10-27T18:04:00.164401+00:00",
+    "log": "acceptance-check.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "acceptance-bindings",
+    "command": [
+      "npm",
+      "run",
+      "oas:rc1:verify"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:04:00.164526+00:00",
+    "completed_at": "2026-10-27T18:04:05.155408+00:00",
+    "log": "acceptance-bindings.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "acceptance-gate",
+    "command": [
+      "npm",
+      "run",
+      "oas:rc1:require-acceptance"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:04:05.155509+00:00",
+    "completed_at": "2026-10-27T18:04:12.537462+00:00",
+    "log": "acceptance-gate.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "scope-schema",
+    "command": [
+      "npm",
+      "run",
+      "oas:closure:validate"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:04:12.537559+00:00",
+    "completed_at": "2026-10-27T18:04:16.861004+00:00",
+    "log": "scope-schema.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "governance-schema",
+    "command": [
+      "npm",
+      "run",
+      "oas:governance:validate"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:04:16.861121+00:00",
+    "completed_at": "2026-10-27T18:04:18.281585+00:00",
+    "log": "governance-schema.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "catalog-schema",
+    "command": [
+      "npm",
+      "run",
+      "oas:validate"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:04:18.281728+00:00",
+    "completed_at": "2026-10-27T18:04:19.281841+00:00",
+    "log": "catalog-schema.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "first-release-schema",
+    "command": [
+      "npm",
+      "run",
+      "oas:first:validate"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:04:19.281975+00:00",
+    "completed_at": "2026-10-27T18:04:20.601804+00:00",
+    "log": "first-release-schema.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "scope-reproduction",
+    "command": [
+      "npm",
+      "run",
+      "oas:closure:check"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:04:20.601990+00:00",
+    "completed_at": "2026-10-27T18:04:28.073848+00:00",
+    "log": "scope-reproduction.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "governance-reproduction",
+    "command": [
+      "npm",
+      "run",
+      "oas:governance:check"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:04:28.073992+00:00",
+    "completed_at": "2026-10-27T18:04:30.084717+00:00",
+    "log": "governance-reproduction.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "catalog-reproduction",
+    "command": [
+      "npm",
+      "run",
+      "oas:check"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:04:30.084832+00:00",
+    "completed_at": "2026-10-27T18:04:32.087371+00:00",
+    "log": "catalog-reproduction.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "first-release-reproduction",
+    "command": [
+      "npm",
+      "run",
+      "oas:first:check"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:04:32.087495+00:00",
+    "completed_at": "2026-10-27T18:04:33.523418+00:00",
+    "log": "first-release-reproduction.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "rc1-typecheck",
+    "command": [
+      "npm",
+      "run",
+      "oas:rc1:typecheck"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:04:33.523572+00:00",
+    "completed_at": "2026-10-27T18:04:39.086477+00:00",
+    "log": "rc1-typecheck.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "closure-typecheck",
+    "command": [
+      "npm",
+      "run",
+      "oas:closure:typecheck"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:04:39.086708+00:00",
+    "completed_at": "2026-10-27T18:04:43.613416+00:00",
+    "log": "closure-typecheck.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "governance-typecheck",
+    "command": [
+      "npm",
+      "run",
+      "oas:governance:typecheck"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:04:43.613531+00:00",
+    "completed_at": "2026-10-27T18:04:48.338406+00:00",
+    "log": "governance-typecheck.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "catalog-typecheck",
+    "command": [
+      "npm",
+      "run",
+      "oas:typecheck"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:04:48.338559+00:00",
+    "completed_at": "2026-10-27T18:04:54.450654+00:00",
+    "log": "catalog-typecheck.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "first-release-typecheck",
+    "command": [
+      "npm",
+      "run",
+      "oas:first:typecheck"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:04:54.450763+00:00",
+    "completed_at": "2026-10-27T18:04:59.078081+00:00",
+    "log": "first-release-typecheck.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "independent-checksums",
+    "command": [
+      "python3",
+      "scripts/verify-oas-rc1-checksums.py"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:04:59.078273+00:00",
+    "completed_at": "2026-10-27T18:05:01.837910+00:00",
+    "log": "independent-checksums.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "architecture-registry",
+    "command": [
+      "npm",
+      "run",
+      "check:registry"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:05:01.838063+00:00",
+    "completed_at": "2026-10-27T18:05:02.414914+00:00",
+    "log": "architecture-registry.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "architecture-proposal",
+    "command": [
+      "npm",
+      "run",
+      "check:proposal"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:05:02.415075+00:00",
+    "completed_at": "2026-10-27T18:05:02.917332+00:00",
+    "log": "architecture-proposal.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "architecture-truth",
+    "command": [
+      "npm",
+      "run",
+      "check:truth"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:05:02.917480+00:00",
+    "completed_at": "2026-10-27T18:05:03.413136+00:00",
+    "log": "architecture-truth.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "manifest-validation",
+    "command": [
+      "npm",
+      "run",
+      "manifests:validate"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:05:03.413280+00:00",
+    "completed_at": "2026-10-27T18:05:03.964198+00:00",
+    "log": "manifest-validation.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  },
+  {
+    "name": "ui-contracts",
+    "command": [
+      "npm",
+      "run",
+      "ui:validate"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:05:03.964305+00:00",
+    "completed_at": "2026-10-27T18:05:04.492529+00:00",
+    "log": "ui-contracts.log",
+    "cwd": "/private/tmp/oas-final-publication-adoption-checkpoint",
+    "execution_context": "immutable adoption checkpoint; original assertions unchanged"
+  }
+]

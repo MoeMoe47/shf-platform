@@ -146,7 +146,11 @@
     "oas:final:check": "node scripts/oas-final-adoption-preparation.mjs check",
     "oas:final:require-adoptable-target": "node scripts/oas-final-adoption-preparation.mjs require-adoptable-target",
     "oas:final:test": "node --test tests/oasFinalAdoptionPreparation.test.mjs",
-    "oas:final:typecheck": "tsc -p tests/oas-final-preparation.tsconfig.json"
+    "oas:final:typecheck": "tsc -p tests/oas-final-preparation.tsconfig.json",
+    "oas:publication:check": "node scripts/oas-final-publication.mjs check",
+    "oas:publication:test": "node --test tests/oasFinalPublication.test.mjs",
+    "oas:publication:typecheck": "tsc -p tests/oas-final-publication.tsconfig.json",
+    "oas:publication:verify": "python3 scripts/verify-oas-final-publication.py"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.0",

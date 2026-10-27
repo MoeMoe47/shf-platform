@@ -1,0 +1,125 @@
+TAP version 13
+# Subtest: separate real publication authorization binds to the exact adopted target
+ok 1 - separate real publication authorization binds to the exact adopted target
+  ---
+  duration_ms: 1434.105168
+  type: 'test'
+  ...
+# Subtest: authorization rejects rehashed identity, time, authority, approval, target and binding mutations
+ok 2 - authorization rejects rehashed identity, time, authority, approval, target and binding mutations
+  ---
+  duration_ms: 5493.667259
+  type: 'test'
+  ...
+# Subtest: canonical final bytes and payload hashes independently match the adopted literal
+not ok 3 - canonical final bytes and payload hashes independently match the adopted literal
+  ---
+  duration_ms: 0.772819
+  type: 'test'
+  location: '/private/tmp/oas-rc1-issuance/tests/oasFinalPublication.test.mjs:11:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, open 'public/oas/catalogs/OAS-1@1.0.0.json'"
+  code: 'ENOENT'
+  stack: |-
+    readFileSync (node:fs:441:20)
+    read (file:///private/tmp/oas-rc1-issuance/tests/oasFinalPublication.test.mjs:6:15)
+    TestContext.<anonymous> (file:///private/tmp/oas-rc1-issuance/tests/oasFinalPublication.test.mjs:11:106)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: freeze rejects whitespace-only byte changes and rehashed normative/member/domain/contract mutation
+not ok 4 - freeze rejects whitespace-only byte changes and rehashed normative/member/domain/contract mutation
+  ---
+  duration_ms: 0.576394
+  type: 'test'
+  location: '/private/tmp/oas-rc1-issuance/tests/oasFinalPublication.test.mjs:12:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, open 'public/oas/catalogs/OAS-1@1.0.0.json'"
+  code: 'ENOENT'
+  stack: |-
+    readFileSync (node:fs:441:20)
+    read (file:///private/tmp/oas-rc1-issuance/tests/oasFinalPublication.test.mjs:6:15)
+    TestContext.<anonymous> (file:///private/tmp/oas-rc1-issuance/tests/oasFinalPublication.test.mjs:12:124)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: freeze rejects altered lock and currentness even if self-hash is recomputed
+not ok 5 - freeze rejects altered lock and currentness even if self-hash is recomputed
+  ---
+  duration_ms: 0.491881
+  type: 'test'
+  location: '/private/tmp/oas-rc1-issuance/tests/oasFinalPublication.test.mjs:13:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, open 'standards/oas/governance/final-1.0.0/publication-lock.json'"
+  code: 'ENOENT'
+  stack: |-
+    readFileSync (node:fs:441:20)
+    read (file:///private/tmp/oas-rc1-issuance/tests/oasFinalPublication.test.mjs:6:15)
+    json (file:///private/tmp/oas-rc1-issuance/tests/oasFinalPublication.test.mjs:6:57)
+    TestContext.<anonymous> (file:///private/tmp/oas-rc1-issuance/tests/oasFinalPublication.test.mjs:13:100)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: currentness identifies final release without rewriting historical artifacts or normative edges
+not ok 6 - currentness identifies final release without rewriting historical artifacts or normative edges
+  ---
+  duration_ms: 329.187954
+  type: 'test'
+  location: '/private/tmp/oas-rc1-issuance/tests/oasFinalPublication.test.mjs:14:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, open 'public/oas/currentness.json'"
+  code: 'ENOENT'
+  stack: |-
+    readFileSync (node:fs:441:20)
+    read (file:///private/tmp/oas-rc1-issuance/tests/oasFinalPublication.test.mjs:6:15)
+    json (file:///private/tmp/oas-rc1-issuance/tests/oasFinalPublication.test.mjs:6:57)
+    TestContext.<anonymous> (file:///private/tmp/oas-rc1-issuance/tests/oasFinalPublication.test.mjs:14:149)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: publication remains repository-only and does not perform Registry integration or an assessment
+not ok 7 - publication remains repository-only and does not perform Registry integration or an assessment
+  ---
+  duration_ms: 0.804631
+  type: 'test'
+  location: '/private/tmp/oas-rc1-issuance/tests/oasFinalPublication.test.mjs:15:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, open '/private/tmp/oas-rc1-issuance/public/oas/catalogs/OAS-1@1.0.0.json'"
+  code: 'ENOENT'
+  stack: |-
+    readFileSync (node:fs:441:20)
+    read (file:///private/tmp/oas-rc1-issuance/scripts/oas-final-publication.mjs:17:18)
+    checkPublication (file:///private/tmp/oas-rc1-issuance/scripts/oas-final-publication.mjs:76:43)
+    TestContext.<anonymous> (file:///private/tmp/oas-rc1-issuance/tests/oasFinalPublication.test.mjs:15:120)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 2
+# fail 5
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7998.595361

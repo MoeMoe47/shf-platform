@@ -1,0 +1,71 @@
+[
+  {
+    "name": "final-publication-tests",
+    "command": [
+      "node",
+      "--test",
+      "tests/oasFinalPublication.test.mjs"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:01:34.174615+00:00",
+    "completed_at": "2026-10-27T18:01:56.144481+00:00",
+    "log": "post-final-publication-tests.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "final-publication-check",
+    "command": [
+      "node",
+      "scripts/oas-final-publication.mjs",
+      "check"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:01:34.180270+00:00",
+    "completed_at": "2026-10-27T18:01:38.855616+00:00",
+    "log": "post-final-publication-check.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "publication-authorization",
+    "command": [
+      "node",
+      "scripts/oas-final-publication.mjs",
+      "verify-authorization"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:01:38.855748+00:00",
+    "completed_at": "2026-10-27T18:01:43.001403+00:00",
+    "log": "post-publication-authorization.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "publication-typecheck",
+    "command": [
+      "./node_modules/.bin/tsc",
+      "-p",
+      "tests/oas-final-publication.tsconfig.json"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:01:43.001624+00:00",
+    "completed_at": "2026-10-27T18:01:56.258643+00:00",
+    "log": "post-publication-typecheck.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "publication-independent",
+    "command": [
+      "python3",
+      "scripts/verify-oas-final-publication.py"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:01:56.146398+00:00",
+    "completed_at": "2026-10-27T18:01:58.910034+00:00",
+    "log": "post-publication-independent.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  }
+]

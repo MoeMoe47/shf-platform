@@ -1,0 +1,393 @@
+[
+  {
+    "name": "rc1-tests",
+    "command": [
+      "npm",
+      "run",
+      "oas:rc1:test"
+    ],
+    "exit_code": 1,
+    "started_at": "2026-10-27T17:58:56.844369+00:00",
+    "completed_at": "2026-10-27T18:01:07.328768+00:00",
+    "log": "rc1-tests.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "scope-closure-tests",
+    "command": [
+      "npm",
+      "run",
+      "oas:closure:test"
+    ],
+    "exit_code": 1,
+    "started_at": "2026-10-27T17:58:56.849364+00:00",
+    "completed_at": "2026-10-27T17:59:25.298731+00:00",
+    "log": "scope-closure-tests.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "governance-review-tests",
+    "command": [
+      "npm",
+      "run",
+      "oas:governance:test"
+    ],
+    "exit_code": 1,
+    "started_at": "2026-10-27T17:59:25.299663+00:00",
+    "completed_at": "2026-10-27T17:59:29.653818+00:00",
+    "log": "governance-review-tests.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "canonical-catalog-tests",
+    "command": [
+      "npm",
+      "run",
+      "oas:test"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:59:29.653970+00:00",
+    "completed_at": "2026-10-27T17:59:33.815868+00:00",
+    "log": "canonical-catalog-tests.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "first-release-tests",
+    "command": [
+      "npm",
+      "run",
+      "oas:first:test"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:59:33.815992+00:00",
+    "completed_at": "2026-10-27T17:59:40.859693+00:00",
+    "log": "first-release-tests.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "rc1-release-check",
+    "command": [
+      "npm",
+      "run",
+      "oas:rc1:check"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T17:59:40.859835+00:00",
+    "completed_at": "2026-10-27T18:00:06.425420+00:00",
+    "log": "rc1-release-check.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "acceptance-check",
+    "command": [
+      "npm",
+      "run",
+      "oas:rc1:acceptance:check"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:00:06.425712+00:00",
+    "completed_at": "2026-10-27T18:00:32.229326+00:00",
+    "log": "acceptance-check.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "acceptance-bindings",
+    "command": [
+      "npm",
+      "run",
+      "oas:rc1:verify"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:00:32.229478+00:00",
+    "completed_at": "2026-10-27T18:00:41.847795+00:00",
+    "log": "acceptance-bindings.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "acceptance-gate",
+    "command": [
+      "npm",
+      "run",
+      "oas:rc1:require-acceptance"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:00:41.848005+00:00",
+    "completed_at": "2026-10-27T18:00:56.279036+00:00",
+    "log": "acceptance-gate.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "scope-schema",
+    "command": [
+      "npm",
+      "run",
+      "oas:closure:validate"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:00:56.279195+00:00",
+    "completed_at": "2026-10-27T18:01:05.627024+00:00",
+    "log": "scope-schema.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "governance-schema",
+    "command": [
+      "npm",
+      "run",
+      "oas:governance:validate"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:01:05.627199+00:00",
+    "completed_at": "2026-10-27T18:01:08.186303+00:00",
+    "log": "governance-schema.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "catalog-schema",
+    "command": [
+      "npm",
+      "run",
+      "oas:validate"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:01:07.328997+00:00",
+    "completed_at": "2026-10-27T18:01:08.791896+00:00",
+    "log": "catalog-schema.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "first-release-schema",
+    "command": [
+      "npm",
+      "run",
+      "oas:first:validate"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:01:08.186464+00:00",
+    "completed_at": "2026-10-27T18:01:10.073281+00:00",
+    "log": "first-release-schema.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "scope-reproduction",
+    "command": [
+      "npm",
+      "run",
+      "oas:closure:check"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:01:08.792031+00:00",
+    "completed_at": "2026-10-27T18:01:20.267427+00:00",
+    "log": "scope-reproduction.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "governance-reproduction",
+    "command": [
+      "npm",
+      "run",
+      "oas:governance:check"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:01:10.073455+00:00",
+    "completed_at": "2026-10-27T18:01:12.476034+00:00",
+    "log": "governance-reproduction.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "catalog-reproduction",
+    "command": [
+      "npm",
+      "run",
+      "oas:check"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:01:12.476162+00:00",
+    "completed_at": "2026-10-27T18:01:15.207462+00:00",
+    "log": "catalog-reproduction.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "first-release-reproduction",
+    "command": [
+      "npm",
+      "run",
+      "oas:first:check"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:01:15.207597+00:00",
+    "completed_at": "2026-10-27T18:01:18.457197+00:00",
+    "log": "first-release-reproduction.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "rc1-typecheck",
+    "command": [
+      "npm",
+      "run",
+      "oas:rc1:typecheck"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:01:18.457330+00:00",
+    "completed_at": "2026-10-27T18:01:26.798794+00:00",
+    "log": "rc1-typecheck.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "closure-typecheck",
+    "command": [
+      "npm",
+      "run",
+      "oas:closure:typecheck"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:01:20.267694+00:00",
+    "completed_at": "2026-10-27T18:01:27.393240+00:00",
+    "log": "closure-typecheck.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "governance-typecheck",
+    "command": [
+      "npm",
+      "run",
+      "oas:governance:typecheck"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:01:26.798952+00:00",
+    "completed_at": "2026-10-27T18:01:34.120893+00:00",
+    "log": "governance-typecheck.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "catalog-typecheck",
+    "command": [
+      "npm",
+      "run",
+      "oas:typecheck"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:01:27.393367+00:00",
+    "completed_at": "2026-10-27T18:01:37.576207+00:00",
+    "log": "catalog-typecheck.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "first-release-typecheck",
+    "command": [
+      "npm",
+      "run",
+      "oas:first:typecheck"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:01:34.121034+00:00",
+    "completed_at": "2026-10-27T18:01:45.963580+00:00",
+    "log": "first-release-typecheck.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "independent-checksums",
+    "command": [
+      "python3",
+      "scripts/verify-oas-rc1-checksums.py"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:01:37.576366+00:00",
+    "completed_at": "2026-10-27T18:01:41.834844+00:00",
+    "log": "independent-checksums.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "architecture-registry",
+    "command": [
+      "npm",
+      "run",
+      "check:registry"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:01:41.834989+00:00",
+    "completed_at": "2026-10-27T18:01:44.073855+00:00",
+    "log": "architecture-registry.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "architecture-proposal",
+    "command": [
+      "npm",
+      "run",
+      "check:proposal"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:01:44.074060+00:00",
+    "completed_at": "2026-10-27T18:01:45.667651+00:00",
+    "log": "architecture-proposal.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "architecture-truth",
+    "command": [
+      "npm",
+      "run",
+      "check:truth"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:01:45.667809+00:00",
+    "completed_at": "2026-10-27T18:01:47.057314+00:00",
+    "log": "architecture-truth.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "manifest-validation",
+    "command": [
+      "npm",
+      "run",
+      "manifests:validate"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:01:45.963750+00:00",
+    "completed_at": "2026-10-27T18:01:47.505993+00:00",
+    "log": "manifest-validation.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  },
+  {
+    "name": "ui-contracts",
+    "command": [
+      "npm",
+      "run",
+      "ui:validate"
+    ],
+    "exit_code": 0,
+    "started_at": "2026-10-27T18:01:47.057502+00:00",
+    "completed_at": "2026-10-27T18:01:48.824184+00:00",
+    "log": "ui-contracts.log",
+    "cwd": "/private/tmp/oas-rc1-issuance",
+    "execution_context": "current publication worktree"
+  }
+]

@@ -1,0 +1,147 @@
+{
+  "validated_at": "2026-10-27T03:20:58.782261+00:00",
+  "source_revision": "0b2d9968877300263929c6b1fabccfe8c57aafa8",
+  "checks": [
+    {
+      "name": "unit-tests",
+      "command": [
+        "npm",
+        "run",
+        "oas:test"
+      ],
+      "exit_code": 0,
+      "log": "unit-tests.log"
+    },
+    {
+      "name": "schema-validation",
+      "command": [
+        "npm",
+        "run",
+        "oas:validate"
+      ],
+      "exit_code": 0,
+      "log": "schema-validation.log"
+    },
+    {
+      "name": "snapshot-reproducibility",
+      "command": [
+        "npm",
+        "run",
+        "oas:check"
+      ],
+      "exit_code": 0,
+      "log": "snapshot-reproducibility.log"
+    },
+    {
+      "name": "typecheck",
+      "command": [
+        "npm",
+        "run",
+        "oas:typecheck"
+      ],
+      "exit_code": 0,
+      "log": "typecheck.log"
+    },
+    {
+      "name": "architecture-registry",
+      "command": [
+        "npm",
+        "run",
+        "check:registry"
+      ],
+      "exit_code": 0,
+      "log": "architecture-registry.log"
+    },
+    {
+      "name": "architecture-proposal",
+      "command": [
+        "npm",
+        "run",
+        "check:proposal"
+      ],
+      "exit_code": 0,
+      "log": "architecture-proposal.log"
+    },
+    {
+      "name": "architecture-truth",
+      "command": [
+        "npm",
+        "run",
+        "check:truth"
+      ],
+      "exit_code": 0,
+      "log": "architecture-truth.log"
+    },
+    {
+      "name": "manifests",
+      "command": [
+        "npm",
+        "run",
+        "manifests:validate"
+      ],
+      "exit_code": 0,
+      "log": "manifests.log"
+    },
+    {
+      "name": "ui-contracts",
+      "command": [
+        "npm",
+        "run",
+        "ui:validate"
+      ],
+      "exit_code": 0,
+      "log": "ui-contracts.log"
+    },
+    {
+      "name": "whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "log": "whitespace.log"
+    },
+    {
+      "name": "oas-build",
+      "command": [
+        "npm",
+        "run",
+        "oas:build"
+      ],
+      "exit_code": 0,
+      "log": "oas-build.log"
+    },
+    {
+      "name": "reporting-tests",
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "--test",
+        "apps/shs-api/tests/report-u2-studio-oas.test.ts"
+      ],
+      "exit_code": 0,
+      "log": "reporting-tests.log"
+    },
+    {
+      "name": "full-mpa-build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exit_code": 0,
+      "notes": "Fresh full build passed in 38.33 seconds; warnings recorded in TEST_RESULTS.md."
+    },
+    {
+      "name": "independent-digests",
+      "command": [
+        "python3",
+        "hashlib + git show verification"
+      ],
+      "exit_code": 0,
+      "log": "independent-digest-check.log"
+    }
+  ]
+}

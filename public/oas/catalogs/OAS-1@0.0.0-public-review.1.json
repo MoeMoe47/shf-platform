@@ -1,0 +1,211 @@
+{
+  "catalog_version": "1.0.0",
+  "authority": "Open Autonomous Standard",
+  "standards": [
+    {
+      "standard_id": "OAS-1",
+      "standard_name": "Open Autonomous Standard",
+      "description": "Autonomous agents; existing public working-draft framework."
+    }
+  ],
+  "releases": [
+    {
+      "standard_id": "OAS-1",
+      "standard_version": "0.0.0-public-review.1",
+      "release_id": "OAS-1@0.0.0-public-review.1",
+      "release_status": "public_review",
+      "release_date": null,
+      "effective_date": null,
+      "publication_label": "Public Working Draft",
+      "review_label": "Public Review",
+      "normative_status": "not_published",
+      "supersedes": [],
+      "superseded_by": [],
+      "source_revision": "0b2d9968877300263929c6b1fabccfe8c57aafa8",
+      "generated_at": "2026-10-27T03:19:58.000Z",
+      "source_checksum": "sha256:083c51c88f711b8a1f84c54b322a463fdb103a47906caaff49251fc54563377c"
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "OAS-1-D01",
+      "ordinal": "01",
+      "domain_name": "Identity & Ownership",
+      "aliases": []
+    },
+    {
+      "domain_id": "OAS-1-D02",
+      "ordinal": "02",
+      "domain_name": "Purpose & Boundaries",
+      "aliases": []
+    },
+    {
+      "domain_id": "OAS-1-D03",
+      "ordinal": "03",
+      "domain_name": "Capabilities & Resources",
+      "aliases": []
+    },
+    {
+      "domain_id": "OAS-1-D04",
+      "ordinal": "04",
+      "domain_name": "Permissions & Access",
+      "aliases": []
+    },
+    {
+      "domain_id": "OAS-1-D05",
+      "ordinal": "05",
+      "domain_name": "Safety & Prohibited Actions",
+      "aliases": []
+    },
+    {
+      "domain_id": "OAS-1-D06",
+      "ordinal": "06",
+      "domain_name": "Human Authority",
+      "aliases": [
+        "Human Oversight"
+      ]
+    },
+    {
+      "domain_id": "OAS-1-D07",
+      "ordinal": "07",
+      "domain_name": "Validation & Evidence",
+      "aliases": []
+    },
+    {
+      "domain_id": "OAS-1-D08",
+      "ordinal": "08",
+      "domain_name": "Lifecycle & Accountability",
+      "aliases": []
+    }
+  ],
+  "risk_levels": [
+    {
+      "risk_level_id": "R0",
+      "risk_level_name": "Minimal"
+    },
+    {
+      "risk_level_id": "R1",
+      "risk_level_name": "Low"
+    },
+    {
+      "risk_level_id": "R2",
+      "risk_level_name": "Moderate"
+    },
+    {
+      "risk_level_id": "R3",
+      "risk_level_name": "High"
+    },
+    {
+      "risk_level_id": "R4",
+      "risk_level_name": "Critical"
+    }
+  ],
+  "legacy_taxonomies": [
+    {
+      "taxonomy_id": "shs-oas-reporting-v1",
+      "status": "legacy_unmapped",
+      "domains": [
+        {
+          "legacy_id": "01",
+          "legacy_label": "Identity and Purpose",
+          "canonical_domain_id": null,
+          "migration_status": "requires_semantic_review"
+        },
+        {
+          "legacy_id": "02",
+          "legacy_label": "Autonomy and Agency",
+          "canonical_domain_id": null,
+          "migration_status": "requires_semantic_review"
+        },
+        {
+          "legacy_id": "03",
+          "legacy_label": "Safety and Risk",
+          "canonical_domain_id": null,
+          "migration_status": "requires_semantic_review"
+        },
+        {
+          "legacy_id": "04",
+          "legacy_label": "Transparency and Explainability",
+          "canonical_domain_id": null,
+          "migration_status": "requires_semantic_review"
+        },
+        {
+          "legacy_id": "05",
+          "legacy_label": "Human Oversight",
+          "canonical_domain_id": null,
+          "migration_status": "requires_semantic_review"
+        },
+        {
+          "legacy_id": "06",
+          "legacy_label": "Data and Privacy",
+          "canonical_domain_id": null,
+          "migration_status": "requires_semantic_review"
+        },
+        {
+          "legacy_id": "07",
+          "legacy_label": "Interoperability",
+          "canonical_domain_id": null,
+          "migration_status": "requires_semantic_review"
+        },
+        {
+          "legacy_id": "08",
+          "legacy_label": "Accountability and Governance",
+          "canonical_domain_id": null,
+          "migration_status": "requires_semantic_review"
+        }
+      ]
+    }
+  ],
+  "profiles": [],
+  "profile_population_status": "not_defined",
+  "requirements": [],
+  "requirement_population_status": "normative_source_not_published",
+  "source_revision": "0b2d9968877300263929c6b1fabccfe8c57aafa8",
+  "generated_at": "2026-10-27T03:19:58.000Z",
+  "source_checksum": "sha256:083c51c88f711b8a1f84c54b322a463fdb103a47906caaff49251fc54563377c",
+  "source_files": [
+    {
+      "path": "schemas/oas/catalog-source.schema.json",
+      "checksum": "sha256:aa7fa0f636e03f6e28b8d1e1862a63bb3fff40260618a925e7c5d163d2846591"
+    },
+    {
+      "path": "schemas/oas/catalog.schema.json",
+      "checksum": "sha256:687f073429503cc87127d411116a1ae5c616db7ea38213044413b43e405287b2"
+    },
+    {
+      "path": "schemas/oas/declaration.schema.json",
+      "checksum": "sha256:6a7407630d88e68f7413d8ea233ab936d6795f57b901b29fc2dab2cb61f3b977"
+    },
+    {
+      "path": "schemas/oas/profile.schema.json",
+      "checksum": "sha256:e9cf253e685d0f86796d9fd28e486edbf9d8055e15f3de1287f48e98afcfe6e1"
+    },
+    {
+      "path": "schemas/oas/release.schema.json",
+      "checksum": "sha256:9bb2d9a4ad071130ba4de3f3e4edfd83e2a03898b6f5ab81e9ab3bfe4d237692"
+    },
+    {
+      "path": "schemas/oas/requirement.schema.json",
+      "checksum": "sha256:07a6aecd99b4f9bda43549142ec692248ff2a70d2853dde45f1ce84fd1f90b49"
+    },
+    {
+      "path": "schemas/oas/standard.schema.json",
+      "checksum": "sha256:6fa65d97cc3b87206c790f85b52593301706eb629512ec63ff57d4935286f913"
+    },
+    {
+      "path": "schemas/oas/supersession.schema.json",
+      "checksum": "sha256:2e3805649e845b148c48884d299ac8b5b337a8543ae329f6156693be4b06f0c8"
+    },
+    {
+      "path": "scripts/oas-catalog.mjs",
+      "checksum": "sha256:7520ba341112ae6e5f022c239a251f574234ce92dc6e9d917405086c0bc43946"
+    },
+    {
+      "path": "standards/oas/catalog.json",
+      "checksum": "sha256:4608cfcc9e6aeed093bb34b67f6bb33df850d4b1f0e14b4096a2bb929be022ae"
+    }
+  ],
+  "declaration_schema_id": "urn:oas:schema:declaration:1",
+  "evaluation_status": "NOT_EVALUATED",
+  "artifact_checksum": "sha256:aeedae764edfc8f56548cd74a61a331d604f122ee133dbf74b2f90487046b98e"
+}

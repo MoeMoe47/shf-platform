@@ -1,0 +1,17 @@
+
+> oas:final:require-adoptable-target
+> node scripts/oas-final-adoption-preparation.mjs require-adoptable-target
+
+file:///private/tmp/oas-rc1-issuance/scripts/oas-final-adoption-preparation.mjs:22
+const ensure=(ok,message)=>{if(!ok)throw new Error(message);};
+                                         ^
+
+Error: Human date fields are missing; no exact publishable final checksum exists
+    at ensure (file:///private/tmp/oas-rc1-issuance/scripts/oas-final-adoption-preparation.mjs:22:42)
+    at requireAdoptableTarget (file:///private/tmp/oas-rc1-issuance/scripts/oas-final-adoption-preparation.mjs:70:99)
+    at file:///private/tmp/oas-rc1-issuance/scripts/oas-final-adoption-preparation.mjs:73:236
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+
+Node.js v22.17.1

@@ -1,0 +1,194 @@
+{
+  "binding_version": "1.0.0",
+  "marking": "PROPOSED — NOT ADOPTED — NOT PUBLISHED",
+  "standard_id": "OAS-1",
+  "proposed_release_id": "OAS-1@1.0.0",
+  "proposed_version": "1.0.0",
+  "release_status_target": "released",
+  "adoption_status": "NOT ADOPTED",
+  "publication_status": "NOT PUBLISHED",
+  "requirement_ids": [
+    "OAS-1-REQ-0001",
+    "OAS-1-REQ-0002",
+    "OAS-1-REQ-0003",
+    "OAS-1-REQ-0004",
+    "OAS-1-REQ-0005",
+    "OAS-1-REQ-0006",
+    "OAS-1-REQ-0007",
+    "OAS-1-REQ-0008",
+    "OAS-1-REQ-0009",
+    "OAS-1-REQ-0010",
+    "OAS-1-REQ-0012",
+    "OAS-1-REQ-0014",
+    "OAS-1-REQ-0016",
+    "OAS-1-REQ-0017"
+  ],
+  "domain_ids": [
+    "OAS-1-D01",
+    "OAS-1-D02",
+    "OAS-1-D03",
+    "OAS-1-D04",
+    "OAS-1-D05",
+    "OAS-1-D06",
+    "OAS-1-D07",
+    "OAS-1-D08"
+  ],
+  "normative_content_checksum": "sha256:43429dd2555e8ec5c033002612f4d3f47b1c02c8209fd17e8cacbd6643a7907a",
+  "requirements_checksum": "sha256:57ed04e0b17cf3f339d211248554c299e49168b47652a9c4ba0a1ef4a0f522cd",
+  "rc1_requirements_checksum": "sha256:ac3e5aa8086552547b8b36c38c2826733585b9458f53584aa2ba0550643a1929",
+  "scope_checksum": "sha256:14be68339c76888fa1cac497564b6abd427352688ff68c531e8f46b61972d3c4",
+  "source_revision": "6f145192af25c929c95181fd6cd38f32d7b5ace9",
+  "normative_source_revision": "517cc23426e7485c352a1672c8fe4614291d552a",
+  "source_checksum": "sha256:4547aba9b5bc83ea89331e0b4f8e6a232a5871c0762c197ce643c1aabc5d6cc1",
+  "source_files": [
+    {
+      "path": "docs/OAS_DECLARATION_CONTRACT.md",
+      "checksum": "sha256:f2bdc2a40a335197ae26caaf1489ef2ea4243f1d7607912b7c21ad99a286ca83"
+    },
+    {
+      "path": "docs/OAS_FOUNDING_MAINTAINER_DESIGNATION.md",
+      "checksum": "sha256:53f5a6df1e4c8604dccce20cced84eab3803b905dcb1bc6d7dff555eb00ee08e"
+    },
+    {
+      "path": "docs/OAS_GOVERNANCE_AUTHORITY.md",
+      "checksum": "sha256:2f7071a93476398746f2ac0c2d7332f7842deefaaf40ef59b4a866bc1cb50546"
+    },
+    {
+      "path": "docs/OAS_RC1_ACCEPTANCE_DECISION.md",
+      "checksum": "sha256:58323836c06233de63d06baada8b4127b64c2c5e981c382a04db9db5a6f28095"
+    },
+    {
+      "path": "docs/OAS_RELEASE_ADOPTION_POLICY.md",
+      "checksum": "sha256:2cfbebf8263d1fb944f339434f4fbe74d902151188eec6d7ae42414d1b45e203"
+    },
+    {
+      "path": "evidence/oas-rc1-final-validation/POST_1_0_BACKLOG.md",
+      "checksum": "sha256:5fd36b658d896f7934b1a13f5689b2551c26c4ccc3582a2dd4cbdcf7846f88b6"
+    },
+    {
+      "path": "evidence/oas-rc1-final-validation/RC1_INDEPENDENT_VALIDATION.md",
+      "checksum": "sha256:c9351d6a140ddb1b51885866a6ac7ff24705678b37920108b9a5796e4c282536"
+    },
+    {
+      "path": "public/oas/catalogs/OAS-1@1.0.0-rc.1.json",
+      "checksum": "sha256:e18e8196dc38fdd3a835c5b098f00188c2ad8ad3bc0d0f49f520add1191b8fe5"
+    },
+    {
+      "path": "schemas/oas/closure/declaration.schema.json",
+      "checksum": "sha256:a3610fe9adac97b8e92d39b4431c340f7b84a1c9ba6bf9ae87b7e06390ea7f9e"
+    },
+    {
+      "path": "schemas/oas/preparation/final-artifact.schema.json",
+      "checksum": "sha256:02a0596f6bb2a306876d77e543929276d441ee3dc03db1d401fb9fd9ad4bb586"
+    },
+    {
+      "path": "schemas/oas/preparation/final-proposal.schema.json",
+      "checksum": "sha256:3745f4c358b8d1977d3c0cd8275e151233dfd45f32ca04a83a5d8c1d114f7f89"
+    },
+    {
+      "path": "schemas/oas/release.schema.json",
+      "checksum": "sha256:9bb2d9a4ad071130ba4de3f3e4edfd83e2a03898b6f5ab81e9ab3bfe4d237692"
+    },
+    {
+      "path": "schemas/oas/requirement.schema.json",
+      "checksum": "sha256:07a6aecd99b4f9bda43549142ec692248ff2a70d2853dde45f1ce84fd1f90b49"
+    },
+    {
+      "path": "scripts/oas-final-adoption-preparation.mjs",
+      "checksum": "sha256:5549a511b349e7f2d951f4ad4a41d0b33775ab4a064482034de5722022f3db2c"
+    },
+    {
+      "path": "scripts/verify-oas-final-preparation.py",
+      "checksum": "sha256:ec8ce141b7a0d9154c6d7d3935d7d4406f69ff3e42f4037a742baea132b473ef"
+    },
+    {
+      "path": "standards/oas/closure/domain-mapping.json",
+      "checksum": "sha256:6f1e7c41d855fc6c4fbe192d72c27e6e9ebd4d95d974e0f4ae62fbe17e3aac26"
+    },
+    {
+      "path": "standards/oas/closure/founding-acceptance.json",
+      "checksum": "sha256:936a4afab1589ecf899a75056cd66e5770e6ed0c59bd7b97da93a75690386cb2"
+    },
+    {
+      "path": "standards/oas/closure/founding-policy.json",
+      "checksum": "sha256:a55f42224fec0bbfa86ee8d2e4d95fb94531fc430b7b088a3cbe8a3f925ac9ab"
+    },
+    {
+      "path": "standards/oas/closure/scope.json",
+      "checksum": "sha256:14be68339c76888fa1cac497564b6abd427352688ff68c531e8f46b61972d3c4"
+    },
+    {
+      "path": "standards/oas/governance/final-1.0.0/inputs.json",
+      "checksum": "sha256:d12fa2afe2756a644ef2b38c5fd6bff58374bb7386b9132ed856361a3a39c2b1"
+    },
+    {
+      "path": "standards/oas/governance/rc1-publication-lock.json",
+      "checksum": "sha256:542a25f9b0c5c17e2dfecdbee2b6b025d5613b3c30e23990de3ad5c7cdc0ee19"
+    }
+  ],
+  "rc1_predecessor": "OAS-1@1.0.0-rc.1",
+  "rc1_artifact_file_checksum": "sha256:e18e8196dc38fdd3a835c5b098f00188c2ad8ad3bc0d0f49f520add1191b8fe5",
+  "rc1_issuance_reference": "1e3b4cad34257f207d8adf3d1afb51cc2b1bd2d8:public/oas/catalogs/OAS-1@1.0.0-rc.1.json",
+  "rc1_validation_reference": "9937511374055b7109438ca4224ae1de6cb1baaa:evidence/oas-rc1-final-validation/RC1_INDEPENDENT_VALIDATION.md",
+  "declaration_contract_version": "1.1.0",
+  "declaration_schema_id": "urn:oas:schema:closure:declaration:1",
+  "governance_model": "FOUNDING GOVERNANCE",
+  "governance_authority_reference": "517cc23426e7485c352a1672c8fe4614291d552a:docs/OAS_GOVERNANCE_AUTHORITY.md",
+  "designation_reference": "f1060153361ef635c8d26fae91d8a33f031faf31:docs/OAS_FOUNDING_MAINTAINER_DESIGNATION.md",
+  "designated_maintainer": "Mike Slate",
+  "rc1_acceptance_reference": "f501c946cb0de2d848445d8e2af0b9c678175cf9:docs/OAS_RC1_ACCEPTANCE_DECISION.md",
+  "domain_mapping_checksum": "sha256:6f1e7c41d855fc6c4fbe192d72c27e6e9ebd4d95d974e0f4ae62fbe17e3aac26",
+  "schema_checksums": {
+    "schemas/oas/preparation/final-proposal.schema.json": "sha256:3745f4c358b8d1977d3c0cd8275e151233dfd45f32ca04a83a5d8c1d114f7f89",
+    "schemas/oas/preparation/final-artifact.schema.json": "sha256:02a0596f6bb2a306876d77e543929276d441ee3dc03db1d401fb9fd9ad4bb586",
+    "schemas/oas/release.schema.json": "sha256:9bb2d9a4ad071130ba4de3f3e4edfd83e2a03898b6f5ab81e9ab3bfe4d237692",
+    "schemas/oas/requirement.schema.json": "sha256:07a6aecd99b4f9bda43549142ec692248ff2a70d2853dde45f1ce84fd1f90b49",
+    "schemas/oas/closure/declaration.schema.json": "sha256:a3610fe9adac97b8e92d39b4431c340f7b84a1c9ba6bf9ae87b7e06390ea7f9e"
+  },
+  "release_metadata": {
+    "release_date": "2026-10-27",
+    "effective_date": "2026-10-27",
+    "date_authority": "REQUIRED_EXPLICIT_HUMAN_MAINTAINER_INPUT",
+    "publication_target": "public/oas/catalogs/OAS-1@1.0.0.json",
+    "predecessor_reference": "OAS-1@1.0.0-rc.1",
+    "predecessor_relationship": "proposed_finalization_of_validated_rc1",
+    "supersedes": [],
+    "superseded_by": [],
+    "currentness": "NOT_CURRENT_PENDING_ADOPTION_AND_PUBLICATION"
+  },
+  "release_metadata_checksum": "sha256:f82f38c6fc4afd24f3d92ce1af1b64f730841d1cb43bfd2a1dc1cf0f2766a4a3",
+  "preview_path": "standards/oas/governance/final-1.0.0/artifact-preview.json",
+  "preview_payload_checksum": "sha256:08c34b37d060faa2bf6ff2fe3bd2e98e32ab9c76a303da733e2fa166c0045e8c",
+  "complete_proposed_preview_file_checksum": "sha256:5a0575822f3db28bdada424041aa9532df19d72e9678294522676600769e5be4",
+  "date_specific_final_artifact_path": "standards/oas/governance/final-1.0.0/artifact-target.json",
+  "date_specific_final_artifact_payload_checksum": "sha256:110711d3677a1c3c78634b708a24e4ec027182c7e770673f2293582c530cf999",
+  "date_specific_final_artifact_file_checksum": "sha256:9ca2b2b9cc17acd419e9961387e65d0ca3de33fde557d5440f96856dc186892e",
+  "publication_target": "public/oas/catalogs/OAS-1@1.0.0.json",
+  "historical_public_review_file_checksum": "sha256:465b9c63a5358b64ae68880bf94858bef5f5a05065cd9295a1b8b7745e76cc57",
+  "profiles": [],
+  "evaluation_status": "NOT_EVALUATED",
+  "supersession_currentness": "Proposed finalization of RC1; no adopted supersession event or current-final claim exists; immutable prior artifacts retained",
+  "required_human_fields": [
+    "release_date",
+    "effective_date",
+    "adoption_statement",
+    "adopter_reference",
+    "adoption_decision_timestamp",
+    "immutable_adoption_decision_reference",
+    "publication_operator_reference",
+    "publication_authorization_statement",
+    "publication_authorization_timestamp",
+    "immutable_publication_authorization_reference"
+  ],
+  "known_limitations": [
+    "Information/declaration baseline; no runtime safety or behavioral verification",
+    "No conformance, certification, ATB assessment or Registry endorsement",
+    "Private evidence references are not authenticated or evaluated",
+    "Parsed-object RC check alone misses whitespace re-encoding; independent full-file checksum verification remains mandatory",
+    "Human dates and separate adoption/publication decisions are required; missing dates prevent a publishable target checksum"
+  ],
+  "post_1_0_backlog_reference": "9937511374055b7109438ca4224ae1de6cb1baaa:evidence/oas-rc1-final-validation/POST_1_0_BACKLOG.md",
+  "adoption_decision": null,
+  "publication_authorization": null,
+  "binding_checksum": "sha256:cbc26edbca5214fdca1cfa7dc2f7fbf17d917eb44bef4dbc2d337c98a7dbeeb1"
+}

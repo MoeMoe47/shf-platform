@@ -1,0 +1,18 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "oas:final:require-adoptable-target"
+  ],
+  "actual_exit_code": 1,
+  "expected_outcome": "REJECT_MISSING_REQUIRED_HUMAN_DATES",
+  "expected_rejection_verified": true,
+  "release_date": null,
+  "effective_date": null,
+  "date_specific_final_artifact_checksum": null,
+  "rc2_required": false,
+  "log": "date-gate.log",
+  "historical_check": true,
+  "applies_to_source": "be8a0ab16559cabf9cfa6d039c6a7d72fc17d99b",
+  "note": "Prior undated-source safety proof; not current dated package readiness."
+}

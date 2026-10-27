@@ -1,0 +1,287 @@
+{
+  "proposal_version": "1.0.0",
+  "marking": "PROPOSED — NOT ADOPTED — NOT PUBLISHED",
+  "state": "PROPOSED_NOT_ADOPTED_NOT_PUBLISHED",
+  "release_status_target": "released",
+  "standard_id": "OAS-1",
+  "release_id": "OAS-1@1.0.0",
+  "standard_version": "1.0.0",
+  "status": "proposed",
+  "source_revision": "6f145192af25c929c95181fd6cd38f32d7b5ace9",
+  "normative_source_revision": "517cc23426e7485c352a1672c8fe4614291d552a",
+  "requirement_ids": [
+    "OAS-1-REQ-0001",
+    "OAS-1-REQ-0002",
+    "OAS-1-REQ-0003",
+    "OAS-1-REQ-0004",
+    "OAS-1-REQ-0005",
+    "OAS-1-REQ-0006",
+    "OAS-1-REQ-0007",
+    "OAS-1-REQ-0008",
+    "OAS-1-REQ-0009",
+    "OAS-1-REQ-0010",
+    "OAS-1-REQ-0012",
+    "OAS-1-REQ-0014",
+    "OAS-1-REQ-0016",
+    "OAS-1-REQ-0017"
+  ],
+  "domain_ids": [
+    "OAS-1-D01",
+    "OAS-1-D02",
+    "OAS-1-D03",
+    "OAS-1-D04",
+    "OAS-1-D05",
+    "OAS-1-D06",
+    "OAS-1-D07",
+    "OAS-1-D08"
+  ],
+  "profiles": [],
+  "declaration_contract_version": "1.1.0",
+  "declaration_schema_id": "urn:oas:schema:closure:declaration:1",
+  "evaluation_status": "NOT_EVALUATED",
+  "requirements": [
+    {
+      "requirement_id": "OAS-1-REQ-0001",
+      "standard_id": "OAS-1",
+      "standard_version": "1.0.0",
+      "release_id": "OAS-1@1.0.0",
+      "domain_id": "OAS-1-D01",
+      "risk_levels": [],
+      "normative_text": "The provider MUST include a system identifier and the name of the person or organization responsible for the described system in the description record for each system version covered by the declaration.",
+      "normative_text_reference": {
+        "source_path": "standards/oas/authoring/first-release.json",
+        "anchor": "OAS-1-REQ-0001"
+      },
+      "status": "draft",
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0002",
+      "standard_id": "OAS-1",
+      "standard_version": "1.0.0",
+      "release_id": "OAS-1@1.0.0",
+      "domain_id": "OAS-1-D01",
+      "risk_levels": [],
+      "normative_text": "The provider MUST include a provenance reference identifying the source artifact or origin record of the system version covered by the declaration in its description record.",
+      "normative_text_reference": {
+        "source_path": "standards/oas/authoring/first-release.json",
+        "anchor": "OAS-1-REQ-0002"
+      },
+      "status": "draft",
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0003",
+      "standard_id": "OAS-1",
+      "standard_version": "1.0.0",
+      "release_id": "OAS-1@1.0.0",
+      "domain_id": "OAS-1-D02",
+      "risk_levels": [],
+      "normative_text": "The provider MUST document the intended goals and use cases of the system version covered by the declaration in its description record.",
+      "normative_text_reference": {
+        "source_path": "standards/oas/authoring/first-release.json",
+        "anchor": "OAS-1-REQ-0003"
+      },
+      "status": "draft",
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0004",
+      "standard_id": "OAS-1",
+      "standard_version": "1.0.0",
+      "release_id": "OAS-1@1.0.0",
+      "domain_id": "OAS-1-D02",
+      "risk_levels": [],
+      "normative_text": "The provider MUST document the permitted operating scope and excluded actions or uses of the system version covered by the declaration in its description record.",
+      "normative_text_reference": {
+        "source_path": "standards/oas/authoring/first-release.json",
+        "anchor": "OAS-1-REQ-0004"
+      },
+      "status": "draft",
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0005",
+      "standard_id": "OAS-1",
+      "standard_version": "1.0.0",
+      "release_id": "OAS-1@1.0.0",
+      "domain_id": "OAS-1-D02",
+      "risk_levels": [],
+      "normative_text": "The provider MUST record a review of the documented purpose and boundaries when the capabilities, permissions, operating context or intended use of the system version covered by the declaration change.",
+      "normative_text_reference": {
+        "source_path": "standards/oas/authoring/first-release.json",
+        "anchor": "OAS-1-REQ-0005"
+      },
+      "status": "draft",
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0006",
+      "standard_id": "OAS-1",
+      "standard_version": "1.0.0",
+      "release_id": "OAS-1@1.0.0",
+      "domain_id": "OAS-1-D03",
+      "risk_levels": [],
+      "normative_text": "The provider MUST list the capabilities made available within the operating scope of the system version covered by the declaration in its description record.",
+      "normative_text_reference": {
+        "source_path": "standards/oas/authoring/first-release.json",
+        "anchor": "OAS-1-REQ-0006"
+      },
+      "status": "draft",
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0007",
+      "standard_id": "OAS-1",
+      "standard_version": "1.0.0",
+      "release_id": "OAS-1@1.0.0",
+      "domain_id": "OAS-1-D03",
+      "risk_levels": [],
+      "normative_text": "The provider MUST identify the resources, external tools and external systems used by the system version within the declared operating scope in its description record.",
+      "normative_text_reference": {
+        "source_path": "standards/oas/authoring/first-release.json",
+        "anchor": "OAS-1-REQ-0007"
+      },
+      "status": "draft",
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0008",
+      "standard_id": "OAS-1",
+      "standard_version": "1.0.0",
+      "release_id": "OAS-1@1.0.0",
+      "domain_id": "OAS-1-D04",
+      "risk_levels": [],
+      "normative_text": "The provider MUST document the data, systems and actions that the described system version is authorized to access or perform within the declared operating scope in its description record.",
+      "normative_text_reference": {
+        "source_path": "standards/oas/authoring/first-release.json",
+        "anchor": "OAS-1-REQ-0008"
+      },
+      "status": "draft",
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0009",
+      "standard_id": "OAS-1",
+      "standard_version": "1.0.0",
+      "release_id": "OAS-1@1.0.0",
+      "domain_id": "OAS-1-D04",
+      "risk_levels": [],
+      "normative_text": "The provider MUST identify the authorization mechanism associated with each documented data, system or action permission in the description record for the declared system version.",
+      "normative_text_reference": {
+        "source_path": "standards/oas/authoring/first-release.json",
+        "anchor": "OAS-1-REQ-0009"
+      },
+      "status": "draft",
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0010",
+      "standard_id": "OAS-1",
+      "standard_version": "1.0.0",
+      "release_id": "OAS-1@1.0.0",
+      "domain_id": "OAS-1-D05",
+      "risk_levels": [],
+      "normative_text": "The provider MUST list the actions prohibited for the system version within the declared operating scope in its description record.",
+      "normative_text_reference": {
+        "source_path": "standards/oas/authoring/first-release.json",
+        "anchor": "OAS-1-REQ-0010"
+      },
+      "status": "draft",
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0012",
+      "standard_id": "OAS-1",
+      "standard_version": "1.0.0",
+      "release_id": "OAS-1@1.0.0",
+      "domain_id": "OAS-1-D06",
+      "risk_levels": [],
+      "normative_text": "The provider MUST document the human role authorized to oversee, override or stop the described system version and the interface by which that role can exercise each documented intervention.",
+      "normative_text_reference": {
+        "source_path": "standards/oas/authoring/first-release.json",
+        "anchor": "OAS-1-REQ-0012"
+      },
+      "status": "draft",
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0014",
+      "standard_id": "OAS-1",
+      "standard_version": "1.0.0",
+      "release_id": "OAS-1@1.0.0",
+      "domain_id": "OAS-1-D07",
+      "risk_levels": [],
+      "normative_text": "The provider MUST document the verification methods and performance-monitoring measures intended for the described system version within the declared operating scope.",
+      "normative_text_reference": {
+        "source_path": "standards/oas/authoring/first-release.json",
+        "anchor": "OAS-1-REQ-0014"
+      },
+      "status": "draft",
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0016",
+      "standard_id": "OAS-1",
+      "standard_version": "1.0.0",
+      "release_id": "OAS-1@1.0.0",
+      "domain_id": "OAS-1-D08",
+      "risk_levels": [],
+      "normative_text": "The provider MUST record the system version and its provider-defined lifecycle state in the description record covered by the declaration.",
+      "normative_text_reference": {
+        "source_path": "standards/oas/authoring/first-release.json",
+        "anchor": "OAS-1-REQ-0016"
+      },
+      "status": "draft",
+      "supersedes": [],
+      "superseded_by": []
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0017",
+      "standard_id": "OAS-1",
+      "standard_version": "1.0.0",
+      "release_id": "OAS-1@1.0.0",
+      "domain_id": "OAS-1-D08",
+      "risk_levels": [],
+      "normative_text": "The provider MUST identify the role responsible for retiring the described system version and the retirement process in its description record.",
+      "normative_text_reference": {
+        "source_path": "standards/oas/authoring/first-release.json",
+        "anchor": "OAS-1-REQ-0017"
+      },
+      "status": "draft",
+      "supersedes": [],
+      "superseded_by": []
+    }
+  ],
+  "release_metadata": {
+    "release_date": "2026-10-27",
+    "effective_date": "2026-10-27",
+    "date_authority": "REQUIRED_EXPLICIT_HUMAN_MAINTAINER_INPUT",
+    "publication_target": "public/oas/catalogs/OAS-1@1.0.0.json",
+    "predecessor_reference": "OAS-1@1.0.0-rc.1",
+    "predecessor_relationship": "proposed_finalization_of_validated_rc1",
+    "supersedes": [],
+    "superseded_by": [],
+    "currentness": "NOT_CURRENT_PENDING_ADOPTION_AND_PUBLICATION"
+  },
+  "requirements_checksum": "sha256:57ed04e0b17cf3f339d211248554c299e49168b47652a9c4ba0a1ef4a0f522cd",
+  "rc1_requirements_checksum": "sha256:ac3e5aa8086552547b8b36c38c2826733585b9458f53584aa2ba0550643a1929",
+  "scope_checksum": "sha256:14be68339c76888fa1cac497564b6abd427352688ff68c531e8f46b61972d3c4",
+  "source_checksum": "sha256:4547aba9b5bc83ea89331e0b4f8e6a232a5871c0762c197ce643c1aabc5d6cc1",
+  "release_metadata_checksum": "sha256:f82f38c6fc4afd24f3d92ce1af1b64f730841d1cb43bfd2a1dc1cf0f2766a4a3",
+  "adoption_decision": null,
+  "publication_authorization": null,
+  "artifact_checksum": "sha256:08c34b37d060faa2bf6ff2fe3bd2e98e32ab9c76a303da733e2fa166c0045e8c"
+}

@@ -1,0 +1,97 @@
+[
+  {
+    "gate": "rc1_integrity",
+    "result": "PASS",
+    "condition": "Exact issued RC1 bytes and independent file hash match"
+  },
+  {
+    "gate": "review_pin",
+    "result": "PASS",
+    "condition": "Exact review commit unchanged"
+  },
+  {
+    "gate": "exact_fourteen_members",
+    "result": "PASS",
+    "condition": "No deferred member or changed order"
+  },
+  {
+    "gate": "normative_content_unchanged",
+    "result": "PASS",
+    "condition": "Same IDs/domain/text; source scope checksum unchanged"
+  },
+  {
+    "gate": "eight_domains",
+    "result": "PASS",
+    "condition": "All D01–D08 represented"
+  },
+  {
+    "gate": "declaration_1_1_0",
+    "result": "PASS",
+    "condition": "Compatible strict NOT_EVALUATED declaration contract"
+  },
+  {
+    "gate": "profiles_empty",
+    "result": "PASS",
+    "condition": "No invented profiles"
+  },
+  {
+    "gate": "preview_deterministic",
+    "result": "PASS",
+    "condition": "Reproduction from committed inputs is exact"
+  },
+  {
+    "gate": "checksums_reproducible",
+    "result": "PASS",
+    "condition": "Independent byte checker also required"
+  },
+  {
+    "gate": "no_final_publication",
+    "result": "PASS",
+    "condition": "No final public artifact exists"
+  },
+  {
+    "gate": "history_preserved",
+    "result": "PASS",
+    "condition": "Historical public-review exact bytes"
+  },
+  {
+    "gate": "designation_valid",
+    "result": "PASS",
+    "condition": "Existing committed human designation retained"
+  },
+  {
+    "gate": "rc1_acceptance_valid",
+    "result": "PASS",
+    "condition": "Valid RC-only acceptance remains separate"
+  },
+  {
+    "gate": "human_decision_absent",
+    "result": "PASS",
+    "condition": "Preparation safety: human final decision is absent/pending"
+  },
+  {
+    "gate": "publication_authorization_absent",
+    "result": "PASS",
+    "condition": "Preparation safety: publication authorization is absent/pending"
+  },
+  {
+    "gate": "autonomous_registry_untouched",
+    "result": "PASS",
+    "condition": "No implementation code/data in Registry or other app/service domains changed"
+  },
+  {
+    "gate": "dates_resolved_for_adoption",
+    "result": "PASS",
+    "condition": "Both actual human-selected dates required; cannot adopt undated preview"
+  },
+  {
+    "gate": "final_human_adoption_recorded",
+    "result": "FAIL",
+    "condition": "New explicit human decision bound to exact resolved final bytes and metadata"
+  },
+  {
+    "gate": "final_publication_authorized",
+    "result": "FAIL",
+    "condition": "Separate explicit final-publication authorization required"
+  }
+]

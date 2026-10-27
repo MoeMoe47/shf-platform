@@ -128,7 +128,12 @@
     "oas:governance:generate": "node scripts/oas-governance-review.mjs generate",
     "oas:governance:check": "node scripts/oas-governance-review.mjs check",
     "oas:governance:test": "node --test tests/oasGovernanceReview.test.mjs",
-    "oas:governance:typecheck": "tsc -p tests/oas-governance.tsconfig.json"
+    "oas:governance:typecheck": "tsc -p tests/oas-governance.tsconfig.json",
+    "oas:closure:validate": "node scripts/oas-scope-closure.mjs validate",
+    "oas:closure:generate": "node scripts/oas-scope-closure.mjs generate",
+    "oas:closure:check": "node scripts/oas-scope-closure.mjs check",
+    "oas:closure:test": "node --test tests/oasScopeClosure.test.mjs",
+    "oas:closure:typecheck": "tsc -p tests/oas-scope-closure.tsconfig.json"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.0",

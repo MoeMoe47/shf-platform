@@ -1,9 +1,9 @@
 name: OAS canonical catalog
 on:
   push:
-    paths: ['standards/oas/**', 'schemas/oas/**', 'scripts/oas-catalog.mjs', 'scripts/oas-first-release.mjs', 'scripts/oas-governance-review.mjs', 'evidence/oas-governance-review/**', 'docs/OAS*', 'evidence/oas-first-release/review-package/**', 'tests/oas*', 'src/pages/oas/**', 'public/oas/**', 'vite.oas.config.mjs', 'package.json', 'package-lock.json', '.github/workflows/oas-catalog.yml']
+    paths: ['standards/oas/**', 'schemas/oas/**', 'scripts/oas-catalog.mjs', 'scripts/oas-first-release.mjs', 'scripts/oas-governance-review.mjs', 'scripts/oas-scope-closure.mjs', 'evidence/oas-governance-resolution/**', 'evidence/oas-governance-review/**', 'docs/OAS*', 'evidence/oas-first-release/review-package/**', 'tests/oas*', 'src/pages/oas/**', 'public/oas/**', 'vite.oas.config.mjs', 'package.json', 'package-lock.json', '.github/workflows/oas-catalog.yml']
   pull_request:
-    paths: ['standards/oas/**', 'schemas/oas/**', 'scripts/oas-catalog.mjs', 'scripts/oas-first-release.mjs', 'scripts/oas-governance-review.mjs', 'evidence/oas-governance-review/**', 'docs/OAS*', 'evidence/oas-first-release/review-package/**', 'tests/oas*', 'src/pages/oas/**', 'public/oas/**', 'vite.oas.config.mjs', 'package.json', 'package-lock.json', '.github/workflows/oas-catalog.yml']
+    paths: ['standards/oas/**', 'schemas/oas/**', 'scripts/oas-catalog.mjs', 'scripts/oas-first-release.mjs', 'scripts/oas-governance-review.mjs', 'scripts/oas-scope-closure.mjs', 'evidence/oas-governance-resolution/**', 'evidence/oas-governance-review/**', 'docs/OAS*', 'evidence/oas-first-release/review-package/**', 'tests/oas*', 'src/pages/oas/**', 'public/oas/**', 'vite.oas.config.mjs', 'package.json', 'package-lock.json', '.github/workflows/oas-catalog.yml']
 jobs:
   catalog:
     runs-on: ubuntu-latest
@@ -22,8 +22,11 @@ jobs:
       - run: npm run oas:first:test
       - run: npm run oas:governance:check
       - run: npm run oas:governance:test
+      - run: npm run oas:closure:check
+      - run: npm run oas:closure:test
       - run: npm run oas:typecheck
       - run: npm run oas:first:typecheck
       - run: npm run oas:governance:typecheck
+      - run: npm run oas:closure:typecheck
       - run: npm run oas:build
       - run: git diff --check

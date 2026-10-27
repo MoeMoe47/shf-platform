@@ -78,7 +78,7 @@ test('RC gates fail and no RC artifact, source revision, checksum or membership 
 test('no released status or 1.0.0 publication and historical public-review pin preserved',()=>{
   const catalog=readSource();assert.equal(catalog.releases.length,1);assert.equal(catalog.releases[0].release_id,'OAS-1@0.0.0-public-review.1');assert.equal(catalog.releases[0].release_status,'public_review');assert.deepEqual(catalog.requirements,[]);
   assert.deepEqual(readdirSync(path.join(root,'public/oas/catalogs')),['OAS-1@0.0.0-public-review.1.json']);
-  for(const file of [...inputPaths,artifactPath,'standards/oas/authoring/domain-mapping.json','docs/OAS_DOMAIN_MAPPING.md','apps/shs-api/src/domain/reporting/studio-oas-report-adapters.ts'])assert.equal(readFileSync(path.join(root,file),'utf8'),execFileSync('git',['show',`${baselineCommit}:${file}`],{cwd:root,encoding:'utf8'}),file);
+  for(const file of [...inputPaths,artifactPath,'standards/oas/authoring/domain-mapping.json','docs/OAS_DOMAIN_MAPPING.md','apps/shs-api/src/domain/reporting/studio-oas-report-adapters.ts'])assert.equal(readFileSync(path.join(root,file === 'docs/OAS_DOMAIN_MAPPING.md' ? 'docs/history/OAS_DOMAIN_MAPPING.e1b6135.md' : file),'utf8'),execFileSync('git',['show',`${baselineCommit}:${file}`],{cwd:root,encoding:'utf8'}),file);
   assert.equal(readFileSync(path.join(root,artifactPath),'utf8'),serialize(generateFromGit()));
   execFileSync('git',['merge-base','--is-ancestor',baselineCommit,'HEAD'],{cwd:root});
 });

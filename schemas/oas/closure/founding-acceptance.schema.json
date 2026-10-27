@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oas:schema:closure:founding-acceptance:1",
+  "type": "object",
+  "properties": {
+    "record_version": {
+      "const": "1.0.0"
+    },
+    "state": {
+      "enum": [
+        "AWAITING_REAL_MAINTAINER_ACCEPTANCE",
+        "ACCEPTED"
+      ]
+    },
+    "maintainer_reference": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "authority_evidence_reference": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "accepted_source_revision": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "accepted_scope_checksum": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "accepted_contract_checksums": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          },
+          "minProperties": 3
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "accepted_at": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "decision_record_reference": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "authorize_rc1": {
+      "type": "boolean"
+    },
+    "authorize_final_release": {
+      "const": false
+    }
+  },
+  "required": [
+    "record_version",
+    "state",
+    "maintainer_reference",
+    "authority_evidence_reference",
+    "accepted_source_revision",
+    "accepted_scope_checksum",
+    "accepted_contract_checksums",
+    "accepted_at",
+    "decision_record_reference",
+    "authorize_rc1",
+    "authorize_final_release"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "const": "ACCEPTED"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "maintainer_reference": {
+            "type": "string",
+            "minLength": 1
+          },
+          "authority_evidence_reference": {
+            "type": "string",
+            "minLength": 1
+          },
+          "accepted_source_revision": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{40}$"
+          },
+          "accepted_scope_checksum": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          },
+          "accepted_contract_checksums": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            "minProperties": 3
+          },
+          "accepted_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "decision_record_reference": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  ]
+}

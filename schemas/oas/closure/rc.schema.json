@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oas:schema:closure:rc:1",
+  "type": "object",
+  "properties": {
+    "standard_id": {
+      "const": "OAS-1"
+    },
+    "release_id": {
+      "type": "string",
+      "pattern": "^OAS-1@1\\.0\\.0-rc\\.[1-9][0-9]*$"
+    },
+    "standard_version": {
+      "type": "string",
+      "pattern": "^1\\.0\\.0-rc\\.[1-9][0-9]*$"
+    },
+    "status": {
+      "const": "release_candidate"
+    },
+    "candidate_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "effective_date": {
+      "type": "null"
+    },
+    "requirement_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^OAS-1-REQ-[0-9]{4,}$"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "domain_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^OAS-1-D0[1-8]$"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "source_revision": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "source_checksum": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "artifact_checksum": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "requirements_checksum": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "changelog_reference": {
+      "type": "string",
+      "minLength": 1
+    },
+    "predecessor_reference": {
+      "const": "OAS-1@0.0.0-public-review.1"
+    },
+    "predecessor_relationship": {
+      "const": "derived_from_historical_public_review"
+    },
+    "declaration_schema_id": {
+      "const": "urn:oas:schema:closure:declaration:1"
+    },
+    "governance_decision_reference": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scope_checksum": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  },
+  "required": [
+    "standard_id",
+    "release_id",
+    "standard_version",
+    "status",
+    "candidate_date",
+    "effective_date",
+    "requirement_ids",
+    "domain_ids",
+    "source_revision",
+    "source_checksum",
+    "artifact_checksum",
+    "requirements_checksum",
+    "changelog_reference",
+    "predecessor_reference",
+    "predecessor_relationship",
+    "declaration_schema_id",
+    "governance_decision_reference",
+    "scope_checksum"
+  ],
+  "additionalProperties": false
+}

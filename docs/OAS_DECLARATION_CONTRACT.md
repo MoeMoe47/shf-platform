@@ -1,0 +1,15 @@
+# OAS declaration contract
+
+Contract version 1.1.0 is defined for the proposed information/declaration baseline. The schema is schemas/oas/closure/declaration.schema.json, ID urn:oas:schema:closure:declaration:1. It becomes usable against an RC only when that RC actually exists. No declaration may resolve a fabricated, floating or placeholder release.
+
+A declaration records standard_id, exact release_id, explicit operating scope, declarant identity/reference and reference kind, actual declaration timestamp, declaration status, one state for every member requirement, evidence references and types, notes and evaluation_status fixed to NOT_EVALUATED. Profiles are null because no real first-release profile use case exists.
+
+Per requirement, applicability is applicable, not_applicable or unknown. Not-applicable requires an explanation and cannot assert satisfaction. The independent provider assertion is declared_satisfied, not_declared or unknown. Declared-satisfied requires applicable status and offered evidence references. Unknown completeness cannot silently become not-applicable or satisfied. Top-level declared/withdrawn is the state of the provider statement, never conformance or a Registry lifecycle event. Omitted member requirements reject rather than defaulting to satisfied.
+
+Validation requires a supplied authoritative release catalog with matching standard/release pin, known exact membership, unique requirement IDs, exact coverage, resolved evidence references, and compatible schema. The local validator does not fetch evidence, authenticate a declarant, verify legal identity, determine truth/sufficiency or perform a Trust Bureau assessment. It is not a new provider-authentication service or operational endpoint. Tests may supply clearly synthetic RC fixtures, but production records cannot resolve a nonexistent RC.
+
+Evidence kinds include configuration, policy, interface, audit, test, manifest, provenance, plan and other. A plan is admissible offered evidence for a plan/documentation obligation such as 0014; it cannot be represented as an executed test or a passing evaluation. Private evidence can be referenced without being published. Evidence presence is not conformance. No score, PASS/FAIL, certification, Trust Bureau opinion or Registry authorization is derived.
+
+Legacy schema version 1.0.0 remains unchanged and supported for historical public-review.1 standard-level declarations. There is no silent upgrade to requirement-level claims, no automatic mapping of legacy strings to current requirements and no retroactive rewriting. New per-requirement declarations pin a real RC or adopted release and preserve the original source revision/digest in the recording system. When version/scope/manifests change, create a new pinned declaration or withdraw the old one; old statements remain historical.
+
+The contract resolves Q08's information/evidence linkage boundary; a generalized requirement to prove effectiveness, impose evidence-retention periods or authenticate providers is intentionally outside this baseline. Final adoption of the standard and Registry recording/public projection remain separate actions.

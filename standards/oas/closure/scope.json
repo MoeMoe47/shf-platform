@@ -1,0 +1,1138 @@
+{
+  "closure_version": "1.0.0",
+  "baseline_commit": "e1b6135aa51bdd20e98706703ae5de714c954671",
+  "authority_model": "FOUNDING GOVERNANCE",
+  "decision_basis": "User-authorized repository scope/contract resolution; content decisions remain subject to founding maintainer acceptance of the exact snapshot.",
+  "standard_id": "OAS-1",
+  "scope_name": "Autonomous system description and declaration baseline",
+  "scope_status": "repository_scope_finalized_pending_founding_acceptance",
+  "included_requirement_ids": [
+    "OAS-1-REQ-0001",
+    "OAS-1-REQ-0002",
+    "OAS-1-REQ-0003",
+    "OAS-1-REQ-0004",
+    "OAS-1-REQ-0005",
+    "OAS-1-REQ-0006",
+    "OAS-1-REQ-0007",
+    "OAS-1-REQ-0008",
+    "OAS-1-REQ-0009",
+    "OAS-1-REQ-0010",
+    "OAS-1-REQ-0012",
+    "OAS-1-REQ-0014",
+    "OAS-1-REQ-0016",
+    "OAS-1-REQ-0017"
+  ],
+  "profiles": [],
+  "risk_level_use": "informative_only",
+  "requirements": [
+    {
+      "requirement_id": "OAS-1-REQ-0001",
+      "domain_id": "OAS-1-D01",
+      "baseline_record_checksum": "sha256:f5941c69982ceb8a96349771fac188ecfcda527d51413bb8b65e2205cfc590e0",
+      "previous_disposition": "APPROVE WITH REVISION",
+      "decision": "APPROVE",
+      "revised_requirement_rereview": "APPROVE",
+      "hold_disposition": null,
+      "reason": "A description names a responsible person or organization, not verified legal title. Multiple named parties are allowed; this obligation requires a named responsible party, not an ownership census. The text asks for a name, not a newly issued organization identifier.",
+      "clarification": "A description names a responsible person or organization, not verified legal title. Multiple named parties are allowed; this obligation requires a named responsible party, not an ownership census. The text asks for a name, not a newly issued organization identifier.",
+      "verification_notes": "Inspect a system identifier and named responsible party; do not infer legal ownership, Registry issuance or identity authentication.",
+      "future_issue_category": null,
+      "criteria": {
+        "precision": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; A description names a responsible person or organization, not verified legal title. Multiple named parties are allowed; this obligation requires a named responsible party, not an ownership census. The text asks for a name, not a newly issued organization identifier."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The provider making the version/scope declaration is the explicit actor."
+        },
+        "applicability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; A description names a responsible person or organization, not verified legal title. Multiple named parties are allowed; this obligation requires a named responsible party, not an ownership census. The text asks for a name, not a newly issued organization identifier."
+        },
+        "inspectability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; A description names a responsible person or organization, not verified legal title. Multiple named parties are allowed; this obligation requires a named responsible party, not an ownership census. The text asks for a name, not a newly issued organization identifier."
+        },
+        "duplication": {
+          "result": "acceptable",
+          "reason": "The primary obligation has distinct information content; deferred overlaps are excluded."
+        },
+        "breadth": {
+          "result": "acceptable",
+          "reason": "Only the identified version and operating context are covered; no universal operational guarantee."
+        },
+        "narrowness": {
+          "result": "acceptable",
+          "reason": "The set deliberately forms an eight-domain information baseline, not a complete execution/safety standard."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Standards description/schema authority only; Registry records and Trust Bureau judgments stay separate."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "Every declaration/evaluation boundary remains NOT_EVALUATED; no certification scheme."
+        },
+        "baseline_suitability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; A description names a responsible person or organization, not verified legal title. Multiple named parties are allowed; this obligation requires a named responsible party, not an ownership census. The text asks for a name, not a newly issued organization identifier."
+        }
+      }
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0002",
+      "domain_id": "OAS-1-D01",
+      "baseline_record_checksum": "sha256:8b45b79816dfd80f385db0a742d0d2bf113a27487046e9ee7d0ffab420cb8033",
+      "previous_disposition": "HOLD",
+      "decision": "APPROVE",
+      "revised_requirement_rereview": null,
+      "hold_disposition": "MOVE TO APPROVE",
+      "reason": "A source artifact reference identifies the declared system version directly or through an origin record that identifies that version. A composite/hosted system can reference a version-specific manifest or origin record; a generic homepage that cannot identify the described version does not meet the existing identification obligation.",
+      "clarification": "A source artifact reference identifies the declared system version directly or through an origin record that identifies that version. A composite/hosted system can reference a version-specific manifest or origin record; a generic homepage that cannot identify the described version does not meet the existing identification obligation.",
+      "verification_notes": "Inspect whether the cited artifact/origin record identifies the declared version; authenticity is separate from reference resolution.",
+      "future_issue_category": null,
+      "criteria": {
+        "precision": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; A source artifact reference identifies the declared system version directly or through an origin record that identifies that version. A composite/hosted system can reference a version-specific manifest or origin record; a generic homepage that cannot identify the described version does not meet the existing identification obligation."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The provider making the version/scope declaration is the explicit actor."
+        },
+        "applicability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; A source artifact reference identifies the declared system version directly or through an origin record that identifies that version. A composite/hosted system can reference a version-specific manifest or origin record; a generic homepage that cannot identify the described version does not meet the existing identification obligation."
+        },
+        "inspectability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; A source artifact reference identifies the declared system version directly or through an origin record that identifies that version. A composite/hosted system can reference a version-specific manifest or origin record; a generic homepage that cannot identify the described version does not meet the existing identification obligation."
+        },
+        "duplication": {
+          "result": "acceptable",
+          "reason": "The primary obligation has distinct information content; deferred overlaps are excluded."
+        },
+        "breadth": {
+          "result": "acceptable",
+          "reason": "Only the identified version and operating context are covered; no universal operational guarantee."
+        },
+        "narrowness": {
+          "result": "acceptable",
+          "reason": "The set deliberately forms an eight-domain information baseline, not a complete execution/safety standard."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Standards description/schema authority only; Registry records and Trust Bureau judgments stay separate."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "Every declaration/evaluation boundary remains NOT_EVALUATED; no certification scheme."
+        },
+        "baseline_suitability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; A source artifact reference identifies the declared system version directly or through an origin record that identifies that version. A composite/hosted system can reference a version-specific manifest or origin record; a generic homepage that cannot identify the described version does not meet the existing identification obligation."
+        }
+      }
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0003",
+      "domain_id": "OAS-1-D02",
+      "baseline_record_checksum": "sha256:c7a8bcb9376a619fdf06dfee7b0248bcae7f24e9300489343dff079fafed7d49",
+      "previous_disposition": "APPROVE",
+      "decision": "APPROVE",
+      "revised_requirement_rereview": null,
+      "hold_disposition": null,
+      "reason": "The existing statement is precise within the version-pinned description/declaration baseline; no normative wording change is needed.",
+      "clarification": "The existing statement is precise within the version-pinned description/declaration baseline; no normative wording change is needed.",
+      "verification_notes": "Inspect for explicit goals and use cases; a purpose statement does not prove aligned behavior.",
+      "future_issue_category": null,
+      "criteria": {
+        "precision": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; The existing statement is precise within the version-pinned description/declaration baseline; no normative wording change is needed."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The provider making the version/scope declaration is the explicit actor."
+        },
+        "applicability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; The existing statement is precise within the version-pinned description/declaration baseline; no normative wording change is needed."
+        },
+        "inspectability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; The existing statement is precise within the version-pinned description/declaration baseline; no normative wording change is needed."
+        },
+        "duplication": {
+          "result": "acceptable",
+          "reason": "The primary obligation has distinct information content; deferred overlaps are excluded."
+        },
+        "breadth": {
+          "result": "acceptable",
+          "reason": "Only the identified version and operating context are covered; no universal operational guarantee."
+        },
+        "narrowness": {
+          "result": "acceptable",
+          "reason": "The set deliberately forms an eight-domain information baseline, not a complete execution/safety standard."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Standards description/schema authority only; Registry records and Trust Bureau judgments stay separate."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "Every declaration/evaluation boundary remains NOT_EVALUATED; no certification scheme."
+        },
+        "baseline_suitability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; The existing statement is precise within the version-pinned description/declaration baseline; no normative wording change is needed."
+        }
+      }
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0004",
+      "domain_id": "OAS-1-D02",
+      "baseline_record_checksum": "sha256:1f88fba4b3e21951a84d47b699d5ad3c8d9e92c5c4ccb5e1a183b3c96fff98d1",
+      "previous_disposition": "APPROVE",
+      "decision": "APPROVE",
+      "revised_requirement_rereview": null,
+      "hold_disposition": null,
+      "reason": "The existing statement is precise within the version-pinned description/declaration baseline; no normative wording change is needed.",
+      "clarification": "The existing statement is precise within the version-pinned description/declaration baseline; no normative wording change is needed.",
+      "verification_notes": "Inspect for both permitted scope and exclusions; documentation is not enforcement.",
+      "future_issue_category": null,
+      "criteria": {
+        "precision": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; The existing statement is precise within the version-pinned description/declaration baseline; no normative wording change is needed."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The provider making the version/scope declaration is the explicit actor."
+        },
+        "applicability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; The existing statement is precise within the version-pinned description/declaration baseline; no normative wording change is needed."
+        },
+        "inspectability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; The existing statement is precise within the version-pinned description/declaration baseline; no normative wording change is needed."
+        },
+        "duplication": {
+          "result": "acceptable",
+          "reason": "The primary obligation has distinct information content; deferred overlaps are excluded."
+        },
+        "breadth": {
+          "result": "acceptable",
+          "reason": "Only the identified version and operating context are covered; no universal operational guarantee."
+        },
+        "narrowness": {
+          "result": "acceptable",
+          "reason": "The set deliberately forms an eight-domain information baseline, not a complete execution/safety standard."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Standards description/schema authority only; Registry records and Trust Bureau judgments stay separate."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "Every declaration/evaluation boundary remains NOT_EVALUATED; no certification scheme."
+        },
+        "baseline_suitability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; The existing statement is precise within the version-pinned description/declaration baseline; no normative wording change is needed."
+        }
+      }
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0005",
+      "domain_id": "OAS-1-D02",
+      "baseline_record_checksum": "sha256:f17fc5ef20f5a2fe8b8f5022bfd12dab87b985e04d4a45f81536ce5e4bc9c9e7",
+      "previous_disposition": "APPROVE WITH REVISION",
+      "decision": "APPROVE",
+      "revised_requirement_rereview": "APPROVE",
+      "hold_disposition": null,
+      "reason": "The grammatical revision preserves all four change triggers. This baseline requires a review record when those scoped attributes change; it introduces no arbitrary review interval or risk classifier.",
+      "clarification": "The grammatical revision preserves all four change triggers. This baseline requires a review record when those scoped attributes change; it introduces no arbitrary review interval or risk classifier.",
+      "verification_notes": "For a sampled scoped change, inspect the linked purpose/boundary review record.",
+      "future_issue_category": null,
+      "criteria": {
+        "precision": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; The grammatical revision preserves all four change triggers. This baseline requires a review record when those scoped attributes change; it introduces no arbitrary review interval or risk classifier."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The provider making the version/scope declaration is the explicit actor."
+        },
+        "applicability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; The grammatical revision preserves all four change triggers. This baseline requires a review record when those scoped attributes change; it introduces no arbitrary review interval or risk classifier."
+        },
+        "inspectability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; The grammatical revision preserves all four change triggers. This baseline requires a review record when those scoped attributes change; it introduces no arbitrary review interval or risk classifier."
+        },
+        "duplication": {
+          "result": "acceptable",
+          "reason": "The primary obligation has distinct information content; deferred overlaps are excluded."
+        },
+        "breadth": {
+          "result": "acceptable",
+          "reason": "Only the identified version and operating context are covered; no universal operational guarantee."
+        },
+        "narrowness": {
+          "result": "acceptable",
+          "reason": "The set deliberately forms an eight-domain information baseline, not a complete execution/safety standard."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Standards description/schema authority only; Registry records and Trust Bureau judgments stay separate."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "Every declaration/evaluation boundary remains NOT_EVALUATED; no certification scheme."
+        },
+        "baseline_suitability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; The grammatical revision preserves all four change triggers. This baseline requires a review record when those scoped attributes change; it introduces no arbitrary review interval or risk classifier."
+        }
+      }
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0006",
+      "domain_id": "OAS-1-D03",
+      "baseline_record_checksum": "sha256:5c195af599d0dfca55d2c7a4f00beebaabe84b185d07b365520460589fcf1f60",
+      "previous_disposition": "APPROVE",
+      "decision": "APPROVE",
+      "revised_requirement_rereview": null,
+      "hold_disposition": null,
+      "reason": "Capabilities means the functions made available by the identified system version in the declared operating scope at the declaration snapshot. It is not a list of merely observed successful actions. Dynamic capability access can be identified through a version-pinned permitted-function manifest; unknown completeness must not be declared satisfied.",
+      "clarification": "Capabilities means the functions made available by the identified system version in the declared operating scope at the declaration snapshot. It is not a list of merely observed successful actions. Dynamic capability access can be identified through a version-pinned permitted-function manifest; unknown completeness must not be declared satisfied.",
+      "verification_notes": "Compare declared functions with scoped version/interface or capability-manifest evidence; declaration validity does not prove runtime completeness.",
+      "future_issue_category": null,
+      "criteria": {
+        "precision": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; Capabilities means the functions made available by the identified system version in the declared operating scope at the declaration snapshot. It is not a list of merely observed successful actions. Dynamic capability access can be identified through a version-pinned permitted-function manifest; unknown completeness must not be declared satisfied."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The provider making the version/scope declaration is the explicit actor."
+        },
+        "applicability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; Capabilities means the functions made available by the identified system version in the declared operating scope at the declaration snapshot. It is not a list of merely observed successful actions. Dynamic capability access can be identified through a version-pinned permitted-function manifest; unknown completeness must not be declared satisfied."
+        },
+        "inspectability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; Capabilities means the functions made available by the identified system version in the declared operating scope at the declaration snapshot. It is not a list of merely observed successful actions. Dynamic capability access can be identified through a version-pinned permitted-function manifest; unknown completeness must not be declared satisfied."
+        },
+        "duplication": {
+          "result": "acceptable",
+          "reason": "The primary obligation has distinct information content; deferred overlaps are excluded."
+        },
+        "breadth": {
+          "result": "acceptable",
+          "reason": "Only the identified version and operating context are covered; no universal operational guarantee."
+        },
+        "narrowness": {
+          "result": "acceptable",
+          "reason": "The set deliberately forms an eight-domain information baseline, not a complete execution/safety standard."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Standards description/schema authority only; Registry records and Trust Bureau judgments stay separate."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "Every declaration/evaluation boundary remains NOT_EVALUATED; no certification scheme."
+        },
+        "baseline_suitability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; Capabilities means the functions made available by the identified system version in the declared operating scope at the declaration snapshot. It is not a list of merely observed successful actions. Dynamic capability access can be identified through a version-pinned permitted-function manifest; unknown completeness must not be declared satisfied."
+        }
+      }
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0007",
+      "domain_id": "OAS-1-D03",
+      "baseline_record_checksum": "sha256:3feca25b10c6bab15f79c86e143dbb1891c9bb52157f3fe9e9f9c3899b0d0ac3",
+      "previous_disposition": "HOLD",
+      "decision": "APPROVE",
+      "revised_requirement_rereview": null,
+      "hold_disposition": "MOVE TO APPROVE",
+      "reason": "Resources means the declared version's required execution resources and external tool/system dependencies within the stated operating scope, not an unbounded supply-chain census. The obligation concerns used dependencies; merely accessible but unused tools remain covered by capability/permission descriptions. Dynamic dependencies can be identified by a version-specific dependency/selector manifest.",
+      "clarification": "Resources means the declared version's required execution resources and external tool/system dependencies within the stated operating scope, not an unbounded supply-chain census. The obligation concerns used dependencies; merely accessible but unused tools remain covered by capability/permission descriptions. Dynamic dependencies can be identified by a version-specific dependency/selector manifest.",
+      "verification_notes": "Inspect the scoped dependency/resource inventory and version-specific references; an unresolved dependency set is unknown, not silently complete.",
+      "future_issue_category": null,
+      "criteria": {
+        "precision": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; Resources means the declared version's required execution resources and external tool/system dependencies within the stated operating scope, not an unbounded supply-chain census. The obligation concerns used dependencies; merely accessible but unused tools remain covered by capability/permission descriptions. Dynamic dependencies can be identified by a version-specific dependency/selector manifest."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The provider making the version/scope declaration is the explicit actor."
+        },
+        "applicability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; Resources means the declared version's required execution resources and external tool/system dependencies within the stated operating scope, not an unbounded supply-chain census. The obligation concerns used dependencies; merely accessible but unused tools remain covered by capability/permission descriptions. Dynamic dependencies can be identified by a version-specific dependency/selector manifest."
+        },
+        "inspectability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; Resources means the declared version's required execution resources and external tool/system dependencies within the stated operating scope, not an unbounded supply-chain census. The obligation concerns used dependencies; merely accessible but unused tools remain covered by capability/permission descriptions. Dynamic dependencies can be identified by a version-specific dependency/selector manifest."
+        },
+        "duplication": {
+          "result": "acceptable",
+          "reason": "The primary obligation has distinct information content; deferred overlaps are excluded."
+        },
+        "breadth": {
+          "result": "acceptable",
+          "reason": "Only the identified version and operating context are covered; no universal operational guarantee."
+        },
+        "narrowness": {
+          "result": "acceptable",
+          "reason": "The set deliberately forms an eight-domain information baseline, not a complete execution/safety standard."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Standards description/schema authority only; Registry records and Trust Bureau judgments stay separate."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "Every declaration/evaluation boundary remains NOT_EVALUATED; no certification scheme."
+        },
+        "baseline_suitability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; Resources means the declared version's required execution resources and external tool/system dependencies within the stated operating scope, not an unbounded supply-chain census. The obligation concerns used dependencies; merely accessible but unused tools remain covered by capability/permission descriptions. Dynamic dependencies can be identified by a version-specific dependency/selector manifest."
+        }
+      }
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0008",
+      "domain_id": "OAS-1-D04",
+      "baseline_record_checksum": "sha256:e3562e2b6d66f1d334aea1ee7de454937e4512bf261251670fc714e3391a0224",
+      "previous_disposition": "APPROVE",
+      "decision": "APPROVE",
+      "revised_requirement_rereview": null,
+      "hold_disposition": null,
+      "reason": "Permissions describe the access/actions authorized within the declared snapshot scope. The provider identifies the applicable policy/configuration; the declaration does not grant authorization or imply Registry permission. Changes require a newly pinned declaration or withdrawal; runtime enforcement is outside this information baseline.",
+      "clarification": "Permissions describe the access/actions authorized within the declared snapshot scope. The provider identifies the applicable policy/configuration; the declaration does not grant authorization or imply Registry permission. Changes require a newly pinned declaration or withdrawal; runtime enforcement is outside this information baseline.",
+      "verification_notes": "Inspect the scoped data/system/action permission list against its policy/configuration references.",
+      "future_issue_category": null,
+      "criteria": {
+        "precision": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; Permissions describe the access/actions authorized within the declared snapshot scope. The provider identifies the applicable policy/configuration; the declaration does not grant authorization or imply Registry permission. Changes require a newly pinned declaration or withdrawal; runtime enforcement is outside this information baseline."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The provider making the version/scope declaration is the explicit actor."
+        },
+        "applicability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; Permissions describe the access/actions authorized within the declared snapshot scope. The provider identifies the applicable policy/configuration; the declaration does not grant authorization or imply Registry permission. Changes require a newly pinned declaration or withdrawal; runtime enforcement is outside this information baseline."
+        },
+        "inspectability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; Permissions describe the access/actions authorized within the declared snapshot scope. The provider identifies the applicable policy/configuration; the declaration does not grant authorization or imply Registry permission. Changes require a newly pinned declaration or withdrawal; runtime enforcement is outside this information baseline."
+        },
+        "duplication": {
+          "result": "acceptable",
+          "reason": "The primary obligation has distinct information content; deferred overlaps are excluded."
+        },
+        "breadth": {
+          "result": "acceptable",
+          "reason": "Only the identified version and operating context are covered; no universal operational guarantee."
+        },
+        "narrowness": {
+          "result": "acceptable",
+          "reason": "The set deliberately forms an eight-domain information baseline, not a complete execution/safety standard."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Standards description/schema authority only; Registry records and Trust Bureau judgments stay separate."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "Every declaration/evaluation boundary remains NOT_EVALUATED; no certification scheme."
+        },
+        "baseline_suitability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; Permissions describe the access/actions authorized within the declared snapshot scope. The provider identifies the applicable policy/configuration; the declaration does not grant authorization or imply Registry permission. Changes require a newly pinned declaration or withdrawal; runtime enforcement is outside this information baseline."
+        }
+      }
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0009",
+      "domain_id": "OAS-1-D04",
+      "baseline_record_checksum": "sha256:4e160e2913162688f8373911a3ee245080cd259f82466cb19ffb4c89d53bc3f4",
+      "previous_disposition": "APPROVE",
+      "decision": "APPROVE",
+      "revised_requirement_rereview": null,
+      "hold_disposition": null,
+      "reason": "Each documented permission is linked to the mechanism the provider identifies as authorizing it. Presence of a mechanism reference is not an access-control efficacy test.",
+      "clarification": "Each documented permission is linked to the mechanism the provider identifies as authorizing it. Presence of a mechanism reference is not an access-control efficacy test.",
+      "verification_notes": "Inspect permission-to-mechanism references; evaluate efficacy separately if an evaluator is later authorized.",
+      "future_issue_category": null,
+      "criteria": {
+        "precision": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; Each documented permission is linked to the mechanism the provider identifies as authorizing it. Presence of a mechanism reference is not an access-control efficacy test."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The provider making the version/scope declaration is the explicit actor."
+        },
+        "applicability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; Each documented permission is linked to the mechanism the provider identifies as authorizing it. Presence of a mechanism reference is not an access-control efficacy test."
+        },
+        "inspectability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; Each documented permission is linked to the mechanism the provider identifies as authorizing it. Presence of a mechanism reference is not an access-control efficacy test."
+        },
+        "duplication": {
+          "result": "acceptable",
+          "reason": "The primary obligation has distinct information content; deferred overlaps are excluded."
+        },
+        "breadth": {
+          "result": "acceptable",
+          "reason": "Only the identified version and operating context are covered; no universal operational guarantee."
+        },
+        "narrowness": {
+          "result": "acceptable",
+          "reason": "The set deliberately forms an eight-domain information baseline, not a complete execution/safety standard."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Standards description/schema authority only; Registry records and Trust Bureau judgments stay separate."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "Every declaration/evaluation boundary remains NOT_EVALUATED; no certification scheme."
+        },
+        "baseline_suitability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; Each documented permission is linked to the mechanism the provider identifies as authorizing it. Presence of a mechanism reference is not an access-control efficacy test."
+        }
+      }
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0010",
+      "domain_id": "OAS-1-D05",
+      "baseline_record_checksum": "sha256:f0654dddbaad018753bc42b32a1585b6b749ca9d563c1aed26d839e5aa6d288a",
+      "previous_disposition": "HOLD",
+      "decision": "APPROVE",
+      "revised_requirement_rereview": null,
+      "hold_disposition": "MOVE TO APPROVE",
+      "reason": "The prohibition set is attributed to the provider's applicable policy for this version/scope; OAS does not invent a universal legal or safety blacklist. An explicit empty list describes the provider's policy claim and is not a safety finding. A missing or unknown prohibition set is not a satisfied declaration. This is safety-constraint disclosure, distinct from the general operating exclusions in 0004.",
+      "clarification": "The prohibition set is attributed to the provider's applicable policy for this version/scope; OAS does not invent a universal legal or safety blacklist. An explicit empty list describes the provider's policy claim and is not a safety finding. A missing or unknown prohibition set is not a satisfied declaration. This is safety-constraint disclosure, distinct from the general operating exclusions in 0004.",
+      "verification_notes": "Inspect an explicit policy-attributed prohibition list, including explicit empty sets where claimed; do not treat the list as safe deployment approval.",
+      "future_issue_category": null,
+      "criteria": {
+        "precision": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; The prohibition set is attributed to the provider's applicable policy for this version/scope; OAS does not invent a universal legal or safety blacklist. An explicit empty list describes the provider's policy claim and is not a safety finding. A missing or unknown prohibition set is not a satisfied declaration. This is safety-constraint disclosure, distinct from the general operating exclusions in 0004."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The provider making the version/scope declaration is the explicit actor."
+        },
+        "applicability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; The prohibition set is attributed to the provider's applicable policy for this version/scope; OAS does not invent a universal legal or safety blacklist. An explicit empty list describes the provider's policy claim and is not a safety finding. A missing or unknown prohibition set is not a satisfied declaration. This is safety-constraint disclosure, distinct from the general operating exclusions in 0004."
+        },
+        "inspectability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; The prohibition set is attributed to the provider's applicable policy for this version/scope; OAS does not invent a universal legal or safety blacklist. An explicit empty list describes the provider's policy claim and is not a safety finding. A missing or unknown prohibition set is not a satisfied declaration. This is safety-constraint disclosure, distinct from the general operating exclusions in 0004."
+        },
+        "duplication": {
+          "result": "acceptable",
+          "reason": "The primary obligation has distinct information content; deferred overlaps are excluded."
+        },
+        "breadth": {
+          "result": "acceptable",
+          "reason": "Only the identified version and operating context are covered; no universal operational guarantee."
+        },
+        "narrowness": {
+          "result": "acceptable",
+          "reason": "The set deliberately forms an eight-domain information baseline, not a complete execution/safety standard."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Standards description/schema authority only; Registry records and Trust Bureau judgments stay separate."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "Every declaration/evaluation boundary remains NOT_EVALUATED; no certification scheme."
+        },
+        "baseline_suitability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; The prohibition set is attributed to the provider's applicable policy for this version/scope; OAS does not invent a universal legal or safety blacklist. An explicit empty list describes the provider's policy claim and is not a safety finding. A missing or unknown prohibition set is not a satisfied declaration. This is safety-constraint disclosure, distinct from the general operating exclusions in 0004."
+        }
+      }
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0011",
+      "domain_id": "OAS-1-D05",
+      "baseline_record_checksum": "sha256:5e1c538576d5f43be70d8dde970ff791c89c4117cccc487442bb69f6e33ec791",
+      "previous_disposition": "HOLD",
+      "decision": "REMAIN DEFERRED FOR POST-1.0",
+      "revised_requirement_rereview": null,
+      "hold_disposition": "REMAIN DEFERRED FOR POST-1.0",
+      "reason": "Control-to-prohibition effectiveness and partial/unavailable-control disclosure needs a separate control model. Constraint disclosure is already covered by 0010; actual prevention/effectiveness is not necessary to an information baseline.",
+      "clarification": "Control-to-prohibition effectiveness and partial/unavailable-control disclosure needs a separate control model. Constraint disclosure is already covered by 0010; actual prevention/effectiveness is not necessary to an information baseline.",
+      "verification_notes": "Inspect prohibition-to-control links; prevention effectiveness requires independent evaluation.",
+      "future_issue_category": "operational control coverage and effectiveness",
+      "criteria": {
+        "precision": {
+          "result": "deferred",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; Control-to-prohibition effectiveness and partial/unavailable-control disclosure needs a separate control model. Constraint disclosure is already covered by 0010; actual prevention/effectiveness is not necessary to an information baseline."
+        },
+        "responsible_actor": {
+          "result": "deferred",
+          "reason": "The provider making the version/scope declaration is the explicit actor."
+        },
+        "applicability": {
+          "result": "deferred",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; Control-to-prohibition effectiveness and partial/unavailable-control disclosure needs a separate control model. Constraint disclosure is already covered by 0010; actual prevention/effectiveness is not necessary to an information baseline."
+        },
+        "inspectability": {
+          "result": "deferred",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; Control-to-prohibition effectiveness and partial/unavailable-control disclosure needs a separate control model. Constraint disclosure is already covered by 0010; actual prevention/effectiveness is not necessary to an information baseline."
+        },
+        "duplication": {
+          "result": "deferred",
+          "reason": "The primary obligation has distinct information content; deferred overlaps are excluded."
+        },
+        "breadth": {
+          "result": "deferred",
+          "reason": "Only the identified version and operating context are covered; no universal operational guarantee."
+        },
+        "narrowness": {
+          "result": "deferred",
+          "reason": "The set deliberately forms an eight-domain information baseline, not a complete execution/safety standard."
+        },
+        "oas_authority": {
+          "result": "deferred",
+          "reason": "Standards description/schema authority only; Registry records and Trust Bureau judgments stay separate."
+        },
+        "certification_boundary": {
+          "result": "deferred",
+          "reason": "Every declaration/evaluation boundary remains NOT_EVALUATED; no certification scheme."
+        },
+        "baseline_suitability": {
+          "result": "deferred",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; Control-to-prohibition effectiveness and partial/unavailable-control disclosure needs a separate control model. Constraint disclosure is already covered by 0010; actual prevention/effectiveness is not necessary to an information baseline."
+        }
+      }
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0012",
+      "domain_id": "OAS-1-D06",
+      "baseline_record_checksum": "sha256:8b99e53a50b7ef07b35686bf42d9ba52d22a33b1c38481459d9dd9a9e9475113",
+      "previous_disposition": "HOLD",
+      "decision": "APPROVE",
+      "revised_requirement_rereview": null,
+      "hold_disposition": "MOVE TO APPROVE",
+      "reason": "The word or is disjunctive: this obligation documents the authorized human role and interfaces for the interventions actually documented. It does not assert that every system supports all three interventions. Unsupported stop/override capability must not be advertised as present. Human oversight can be documented through its actual inspection/control interface; latency/effectiveness is outside this baseline.",
+      "clarification": "The word or is disjunctive: this obligation documents the authorized human role and interfaces for the interventions actually documented. It does not assert that every system supports all three interventions. Unsupported stop/override capability must not be advertised as present. Human oversight can be documented through its actual inspection/control interface; latency/effectiveness is outside this baseline.",
+      "verification_notes": "Inspect the named role and interface for every claimed intervention; do not infer universal stop capability or latency guarantees.",
+      "future_issue_category": null,
+      "criteria": {
+        "precision": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; The word or is disjunctive: this obligation documents the authorized human role and interfaces for the interventions actually documented. It does not assert that every system supports all three interventions. Unsupported stop/override capability must not be advertised as present. Human oversight can be documented through its actual inspection/control interface; latency/effectiveness is outside this baseline."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The provider making the version/scope declaration is the explicit actor."
+        },
+        "applicability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; The word or is disjunctive: this obligation documents the authorized human role and interfaces for the interventions actually documented. It does not assert that every system supports all three interventions. Unsupported stop/override capability must not be advertised as present. Human oversight can be documented through its actual inspection/control interface; latency/effectiveness is outside this baseline."
+        },
+        "inspectability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; The word or is disjunctive: this obligation documents the authorized human role and interfaces for the interventions actually documented. It does not assert that every system supports all three interventions. Unsupported stop/override capability must not be advertised as present. Human oversight can be documented through its actual inspection/control interface; latency/effectiveness is outside this baseline."
+        },
+        "duplication": {
+          "result": "acceptable",
+          "reason": "The primary obligation has distinct information content; deferred overlaps are excluded."
+        },
+        "breadth": {
+          "result": "acceptable",
+          "reason": "Only the identified version and operating context are covered; no universal operational guarantee."
+        },
+        "narrowness": {
+          "result": "acceptable",
+          "reason": "The set deliberately forms an eight-domain information baseline, not a complete execution/safety standard."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Standards description/schema authority only; Registry records and Trust Bureau judgments stay separate."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "Every declaration/evaluation boundary remains NOT_EVALUATED; no certification scheme."
+        },
+        "baseline_suitability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; The word or is disjunctive: this obligation documents the authorized human role and interfaces for the interventions actually documented. It does not assert that every system supports all three interventions. Unsupported stop/override capability must not be advertised as present. Human oversight can be documented through its actual inspection/control interface; latency/effectiveness is outside this baseline."
+        }
+      }
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0013",
+      "domain_id": "OAS-1-D06",
+      "baseline_record_checksum": "sha256:c96eb954daeec7bfdecb7dc0fd109be0eb4c9ed91dc9d4e3f8ee1dabdbedfb7d",
+      "previous_disposition": "HOLD",
+      "decision": "REMAIN DEFERRED FOR POST-1.0",
+      "revised_requirement_rereview": null,
+      "hold_disposition": "REMAIN DEFERRED FOR POST-1.0",
+      "reason": "Runtime escalation trigger/destination applicability is a later operational-control issue. The first baseline already records human responsibility/intervention interfaces through 0012; it does not promise response handling.",
+      "clarification": "Runtime escalation trigger/destination applicability is a later operational-control issue. The first baseline already records human responsibility/intervention interfaces through 0012; it does not promise response handling.",
+      "verification_notes": "Inspect trigger-to-destination descriptions; response adequacy is separate from declaration validity.",
+      "future_issue_category": "operational escalation applicability and response",
+      "criteria": {
+        "precision": {
+          "result": "deferred",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; Runtime escalation trigger/destination applicability is a later operational-control issue. The first baseline already records human responsibility/intervention interfaces through 0012; it does not promise response handling."
+        },
+        "responsible_actor": {
+          "result": "deferred",
+          "reason": "The provider making the version/scope declaration is the explicit actor."
+        },
+        "applicability": {
+          "result": "deferred",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; Runtime escalation trigger/destination applicability is a later operational-control issue. The first baseline already records human responsibility/intervention interfaces through 0012; it does not promise response handling."
+        },
+        "inspectability": {
+          "result": "deferred",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; Runtime escalation trigger/destination applicability is a later operational-control issue. The first baseline already records human responsibility/intervention interfaces through 0012; it does not promise response handling."
+        },
+        "duplication": {
+          "result": "deferred",
+          "reason": "The primary obligation has distinct information content; deferred overlaps are excluded."
+        },
+        "breadth": {
+          "result": "deferred",
+          "reason": "Only the identified version and operating context are covered; no universal operational guarantee."
+        },
+        "narrowness": {
+          "result": "deferred",
+          "reason": "The set deliberately forms an eight-domain information baseline, not a complete execution/safety standard."
+        },
+        "oas_authority": {
+          "result": "deferred",
+          "reason": "Standards description/schema authority only; Registry records and Trust Bureau judgments stay separate."
+        },
+        "certification_boundary": {
+          "result": "deferred",
+          "reason": "Every declaration/evaluation boundary remains NOT_EVALUATED; no certification scheme."
+        },
+        "baseline_suitability": {
+          "result": "deferred",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; Runtime escalation trigger/destination applicability is a later operational-control issue. The first baseline already records human responsibility/intervention interfaces through 0012; it does not promise response handling."
+        }
+      }
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0014",
+      "domain_id": "OAS-1-D07",
+      "baseline_record_checksum": "sha256:eef8a364d2266257b0d5873d8b4d23e4405658d460e8fd8ebdfcadcf7287a370",
+      "previous_disposition": "APPROVE",
+      "decision": "APPROVE",
+      "revised_requirement_rereview": null,
+      "hold_disposition": null,
+      "reason": "This is explicitly a documented plan obligation: intended verification methods and monitoring measures, not executed tests, minimum performance or conformance. Plan documentation can support this requirement's declaration; an unexecuted plan cannot be represented as a completed test result.",
+      "clarification": "This is explicitly a documented plan obligation: intended verification methods and monitoring measures, not executed tests, minimum performance or conformance. Plan documentation can support this requirement's declaration; an unexecuted plan cannot be represented as a completed test result.",
+      "verification_notes": "Inspect named methods/measures and offered plan references; do not calculate PASS/FAIL or trust.",
+      "future_issue_category": null,
+      "criteria": {
+        "precision": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; This is explicitly a documented plan obligation: intended verification methods and monitoring measures, not executed tests, minimum performance or conformance. Plan documentation can support this requirement's declaration; an unexecuted plan cannot be represented as a completed test result."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The provider making the version/scope declaration is the explicit actor."
+        },
+        "applicability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; This is explicitly a documented plan obligation: intended verification methods and monitoring measures, not executed tests, minimum performance or conformance. Plan documentation can support this requirement's declaration; an unexecuted plan cannot be represented as a completed test result."
+        },
+        "inspectability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; This is explicitly a documented plan obligation: intended verification methods and monitoring measures, not executed tests, minimum performance or conformance. Plan documentation can support this requirement's declaration; an unexecuted plan cannot be represented as a completed test result."
+        },
+        "duplication": {
+          "result": "acceptable",
+          "reason": "The primary obligation has distinct information content; deferred overlaps are excluded."
+        },
+        "breadth": {
+          "result": "acceptable",
+          "reason": "Only the identified version and operating context are covered; no universal operational guarantee."
+        },
+        "narrowness": {
+          "result": "acceptable",
+          "reason": "The set deliberately forms an eight-domain information baseline, not a complete execution/safety standard."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Standards description/schema authority only; Registry records and Trust Bureau judgments stay separate."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "Every declaration/evaluation boundary remains NOT_EVALUATED; no certification scheme."
+        },
+        "baseline_suitability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; This is explicitly a documented plan obligation: intended verification methods and monitoring measures, not executed tests, minimum performance or conformance. Plan documentation can support this requirement's declaration; an unexecuted plan cannot be represented as a completed test result."
+        }
+      }
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0015",
+      "domain_id": "OAS-1-D07",
+      "baseline_record_checksum": "sha256:8b484f7d8e5315d0783babb1b65ce2bdf3f85290c14d1296bd7b149e26dd47cf",
+      "previous_disposition": "HOLD",
+      "decision": "REMAIN DEFERRED FOR POST-1.0",
+      "revised_requirement_rereview": null,
+      "hold_disposition": "REMAIN DEFERRED FOR POST-1.0",
+      "reason": "Requirement-to-evidence references are enforced by the declaration contract. A separate normative evidence-typing obligation is deferred until evidence sufficiency/access/retention semantics are governed; 0014 supplies the initial plan baseline.",
+      "clarification": "Requirement-to-evidence references are enforced by the declaration contract. A separate normative evidence-typing obligation is deferred until evidence sufficiency/access/retention semantics are governed; 0014 supplies the initial plan baseline.",
+      "verification_notes": "Inspect requirement-to-evidence-type/reference relationships; presence does not establish conformance or Trust Bureau assessment.",
+      "future_issue_category": "evidence typing, sufficiency and retention",
+      "criteria": {
+        "precision": {
+          "result": "deferred",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; Requirement-to-evidence references are enforced by the declaration contract. A separate normative evidence-typing obligation is deferred until evidence sufficiency/access/retention semantics are governed; 0014 supplies the initial plan baseline."
+        },
+        "responsible_actor": {
+          "result": "deferred",
+          "reason": "The provider making the version/scope declaration is the explicit actor."
+        },
+        "applicability": {
+          "result": "deferred",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; Requirement-to-evidence references are enforced by the declaration contract. A separate normative evidence-typing obligation is deferred until evidence sufficiency/access/retention semantics are governed; 0014 supplies the initial plan baseline."
+        },
+        "inspectability": {
+          "result": "deferred",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; Requirement-to-evidence references are enforced by the declaration contract. A separate normative evidence-typing obligation is deferred until evidence sufficiency/access/retention semantics are governed; 0014 supplies the initial plan baseline."
+        },
+        "duplication": {
+          "result": "deferred",
+          "reason": "The primary obligation has distinct information content; deferred overlaps are excluded."
+        },
+        "breadth": {
+          "result": "deferred",
+          "reason": "Only the identified version and operating context are covered; no universal operational guarantee."
+        },
+        "narrowness": {
+          "result": "deferred",
+          "reason": "The set deliberately forms an eight-domain information baseline, not a complete execution/safety standard."
+        },
+        "oas_authority": {
+          "result": "deferred",
+          "reason": "Standards description/schema authority only; Registry records and Trust Bureau judgments stay separate."
+        },
+        "certification_boundary": {
+          "result": "deferred",
+          "reason": "Every declaration/evaluation boundary remains NOT_EVALUATED; no certification scheme."
+        },
+        "baseline_suitability": {
+          "result": "deferred",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; Requirement-to-evidence references are enforced by the declaration contract. A separate normative evidence-typing obligation is deferred until evidence sufficiency/access/retention semantics are governed; 0014 supplies the initial plan baseline."
+        }
+      }
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0016",
+      "domain_id": "OAS-1-D08",
+      "baseline_record_checksum": "sha256:a7efd09ad1d373dd5b8e5a835c5170b8c0a20a612407ac734cdd0d7e02770e4d",
+      "previous_disposition": "HOLD",
+      "decision": "APPROVE",
+      "revised_requirement_rereview": null,
+      "hold_disposition": "MOVE TO APPROVE",
+      "reason": "The lifecycle state is explicitly provider-defined. Its meaning is inspected in the provider's referenced description/vocabulary, not mapped to Registry lifecycle by matching a label. A bare value without an interpretable provider description cannot substantiate the claimed state. Version/state here describe the subject, not OAS release status.",
+      "clarification": "The lifecycle state is explicitly provider-defined. Its meaning is inspected in the provider's referenced description/vocabulary, not mapped to Registry lifecycle by matching a label. A bare value without an interpretable provider description cannot substantiate the claimed state. Version/state here describe the subject, not OAS release status.",
+      "verification_notes": "Inspect the subject version and provider-defined state in its documented context; no Registry state transition is inferred.",
+      "future_issue_category": null,
+      "criteria": {
+        "precision": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; The lifecycle state is explicitly provider-defined. Its meaning is inspected in the provider's referenced description/vocabulary, not mapped to Registry lifecycle by matching a label. A bare value without an interpretable provider description cannot substantiate the claimed state. Version/state here describe the subject, not OAS release status."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The provider making the version/scope declaration is the explicit actor."
+        },
+        "applicability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; The lifecycle state is explicitly provider-defined. Its meaning is inspected in the provider's referenced description/vocabulary, not mapped to Registry lifecycle by matching a label. A bare value without an interpretable provider description cannot substantiate the claimed state. Version/state here describe the subject, not OAS release status."
+        },
+        "inspectability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; The lifecycle state is explicitly provider-defined. Its meaning is inspected in the provider's referenced description/vocabulary, not mapped to Registry lifecycle by matching a label. A bare value without an interpretable provider description cannot substantiate the claimed state. Version/state here describe the subject, not OAS release status."
+        },
+        "duplication": {
+          "result": "acceptable",
+          "reason": "The primary obligation has distinct information content; deferred overlaps are excluded."
+        },
+        "breadth": {
+          "result": "acceptable",
+          "reason": "Only the identified version and operating context are covered; no universal operational guarantee."
+        },
+        "narrowness": {
+          "result": "acceptable",
+          "reason": "The set deliberately forms an eight-domain information baseline, not a complete execution/safety standard."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Standards description/schema authority only; Registry records and Trust Bureau judgments stay separate."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "Every declaration/evaluation boundary remains NOT_EVALUATED; no certification scheme."
+        },
+        "baseline_suitability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; The lifecycle state is explicitly provider-defined. Its meaning is inspected in the provider's referenced description/vocabulary, not mapped to Registry lifecycle by matching a label. A bare value without an interpretable provider description cannot substantiate the claimed state. Version/state here describe the subject, not OAS release status."
+        }
+      }
+    },
+    {
+      "requirement_id": "OAS-1-REQ-0017",
+      "domain_id": "OAS-1-D08",
+      "baseline_record_checksum": "sha256:6f3339dcad396b7f226b882e752a10bf18162716fbf2fe75e61127b06d4d4521",
+      "previous_disposition": "APPROVE WITH REVISION",
+      "decision": "APPROVE",
+      "revised_requirement_rereview": "APPROVE",
+      "hold_disposition": null,
+      "reason": "The revised sentence records a role responsible for retiring the version and the retirement process. It neither performs retirement nor mandates Registry lifecycle changes, record deletion, retention periods or a universal shutdown interface.",
+      "clarification": "The revised sentence records a role responsible for retiring the version and the retirement process. It neither performs retirement nor mandates Registry lifecycle changes, record deletion, retention periods or a universal shutdown interface.",
+      "verification_notes": "Inspect a responsible role and retirement-process description; evaluate execution separately.",
+      "future_issue_category": null,
+      "criteria": {
+        "precision": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; The revised sentence records a role responsible for retiring the version and the retirement process. It neither performs retirement nor mandates Registry lifecycle changes, record deletion, retention periods or a universal shutdown interface."
+        },
+        "responsible_actor": {
+          "result": "acceptable",
+          "reason": "The provider making the version/scope declaration is the explicit actor."
+        },
+        "applicability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; The revised sentence records a role responsible for retiring the version and the retirement process. It neither performs retirement nor mandates Registry lifecycle changes, record deletion, retention periods or a universal shutdown interface."
+        },
+        "inspectability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; The revised sentence records a role responsible for retiring the version and the retirement process. It neither performs retirement nor mandates Registry lifecycle changes, record deletion, retention periods or a universal shutdown interface."
+        },
+        "duplication": {
+          "result": "acceptable",
+          "reason": "The primary obligation has distinct information content; deferred overlaps are excluded."
+        },
+        "breadth": {
+          "result": "acceptable",
+          "reason": "Only the identified version and operating context are covered; no universal operational guarantee."
+        },
+        "narrowness": {
+          "result": "acceptable",
+          "reason": "The set deliberately forms an eight-domain information baseline, not a complete execution/safety standard."
+        },
+        "oas_authority": {
+          "result": "acceptable",
+          "reason": "Standards description/schema authority only; Registry records and Trust Bureau judgments stay separate."
+        },
+        "certification_boundary": {
+          "result": "acceptable",
+          "reason": "Every declaration/evaluation boundary remains NOT_EVALUATED; no certification scheme."
+        },
+        "baseline_suitability": {
+          "result": "acceptable",
+          "reason": "The scoped information obligation is inspectable without asserting runtime efficacy; The revised sentence records a role responsible for retiring the version and the retirement process. It neither performs retirement nor mandates Registry lifecycle changes, record deletion, retention periods or a universal shutdown interface."
+        }
+      }
+    }
+  ],
+  "blocking_question_resolutions": [
+    {
+      "question_id": "Q01",
+      "disposition": "RESOLVED",
+      "exact_issue": "Approve whether this first set governs provider description records only, or must also specify runtime behavior. All candidates explicitly target description records; no runtime efficacy follows.",
+      "resolution": "Use a universal provider information/declaration baseline for an identified autonomous-system version and explicit operating scope. The obligated actor is the declarant/provider. Runtime outcomes and system authorization are excluded.",
+      "alternatives_considered": "A runtime safety standard would require unsupported control/evaluation criteria; unrestricted overview prose is not inspectable.",
+      "responsible_contract": "scope-and-actor",
+      "affected_requirement_ids": [
+        "OAS-1-REQ-0001",
+        "OAS-1-REQ-0002",
+        "OAS-1-REQ-0003",
+        "OAS-1-REQ-0004",
+        "OAS-1-REQ-0005",
+        "OAS-1-REQ-0006",
+        "OAS-1-REQ-0007",
+        "OAS-1-REQ-0008",
+        "OAS-1-REQ-0009",
+        "OAS-1-REQ-0010",
+        "OAS-1-REQ-0011",
+        "OAS-1-REQ-0012",
+        "OAS-1-REQ-0013",
+        "OAS-1-REQ-0014",
+        "OAS-1-REQ-0015",
+        "OAS-1-REQ-0016",
+        "OAS-1-REQ-0017"
+      ]
+    },
+    {
+      "question_id": "Q05",
+      "disposition": "RESOLVED",
+      "exact_issue": "Approve scope boundaries, dynamically discovered tools, permission exceptions and whether runtime denial behavior belongs in release 1.",
+      "resolution": "Inventory the available scoped functions, used dependencies, authorized permissions and their mechanism references at the declaration snapshot. Dynamic sets are represented by version-specific manifests/selectors; unknown completeness is declared unknown, never satisfied. Descriptions do not prove enforcement.",
+      "alternatives_considered": "Sampling only observed successful actions omits capability scope; requiring an unbounded supply-chain census exceeds the source obligations.",
+      "responsible_contract": "snapshot-inventory-semantics",
+      "affected_requirement_ids": [
+        "OAS-1-REQ-0006",
+        "OAS-1-REQ-0007",
+        "OAS-1-REQ-0008",
+        "OAS-1-REQ-0009"
+      ]
+    },
+    {
+      "question_id": "Q08",
+      "disposition": "RESOLVED",
+      "exact_issue": "Review minimum test methods, evidence accessibility, privacy, retention and whether evidence plans alone suffice. No completeness or conformance follows from evidence presence.",
+      "resolution": "Requirement 0014 requires a plan, not a passing execution result. The versioned declaration contract supplies exact requirement/evidence linkage and explicit applicability/assertion states; 0015 is deferred rather than duplicating that contract. Evidence presence remains NOT_EVALUATED.",
+      "alternatives_considered": "Automatic evidence scoring or independent-review claims lack a governed evaluator; public disclosure of private evidence is not required.",
+      "responsible_contract": "evidence-and-declaration-contract",
+      "affected_requirement_ids": [
+        "OAS-1-REQ-0014",
+        "OAS-1-REQ-0015"
+      ]
+    },
+    {
+      "question_id": "Q10",
+      "disposition": "REMAINS BLOCKING",
+      "exact_issue": "OAS must identify its authorized adopter, decision procedure/quorum and approval record. None is established by repository code.",
+      "resolution": "Establish transparent FOUNDING GOVERNANCE: founding maintainer role, delegated author/reviewer roles, exact-snapshot acceptance/issuance record, separate final adoption and publisher actions, and a multi-party migration process. No person or board is invented. A real maintainer must still accept this exact snapshot before RC issuance. The procedural mechanism is closed, but role occupancy and exact-snapshot acceptance are still absent; Q10 remains blocking for issuance until that real record exists.",
+      "alternatives_considered": "External consensus is unsupported; agent self-appointment or treating a technical green check as institutional acceptance would manufacture authority.",
+      "responsible_contract": "founding-governance-mechanism",
+      "affected_requirement_ids": [
+        "OAS-1-REQ-0001",
+        "OAS-1-REQ-0002",
+        "OAS-1-REQ-0003",
+        "OAS-1-REQ-0004",
+        "OAS-1-REQ-0005",
+        "OAS-1-REQ-0006",
+        "OAS-1-REQ-0007",
+        "OAS-1-REQ-0008",
+        "OAS-1-REQ-0009",
+        "OAS-1-REQ-0010",
+        "OAS-1-REQ-0011",
+        "OAS-1-REQ-0012",
+        "OAS-1-REQ-0013",
+        "OAS-1-REQ-0014",
+        "OAS-1-REQ-0015",
+        "OAS-1-REQ-0016",
+        "OAS-1-REQ-0017"
+      ]
+    },
+    {
+      "question_id": "Q11",
+      "disposition": "RESOLVED",
+      "exact_issue": "Review every ambiguous reporting label and approve migration disposition before canonical report adoption.",
+      "resolution": "Quarantine all seven labels without defensible equivalence. Quarantine is a terminal namespace-specific migration exclusion: no automatic canonical projection, ordinal mapping or normalization. Preserve the existing Human Oversight lexical alias to D06.",
+      "alternatives_considered": "Forced one-to-one or ordinal mapping changes meaning; unresolved live aliases would allow silent contamination.",
+      "responsible_contract": "terminal-legacy-quarantine",
+      "affected_requirement_ids": [
+        "OAS-1-REQ-0001",
+        "OAS-1-REQ-0002",
+        "OAS-1-REQ-0003",
+        "OAS-1-REQ-0004",
+        "OAS-1-REQ-0005",
+        "OAS-1-REQ-0006",
+        "OAS-1-REQ-0007",
+        "OAS-1-REQ-0008",
+        "OAS-1-REQ-0009",
+        "OAS-1-REQ-0010",
+        "OAS-1-REQ-0011",
+        "OAS-1-REQ-0012",
+        "OAS-1-REQ-0013",
+        "OAS-1-REQ-0014",
+        "OAS-1-REQ-0015",
+        "OAS-1-REQ-0016",
+        "OAS-1-REQ-0017"
+      ]
+    },
+    {
+      "question_id": "Q12",
+      "disposition": "RESOLVED",
+      "exact_issue": "Decide whether these traceable description obligations constitute a useful complete first standard; no claim of complete autonomous-system governance is made.",
+      "resolution": "Define OAS 1.0 as a coherent eight-domain description and declaration baseline. Include 14 information obligations and defer three operational/evidence-model extensions. Coverage follows required concepts rather than counts. No claim of complete autonomous execution governance.",
+      "alternatives_considered": "A four-domain six-item subset leaves accountability/constraint gaps; including every held operational requirement would pretend unresolved efficacy semantics are solved.",
+      "responsible_contract": "eight-domain-information-baseline",
+      "affected_requirement_ids": [
+        "OAS-1-REQ-0001",
+        "OAS-1-REQ-0002",
+        "OAS-1-REQ-0003",
+        "OAS-1-REQ-0004",
+        "OAS-1-REQ-0005",
+        "OAS-1-REQ-0006",
+        "OAS-1-REQ-0007",
+        "OAS-1-REQ-0008",
+        "OAS-1-REQ-0009",
+        "OAS-1-REQ-0010",
+        "OAS-1-REQ-0011",
+        "OAS-1-REQ-0012",
+        "OAS-1-REQ-0013",
+        "OAS-1-REQ-0014",
+        "OAS-1-REQ-0015",
+        "OAS-1-REQ-0016",
+        "OAS-1-REQ-0017"
+      ]
+    }
+  ],
+  "founding_acceptance": null,
+  "rc_issued": false,
+  "rc_release_id": null,
+  "rc_requirement_ids": [],
+  "final_release_id": null,
+  "evaluation_status": "NOT_EVALUATED",
+  "prior_deferred_question_dispositions": [
+    {
+      "question_id": "Q02",
+      "disposition": "DEFERRED WITHOUT BLOCKING RC",
+      "resolution": "R0–R4 remains informative; no included obligation has risk-conditioned applicability."
+    },
+    {
+      "question_id": "Q03",
+      "disposition": "RESOLVED",
+      "resolution": "The baseline names a responsible party, not verified legal ownership. Additional named parties are allowed; organization name satisfies this description obligation without inventing an organization identity scheme."
+    },
+    {
+      "question_id": "Q04",
+      "disposition": "RESOLVED",
+      "resolution": "A provenance reference must identify the declared version directly or through a version-specific manifest/origin record; no full supply-chain attestation is claimed."
+    },
+    {
+      "question_id": "Q06",
+      "disposition": "RESOLVED",
+      "resolution": "The provider identifies its applicable prohibition policy; explicit empty lists are disclosed policy claims, not safety approval. Control efficacy remains deferred under 0011."
+    },
+    {
+      "question_id": "Q07",
+      "disposition": "RESOLVED",
+      "resolution": "0012 documents the human role/interfaces actually claimed; it does not mandate all intervention kinds or latency guarantees. Operational escalation 0013 is deferred."
+    },
+    {
+      "question_id": "Q09",
+      "disposition": "RESOLVED",
+      "resolution": "Provider-defined lifecycle meaning is interpreted in its referenced documentation, separate from Registry lifecycle. Version/state and retirement responsibility are described; retention/execution rules are deferred."
+    }
+  ]
+}

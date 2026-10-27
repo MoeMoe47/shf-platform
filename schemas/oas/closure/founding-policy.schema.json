@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oas:schema:closure:founding-policy:1",
+  "type": "object",
+  "properties": {
+    "policy_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "model": {
+      "type": "string",
+      "minLength": 1
+    },
+    "establishment_basis": {
+      "type": "string",
+      "minLength": 1
+    },
+    "founding_maintainer_role": {
+      "type": "string",
+      "minLength": 1
+    },
+    "identified_maintainer_reference": {
+      "type": "null"
+    },
+    "authoring_authority": {
+      "type": "string",
+      "minLength": 1
+    },
+    "review_authority": {
+      "type": "string",
+      "minLength": 1
+    },
+    "rc_authority": {
+      "type": "string",
+      "minLength": 1
+    },
+    "adoption_authority": {
+      "type": "string",
+      "minLength": 1
+    },
+    "publication_authority": {
+      "type": "string",
+      "minLength": 1
+    },
+    "acceptance_record_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "external_consensus_claim": {
+      "const": false
+    },
+    "multi_party_migration": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "policy_version",
+    "model",
+    "establishment_basis",
+    "founding_maintainer_role",
+    "identified_maintainer_reference",
+    "authoring_authority",
+    "review_authority",
+    "rc_authority",
+    "adoption_authority",
+    "publication_authority",
+    "acceptance_record_path",
+    "external_consensus_claim",
+    "multi_party_migration"
+  ],
+  "additionalProperties": false
+}

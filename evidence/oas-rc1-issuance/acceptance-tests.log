@@ -1,5 +1,4 @@
 $ npm run oas:rc1:test
-
 > oas:rc1:test
 > node --test tests/oasRc1Acceptance.test.mjs
 
@@ -7,55 +6,55 @@ TAP version 13
 # Subtest: original bindings remain exact and prepared source commits every intended artifact
 ok 1 - original bindings remain exact and prepared source commits every intended artifact
   ---
-  duration_ms: 492.352929
+  duration_ms: 1305.983597
   type: 'test'
   ...
 # Subtest: exact fourteen IDs and all eight domains are independently fixed
 ok 2 - exact fourteen IDs and all eight domains are independently fixed
   ---
-  duration_ms: 0.612085
+  duration_ms: 1.228127
   type: 'test'
   ...
 # Subtest: wrong revision, changed digest or altered membership cannot silently regenerate bindings
 ok 3 - wrong revision, changed digest or altered membership cannot silently regenerate bindings
   ---
-  duration_ms: 143.266128
+  duration_ms: 414.434153
   type: 'test'
   ...
 # Subtest: canonical record remains pending and no identity, timestamp or approval is fabricated
 ok 4 - canonical record remains pending and no identity, timestamp or approval is fabricated
   ---
-  duration_ms: 95.224531
+  duration_ms: 247.038804
   type: 'test'
   ...
 # Subtest: synthetic positive acceptance validates structure without claiming real authority or consent
 ok 5 - synthetic positive acceptance validates structure without claiming real authority or consent
   ---
-  duration_ms: 1.889472
+  duration_ms: 2.388565
   type: 'test'
   ...
 # Subtest: acceptance validation rejects stale source, wrong scope/digests, blanks and final-adoption claims
 ok 6 - acceptance validation rejects stale source, wrong scope/digests, blanks and final-adoption claims
   ---
-  duration_ms: 4.688442
+  duration_ms: 5.376663
   type: 'test'
   ...
 # Subtest: the exact maintainer statement binds full membership, original request and validation-only issuance
 ok 7 - the exact maintainer statement binds full membership, original request and validation-only issuance
   ---
-  duration_ms: 53.515676
+  duration_ms: 147.902216
   type: 'test'
   ...
 # Subtest: request/checksums and all package views reproduce deterministically
 ok 8 - request/checksums and all package views reproduce deterministically
   ---
-  duration_ms: 218.032806
+  duration_ms: 566.082917
   type: 'test'
   ...
 # Subtest: no RC/final artifact exists and all prepared inputs/history are unchanged
 ok 9 - no RC/final artifact exists and all prepared inputs/history are unchanged
   ---
-  duration_ms: 644.486506
+  duration_ms: 1783.075855
   type: 'test'
   ...
 1..9
@@ -66,6 +65,6 @@ ok 9 - no RC/final artifact exists and all prepared inputs/history are unchanged
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 4710.475543
+# duration_ms 10720.624997
 
 Exit code: 0

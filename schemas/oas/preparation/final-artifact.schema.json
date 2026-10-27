@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oas:schema:preparation:final-artifact:1",
+  "type": "object",
+  "properties": {
+    "standard_id": {
+      "const": "OAS-1"
+    },
+    "release_id": {
+      "const": "OAS-1@1.0.0"
+    },
+    "standard_version": {
+      "const": "1.0.0"
+    },
+    "status": {
+      "const": "released"
+    },
+    "release": {
+      "$ref": "urn:oas:schema:release:1"
+    },
+    "requirement_ids": {
+      "type": "array",
+      "minItems": 14,
+      "maxItems": 14,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^OAS-1-REQ-[0-9]{4}$"
+      }
+    },
+    "domain_ids": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^OAS-1-D0[1-8]$"
+      }
+    },
+    "requirements": {
+      "type": "array",
+      "minItems": 14,
+      "maxItems": 14,
+      "items": {
+        "$ref": "urn:oas:schema:requirement:1"
+      }
+    },
+    "profiles": {
+      "type": "array",
+      "maxItems": 0
+    },
+    "declaration_contract_version": {
+      "const": "1.1.0"
+    },
+    "declaration_schema_id": {
+      "const": "urn:oas:schema:closure:declaration:1"
+    },
+    "evaluation_status": {
+      "const": "NOT_EVALUATED"
+    },
+    "source_revision": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$"
+    },
+    "source_checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "normative_source_revision": {
+      "const": "517cc23426e7485c352a1672c8fe4614291d552a"
+    },
+    "scope_checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "requirements_checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "rc1_requirements_checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "normative_content_checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "domain_mapping_checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "predecessor_reference": {
+      "const": "OAS-1@1.0.0-rc.1"
+    },
+    "predecessor_relationship": {
+      "const": "finalization_of_validated_rc1"
+    },
+    "artifact_checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    }
+  },
+  "required": [
+    "standard_id",
+    "release_id",
+    "standard_version",
+    "status",
+    "release",
+    "requirement_ids",
+    "domain_ids",
+    "requirements",
+    "profiles",
+    "declaration_contract_version",
+    "declaration_schema_id",
+    "evaluation_status",
+    "source_revision",
+    "source_checksum",
+    "normative_source_revision",
+    "scope_checksum",
+    "requirements_checksum",
+    "rc1_requirements_checksum",
+    "normative_content_checksum",
+    "domain_mapping_checksum",
+    "predecessor_reference",
+    "predecessor_relationship",
+    "artifact_checksum"
+  ],
+  "additionalProperties": false
+}

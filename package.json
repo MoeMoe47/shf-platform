@@ -141,7 +141,12 @@
     "oas:rc1:test": "node --test tests/oasRc1Acceptance.test.mjs tests/oasRc1Release.test.mjs",
     "oas:rc1:typecheck": "tsc -p tests/oas-rc1-acceptance.tsconfig.json",
     "oas:rc1:issue": "node scripts/oas-rc1-release.mjs issue",
-    "oas:rc1:check": "node scripts/oas-rc1-release.mjs check"
+    "oas:rc1:check": "node scripts/oas-rc1-release.mjs check",
+    "oas:final:prepare": "node scripts/oas-final-adoption-preparation.mjs prepare",
+    "oas:final:check": "node scripts/oas-final-adoption-preparation.mjs check",
+    "oas:final:require-adoptable-target": "node scripts/oas-final-adoption-preparation.mjs require-adoptable-target",
+    "oas:final:test": "node --test tests/oasFinalAdoptionPreparation.test.mjs",
+    "oas:final:typecheck": "tsc -p tests/oas-final-preparation.tsconfig.json"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.0",

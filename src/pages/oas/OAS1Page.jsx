@@ -10,20 +10,12 @@
 // publication-cover hero, quick facts strip, coverage list, spec
 // table-of-contents, and access/download states).
 //
-// Claims discipline: OAS-1 is a Public Working Draft only. No
-// certification, adoption, Registry approval, or Trust Bureau assurance
-// is claimed anywhere on this page. The "Read Full Specification" /
-// "Download PDF" / "Machine-Readable Schema (JSON)" actions are all
-// rendered as non-interactive (no href, aria-disabled) because no such
-// files currently exist in this repository (verified: no PDF, no JSON
-// schema, no full-spec page anywhere in the repo). The approved mock
-// shows two of the three with an active-looking arrow, but that visual
-// styling is knowingly not carried over to function — nothing here
-// links anywhere or claims to be downloadable when it isn't.
-import React, { useState } from "react";
+// Website summary of the frozen published release; normative files remain unchanged.
+import React from "react";
 import "./oas-landing.css";
 import "./oas1-page.css";
-import { VenusMark, PlannedItem, AnchorLink, OASFooter } from "./oasShared.jsx";
+import { oasRelease } from "./oasRelease.js";
+import { OASHeader, PlannedItem, OASFooter } from "./oasShared.jsx";
 
 const DOMAINS = [
   { n: "01", label: "Identity & Ownership" },
@@ -62,8 +54,8 @@ const TOC_FULL = [
 const TOC_PREVIEW_COUNT = 10;
 
 const QUICK_FACTS = [
-  { label: "Version", value: "OAS-1 (Working Draft)", icon: "edit" },
-  { label: "Status", value: "Public Review", icon: "clock" },
+  { label: "Version", value: oasRelease.id, icon: "edit" },
+  { label: "Status", value: "Frozen published release", icon: "clock" },
   { label: "Scope", value: "Autonomous Agents", icon: "target" },
   { label: "Format", value: "Human-readable + Machine-readable", icon: "doc" },
   { label: "Audience", value: "Developers, Organizations, Educators, Policymakers", icon: "people" },
@@ -142,9 +134,10 @@ const ICONS = {
   ),
 };
 
-function ActionRow({ icon, title, comingSoon, description }) {
+function ActionRow({ icon, title, comingSoon = false, description, href = undefined }) {
+  const Tag = href ? "a" : "span";
   return (
-    <span className="oas1-action" aria-disabled="true" title="Coming soon — this file does not exist yet">
+    <Tag className="oas1-action" href={href} aria-disabled={href ? undefined : true} title={href ? undefined : "Planned — not yet published"}>
       <span className="oas1-action__icon">{ICONS[icon](iconProps)}</span>
       <span className="oas1-action__text">
         <span className="oas1-action__title">
@@ -156,12 +149,11 @@ function ActionRow({ icon, title, comingSoon, description }) {
       <span className="oas1-action__arrow" aria-hidden="true">
         →
       </span>
-    </span>
+    </Tag>
   );
 }
 
 export default function OAS1Page() {
-  const [navOpen, setNavOpen] = useState(false);
   const tocPreview = TOC_FULL.slice(0, TOC_PREVIEW_COUNT);
 
   return (
@@ -171,55 +163,7 @@ export default function OAS1Page() {
       </a>
 
       {/* ---------------------------- Header ---------------------------- */}
-      <header className="oas-header">
-        <div className="oas-header__bar">
-          <div className="oas-header__brand">
-            <VenusMark size={54} />
-            <div className="oas-header__brand-text">
-              <span className="oas-header__mark">OAS</span>
-              <span className="oas-header__tagline">
-                <span>Open Autonomous Standard</span>
-              </span>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            className="oas-header__toggle"
-            aria-expanded={navOpen}
-            aria-controls="oas1-primary-nav"
-            aria-label="Toggle navigation menu"
-            onClick={() => setNavOpen((v) => !v)}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
-              <path d="M4 7h16M4 12h16M4 17h16" strokeLinecap="round" />
-            </svg>
-          </button>
-
-          <nav
-            id="oas1-primary-nav"
-            className={`oas-header__nav${navOpen ? " oas-header__nav--open" : ""}`}
-            aria-label="Primary"
-          >
-            <AnchorLink href="/oas.html#why-oas">About</AnchorLink>
-            <span className="oas1-nav-active" aria-current="page">
-              OAS-1
-            </span>
-            <PlannedItem>Control Domains</PlannedItem>
-            <PlannedItem>Risk</PlannedItem>
-            <PlannedItem>Conformance</PlannedItem>
-            <PlannedItem>Schemas</PlannedItem>
-            <PlannedItem>Implementation</PlannedItem>
-            <AnchorLink href="/oas.html#site-footer">Governance</AnchorLink>
-          </nav>
-
-          <div className="oas-header__cta">
-            <a className="oas-btn oas1-btn--rust" href="#read-the-standard">
-              Read OAS-1
-            </a>
-          </div>
-        </div>
-      </header>
+      <OASHeader current="/oas-1.html" />
 
       <main id="oas1-main">
         {/* ---------------------------- Hero ---------------------------- */}
@@ -250,31 +194,13 @@ export default function OAS1Page() {
               </div>
             </div>
 
-            <div className="oas1-hero__visual">
-              {/* Transparent-background cutout (see
-                  public/assets/oas/oas1-book-stack-transparent.png),
-                  matted from the same real photographic book-stack asset
-                  (oas1-book-stack.png) so the book floats directly in the
-                  hero's own dark-to-rust gradient with no visible image
-                  rectangle around it. The natural contact shadow beneath
-                  the book is baked into this asset's alpha channel (soft,
-                  fading to full transparency) rather than reproduced as a
-                  CSS box-shadow. All cover text (title, subtitle,
-                  tagline, rule, status labels, Venus mark) is baked into
-                  the book's own cover design, same as any product-photo
-                  asset; it is not independently meaningful copy exclusive
-                  to this image (the same title/tagline/mark already exist
-                  as real text elsewhere on the page and site), so a
-                  complete descriptive alt attribute is the correct
-                  accessibility treatment here rather than a duplicate
-                  live-HTML overlay at the same position. */}
-              <img
-                className="oas1-cover"
-                src="/assets/oas/oas1-book-stack-transparent.png"
-                width={750}
-                height={691}
-                alt="OAS-1 publication cover: a cream book with the Venus mark, titled 'OAS-1, Open Autonomous Standard,' reading 'A more trustworthy AI future,' with a warm bronze planetary sweep across the lower-right corner, labeled Public Working Draft, Version 1.0, resting against a second volume."
-              />
+            <div className="oas1-hero__visual oas1-release-summary">
+              <p>{oasRelease.name}</p><h2>{oasRelease.id}</h2>
+              <p>Frozen published release · {oasRelease.publicationDate}</p>
+              <p>{oasRelease.requirements} requirements · {oasRelease.domains} domains</p>
+              <p>Declaration contract {oasRelease.declarationContract}</p>
+              <p>{oasRelease.evaluationStatus}</p>
+              <a className="oas-btn oas1-btn--ghost-on-dark" href={oasRelease.humanUrl}>Read OAS 1.0</a>
             </div>
 
             <ul className="oas1-hero__tags" aria-hidden="true">
@@ -328,7 +254,7 @@ export default function OAS1Page() {
                 ))}
               </div>
 
-              <a className="oas1-textlink" href="/oas.html#what-oas-governs">
+              <a className="oas1-textlink" href="/oas-control-domains.html">
                 Explore the Control Domains →
               </a>
             </div>
@@ -367,11 +293,18 @@ export default function OAS1Page() {
               </p>
 
               <div className="oas1-access__actions">
-                <ActionRow icon="doc" title="Read Full Specification" description="View the complete OAS-1 standard online." />
+                <ActionRow icon="doc" title="Read OAS 1.0" href={oasRelease.humanUrl} description="The frozen human-readable standard (Markdown)." />
                 <ActionRow icon="download" title="Download PDF" comingSoon description="A printable version of the OAS-1 standard." />
-                <ActionRow icon="code" title="Machine-Readable Schema (JSON)" description="Integrate OAS-1 into your systems." />
+                <ActionRow icon="code" title="Machine-readable JSON" href={oasRelease.artifactUrl} description="The frozen release catalog, including all canonical requirements." />
+                <ActionRow icon="code" title="Currentness metadata" href={oasRelease.currentnessUrl} description="Published release observation and file checksum." />
+                <ActionRow icon="code" title="Declaration schema" href={oasRelease.declarationSchemaUrl} description={`Published declaration contract ${oasRelease.declarationContract}; no assessment implied.`} />
               </div>
 
+              <details className="oas-release-checksums"><summary>Release checksums (SHA-256)</summary>
+                <dl><dt>Artifact file</dt><dd>{oasRelease.artifactChecksum}</dd>
+                <dt>Requirements</dt><dd>{oasRelease.requirementsChecksum}</dd>
+                <dt>Scope</dt><dd>{oasRelease.scopeChecksum}</dd></dl>
+              </details>
               {/* ---------------------------- Normative Notice ---------------------------- */}
               <p className="oas1-notice">
                 <span className="oas1-notice__icon">{ICONS.info(iconProps)}</span>

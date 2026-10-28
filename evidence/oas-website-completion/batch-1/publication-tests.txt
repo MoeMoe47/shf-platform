@@ -1,0 +1,64 @@
+TAP version 13
+# Subtest: separate real publication authorization binds to the exact adopted target
+ok 1 - separate real publication authorization binds to the exact adopted target
+  ---
+  duration_ms: 3027.218159
+  type: 'test'
+  ...
+# Subtest: authorization rejects rehashed identity, time, authority, approval, target and binding mutations
+ok 2 - authorization rejects rehashed identity, time, authority, approval, target and binding mutations
+  ---
+  duration_ms: 4824.890547
+  type: 'test'
+  ...
+# Subtest: canonical final bytes and payload hashes independently match the adopted literal
+ok 3 - canonical final bytes and payload hashes independently match the adopted literal
+  ---
+  duration_ms: 1001.67386
+  type: 'test'
+  ...
+# Subtest: freeze rejects whitespace-only byte changes and rehashed normative/member/domain/contract mutation
+ok 4 - freeze rejects whitespace-only byte changes and rehashed normative/member/domain/contract mutation
+  ---
+  duration_ms: 2404.426237
+  type: 'test'
+  ...
+# Subtest: freeze rejects altered lock and currentness even if self-hash is recomputed
+ok 5 - freeze rejects altered lock and currentness even if self-hash is recomputed
+  ---
+  duration_ms: 878.729208
+  type: 'test'
+  ...
+# Subtest: currentness identifies final release without rewriting historical artifacts or normative edges
+ok 6 - currentness identifies final release without rewriting historical artifacts or normative edges
+  ---
+  duration_ms: 260.634459
+  type: 'test'
+  ...
+# Subtest: publication remains repository-only and does not perform Registry integration or an assessment
+ok 7 - publication remains repository-only and does not perform Registry integration or an assessment
+  ---
+  duration_ms: 1020.781291
+  type: 'test'
+  ...
+# Subtest: final declarations use the unchanged canonical contract and reject overclaims or unstable pins
+ok 8 - final declarations use the unchanged canonical contract and reject overclaims or unstable pins
+  ---
+  duration_ms: 244.019928
+  type: 'test'
+  ...
+# Subtest: repeat publication is deterministic and leaves the original publication time and every frozen byte intact
+ok 9 - repeat publication is deterministic and leaves the original publication time and every frozen byte intact
+  ---
+  duration_ms: 1371.468089
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 16677.373365

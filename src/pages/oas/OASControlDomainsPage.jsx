@@ -20,7 +20,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./oas-landing.css";
 import "./oas-control-domains.css";
-import { VenusMark, PlannedItem, AnchorLink, OASFooter } from "./oasShared.jsx";
+import { OASHeader, OASFooter } from "./oasShared.jsx";
 
 const iconProps = {
   className: "oascd-icon",
@@ -357,7 +357,6 @@ function Flywheel({ activeDomain, onActivate, onRelease }) {
 }
 
 export default function OASControlDomainsPage() {
-  const [navOpen, setNavOpen] = useState(false);
   const { activeDomain, activate, release } = useDomainCycle();
 
   return (
@@ -367,55 +366,7 @@ export default function OASControlDomainsPage() {
       </a>
 
       {/* ---------------------------- Header ---------------------------- */}
-      <header className="oas-header">
-        <div className="oas-header__bar">
-          <div className="oas-header__brand">
-            <VenusMark size={54} />
-            <div className="oas-header__brand-text">
-              <span className="oas-header__mark">OAS</span>
-              <span className="oas-header__tagline">
-                <span>Open Autonomous Standard</span>
-              </span>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            className="oas-header__toggle"
-            aria-expanded={navOpen}
-            aria-controls="oascd-primary-nav"
-            aria-label="Toggle navigation menu"
-            onClick={() => setNavOpen((v) => !v)}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
-              <path d="M4 7h16M4 12h16M4 17h16" strokeLinecap="round" />
-            </svg>
-          </button>
-
-          <nav
-            id="oascd-primary-nav"
-            className={`oas-header__nav${navOpen ? " oas-header__nav--open" : ""}`}
-            aria-label="Primary"
-          >
-            <AnchorLink href="/oas.html#why-oas">About</AnchorLink>
-            <AnchorLink href="/oas-1.html">OAS-1</AnchorLink>
-            <span className="oascd-nav-active" aria-current="page">
-              Control Domains
-            </span>
-            <PlannedItem>Risk</PlannedItem>
-            <PlannedItem>Conformance</PlannedItem>
-            <PlannedItem>Schemas</PlannedItem>
-            <PlannedItem>Implementation</PlannedItem>
-            <AnchorLink href="/oas.html#site-footer">Governance</AnchorLink>
-          </nav>
-
-          <div className="oas-header__cta">
-            <a className="oas-btn oascd-btn--rust" href="/oas-1.html">
-              Read OAS-1
-            </a>
-          </div>
-        </div>
-      </header>
+      <OASHeader current="/oas-control-domains.html" />
 
       <main id="oascd-main">
         {/* ---------------------------- Framework intro + flywheel ---------------------------- */}
@@ -559,11 +510,11 @@ export default function OASControlDomainsPage() {
             </div>
 
             <div className="oascd-together__right">
-              <a className="oas-btn oascd-btn--rust" href="/oas.html#what-oas-governs">
-                Explore the Full Framework
+              <a className="oas-btn oascd-btn--rust" href="/oas-1.html#read-the-standard">
+                Read the Published Standard
               </a>
               <a className="oascd-textlink" href="/oas-1.html">
-                View OAS-1 Specification <span aria-hidden="true">→</span>
+                View OAS-1 Summary <span aria-hidden="true">→</span>
               </a>
             </div>
           </div>

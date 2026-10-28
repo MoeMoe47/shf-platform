@@ -1,0 +1,48 @@
+/* Shared Batch 1 release/navigation corrections; preserve page-specific composition. */
+.oas .oas-header__brand { min-width: 0; flex-shrink: 1; }
+.oas .oas-header__brand-text { min-width: 0; }
+.oas .oas-header__tagline span { white-space: normal; }
+.oas .oas-header__nav { gap: 20px; }
+.oas .oas-header__nav a[aria-current="page"] { text-decoration: underline; text-underline-offset: 6px; }
+.oas-nav-planned { color: #625346; font-size: 12px; }
+.oas-nav-planned small { display: block; }
+.oas .oas-release-boundary { padding-top: 24px; padding-bottom: 24px; font-size: 14px; line-height: 1.65; }
+.oas-footer .oas-release-boundary { color: #ded4c5; }
+.oas1-release-summary { padding: 32px; border: 1px solid #bda283; border-radius: 8px; color: #fff7eb; align-self: center; }
+.oas1-release-summary h2 { font-size: clamp(24px, 3vw, 38px); overflow-wrap: anywhere; }
+.oas1-release-summary p { line-height: 1.6; }
+.oas .oas-release-checksums { margin-top: 24px; font-size: 14px; line-height: 1.65; }
+.oas-release-checksums dd { margin: 0 0 12px; overflow-wrap: anywhere; }
+.oas .oas1-action[href] { cursor: pointer; }
+.oas .oas1-action[href]:hover { background: #eee4d5; }
+.oas :focus-visible { outline: 3px solid #8f5a32; outline-offset: 4px; }
+.oas-footer :focus-visible { outline-color: #f6efe2; }
+@media (max-width: 1280px) {
+ .oas .oas-header__nav { display: none; }
+ .oas .oas-header__toggle { display: inline-flex; margin-left: auto; flex-shrink: 0; }
+ .oas .oas-header__nav.oas-header__nav--open { display: flex; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 8px; padding: 16px 24px; background: #fff; border-bottom: 1px solid #bda283; max-height: 80vh; overflow-y: auto; }
+}
+@media (max-width: 380px) {
+ .oas .oas-header__bar { padding: 14px 16px; gap: 10px; }
+ .oas .oas-header__brand { gap: 10px; }
+ .oas .oas-header__brand .oas-venus-mark { width: 40px !important; height: 40px !important; }
+ .oas .oas-header__tagline span { font-size: 10px; }
+ .oas .oas-hero__actions { flex-wrap: wrap; }
+ .oas .oas-footer__bottom-links { flex-wrap: wrap; gap: 12px; }
+ .oas1-release-summary { padding: 20px; }
+}
+
+/* Contrast fixes measured against actual light and dark surfaces. */
+.oas .oas-footer .oas-footer__col h4 { color: #e4bb91; }
+.oas .oaspb-dive__next-title { color: #655548; }
+.oas .oasrc-level--r3 .oasrc-level__badge { background: #a64d23; }
+
+@media (max-width: 380px) {
+ .oas .oas-hero-strip__statement { min-width: 0; max-width: 100%; }
+ .oas .oas-hero-strip__tags { flex-wrap: wrap; gap: 12px; padding-left: 0; }
+}
+
+/* The old image wrapper was a horizontal flex row; release text needs normal flow. */
+.oas1 .oas1-release-summary { display: block; min-width: 0; width: 100%; transform: none; background: #241a14; }
+.oas1 .oas1-release-summary h2 { line-height: 1.2; }
+.oas1 .oas1-hero__eyebrow { color: #edc397; }

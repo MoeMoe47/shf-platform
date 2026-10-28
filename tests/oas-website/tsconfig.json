@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "target": "es2022",
+    "skipLibCheck": true,
+    "types": [
+      "node"
+    ],
+    "jsx": "react-jsx",
+    "esModuleInterop": true
+  },
+  "files": [
+    "../../src/pages/oas/oasRelease.js",
+    "../../vite.oas-website.config.mjs",
+    "../../scripts/verify-oas-website-source.mjs",
+    "../../node_modules/vite/client.d.ts",
+    "../../src/pages/oas/OASLandingPage.jsx",
+    "../../src/pages/oas/OAS1Page.jsx",
+    "../../src/pages/oas/OASControlDomainsPage.jsx",
+    "../../src/pages/oas/OASPurposeBoundariesPage.jsx",
+    "../../src/pages/oas/OASRiskClassificationPage.jsx",
+    "../../src/pages/oas/oasShared.jsx"
+  ]
+}

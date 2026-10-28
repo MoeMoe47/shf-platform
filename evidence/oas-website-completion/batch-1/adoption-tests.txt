@@ -1,0 +1,580 @@
+TAP version 13
+# Subtest: catalog has exact draft identity, no invented release or normative population
+ok 1 - catalog has exact draft identity, no invented release or normative population
+  ---
+  duration_ms: 31.494123
+  type: 'test'
+  ...
+# Subtest: duplicate standard_id rejected even when other fields differ
+ok 2 - duplicate standard_id rejected even when other fields differ
+  ---
+  duration_ms: 11.456808
+  type: 'test'
+  ...
+# Subtest: duplicate release_id rejected even when other fields differ
+ok 3 - duplicate release_id rejected even when other fields differ
+  ---
+  duration_ms: 0.876841
+  type: 'test'
+  ...
+# Subtest: duplicate profile_id rejected even when other fields differ
+ok 4 - duplicate profile_id rejected even when other fields differ
+  ---
+  duration_ms: 0.714602
+  type: 'test'
+  ...
+# Subtest: duplicate requirement_id rejected even when other fields differ
+ok 5 - duplicate requirement_id rejected even when other fields differ
+  ---
+  duration_ms: 46.380527
+  type: 'test'
+  ...
+# Subtest: stable machine ID formats and no floating latest
+ok 6 - stable machine ID formats and no floating latest
+  ---
+  duration_ms: 3.780873
+  type: 'test'
+  ...
+# Subtest: canonical public labels/order preserved; legacy report collisions remain unmapped
+ok 7 - canonical public labels/order preserved; legacy report collisions remain unmapped
+  ---
+  duration_ms: 14.346361
+  type: 'test'
+  ...
+# Subtest: cross-reference, version and domain errors rejected
+ok 8 - cross-reference, version and domain errors rejected
+  ---
+  duration_ms: 5.129443
+  type: 'test'
+  ...
+# Subtest: releases: valid reciprocal supersession; dangling, self and cyclic links rejected
+ok 9 - releases: valid reciprocal supersession; dangling, self and cyclic links rejected
+  ---
+  duration_ms: 3.861907
+  type: 'test'
+  ...
+# Subtest: requirements: valid reciprocal supersession; dangling, self and cyclic links rejected
+ok 10 - requirements: valid reciprocal supersession; dangling, self and cyclic links rejected
+  ---
+  duration_ms: 4.004609
+  type: 'test'
+  ...
+# Subtest: profiles: valid reciprocal supersession; dangling, self and cyclic links rejected
+ok 11 - profiles: valid reciprocal supersession; dangling, self and cyclic links rejected
+  ---
+  duration_ms: 2.233197
+  type: 'test'
+  ...
+# Subtest: schema rejects extra fields, false release claims, invalid dates and certifications
+ok 12 - schema rejects extra fields, false release claims, invalid dates and certifications
+  ---
+  duration_ms: 5.666163
+  type: 'test'
+  ...
+# Subtest: declarations resolve pinned references and preserve historical declaration data
+ok 13 - declarations resolve pinned references and preserve historical declaration data
+  ---
+  duration_ms: 5.930593
+  type: 'test'
+  ...
+# Subtest: deterministic generation, provenance and independent digest tampering checks
+ok 14 - deterministic generation, provenance and independent digest tampering checks
+  ---
+  duration_ms: 73.275608
+  type: 'test'
+  ...
+# Subtest: committed public snapshot exists and reproduces from git
+ok 15 - committed public snapshot exists and reproduces from git
+  ---
+  duration_ms: 1148.552833
+  type: 'test'
+  ...
+# Subtest: real human adoption is recorded separately from withheld publication
+ok 16 - real human adoption is recorded separately from withheld publication
+  ---
+  duration_ms: 793.608535
+  type: 'test'
+  ...
+# Subtest: every explicit final binding and complete prepared package remains exact
+ok 17 - every explicit final binding and complete prepared package remains exact
+  ---
+  duration_ms: 85.076093
+  type: 'test'
+  ...
+# Subtest: even rehashed actor, time, authority, source/content, approval and publication mutations reject
+ok 18 - even rehashed actor, time, authority, source/content, approval and publication mutations reject
+  ---
+  duration_ms: 874.592185
+  type: 'test'
+  ...
+# Subtest: unsigned templates and Git actor metadata cannot fabricate a final adoption
+ok 19 - unsigned templates and Git actor metadata cannot fabricate a final adoption
+  ---
+  duration_ms: 114.928649
+  type: 'test'
+  ...
+# Subtest: decision is immutable and attributable; canonical JSON checksum is independently reproducible
+ok 20 - decision is immutable and attributable; canonical JSON checksum is independently reproducible
+  ---
+  duration_ms: 134.357008
+  type: 'test'
+  ...
+# Subtest: adoption leaves original pending preparation snapshots and issued/historical bytes unchanged
+ok 21 - adoption leaves original pending preparation snapshots and issued/historical bytes unchanged
+  ---
+  duration_ms: 372.084368
+  type: 'test'
+  ...
+# Subtest: staged proposal is deterministic, clearly marked and unadopted, without a public final artifact
+ok 22 - staged proposal is deterministic, clearly marked and unadopted, without a public final artifact
+  ---
+  duration_ms: 19116.719638
+  type: 'test'
+  ...
+# Subtest: exact 14 IDs, all eight domains and original normative text are retained
+ok 23 - exact 14 IDs, all eight domains and original normative text are retained
+  ---
+  duration_ms: 7622.283741
+  type: 'test'
+  ...
+# Subtest: human dates cannot be guessed, invalid or precede release; fixture dates are only synthetic
+ok 24 - human dates cannot be guessed, invalid or precede release; fixture dates are only synthetic
+  ---
+  duration_ms: 6878.613264
+  type: 'test'
+  ...
+# Subtest: date-completed synthetic target validates existing final release/requirement primitives
+ok 25 - date-completed synthetic target validates existing final release/requirement primitives
+  ---
+  duration_ms: 15650.82526
+  type: 'test'
+  ...
+# Subtest: even rehashed membership, wording, profiles, authority or scope changes cannot materialize
+ok 26 - even rehashed membership, wording, profiles, authority or scope changes cannot materialize
+  ---
+  duration_ms: 25880.469701
+  type: 'test'
+  ...
+# Subtest: date or metadata selection changes hashes and cannot silently reuse earlier bindings
+ok 27 - date or metadata selection changes hashes and cannot silently reuse earlier bindings
+  ---
+  duration_ms: 24660.267112
+  type: 'test'
+  ...
+# Subtest: independent hashes cover proposal payload/file, metadata, final target and source files
+ok 28 - independent hashes cover proposal payload/file, metadata, final target and source files
+  ---
+  duration_ms: 16463.702639
+  type: 'test'
+  ...
+# Subtest: provider declarations reject staged proposal, and final-compatible synthetic data remains NOT_EVALUATED
+ok 29 - provider declarations reject staged proposal, and final-compatible synthetic data remains NOT_EVALUATED
+  ---
+  duration_ms: 22928.088791
+  type: 'test'
+  ...
+# Subtest: live package checks are exact while final human adoption/publication gates remain fail
+ok 30 - live package checks are exact while final human adoption/publication gates remain fail
+  ---
+  duration_ms: 82476.379074
+  type: 'test'
+  ...
+# Subtest: 17 traceable candidates cover exactly the existing eight domains without published requirements
+ok 31 - 17 traceable candidates cover exactly the existing eight domains without published requirements
+  ---
+  duration_ms: 315.51859
+  type: 'test'
+  ...
+# Subtest: duplicate IDs and whitespace/case-equivalent normative statements rejected
+ok 32 - duplicate IDs and whitespace/case-equivalent normative statements rejected
+  ---
+  duration_ms: 69.51247
+  type: 'test'
+  ...
+# Subtest: all candidates need canonical domains, normative text, applicability and exact source citation
+ok 33 - all candidates need canonical domains, normative text, applicability and exact source citation
+  ---
+  duration_ms: 53.706877
+  type: 'test'
+  ...
+# Subtest: candidate risk conditioning cannot silently introduce R0–R4 duties
+ok 34 - candidate risk conditioning cannot silently introduce R0–R4 duties
+  ---
+  duration_ms: 1.73174
+  type: 'test'
+  ...
+# Subtest: approved/released status cannot be asserted without review and governance
+ok 35 - approved/released status cannot be asserted without review and governance
+  ---
+  duration_ms: 11.017962
+  type: 'test'
+  ...
+# Subtest: a review decision is bound to exact wording and is not release adoption
+ok 36 - a review decision is bound to exact wording and is not release adoption
+  ---
+  duration_ms: 11.310751
+  type: 'test'
+  ...
+# Subtest: review declaration applicable validates and stays NOT_EVALUATED
+ok 37 - review declaration applicable validates and stays NOT_EVALUATED
+  ---
+  duration_ms: 15.744987
+  type: 'test'
+  ...
+# Subtest: review declaration not_applicable validates and stays NOT_EVALUATED
+ok 38 - review declaration not_applicable validates and stays NOT_EVALUATED
+  ---
+  duration_ms: 81.952163
+  type: 'test'
+  ...
+# Subtest: review declaration declared_satisfied validates and stays NOT_EVALUATED
+ok 39 - review declaration declared_satisfied validates and stays NOT_EVALUATED
+  ---
+  duration_ms: 4.372772
+  type: 'test'
+  ...
+# Subtest: review declaration not_declared validates and stays NOT_EVALUATED
+ok 40 - review declaration not_declared validates and stays NOT_EVALUATED
+  ---
+  duration_ms: 11.903659
+  type: 'test'
+  ...
+# Subtest: review declaration unknown validates and stays NOT_EVALUATED
+ok 41 - review declaration unknown validates and stays NOT_EVALUATED
+  ---
+  duration_ms: 4.183551
+  type: 'test'
+  ...
+# Subtest: declarations reject absent NA reason, absent offered evidence, unknown IDs, stale pins and conformance claims
+ok 42 - declarations reject absent NA reason, absent offered evidence, unknown IDs, stale pins and conformance claims
+  ---
+  duration_ms: 105.658004
+  type: 'test'
+  ...
+# Subtest: declaration review contract cannot masquerade as the existing published declaration schema
+ok 43 - declaration review contract cannot masquerade as the existing published declaration schema
+  ---
+  duration_ms: 1.417061
+  type: 'test'
+  ...
+# Subtest: aliases resolve deterministically by namespace and never by reporting ordinal
+ok 44 - aliases resolve deterministically by namespace and never by reporting ordinal
+  ---
+  duration_ms: 32.692318
+  type: 'test'
+  ...
+# Subtest: unreviewed aliases, unknown mapping domains, missing and duplicate dispositions rejected
+ok 45 - unreviewed aliases, unknown mapping domains, missing and duplicate dispositions rejected
+  ---
+  duration_ms: 2.741623
+  type: 'test'
+  ...
+# Subtest: candidate supersession rejects dangling and circular replacement links
+ok 46 - candidate supersession rejects dangling and circular replacement links
+  ---
+  duration_ms: 21.600533
+  type: 'test'
+  ...
+# Subtest: adopted requirements require a valid release, nonempty normative text and matching governance state
+ok 47 - adopted requirements require a valid release, nonempty normative text and matching governance state
+  ---
+  duration_ms: 5.658423
+  type: 'test'
+  ...
+# Subtest: release gates block RC, adoption and publication; generated metadata contains no invented approval
+ok 48 - release gates block RC, adoption and publication; generated metadata contains no invented approval
+  ---
+  duration_ms: 81.586372
+  type: 'test'
+  ...
+# Subtest: human review documents and checksums regenerate deterministically without manual divergence
+ok 49 - human review documents and checksums regenerate deterministically without manual divergence
+  ---
+  duration_ms: 69.232118
+  type: 'test'
+  ...
+# Subtest: all historical catalog inputs, reporting production code and public pin remain byte-for-byte unchanged
+ok 50 - all historical catalog inputs, reporting production code and public pin remain byte-for-byte unchanged
+  ---
+  duration_ms: 1933.000868
+  type: 'test'
+  ...
+# Subtest: all 17 candidates have exactly one explicit disposition and ten criterion findings
+ok 51 - all 17 candidates have exactly one explicit disposition and ten criterion findings
+  ---
+  duration_ms: 311.484579
+  type: 'test'
+  ...
+# Subtest: missing, duplicate and unknown dispositions reject
+ok 52 - missing, duplicate and unknown dispositions reject
+  ---
+  duration_ms: 41.123873
+  type: 'test'
+  ...
+# Subtest: content-approved rows have complete canonical normative metadata
+ok 53 - content-approved rows have complete canonical normative metadata
+  ---
+  duration_ms: 9.149442
+  type: 'test'
+  ...
+# Subtest: proposed membership is deterministic, unique and excludes held/rejected/revision-pending requirements
+ok 54 - proposed membership is deterministic, unique and excludes held/rejected/revision-pending requirements
+  ---
+  duration_ms: 17.716444
+  type: 'test'
+  ...
+# Subtest: no ID changes or reuse and exact editorial deltas are recorded
+ok 55 - no ID changes or reuse and exact editorial deltas are recorded
+  ---
+  duration_ms: 51.127906
+  type: 'test'
+  ...
+# Subtest: stale wording/metadata and incomplete revision evidence reject
+ok 56 - stale wording/metadata and incomplete revision evidence reject
+  ---
+  duration_ms: 31.956161
+  type: 'test'
+  ...
+# Subtest: all twelve questions have one disposition; deferred is not silently resolved
+ok 57 - all twelve questions have one disposition; deferred is not silently resolved
+  ---
+  duration_ms: 25.223236
+  type: 'test'
+  ...
+# Subtest: seven mapping holds preserve deterministic canonical labels and never become aliases
+ok 58 - seven mapping holds preserve deterministic canonical labels and never become aliases
+  ---
+  duration_ms: 25.831459
+  type: 'test'
+  ...
+# Subtest: no institutional approval is fabricated or inferred from a content disposition
+ok 59 - no institutional approval is fabricated or inferred from a content disposition
+  ---
+  duration_ms: 11.769948
+  type: 'test'
+  ...
+# Subtest: RC gates fail and no RC artifact, source revision, checksum or membership exists
+ok 60 - RC gates fail and no RC artifact, source revision, checksum or membership exists
+  ---
+  duration_ms: 197.743667
+  type: 'test'
+  ...
+# Subtest: no released status or 1.0.0 publication and historical public-review pin preserved
+ok 61 - no released status or 1.0.0 publication and historical public-review pin preserved
+  ---
+  duration_ms: 1931.176851
+  type: 'test'
+  ...
+# Subtest: review manifest and generated decision records reproduce; no invented RC checksum
+ok 62 - review manifest and generated decision records reproduce; no invented RC checksum
+  ---
+  duration_ms: 175.174013
+  type: 'test'
+  ...
+# Subtest: original bindings remain exact and prepared source commits every intended artifact
+ok 63 - original bindings remain exact and prepared source commits every intended artifact
+  ---
+  duration_ms: 872.758989
+  type: 'test'
+  ...
+# Subtest: exact fourteen IDs and all eight domains are independently fixed
+ok 64 - exact fourteen IDs and all eight domains are independently fixed
+  ---
+  duration_ms: 0.665724
+  type: 'test'
+  ...
+# Subtest: wrong revision, changed digest or altered membership cannot silently regenerate bindings
+ok 65 - wrong revision, changed digest or altered membership cannot silently regenerate bindings
+  ---
+  duration_ms: 378.736519
+  type: 'test'
+  ...
+# Subtest: historical pending record grants no authority; current human acceptance is separate
+ok 66 - historical pending record grants no authority; current human acceptance is separate
+  ---
+  duration_ms: 3092.426716
+  type: 'test'
+  ...
+# Subtest: synthetic positive acceptance validates structure without claiming real authority or consent
+ok 67 - synthetic positive acceptance validates structure without claiming real authority or consent
+  ---
+  duration_ms: 69.799866
+  type: 'test'
+  ...
+# Subtest: acceptance validation rejects stale source, wrong scope/digests, blanks and final-adoption claims
+ok 68 - acceptance validation rejects stale source, wrong scope/digests, blanks and final-adoption claims
+  ---
+  duration_ms: 7.261214
+  type: 'test'
+  ...
+# Subtest: the exact maintainer statement binds full membership, original request and validation-only issuance
+ok 69 - the exact maintainer statement binds full membership, original request and validation-only issuance
+  ---
+  duration_ms: 112.770699
+  type: 'test'
+  ...
+# Subtest: request/checksums and all package views reproduce deterministically
+ok 70 - request/checksums and all package views reproduce deterministically
+  ---
+  duration_ms: 9192.833828
+  type: 'test'
+  ...
+# Subtest: RC1 is separate from unchanged preparation/history; no final artifact exists
+ok 71 - RC1 is separate from unchanged preparation/history; no final artifact exists
+  ---
+  duration_ms: 8881.260099
+  type: 'test'
+  ...
+# Subtest: human acceptance is independently retrievable from its exact committed decision and designation
+ok 72 - human acceptance is independently retrievable from its exact committed decision and designation
+  ---
+  duration_ms: 5488.101054
+  type: 'test'
+  ...
+# Subtest: pending, fabricated designation, actor, time or decision references cannot enter issuance
+ok 73 - pending, fabricated designation, actor, time or decision references cannot enter issuance
+  ---
+  duration_ms: 1821.623896
+  type: 'test'
+  ...
+# Subtest: RC1 schema, all exact IDs, eight domains and deterministic bytes agree with accepted source
+ok 74 - RC1 schema, all exact IDs, eight domains and deterministic bytes agree with accepted source
+  ---
+  duration_ms: 19685.051993
+  type: 'test'
+  ...
+# Subtest: even rehashed membership, wording/source, date, decision or adoption changes fail the publication lock
+ok 75 - even rehashed membership, wording/source, date, decision or adoption changes fail the publication lock
+  ---
+  duration_ms: 26893.37607
+  type: 'test'
+  ...
+# Subtest: independent checksum computation verifies full artifact, payload, source manifest, acceptance and requirements
+ok 76 - independent checksum computation verifies full artifact, payload, source manifest, acceptance and requirements
+  ---
+  duration_ms: 832.169782
+  type: 'test'
+  ...
+# Subtest: real RC1 declarations resolve only pinned members and cannot create evaluation, profiles or certification
+ok 77 - real RC1 declarations resolve only pinned members and cannot create evaluation, profiles or certification
+  ---
+  duration_ms: 5185.364604
+  type: 'test'
+  ...
+# Subtest: historical public review and all accepted source documents remain unchanged; no final exists
+ok 78 - historical public review and all accepted source documents remain unchanged; no final exists
+  ---
+  duration_ms: 1499.392182
+  type: 'test'
+  ...
+# Subtest: all six blocking questions have exact issues, alternatives and bounded decisions
+ok 79 - all six blocking questions have exact issues, alternatives and bounded decisions
+  ---
+  duration_ms: 110.412481
+  type: 'test'
+  ...
+# Subtest: all three revised requirements receive final APPROVE with ten-criterion review
+ok 80 - all three revised requirements receive final APPROVE with ten-criterion review
+  ---
+  duration_ms: 2.816296
+  type: 'test'
+  ...
+# Subtest: all eight HOLDs close with five promotions and three explicit post-1.0 deferrals
+ok 81 - all eight HOLDs close with five promotions and three explicit post-1.0 deferrals
+  ---
+  duration_ms: 4.805758
+  type: 'test'
+  ...
+# Subtest: 14 approved requirements cover all eight concepts with no normative text/ID reuse
+ok 82 - 14 approved requirements cover all eight concepts with no normative text/ID reuse
+  ---
+  duration_ms: 2.47717
+  type: 'test'
+  ...
+# Subtest: deferred, rejected, duplicate or unknown requirements cannot enter scope
+ok 83 - deferred, rejected, duplicate or unknown requirements cannot enter scope
+  ---
+  duration_ms: 13.728796
+  type: 'test'
+  ...
+# Subtest: former deferred questions are resolved within scope or explicitly excluded
+ok 84 - former deferred questions are resolved within scope or explicitly excluded
+  ---
+  duration_ms: 1.116672
+  type: 'test'
+  ...
+# Subtest: mapping states terminate; all seven quarantines reject canonical projection
+ok 85 - mapping states terminate; all seven quarantines reject canonical projection
+  ---
+  duration_ms: 15.37106
+  type: 'test'
+  ...
+# Subtest: historical mapping preimage remains exact and current documentation is generated
+ok 86 - historical mapping preimage remains exact and current documentation is generated
+  ---
+  duration_ms: 3365.071408
+  type: 'test'
+  ...
+# Subtest: valid fully pinned declarations validate without producing conformance
+ok 87 - valid fully pinned declarations validate without producing conformance
+  ---
+  duration_ms: 4.483875
+  type: 'test'
+  ...
+# Subtest: not-applicable requires reason; unknown or unavailable applicability cannot assert satisfaction
+ok 88 - not-applicable requires reason; unknown or unavailable applicability cannot assert satisfaction
+  ---
+  duration_ms: 1.829599
+  type: 'test'
+  ...
+# Subtest: declarations reject missing/duplicate/deferred references and invented release pins or scores
+ok 89 - declarations reject missing/duplicate/deferred references and invented release pins or scores
+  ---
+  duration_ms: 2.247521
+  type: 'test'
+  ...
+# Subtest: RC format validates only exact scope membership, provenance fields and checksums
+ok 90 - RC format validates only exact scope membership, provenance fields and checksums
+  ---
+  duration_ms: 126.596921
+  type: 'test'
+  ...
+# Subtest: founding procedure is explicit and actual acceptance cannot be invented by a green suite
+ok 91 - founding procedure is explicit and actual acceptance cannot be invented by a green suite
+  ---
+  duration_ms: 3013.403863
+  type: 'test'
+  ...
+# Subtest: recorded real acceptance resolves both activation gates; all fifteen gates pass
+ok 92 - recorded real acceptance resolves both activation gates; all fifteen gates pass
+  ---
+  duration_ms: 2028.644999
+  type: 'test'
+  ...
+# Subtest: RC1 is issued separately; historical scope and public-review snapshot are immutable
+ok 93 - RC1 is issued separately; historical scope and public-review snapshot are immutable
+  ---
+  duration_ms: 11000.961383
+  type: 'test'
+  ...
+# Subtest: source and acceptance digests are separate, deterministic and independently computable
+ok 94 - source and acceptance digests are separate, deterministic and independently computable
+  ---
+  duration_ms: 224.987011
+  type: 'test'
+  ...
+# Subtest: all human views and effective catalog reproduce from the single pinned source/resolution
+ok 95 - all human views and effective catalog reproduce from the single pinned source/resolution
+  ---
+  duration_ms: 6499.605006
+  type: 'test'
+  ...
+1..95
+# tests 95
+# suites 0
+# pass 95
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 226119.292279

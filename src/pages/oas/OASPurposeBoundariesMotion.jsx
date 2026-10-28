@@ -40,9 +40,15 @@ function driftVector(speed, wobble) {
   };
 }
 
+/** @typedef {{x: number, y: number, r: number, dx: number, dy: number,
+ * baseAlpha: number, color: string, sparkleT: number, sparkleChance: number,
+ * _height?: number, px?: number, py?: number, trail?: boolean}} Particle */
 function buildParticles(width, height, density) {
+  /** @type {Particle[]} */
   const far = [];
+  /** @type {Particle[]} */
   const mid = [];
+  /** @type {Particle[]} */
   const near = [];
 
   for (let i = 0; i < density.far; i++) {

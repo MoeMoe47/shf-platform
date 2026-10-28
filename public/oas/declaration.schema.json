@@ -1,0 +1,205 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oas:schema:closure:declaration:1",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.1.0"
+    },
+    "standard_id": {
+      "const": "OAS-1"
+    },
+    "release_id": {
+      "type": "string",
+      "pattern": "^OAS-1@1\\.0\\.0(?:-rc\\.[1-9][0-9]*)?$"
+    },
+    "profile_reference": {
+      "type": "null"
+    },
+    "declaration_scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "declarant": {
+      "type": "object",
+      "properties": {
+        "identity_reference": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reference_kind": {
+          "enum": [
+            "provider_supplied",
+            "repository_reference",
+            "external_identity_reference"
+          ]
+        }
+      },
+      "required": [
+        "identity_reference",
+        "reference_kind"
+      ],
+      "additionalProperties": false
+    },
+    "declared_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "declaration_status": {
+      "enum": [
+        "declared",
+        "withdrawn"
+      ]
+    },
+    "requirements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "requirement_id": {
+            "type": "string",
+            "pattern": "^OAS-1-REQ-[0-9]{4,}$"
+          },
+          "applicability": {
+            "enum": [
+              "applicable",
+              "not_applicable",
+              "unknown"
+            ]
+          },
+          "applicability_reason": {
+            "type": "string"
+          },
+          "declaration_status": {
+            "enum": [
+              "declared_satisfied",
+              "not_declared",
+              "unknown"
+            ]
+          },
+          "evidence_references": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "notes": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "requirement_id",
+          "applicability",
+          "applicability_reason",
+          "declaration_status",
+          "evidence_references",
+          "notes"
+        ],
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "applicability": {
+                  "const": "not_applicable"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "applicability_reason": {
+                  "type": "string",
+                  "pattern": "\\S"
+                },
+                "declaration_status": {
+                  "enum": [
+                    "not_declared",
+                    "unknown"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "declaration_status": {
+                  "const": "declared_satisfied"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "applicability": {
+                  "const": "applicable"
+                },
+                "evidence_references": {
+                  "type": "array",
+                  "minItems": 1
+                }
+              }
+            }
+          }
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "evidence_references": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "reference": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "configuration",
+              "policy",
+              "interface",
+              "audit",
+              "test",
+              "manifest",
+              "provenance",
+              "plan",
+              "other"
+            ]
+          }
+        },
+        "required": [
+          "reference",
+          "kind"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "notes": {
+      "type": "string"
+    },
+    "evaluation_status": {
+      "const": "NOT_EVALUATED"
+    }
+  },
+  "required": [
+    "schema_version",
+    "standard_id",
+    "release_id",
+    "profile_reference",
+    "declaration_scope",
+    "declarant",
+    "declared_at",
+    "declaration_status",
+    "requirements",
+    "evidence_references",
+    "notes",
+    "evaluation_status"
+  ],
+  "additionalProperties": false
+}

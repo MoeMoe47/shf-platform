@@ -1,0 +1,142 @@
+TAP version 13
+# Subtest: /oas.html: renders pinned release and consistent reachable navigation
+ok 1 - /oas.html: renders pinned release and consistent reachable navigation
+  ---
+  duration_ms: 2453.138546
+  type: 'test'
+  ...
+# Subtest: /oas.html: 320/375/768/1440px reflow, keyboard menu and focus
+ok 2 - /oas.html: 320/375/768/1440px reflow, keyboard menu and focus
+  ---
+  duration_ms: 970.445893
+  type: 'test'
+  ...
+# Subtest: /oas.html: WCAG A/AA automated accessibility, desktop and mobile
+ok 3 - /oas.html: WCAG A/AA automated accessibility, desktop and mobile
+  ---
+  duration_ms: 2464.240576
+  type: 'test'
+  ...
+# Subtest: /oas-1.html: renders pinned release and consistent reachable navigation
+ok 4 - /oas-1.html: renders pinned release and consistent reachable navigation
+  ---
+  duration_ms: 1919.702103
+  type: 'test'
+  ...
+# Subtest: /oas-1.html: 320/375/768/1440px reflow, keyboard menu and focus
+ok 5 - /oas-1.html: 320/375/768/1440px reflow, keyboard menu and focus
+  ---
+  duration_ms: 1065.263571
+  type: 'test'
+  ...
+# Subtest: /oas-1.html: WCAG A/AA automated accessibility, desktop and mobile
+ok 6 - /oas-1.html: WCAG A/AA automated accessibility, desktop and mobile
+  ---
+  duration_ms: 1929.659085
+  type: 'test'
+  ...
+# Subtest: /oas-control-domains.html: renders pinned release and consistent reachable navigation
+ok 7 - /oas-control-domains.html: renders pinned release and consistent reachable navigation
+  ---
+  duration_ms: 2244.096672
+  type: 'test'
+  ...
+# Subtest: /oas-control-domains.html: 320/375/768/1440px reflow, keyboard menu and focus
+ok 8 - /oas-control-domains.html: 320/375/768/1440px reflow, keyboard menu and focus
+  ---
+  duration_ms: 1087.033296
+  type: 'test'
+  ...
+# Subtest: /oas-control-domains.html: WCAG A/AA automated accessibility, desktop and mobile
+ok 9 - /oas-control-domains.html: WCAG A/AA automated accessibility, desktop and mobile
+  ---
+  duration_ms: 2502.700322
+  type: 'test'
+  ...
+# Subtest: /oas-purpose-boundaries.html: renders pinned release and consistent reachable navigation
+ok 10 - /oas-purpose-boundaries.html: renders pinned release and consistent reachable navigation
+  ---
+  duration_ms: 1943.24621
+  type: 'test'
+  ...
+# Subtest: /oas-purpose-boundaries.html: 320/375/768/1440px reflow, keyboard menu and focus
+ok 11 - /oas-purpose-boundaries.html: 320/375/768/1440px reflow, keyboard menu and focus
+  ---
+  duration_ms: 1010.687056
+  type: 'test'
+  ...
+# Subtest: /oas-purpose-boundaries.html: WCAG A/AA automated accessibility, desktop and mobile
+ok 12 - /oas-purpose-boundaries.html: WCAG A/AA automated accessibility, desktop and mobile
+  ---
+  duration_ms: 1980.560256
+  type: 'test'
+  ...
+# Subtest: /oas-risk-classification.html: renders pinned release and consistent reachable navigation
+ok 13 - /oas-risk-classification.html: renders pinned release and consistent reachable navigation
+  ---
+  duration_ms: 1864.326993
+  type: 'test'
+  ...
+# Subtest: /oas-risk-classification.html: 320/375/768/1440px reflow, keyboard menu and focus
+ok 14 - /oas-risk-classification.html: 320/375/768/1440px reflow, keyboard menu and focus
+  ---
+  duration_ms: 1079.856779
+  type: 'test'
+  ...
+# Subtest: /oas-risk-classification.html: WCAG A/AA automated accessibility, desktop and mobile
+ok 15 - /oas-risk-classification.html: WCAG A/AA automated accessibility, desktop and mobile
+  ---
+  duration_ms: 2217.78771
+  type: 'test'
+  ...
+# Subtest: /oas/catalogs/OAS-1@1.0.0.json: built response is the exact frozen file
+ok 16 - /oas/catalogs/OAS-1@1.0.0.json: built response is the exact frozen file
+  ---
+  duration_ms: 87.179753
+  type: 'test'
+  ...
+# Subtest: /oas/OAS-1@1.0.0.md: built response is the exact frozen file
+ok 17 - /oas/OAS-1@1.0.0.md: built response is the exact frozen file
+  ---
+  duration_ms: 62.353364
+  type: 'test'
+  ...
+# Subtest: /oas/currentness.json: built response is the exact frozen file
+ok 18 - /oas/currentness.json: built response is the exact frozen file
+  ---
+  duration_ms: 54.433878
+  type: 'test'
+  ...
+# Subtest: /oas/declaration.schema.json: built response is the exact frozen file
+ok 19 - /oas/declaration.schema.json: built response is the exact frozen file
+  ---
+  duration_ms: 43.585417
+  type: 'test'
+  ...
+# Subtest: every reachable page link, fragment and release CTA has a real destination
+ok 20 - every reachable page link, fragment and release CTA has a real destination
+  ---
+  duration_ms: 12908.927184
+  type: 'test'
+  ...
+# Subtest: reduced motion disables nonessential canvas and CSS animation
+ok 21 - reduced motion disables nonessential canvas and CSS animation
+  ---
+  duration_ms: 3810.815213
+  type: 'test'
+  ...
+# Subtest: mobile risk comparison is keyboard focusable and scrollable
+ok 22 - mobile risk comparison is keyboard focusable and scrollable
+  ---
+  duration_ms: 941.990438
+  type: 'test'
+  ...
+1..22
+# tests 22
+# suites 0
+# pass 22
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 45673.004502

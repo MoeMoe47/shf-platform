@@ -1,12 +1,12 @@
 # Controlled OAS website completion roadmap
 
-No batch has been implemented. Owner approval of the sequence is required. Current checkout source mismatch is an explicit prerequisite; neither this audit nor the next batch may reset user work or merge histories automatically.
+Batch 1 was explicitly approved and completed on 2026-10-27. Only the bounded release/navigation/accessibility foundation is implemented. Later batches remain subject to approval. No user work was reset and no histories were merged.
 
 ## Batch 1 — Core release access and broken navigation
 
-Prerequisite DECISION REQUIRED: Core + Integration/owner confirm which website checkout should expose frozen publication 9fc9827 and approve a bounded integration plan preserving every frozen artifact byte. Do not edit normative content. In that approved context, surface exact final ID/date/status/NOT_EVALUATED, human standard/catalog/currentness/schema access; correct obsolete working-draft presentation; fix two Purpose anchors or point them truthfully; enable links to existing Risk/Control pages consistently and make Purpose reachable. Keep scope/declaration boundaries explicit. No new visual system, certification function, provider login or backend is required.
+**COMPLETE — 2026-10-27.** Owner-approved exact-byte source alignment restored the frozen catalog/Markdown/currentness and final closure schema from publication 9fc9827. Shared metadata/nav, truthful planned Governance, Purpose destinations, real release CTAs, draft-label removal, contrast/320px corrections and keyboard/reduced-motion gates pass. No normative bytes changed or new later-batch pages were built.
 
-Acceptance: all five pages render; all actual nav/CTA/fragment targets match their labels; canonical artifact responses have correct MIME and exact hashes; no guessed routes/domains; no unsupported conformance/assessment claim; frozen-artifact checks pass; user working tree preserved. **This is the exact first implementation batch**, after the source-alignment decision.
+Acceptance evidence: 22 compiled-site browser tests, 109 existing stage-appropriate OAS/reporting tests, 12 broader routing tests; byte/hash/source checks, TypeScript and scoped build pass. See evidence/oas-website-completion/batch-1/VALIDATION.md for the distinction between active and frozen-stage checks. All 271 incoming modified tracked files preserve their exact hashes. Remaining full canonical-content and legacy scope prose work belongs to Batch 2; this does not declare the entire website complete.
 
 ## Batch 2 — Standard, requirements and domains presentation
 

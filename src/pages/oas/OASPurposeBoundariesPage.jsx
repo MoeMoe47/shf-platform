@@ -34,9 +34,10 @@
 import React, { useEffect, useState } from "react";
 import "./oas-landing.css";
 import "./oas-purpose-boundaries.css";
+import { oasRelease } from "./oasRelease.js";
 import HeroAtmosphere from "./OASPurposeBoundariesMotion.jsx";
 import LowerAtmosphere from "./OASPurposeBoundariesLowerMotion.jsx";
-import { VenusMark, PlannedItem, AnchorLink, OASFooter } from "./oasShared.jsx";
+import { OASHeader, OASFooter } from "./oasShared.jsx";
 
 function usePrefersReducedMotion() {
   const [reduced, setReduced] = useState(
@@ -107,8 +108,8 @@ const SECTION_NAV = [
   { id: "overview", label: "Overview" },
   { id: "key-elements", label: "Key Elements" },
   { id: "in-practice", label: "In Practice" },
-  { id: "standards-schemas", label: "Standards & Schemas" },
-  { id: "related-domains", label: "Related Domains" },
+  { id: "standards-schemas", label: "Standard & Schema Access", href: "/oas-1.html#read-the-standard" },
+  { id: "related-domains", label: "All Control Domains", href: "/oas-control-domains.html" },
 ];
 
 const WHY_IT_MATTERS = [
@@ -153,7 +154,6 @@ const IN_PRACTICE = [
 ];
 
 export default function OASPurposeBoundariesPage() {
-  const [navOpen, setNavOpen] = useState(false);
   const reducedMotion = usePrefersReducedMotion();
 
   return (
@@ -163,55 +163,7 @@ export default function OASPurposeBoundariesPage() {
       </a>
 
       {/* ---------------------------- Header ---------------------------- */}
-      <header className="oas-header">
-        <div className="oas-header__bar">
-          <div className="oas-header__brand">
-            <VenusMark size={54} />
-            <div className="oas-header__brand-text">
-              <span className="oas-header__mark">OAS</span>
-              <span className="oas-header__tagline">
-                <span>Open Autonomous Standard</span>
-              </span>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            className="oas-header__toggle"
-            aria-expanded={navOpen}
-            aria-controls="oaspb-primary-nav"
-            aria-label="Toggle navigation menu"
-            onClick={() => setNavOpen((v) => !v)}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
-              <path d="M4 7h16M4 12h16M4 17h16" strokeLinecap="round" />
-            </svg>
-          </button>
-
-          <nav
-            id="oaspb-primary-nav"
-            className={`oas-header__nav${navOpen ? " oas-header__nav--open" : ""}`}
-            aria-label="Primary"
-          >
-            <AnchorLink href="/oas.html#why-oas">About</AnchorLink>
-            <AnchorLink href="/oas-1.html">OAS-1</AnchorLink>
-            <AnchorLink href="/oas-control-domains.html" className="oaspb-nav-active">
-              Control Domains
-            </AnchorLink>
-            <PlannedItem>Risk</PlannedItem>
-            <PlannedItem>Conformance</PlannedItem>
-            <PlannedItem>Schemas</PlannedItem>
-            <PlannedItem>Implementation</PlannedItem>
-            <AnchorLink href="/oas.html#site-footer">Governance</AnchorLink>
-          </nav>
-
-          <div className="oas-header__cta">
-            <a className="oas-btn oaspb-btn--rust" href="/oas-1.html">
-              Read OAS-1
-            </a>
-          </div>
-        </div>
-      </header>
+      <OASHeader current="/oas-purpose-boundaries.html" />
 
       <main id="oaspb-main">
         {/* ---------------------------- Hero ---------------------------- */}
@@ -303,7 +255,7 @@ export default function OASPurposeBoundariesPage() {
               {SECTION_NAV.map((s, i) => (
                 <a
                   key={s.id}
-                  href={`#${s.id}`}
+                  href={s.href ?? `#${s.id}`}
                   className={`oaspb-subnav__link${i === 0 ? " oaspb-subnav__link--active" : ""}`}
                   aria-current={i === 0 ? "true" : undefined}
                 >
@@ -370,20 +322,20 @@ export default function OASPurposeBoundariesPage() {
                 <div className="oaspb-dive__text">
                   <p className="oaspb-dive__heading">Dive deeper.</p>
                   <p className="oaspb-dive__body">
-                    Explore the detailed requirements, schemas, and implementation guidance for Purpose &amp;
-                    Boundaries in OAS-1.
+                    Read the published standard and its provider-description requirements for Purpose &amp;
+                    Boundaries.
                   </p>
                 </div>
               </div>
 
-              <a className="oas-btn oaspb-btn--rust oaspb-dive__cta" href="/oas-1.html">
-                View OAS-1 Specification <span aria-hidden="true">→</span>
+              <a className="oas-btn oaspb-btn--rust oaspb-dive__cta" href={oasRelease.humanUrl}>
+                Read OAS 1.0 <span aria-hidden="true">→</span>
               </a>
 
               <a className="oaspb-dive__next" href="/oas-control-domains.html">
                 <span className="oaspb-dive__next-text">
-                  <span className="oaspb-dive__next-label">Next Domain</span>
-                  <span className="oaspb-dive__next-title">Capabilities &amp; Resources</span>
+                  <span className="oaspb-dive__next-label">All Domains</span>
+                  <span className="oaspb-dive__next-title">Control Domains</span>
                 </span>
                 <span className="oaspb-dive__next-arrow" aria-hidden="true">
                   {ICONS.arrowRight(iconProps)}

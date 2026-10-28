@@ -30,7 +30,7 @@ import React, { useEffect, useState } from "react";
 import "./oas-landing.css";
 import "./oas-risk-classification.css";
 import HeroMotion from "./OASRiskClassificationHeroMotion.jsx";
-import { VenusMark, PlannedItem, AnchorLink, OASFooter } from "./oasShared.jsx";
+import { OASHeader, PlannedItem, OASFooter } from "./oasShared.jsx";
 
 function usePrefersReducedMotion() {
   const [reduced, setReduced] = useState(
@@ -169,7 +169,6 @@ const MATRIX_ROWS = [
 const MATRIX_COLUMNS = ["R0 Minimal", "R1 Low", "R2 Moderate", "R3 High", "R4 Critical"];
 
 export default function OASRiskClassificationPage() {
-  const [navOpen, setNavOpen] = useState(false);
   const reducedMotion = usePrefersReducedMotion();
 
   return (
@@ -179,57 +178,9 @@ export default function OASRiskClassificationPage() {
       </a>
 
       {/* ---------------------------- Header ---------------------------- */}
-      <header className="oas-header">
-        <div className="oas-header__bar">
-          <div className="oas-header__brand">
-            <VenusMark size={54} />
-            <div className="oas-header__brand-text">
-              <span className="oas-header__mark">OAS</span>
-              <span className="oas-header__tagline">
-                <span>Open Autonomous Standard</span>
-              </span>
-            </div>
-          </div>
+      <OASHeader current="/oas-risk-classification.html" />
 
-          <button
-            type="button"
-            className="oas-header__toggle"
-            aria-expanded={navOpen}
-            aria-controls="oasrc-primary-nav"
-            aria-label="Toggle navigation menu"
-            onClick={() => setNavOpen((v) => !v)}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
-              <path d="M4 7h16M4 12h16M4 17h16" strokeLinecap="round" />
-            </svg>
-          </button>
-
-          <nav
-            id="oasrc-primary-nav"
-            className={`oas-header__nav${navOpen ? " oas-header__nav--open" : ""}`}
-            aria-label="Primary"
-          >
-            <AnchorLink href="/oas.html#why-oas">About</AnchorLink>
-            <AnchorLink href="/oas-1.html">OAS-1</AnchorLink>
-            <AnchorLink href="/oas-control-domains.html">Control Domains</AnchorLink>
-            <span className="oasrc-nav-active" aria-current="page">
-              Risk
-            </span>
-            <PlannedItem>Conformance</PlannedItem>
-            <PlannedItem>Schemas</PlannedItem>
-            <PlannedItem>Implementation</PlannedItem>
-            <AnchorLink href="/oas.html#site-footer">Governance</AnchorLink>
-          </nav>
-
-          <div className="oas-header__cta">
-            <a className="oas-btn oasrc-btn--rust" href="/oas-1.html">
-              Read OAS-1
-            </a>
-          </div>
-        </div>
-      </header>
-
-      <main id="oasrc-main">
+      <main id="oasrc-main"><p className="oas__container oas-release-boundary">Risk classification is informative guidance. It does not assign certification, assess an agent, or authorize deployment. The frozen release defines description and provider-declaration obligations.</p>
         {/* ---------------------------- Hero ---------------------------- */}
         <section className="oasrc-hero" aria-labelledby="oasrc-hero-heading">
           {/* Approved atmospheric background asset — purely decorative
@@ -373,7 +324,7 @@ export default function OASRiskClassificationPage() {
               deployment controls.
             </p>
 
-            <div className="oasrc-matrix__scroll">
+            <div className="oasrc-matrix__scroll" tabIndex={0} role="region" aria-label="Informative risk comparison — scroll horizontally">
               <table className="oasrc-matrix">
                 <caption className="oas__skip-link">Requirements compared across risk levels R0 through R4</caption>
                 <thead>
@@ -429,7 +380,7 @@ export default function OASRiskClassificationPage() {
                 </span>
               </PlannedItem>
               <a className="oasrc-textlink" href="/oas-1.html">
-                Read OAS-1 Specification <span aria-hidden="true">→</span>
+                View OAS-1 Summary <span aria-hidden="true">→</span>
               </a>
             </div>
           </div>

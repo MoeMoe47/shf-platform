@@ -1,12 +1,12 @@
 // src/pages/oas/OASLandingPage.jsx
 //
 // Public landing page for the Open Autonomous Standard (OAS) — a public
-// working draft, "OAS-1". This page is intentionally self-contained: it
+// frozen published release, "OAS-1". This page is intentionally self-contained: it
 // does not import shared SHF/SHS tokens or styles (see oas-landing.css),
 // matching the same isolation precedent already established for the
 // canonical Universe experience (universe.html/universe.main.jsx).
 //
-// Status/claims discipline: OAS-1 is a working draft with no operational
+// Status/claims discipline: OAS-1 is a frozen published release with no operational
 // certification, validation, or Registry/Trust Bureau backend behind it
 // in this repository. Copy below deliberately uses "defines" / "proposes"
 // / "establishes requirements" language and never claims adoption,
@@ -21,9 +21,9 @@
 // does not, it renders as non-interactive text via <PlannedItem>, per
 // the routing rules for this page — no fabricated routes.
 
-import React, { useState } from "react";
+import React from "react";
 import "./oas-landing.css";
-import { VenusMark, PlannedItem, AnchorLink, OASFooter } from "./oasShared.jsx";
+import { OASHeader, OASFooter } from "./oasShared.jsx";
 
 /* ---------------------------- Foundation icons ---------------------------- */
 /* Minimal hand-authored line icons (no external icon library dependency). */
@@ -151,7 +151,6 @@ const FOUNDATIONS = [
 ];
 
 export default function OASLandingPage() {
-  const [navOpen, setNavOpen] = useState(false);
 
   return (
     <div className="oas oas-home">
@@ -167,53 +166,7 @@ export default function OASLandingPage() {
           whole OAS site. No nav item is marked active: Home has no
           corresponding nav entry (it's reached via the logo), matching
           the "no active state unless cleanly supported" instruction. */}
-      <header className="oas-header">
-        <div className="oas-header__bar">
-          <div className="oas-header__brand">
-            <VenusMark size={54} />
-            <div className="oas-header__brand-text">
-              <span className="oas-header__mark">OAS</span>
-              <span className="oas-header__tagline">
-                <span>Open Autonomous Standard</span>
-              </span>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            className="oas-header__toggle"
-            aria-expanded={navOpen}
-            aria-controls="oas-primary-nav"
-            aria-label="Toggle navigation menu"
-            onClick={() => setNavOpen((v) => !v)}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
-              <path d="M4 7h16M4 12h16M4 17h16" strokeLinecap="round" />
-            </svg>
-          </button>
-
-          <nav
-            id="oas-primary-nav"
-            className={`oas-header__nav${navOpen ? " oas-header__nav--open" : ""}`}
-            aria-label="Primary"
-          >
-            <AnchorLink href="#why-oas">About</AnchorLink>
-            <AnchorLink href="/oas-1.html">OAS-1</AnchorLink>
-            <AnchorLink href="/oas-control-domains.html">Control Domains</AnchorLink>
-            <AnchorLink href="/oas-risk-classification.html">Risk</AnchorLink>
-            <PlannedItem>Conformance</PlannedItem>
-            <PlannedItem>Schemas</PlannedItem>
-            <PlannedItem>Implementation</PlannedItem>
-            <AnchorLink href="#site-footer">Governance</AnchorLink>
-          </nav>
-
-          <div className="oas-header__cta">
-            <a className="oas-btn oas-btn--primary" href="/oas-1.html">
-              Read OAS-1
-            </a>
-          </div>
-        </div>
-      </header>
+      <OASHeader current="/oas.html" />
 
       <main id="oas-main">
         {/* ---------------------------- Hero ---------------------------- */}
@@ -256,7 +209,7 @@ export default function OASLandingPage() {
                   Explore OAS-1
                 </a>
                 <a className="oas-btn oas-btn--outline-on-dark" href="#why-oas">
-                  Watch Overview
+                  Read Overview
                 </a>
               </div>
             </div>
@@ -401,7 +354,7 @@ export default function OASLandingPage() {
           <div className="oas__container oas-opportunity__content">
             <h2 id="oas-opportunity-heading">A more trustworthy autonomous future starts with shared rules.</h2>
             <p>
-              Explore the working draft that defines how autonomous agents can be built, governed, and
+              Explore the frozen published release that defines how autonomous agents can be built, governed, and
               trusted.
             </p>
             <a className="oas-btn oas-btn--on-dark" href="/oas-1.html">

@@ -174,3 +174,138 @@ test("mobile risk comparison is keyboard focusable and scrollable", async () => 
     await expect.poll(() => region.evaluate(e => e.scrollLeft)).toBeGreaterThan(before);
   } finally { await page.close(); }
 });
+
+test("OAS-1 presents exactly 14 canonical requirements across 8 canonical domains", async () => {
+  const page = await pageFor("/oas-1.html");
+
+  try {
+    const requirementCards = page.locator(".oas1-requirement");
+    const domainSections = page.locator(".oas1-requirement-domain");
+
+    assert.equal(await requirementCards.count(), 14);
+    assert.equal(await domainSections.count(), 8);
+
+    const requirementIds = await page
+      .locator(".oas1-requirement__id")
+      .allTextContents();
+
+    assert.deepEqual(requirementIds, [
+      "OAS-1-REQ-0001",
+      "OAS-1-REQ-0002",
+      "OAS-1-REQ-0003",
+      "OAS-1-REQ-0004",
+      "OAS-1-REQ-0005",
+      "OAS-1-REQ-0006",
+      "OAS-1-REQ-0007",
+      "OAS-1-REQ-0008",
+      "OAS-1-REQ-0009",
+      "OAS-1-REQ-0010",
+      "OAS-1-REQ-0012",
+      "OAS-1-REQ-0014",
+      "OAS-1-REQ-0016",
+      "OAS-1-REQ-0017",
+    ]);
+  } finally {
+    await page.close();
+  }
+});
+
+test("OAS-1 requirement-to-domain mapping matches the frozen release", async () => {
+  const page = await pageFor("/oas-1.html");
+
+  try {
+    const expected = {
+      "OAS-1-D01": ["OAS-1-REQ-0001", "OAS-1-REQ-0002"],
+      "OAS-1-D02": ["OAS-1-REQ-0003", "OAS-1-REQ-0004", "OAS-1-REQ-0005"],
+      "OAS-1-D03": ["OAS-1-REQ-0006", "OAS-1-REQ-0007"],
+      "OAS-1-D04": ["OAS-1-REQ-0008", "OAS-1-REQ-0009"],
+      "OAS-1-D05": ["OAS-1-REQ-0010"],
+      "OAS-1-D06": ["OAS-1-REQ-0012"],
+      "OAS-1-D07": ["OAS-1-REQ-0014"],
+      "OAS-1-D08": ["OAS-1-REQ-0016", "OAS-1-REQ-0017"],
+    };
+
+    for (const [domainId, requirementIds] of Object.entries(expected)) {
+      const domain = page.locator(".oas1-requirement-domain").filter({
+        has: page.getByText(domainId, { exact: false }),
+      });
+
+      assert.equal(await domain.count(), 1);
+
+      const rendered = await domain
+        .locator(".oas1-requirement__id")
+        .allTextContents();
+
+      assert.deepEqual(rendered, requirementIds);
+    }
+  } finally {
+    await page.close();
+  }
+});
+
+test("OAS requirement and domain links are stable and reachable", async () => {
+  const page = await pageFor("/oas-1.html");
+
+  try {
+    for (const id of [
+      "OAS-1-REQ-0001",
+      "OAS-1-REQ-0002",
+      "OAS-1-REQ-0003",
+      "OAS-1-REQ-0004",
+      "OAS-1-REQ-0005",
+      "OAS-1-REQ-0006",
+      "OAS-1-REQ-0007",
+      "OAS-1-REQ-0008",
+      "OAS-1-REQ-0009",
+      "OAS-1-REQ-0010",
+      "OAS-1-REQ-0012",
+      "OAS-1-REQ-0014",
+      "OAS-1-REQ-0016",
+      "OAS-1-REQ-0017",
+    ]) {
+      const anchor = `requirement-${id.toLowerCase()}`;
+      assert.equal(await page.locator(`#${anchor}`).count(), 1);
+    }
+
+    for (const domainId of [
+      "OAS-1-D01",
+      "OAS-1-D02",
+      "OAS-1-D03",
+      "OAS-1-D04",
+      "OAS-1-D05",
+      "OAS-1-D06",
+      "OAS-1-D07",
+      "OAS-1-D08",
+    ]) {
+      const href = `/oas-control-domains.html#domain-${domainId.toLowerCase()}`;
+      assert.ok(await page.locator(`a[href="${href}"]`).count() >= 1);
+    }
+  } finally {
+    await page.close();
+  }
+});
+
+test("OAS-1 preserves release identity and NOT_EVALUATED boundary", async () => {
+  const page = await pageFor("/oas-1.html");
+
+  try {
+    const text = await page.locator("body").innerText();
+
+    assert.match(text, /OAS-1@1\.0\.0/);
+    assert.match(text, /14 requirements/);
+    assert.match(text, /8 domains/);
+    assert.match(text, /NOT_EVALUATED/);
+
+    assert.doesNotMatch(
+      text,
+      /working draft|public review|draft release|provisional/i
+    );
+
+    assert.match(
+      text,
+      /does not certify, assess, endorse, or behaviorally verify/i
+    );
+  } finally {
+    await page.close();
+  }
+});

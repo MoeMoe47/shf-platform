@@ -21,6 +21,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./oas-landing.css";
 import "./oas-control-domains.css";
 import { OASHeader, OASFooter } from "./oasShared.jsx";
+import { oasDomains } from "./oasStandard.js";
 
 const iconProps = {
   className: "oascd-icon",
@@ -95,64 +96,46 @@ const ICONS = {
 
 // Canonical order, copy, and per-node radial position — matches the
 // approved mock's exact placement (top, then clockwise).
-const DOMAINS = [
-  {
-    n: "01",
-    title: "Identity & Ownership",
-    icon: "fingerprint",
-    pos: "top",
-    body: "Establishes clear identity, provenance and ownership for agents, ensuring accountability throughout their lifecycle.",
-  },
-  {
-    n: "02",
-    title: "Purpose & Boundaries",
-    icon: "target",
-    pos: "upper-right",
-    body: "Defines what the agent is intended to do, including its goals, scope and operational boundaries.",
-  },
-  {
-    n: "03",
-    title: "Capabilities & Resources",
-    icon: "gear",
-    pos: "right",
-    body: "Specifies the agent's capabilities, required resources and any external tools or systems it can access.",
-  },
-  {
-    n: "04",
-    title: "Permissions & Access",
-    icon: "key",
-    pos: "lower-right",
-    body: "Controls what the agent can access, including data, systems and actions, with appropriate authorization mechanisms.",
-  },
-  {
-    n: "05",
-    title: "Safety & Prohibited Actions",
-    icon: "shield",
-    pos: "bottom",
-    body: "Defines safety requirements, prohibited actions and guardrails to prevent harmful behavior.",
-  },
-  {
-    n: "06",
-    title: "Human Authority",
-    icon: "people",
-    pos: "lower-left",
-    body: "Clarifies human oversight, authority structures and escalation paths for critical decisions.",
-  },
-  {
-    n: "07",
-    title: "Validation & Evidence",
-    icon: "doc",
-    pos: "left",
-    body: "Establishes verification methods, performance monitoring and evidence requirements.",
-  },
-  {
-    n: "08",
-    title: "Lifecycle & Accountability",
-    icon: "cycle",
-    pos: "upper-left",
-    body: "Covers the full lifecycle from development to decommissioning, including ongoing accountability and impact assessment.",
-  },
-];
+const DOMAIN_VISUALS = Object.freeze({
+  "OAS-1-D01": Object.freeze({ icon: "fingerprint", pos: "top" }),
+  "OAS-1-D02": Object.freeze({ icon: "target", pos: "upper-right" }),
+  "OAS-1-D03": Object.freeze({ icon: "gear", pos: "right" }),
+  "OAS-1-D04": Object.freeze({ icon: "key", pos: "lower-right" }),
+  "OAS-1-D05": Object.freeze({ icon: "shield", pos: "bottom" }),
+  "OAS-1-D06": Object.freeze({ icon: "people", pos: "lower-left" }),
+  "OAS-1-D07": Object.freeze({ icon: "doc", pos: "left" }),
+  "OAS-1-D08": Object.freeze({ icon: "cycle", pos: "upper-left" }),
+});
+
+const DOMAIN_DESCRIPTIONS = Object.freeze({
+  "OAS-1-D01":
+    "Establishes clear identity, provenance and ownership for agents, ensuring accountability throughout their lifecycle.",
+  "OAS-1-D02":
+    "Defines what the agent is intended to do, including its goals, scope and operational boundaries.",
+  "OAS-1-D03":
+    "Specifies the agent's capabilities, required resources and any external tools or systems it can access.",
+  "OAS-1-D04":
+    "Controls what the agent can access, including data, systems and actions, with appropriate authorization mechanisms.",
+  "OAS-1-D05":
+    "Defines safety requirements, prohibited actions and guardrails to prevent harmful behavior.",
+  "OAS-1-D06":
+    "Clarifies human oversight, authority structures and escalation paths for critical decisions.",
+  "OAS-1-D07":
+    "Establishes verification methods, performance monitoring and evidence requirements.",
+  "OAS-1-D08":
+    "Covers the full lifecycle from development to decommissioning, including ongoing accountability and impact assessment.",
+});
+
+const DOMAINS = Object.freeze(
+  oasDomains.map((domain) =>
+    Object.freeze({
+      ...domain,
+      n: domain.number,
+      body: DOMAIN_DESCRIPTIONS[domain.id],
+      ...DOMAIN_VISUALS[domain.id],
+    }),
+  ),
+);
 
 // Screen-space angles (SVG y grows downward): top = -90deg, then every
 // 45deg clockwise — matches the approved mock's exact node order and
@@ -474,8 +457,9 @@ export default function OASControlDomainsPage() {
             <div className="oascd-details__list">
               {DOMAINS.map((d) => (
                 <div
+                  id={d.anchor}
                   className={`oascd-detail${d.n === activeDomain ? " oascd-detail--active" : ""}`}
-                  key={d.n}
+                  key={d.id}
                 >
                   <span className="oascd-detail__icon">{ICONS[d.icon](iconProps)}</span>
                   <span className="oascd-detail__head">

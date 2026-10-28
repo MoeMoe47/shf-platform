@@ -15,43 +15,20 @@ import React from "react";
 import "./oas-landing.css";
 import "./oas1-page.css";
 import { oasRelease } from "./oasRelease.js";
+import { oasDomains } from "./oasStandard.js";
 import { OASHeader, PlannedItem, OASFooter } from "./oasShared.jsx";
 
-const DOMAINS = [
-  { n: "01", label: "Identity & Ownership" },
-  { n: "02", label: "Purpose & Boundaries" },
-  { n: "03", label: "Capabilities & Resources" },
-  { n: "04", label: "Permissions & Access" },
-  { n: "05", label: "Safety & Prohibited Actions" },
-  { n: "06", label: "Human Authority" },
-  { n: "07", label: "Validation & Evidence" },
-  { n: "08", label: "Lifecycle & Accountability" },
+// Public standard navigation for the surfaces currently published.
+// Governance, developer tooling, conformance, SDKs, CLI, and later
+// interoperability work remain outside this Batch 2 presentation scope.
+const STANDARD_NAV = [
+  { number: "01", label: "Overview", href: "#oas1-covers" },
+  { number: "02", label: "Purpose & Boundaries", href: "/oas-purpose-boundaries.html" },
+  { number: "03", label: "Control Domains", href: "/oas-control-domains.html" },
+  { number: "04", label: "Requirements", href: "#requirements" },
+  { number: "05", label: "Risk Classification", href: "/oas-risk-classification.html" },
+  { number: "06", label: "Release Artifacts", href: "#read-the-standard" },
 ];
-
-// The approved mock shows a 10-line preview of the 14-section spec
-// followed by a "View Full Table of Contents" link — a genuine partial
-// preview, not the complete list twice over. The other four sections
-// (Risk Classification, Conformance, Schemas, Versioning and Change
-// Control) still exist as real content elsewhere on this page/site
-// (Risk/Conformance/Schemas are already in the header nav as planned
-// items), so truncating here doesn't hide anything invented.
-const TOC_FULL = [
-  "Scope",
-  "Terms and Definitions",
-  "Agent Identity",
-  "Purpose and Operating Boundaries",
-  "Capabilities and Resources",
-  "Permissions and Access",
-  "Safety Controls",
-  "Human Authority",
-  "Validation and Evidence",
-  "Lifecycle Governance",
-  "Risk Classification",
-  "Conformance",
-  "Schemas",
-  "Versioning and Change Control",
-];
-const TOC_PREVIEW_COUNT = 10;
 
 const QUICK_FACTS = [
   { label: "Version", value: oasRelease.id, icon: "edit" },
@@ -154,8 +131,6 @@ function ActionRow({ icon, title, comingSoon = false, description, href = undefi
 }
 
 export default function OAS1Page() {
-  const tocPreview = TOC_FULL.slice(0, TOC_PREVIEW_COUNT);
-
   return (
     <div className="oas oas1">
       <a className="oas__skip-link" href="#oas1-main">
@@ -246,11 +221,15 @@ export default function OAS1Page() {
               </p>
 
               <div className="oas1-covers__row">
-                {DOMAINS.map((d) => (
-                  <div className="oas1-domain" key={d.n}>
-                    <span className="oas1-domain__num">{d.n}</span>
-                    <span className="oas1-domain__label">{d.label}</span>
-                  </div>
+                {oasDomains.map((domain) => (
+                  <a
+                    className="oas1-domain"
+                    key={domain.id}
+                    href={`/oas-control-domains.html#${domain.anchor}`}
+                  >
+                    <span className="oas1-domain__num">{domain.number}</span>
+                    <span className="oas1-domain__label">{domain.title}</span>
+                  </a>
                 ))}
               </div>
 
@@ -270,17 +249,15 @@ export default function OAS1Page() {
               </p>
 
               <ol className="oas1-toc">
-                {tocPreview.map((title, i) => (
-                  <li className="oas1-toc__item" key={title}>
-                    <span className="oas1-toc__num">{String(i + 1).padStart(2, "0")}</span>
-                    <span className="oas1-toc__title">{title}</span>
+                {STANDARD_NAV.map((item) => (
+                  <li className="oas1-toc__item" key={item.label}>
+                    <span className="oas1-toc__num">{item.number}</span>
+                    <a className="oas1-toc__title" href={item.href}>
+                      {item.label}
+                    </a>
                   </li>
                 ))}
               </ol>
-
-              <div className="oas1-textlink oas1-textlink--planned">
-                <PlannedItem>View Full Table of Contents →</PlannedItem>
-              </div>
             </div>
 
             <div className="oas1-main__col oas1-main__col--divider" id="read-the-standard" aria-labelledby="oas1-access-heading">
@@ -311,6 +288,135 @@ export default function OAS1Page() {
                 This page provides an overview. The OAS-1 Specification contains the normative requirements.
               </p>
             </div>
+          </div>
+        </section>
+
+        {/* ---------------------------- Canonical requirements ---------------------------- */}
+        <section
+          className="oas1-requirements"
+          id="requirements"
+          aria-labelledby="oas1-requirements-heading"
+        >
+          <div className="oas__container">
+            <div className="oas1-requirements__intro">
+              <p className="oas__eyebrow">Normative requirements</p>
+
+              <h2 id="oas1-requirements-heading" className="oas1-requirements__heading">
+                The 14 requirements of OAS-1.
+              </h2>
+
+              <p className="oas1-requirements__lead">
+                The requirement IDs and normative text below are derived directly from the frozen
+                {` ${oasRelease.id} `}release catalog. Domain names are informative presentation
+                labels used to organize the published requirements.
+              </p>
+
+              <p className="oas1-requirements__boundary">
+                Publication defines the standard. It does not certify, assess, endorse, or
+                behaviorally verify any provider or autonomous system. Provider declarations remain
+                {` ${oasRelease.evaluationStatus}`}.
+              </p>
+            </div>
+
+            <nav className="oas1-requirements__domain-nav" aria-label="Requirement domains">
+              {oasDomains.map((domain) => (
+                <a key={domain.id} href={`#requirements-${domain.slug}`}>
+                  <span>{domain.number}</span>
+                  {domain.title}
+                </a>
+              ))}
+            </nav>
+
+            <div className="oas1-requirements__domains">
+              {oasDomains.map((domain) => (
+                <section
+                  className="oas1-requirement-domain"
+                  id={`requirements-${domain.slug}`}
+                  key={domain.id}
+                  aria-labelledby={`requirements-${domain.slug}-heading`}
+                >
+                  <header className="oas1-requirement-domain__header">
+                    <div>
+                      <p className="oas1-requirement-domain__id">
+                        Domain {domain.number} · {domain.id}
+                      </p>
+
+                      <h3
+                        className="oas1-requirement-domain__title"
+                        id={`requirements-${domain.slug}-heading`}
+                      >
+                        {domain.title}
+                      </h3>
+                    </div>
+
+                    <a
+                      className="oas1-requirement-domain__domain-link"
+                      href={`/oas-control-domains.html#${domain.anchor}`}
+                    >
+                      View domain →
+                    </a>
+                  </header>
+
+                  <ol className="oas1-requirement-list">
+                    {domain.requirements.map((requirement) => (
+                      <li
+                        className="oas1-requirement"
+                        id={requirement.anchor}
+                        key={requirement.requirement_id}
+                      >
+                        <div className="oas1-requirement__meta">
+                          <a
+                            className="oas1-requirement__id"
+                            href={`#${requirement.anchor}`}
+                          >
+                            {requirement.requirement_id}
+                          </a>
+
+                          <span className="oas1-requirement__badge">Normative</span>
+
+                          <span className="oas1-requirement__status">
+                            {requirement.status}
+                          </span>
+                        </div>
+
+                        <p className="oas1-requirement__text">
+                          {requirement.normative_text}
+                        </p>
+
+                        <dl className="oas1-requirement__facts">
+                          <div>
+                            <dt>Release</dt>
+                            <dd>{requirement.release_id}</dd>
+                          </div>
+
+                          <div>
+                            <dt>Domain</dt>
+                            <dd>
+                              <a href={`/oas-control-domains.html#${domain.anchor}`}>
+                                {requirement.domain_id}
+                              </a>
+                            </dd>
+                          </div>
+
+                          <div>
+                            <dt>Evaluation</dt>
+                            <dd>{oasRelease.evaluationStatus}</dd>
+                          </div>
+                        </dl>
+                      </li>
+                    ))}
+                  </ol>
+                </section>
+              ))}
+            </div>
+
+            <p className="oas1-requirements__source">
+              Normative source:{" "}
+              <a href={oasRelease.artifactUrl}>
+                {oasRelease.id} machine-readable catalog
+              </a>
+              .
+            </p>
           </div>
         </section>
       </main>

@@ -10,9 +10,11 @@ Acceptance evidence: 22 compiled-site browser tests, 109 existing stage-appropri
 
 ## Batch 2 — Standard, requirements and domains presentation
 
-Expose all fourteen released requirements/IDs verbatim, grouped under all eight canonical domains. Tie summaries to the catalog/source pin; distinguish informative risk matrix from normative information obligations. Clarify empty profiles. Complete Purpose information/related links using existing source. Do not require seven new detail pages to achieve complete canonical coverage.
+**COMPLETE — 2026-10-28.** The public OAS-1 presentation now derives all fourteen released requirements from the frozen catalog and groups them under all eight canonical domain IDs through one centralized presentation model. Stable requirement/domain anchors, working standard navigation, release identity, normative/informative distinctions and the NOT_EVALUATED boundary are explicit. Friendly domain names remain informative website presentation metadata rather than invented normative catalog fields.
 
-Acceptance: 14 exact IDs/text, 8-domain membership and source checks; no floating latest; source/governance boundaries intact.
+Acceptance evidence: scoped production build PASS; TypeScript PASS; expanded built-site browser/regression suite 26/26 PASS; exact 14 requirement IDs, exact 8-domain membership, stable links, responsive/accessibility gates and frozen-artifact serving all pass. OAS-1 catalog checksum remains `9ca2b2b9cc17acd419e9961387e65d0ca3de33fde557d5440f96856dc186892e`. No normative artifact was rewritten and no certification, Registry, ATB or BOS authority was absorbed into OAS. See `evidence/oas-website-completion/batch-2/`.
+
+Next controlled step: Release Center / final OAS 1.0 launch surface.
 
 ## Batch 3 — Governance and versioning
 

@@ -32,6 +32,7 @@ import {
   isVehicleVisible,
   smoothHeadingDeg,
 } from "./metaverseTrafficLivePreviewModel.js";
+import { planTrafficControlStep } from "./metaverseTrafficIntersectionControls.js";
 
 // ---------------------------------------------------------------------------
 // Review-only gate (separate from resolveTrafficAuthoringEnabled)
@@ -411,11 +412,11 @@ export const ALL_ROUTES_REVIEW_SKIP_REASONS = {
 
 // Reports exactly which real routes were selected vs. skipped, and why —
 // never silently drops a route the owner would expect to see explained.
-export function resolveAllRoutesReviewEligibility(routes) {
+export function resolveAllRoutesReviewEligibility(routes, { allowCalibrated = false } = {}) {
   const selected = [];
   const skipped = [];
   for (const route of routes || []) {
-    if (route.status !== "APPROVED") {
+    if (route.status !== "APPROVED" && !(allowCalibrated && route.status === "CALIBRATED")) {
       skipped.push({ id: route.id, name: route.name, reason: ALL_ROUTES_REVIEW_SKIP_REASONS.NOT_APPROVED });
       continue;
     }
@@ -461,10 +462,59 @@ export function advanceRouteFleetVehicles({
   vehicleStates,
   previousHeadings,
   routeElapsed,
+  routeOptions = {},
+  intersectionControls,
+  slotActivation = null,
 }) {
+  const args = { routes, vehicleCountPerRoute, vehicleStates, previousHeadings, routeElapsed, routeOptions, slotActivation };
+  // No opt-in: preserve the original update order, dt, speed and output shape.
+  if (!intersectionControls?.registry.intersections.length) return advanceFleetStep({ ...args, dtSeconds });
+  const { registry, state, pedestrianOccupancy } = intersectionControls;
+  if (!Number.isFinite(dtSeconds) || dtSeconds < 0 || dtSeconds > 10) throw Error('Controlled dt must be finite, 0–10 seconds');
+  if (!state) throw Error('Traffic controls require caller-owned state');
+  for (const zone of registry.intersections) for (const a of zone.approaches) {
+    if (!routes.some(r => r.id === a.routeId)) throw Error('Controlled approach route is missing');
+  }
+  const steps = Math.max(1, Math.ceil(dtSeconds / .02)), dt = dtSeconds / steps;
+  const controlledRouteIds = new Set(registry.intersections.flatMap(z => z.approaches.map(a => a.routeId)));
+  let rendered = [];
+  for (let step = 0; step < steps; step++) {
+    const entries = [];
+    routes.forEach((route, routeIndex) => {
+      if (!controlledRouteIds.has(route.id)) return;
+      const settings = routeOptions[route.id] || {};
+      if ((routeElapsed.get(route.id) || 0)+dt < (settings.startDelay ?? resolveRouteStartDelaySeconds(routeIndex))) return;
+      const offsets = settings.offsets || computeDeterministicVehicleOffsets(vehicleCountPerRoute);
+      offsets.forEach((offset, slot) => {
+        const key = `${route.id}:${slot}`;
+        if (slotActivation) {
+          const activateAt = slotActivation.get(key);
+          const elapsedAfter = (routeElapsed.get(route.id) || 0) + dt;
+          if (!Number.isFinite(activateAt) || activateAt < 0 ||
+              elapsedAfter < activateAt) return;
+        }
+        const current = vehicleStates.get(key) || createVehicleState(offset);
+        const rate = (settings.progressPerSecond ?? resolveTrafficCorridorProgressPerSecond(route.speed_class, slot)) *
+          (settings.speedProfile ? interpolatePerspectiveScale(settings.speedProfile, current.progress) : 1);
+        entries.push({ key, routeId: route.id, slot, current, cruiseSpeed: rate*(registry.corridors[route.id]?.length ?? 1) });
+      });
+    });
+    const plans = planTrafficControlStep({ entries, registry, state, dt, pedestrianOccupancy });
+    rendered = advanceFleetStep({ ...args, dtSeconds: dt, plans, eligibleRouteIds: controlledRouteIds });
+  }
+  const uncontrolledRouteIds = new Set(routes.filter(r => !controlledRouteIds.has(r.id)).map(r => r.id));
+  const uncontrolled = advanceFleetStep({ ...args, dtSeconds, eligibleRouteIds: uncontrolledRouteIds });
+  const order = new Map(routes.map((r,i) => [r.id,i]));
+  return [...rendered, ...uncontrolled].sort((a,b) => order.get(a.routeId)-order.get(b.routeId) ||
+    Number(a.key.split(':').at(-1))-Number(b.key.split(':').at(-1)));
+}
+
+function advanceFleetStep({ routes, vehicleCountPerRoute, dtSeconds, vehicleStates, previousHeadings, routeElapsed, routeOptions, slotActivation = null, plans = new Map(), eligibleRouteIds = null }) {
   const nextRendered = [];
   (routes || []).forEach((route, routeIndex) => {
-    const startDelay = resolveRouteStartDelaySeconds(routeIndex);
+    if (eligibleRouteIds && !eligibleRouteIds.has(route.id)) return;
+    const settings = routeOptions[route.id] || {};
+    const startDelay = settings.startDelay ?? resolveRouteStartDelaySeconds(routeIndex);
     const elapsedBefore = routeElapsed.get(route.id) || 0;
     const elapsedAfter = elapsedBefore + Math.max(0, dtSeconds || 0);
     routeElapsed.set(route.id, elapsedAfter);
@@ -473,18 +523,35 @@ export function advanceRouteFleetVehicles({
     // once at t=0.
     if (elapsedAfter < startDelay) return;
 
-    const offsets = computeDeterministicVehicleOffsets(vehicleCountPerRoute);
+    const offsets = settings.offsets || computeDeterministicVehicleOffsets(vehicleCountPerRoute);
     offsets.forEach((offset, slot) => {
       const key = `${route.id}:${slot}`;
-      const rate = resolveTrafficCorridorProgressPerSecond(route.speed_class, slot);
+      if (slotActivation) {
+        const activateAt = slotActivation.get(key);
+        if (!Number.isFinite(activateAt) || activateAt < 0 ||
+            elapsedAfter < activateAt) return;
+      }
       const current = vehicleStates.get(key) || createVehicleState(offset);
-      const advanced = advanceVehicleState(current, dtSeconds, rate, { loop: true });
+      const baseRate = settings.progressPerSecond ?? resolveTrafficCorridorProgressPerSecond(route.speed_class, slot);
+      // Optional scene presentation reuses the canonical interpolation for
+      // authored slow approaches; it does not introduce signal authority.
+      const rate = baseRate * (settings.speedProfile
+        ? interpolatePerspectiveScale(settings.speedProfile, current.progress) : 1);
+      const plan = plans.get(key);
+      const advanced = plan?.holdRespawn ? current : advanceVehicleState(current, dtSeconds, plan?.progressPerSecond ?? rate, { loop: true });
       vehicleStates.set(key, advanced);
       const previousHeadingDeg = previousHeadings.get(key);
-      const appearance = resolveTrafficCorridorVehicleAppearance({ route, vehicleState: advanced, previousHeadingDeg });
+      const appearance = resolveTrafficCorridorVehicleAppearance({ route, vehicleState: advanced, previousHeadingDeg,
+        headingSmoothingFactor: dtSeconds > 0 ? 0.35 : 0 });
       if (appearance) {
         previousHeadings.set(key, appearance.headingDeg);
-        nextRendered.push({ key, routeId: route.id, ...appearance });
+        const vehicleClass = settings.vehicleClasses?.[slot % settings.vehicleClasses.length];
+        const color = settings.vehicleClasses ? resolveTrafficVehicleColorForSlot(slot + routeIndex) : null;
+        nextRendered.push({ key, routeId: route.id, ...appearance,
+          ...(plan ? { trafficControl: { speed: plan.speed, status: plan.status, zoneId: plan.zoneId } } : {}),
+          ...(vehicleClass ? { vehicleClass, bodyColor: color.body, accentColor: color.accent,
+            worldAspectRatio: settings.worldAspectRatio } : {}),
+        });
       }
     });
   });

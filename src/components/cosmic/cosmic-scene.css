@@ -1,0 +1,365 @@
+/* Cosmic Scene V1: one Sun, one Earth */
+
+.cosmic-scene {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  background: #02050d;
+}
+
+.cosmic-stars {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.cosmic-sun-position {
+  position: absolute;
+  z-index: 1;
+  width: min(55vw, 680px);
+  right: 2.5vw;
+  top: 18%;
+  aspect-ratio: 1;
+}
+
+.cosmic-sun-position .solar-hero {
+  width: 100%;
+  height: 100%;
+}
+
+.cosmic-earth-foreground {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 2;
+}
+
+/* Keep the approved page's original image hidden:
+   it contains both a baked Earth and a baked sunrise. */
+.shuic .shuic-background {
+  display: none !important;
+}
+
+/* UI stays ahead of the environmental scene. */
+.shuic .shuic-header,
+.shuic .shuic-main,
+.shuic .shuic-footer {
+  position: relative;
+  z-index: 3;
+}
+
+/* Preserve the original hero's two-column spacing. */
+.shuic .shuic-cosmic-placeholder {
+  min-height: 450px;
+  pointer-events: none;
+}
+
+@media (max-width: 850px) {
+  .cosmic-sun-position {
+    width: 68vw;
+    right: -9vw;
+    top: 21%;
+  }
+
+  .shuic .shuic-cosmic-placeholder {
+    min-height: 320px;
+  }
+}
+
+@media (max-width: 550px) {
+  .cosmic-sun-position {
+    width: 100vw;
+    right: -35vw;
+    top: 16%;
+  }
+
+  .shuic .shuic-cosmic-placeholder {
+    min-height: 220px;
+  }
+}
+
+
+/* COSMIC_SCENE_STACKING_REPAIR_V1 */
+
+/* Fixed environmental renderer behind the interface */
+.shuic > .cosmic-scene {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+}
+
+/* All actual page content stays in front */
+.shuic > .shuic-header,
+.shuic > .shuic-main,
+.shuic > .shuic-footer {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* Preserve the scrolling hero layout */
+.shuic .shuic-hero {
+  position: relative;
+  background: transparent;
+}
+
+.shuic .shuic-cosmic-placeholder {
+  pointer-events: none;
+}
+
+/* The environment never intercepts scrolling */
+.shuic > .cosmic-scene canvas {
+  pointer-events: none !important;
+}
+
+/* COSMIC_EXTRACTED_ASSET_PREVIEW_V1 */
+.cosmic-scene > img.cosmic-stars,
+.cosmic-scene > img.cosmic-earth-foreground {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  display: block; object-fit: fill; pointer-events: none;
+}
+.cosmic-scene > img.cosmic-stars { z-index: 0; }
+.cosmic-scene > img.cosmic-earth-foreground { z-index: 2; }
+
+
+
+/* SHUIC_HERO_POSITIONING_V3 */
+
+/* Animated Sun is centered behind hero content */
+.cosmic-scene .cosmic-sun-position {
+  position: absolute;
+  top: 2%;
+  left: 50%;
+  right: auto;
+  width: min(77vw, 830px);
+  transform: translateX(-50%);
+  aspect-ratio: 1;
+  z-index: 1;
+}
+
+/* Earth remains in front of the Sun,
+   positioned lower in the composition */
+.cosmic-scene .cosmic-earth-foreground {
+  z-index: 2;
+  transform: translateY(24%);
+  transform-origin: center bottom;
+}
+
+/* Fixed background, independently scrolling UI */
+.shuic > .cosmic-scene {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+}
+
+@media (max-width: 900px) {
+  .cosmic-scene .cosmic-sun-position {
+    width: 105vw;
+    top: 13%;
+  }
+
+  .cosmic-scene .cosmic-earth-foreground {
+    transform: translateY(17%);
+  }
+}
+
+@media (max-width: 600px) {
+  .cosmic-scene .cosmic-sun-position {
+    width: 145vw;
+    top: 20%;
+  }
+
+  .cosmic-scene .cosmic-earth-foreground {
+    transform: translateY(11%);
+  }
+}
+
+
+/* SHUIC_CATALOG_COSMIC_BACKGROUND_V1 */
+
+/* New SHU black-and-ivory cosmic background */
+.cosmic-scene {
+  background-color: #020304 !important;
+  background-image:
+    url("/assets/shu/cosmic-v2/catalog-background.png") !important;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+}
+
+/* Hide the previous starfield canvas.
+   The new background supplies the galaxy and stars. */
+.cosmic-scene .cosmic-stars {
+  display: none !important;
+}
+
+/* Keep the Living Sun and Earth above the background. */
+.cosmic-scene .cosmic-sun-position {
+  z-index: 1 !important;
+}
+
+.cosmic-scene .cosmic-earth-foreground {
+  z-index: 2 !important;
+}
+
+
+/* SHUIC_TWINKLING_STARFIELD_V1 */
+
+/* New animated stars above the static galaxy background. */
+.cosmic-scene .cosmic-twinkle-canvas {
+  position: absolute;
+  inset: 0;
+  display: block !important;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  background: transparent;
+  opacity: 1;
+}
+
+/* Preserve the existing Sun/Earth foreground ordering. */
+.cosmic-scene .cosmic-sun-position {
+  z-index: 1 !important;
+}
+
+.cosmic-scene .cosmic-earth-foreground {
+  z-index: 2 !important;
+}
+
+
+/* SHUIC_TWINKLE_VISIBILITY_V2 */
+
+/* Static galaxy remains the background base layer. */
+.cosmic-scene {
+  isolation: isolate;
+}
+
+/* Animated stars must render above background artwork. */
+.cosmic-scene > .cosmic-twinkle-canvas {
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 1 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: none !important;
+}
+
+/* Sun above the animated starfield. */
+.cosmic-scene > .cosmic-sun-position {
+  z-index: 2 !important;
+}
+
+/* Earth above the Sun. */
+.cosmic-scene > .cosmic-earth-foreground {
+  z-index: 3 !important;
+}
+
+
+/* SHUIC_SOLAR_DUST_MOUNT_REPAIR_V3 */
+
+/* Visible dust over the cosmic environment, below interface. */
+.shuic > .cosmic-scene > .cosmic-solar-dust-canvas {
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 5 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: none !important;
+  background: transparent !important;
+}
+
+
+/* SHUIC_LIVING_SUN_BREATHING_V1 */
+
+/*
+  Living Sun breathing:
+  Gentle physical expansion and contraction.
+  Keeps the approved Sun position unchanged.
+*/
+
+@keyframes shuicSolarBreathing {
+  0%, 100% {
+    scale: 1;
+  }
+
+  25% {
+    scale: 1.008;
+  }
+
+  50% {
+    scale: 1.018;
+  }
+
+  75% {
+    scale: 1.009;
+  }
+}
+
+/*
+  Animate only the Sun container.
+  The scale property is independent of the existing
+  translateX(-50%) transform used for centering.
+*/
+
+.shuic > .cosmic-scene .cosmic-sun-position {
+  transform-origin: center center !important;
+
+  animation:
+    shuicSolarBreathing
+    7s
+    ease-in-out
+    infinite !important;
+}
+
+/* Secondary breathing rhythm for the solar aura. */
+
+@keyframes shuicSolarAuraBreathing {
+  0%, 100% {
+    opacity: .78;
+    scale: 1;
+  }
+
+  50% {
+    opacity: 1;
+    scale: 1.045;
+  }
+}
+
+.shuic > .cosmic-scene
+.cosmic-sun-position .solar-hero-aura {
+  transform-origin: center center !important;
+
+  animation:
+    shuicSolarAuraBreathing
+    7s
+    ease-in-out
+    infinite !important;
+}
+
+/* Respect accessibility preferences. */
+
+@media (prefers-reduced-motion: reduce) {
+  .shuic > .cosmic-scene .cosmic-sun-position,
+  .shuic > .cosmic-scene
+  .cosmic-sun-position .solar-hero-aura {
+    animation: none !important;
+    scale: 1 !important;
+  }
+}

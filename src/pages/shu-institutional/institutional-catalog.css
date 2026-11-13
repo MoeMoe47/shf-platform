@@ -1,0 +1,1937 @@
+.shuic {
+  --gold: #f2c77d;
+  --gold-light: #ffdfa2;
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  overflow: hidden;
+  background: #02050b;
+  color: #f7f7fa;
+  font: 16px/1.5 Inter, system-ui, sans-serif;
+}
+
+.shuic *,
+.shuic *::before,
+.shuic *::after {
+  box-sizing: border-box;
+}
+
+.shuic a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.shuic button,
+.shuic input {
+  font: inherit;
+}
+
+.shuic a:focus-visible,
+.shuic button:focus-visible,
+.shuic input:focus-visible {
+  outline: 3px solid var(--gold-light);
+  outline-offset: 4px;
+}
+
+.shuic-background {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.shuic-background img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.shuic-background-shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, .12),
+      rgba(0, 0, 0, .18) 44%,
+      rgba(0, 0, 0, .68) 78%,
+      #02050b
+    ),
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, .45),
+      transparent 68%
+    );
+}
+
+.shuic-header,
+.shuic-main {
+  width: min(1440px, calc(100% - 64px));
+  margin-inline: auto;
+}
+
+.shuic-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 88px;
+  border-bottom: 1px solid #d6b07135;
+}
+
+.shuic-logo {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  line-height: 1.4;
+}
+
+.shuic-logo strong {
+  display: block;
+  color: var(--gold);
+  font-size: 11px;
+  letter-spacing: .3em;
+}
+
+.shuic-logo-mark {
+  color: var(--gold);
+  font-size: 36px;
+}
+
+.shuic-header nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 2.3vw, 34px);
+  font-size: 13px;
+}
+
+.shuic-header nav a:hover {
+  color: var(--gold);
+}
+
+.shuic-header-button {
+  border: 1px solid #bd9559;
+  border-radius: 28px;
+  padding: 11px 19px;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+.shuic-hero {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 5%;
+  align-items: center;
+  min-height: 510px;
+  padding-block: 44px;
+}
+
+.shuic-eyebrow {
+  margin: 0 0 17px;
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .26em;
+}
+
+.shuic-intro h1 {
+  margin: 0 0 20px;
+  max-width: 720px;
+  font-size: clamp(37px, 3.6vw, 60px);
+  line-height: 1.11;
+  letter-spacing: -.04em;
+}
+
+.shuic-subtitle {
+  max-width: 610px;
+  margin: 0 0 25px;
+  color: #e1e3ec;
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+.shuic-search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 630px;
+  height: 54px;
+  padding: 4px 5px 4px 19px;
+  border: 1px solid #d1a45f;
+  border-radius: 32px;
+  background: #020408d9;
+}
+
+.shuic-search span {
+  color: var(--gold);
+  font-size: 25px;
+}
+
+.shuic-search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: white;
+  font-size: 13px;
+}
+
+.shuic-search button {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--gold);
+  color: #15100c;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.shuic-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.shuic-primary,
+.shuic-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 22px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.shuic-primary {
+  background: var(--gold);
+  color: #17120c !important;
+}
+
+.shuic-secondary {
+  border: 1px solid #bd9559;
+}
+
+.shuic-preview-label {
+  margin-top: 21px;
+  color: #c4b6a2;
+  font-size: 11px;
+}
+
+.shuic-planets {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 26px 10px;
+  justify-items: center;
+}
+
+.shuic-planet {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  text-align: center;
+}
+
+.shuic-planet-frame {
+  width: 140px;
+  height: 112px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #d5b16a55;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, #8b6a3233, transparent 70%);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.shuic-planet:hover .shuic-planet-frame,
+.shuic-planet:focus-visible .shuic-planet-frame {
+  transform: translateY(-5px);
+  box-shadow: 0 0 25px #eeb75a55;
+}
+
+.shuic-planet-frame img {
+  max-width: 120px;
+  max-height: 104px;
+  object-fit: contain;
+}
+
+.shuic-planet strong {
+  font-size: 13px;
+}
+
+.shuic-planet-featured strong {
+  color: var(--gold);
+}
+
+.shuic-solutions {
+  padding-top: 30px;
+}
+
+.shuic-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.shuic-card {
+  display: flex;
+  gap: 16px;
+  min-height: 157px;
+  position: relative;
+  padding: 22px 29px 20px 18px;
+  border: 1px solid #c39b5d85;
+  border-radius: 12px;
+  background: linear-gradient(125deg, #141c25ef, #06090def);
+  box-shadow: 0 10px 25px #0006;
+  scroll-margin-top: 24px;
+}
+
+.shuic-card-featured {
+  border-color: var(--gold);
+  background: linear-gradient(130deg, #60432bdf, #13100fe8);
+  box-shadow: 0 0 25px #d9a55240;
+}
+
+.shuic-card-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  color: var(--gold);
+  background: #32271a;
+  border-radius: 12px;
+  font-size: 28px;
+}
+
+.shuic-card h2 {
+  margin: 0 0 8px;
+  font-size: 17px;
+  line-height: 1.3;
+}
+
+.shuic-card p {
+  margin: 0;
+  color: #e0e1e7;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.shuic-card small {
+  display: block;
+  margin-top: 12px;
+  color: var(--gold);
+  font-size: 11px;
+}
+
+.shuic-card-arrow {
+  position: absolute;
+  top: 21px;
+  right: 13px;
+  color: var(--gold);
+}
+
+.shuic-no-results {
+  padding: 20px;
+}
+
+.shuic-highlights {
+  display: grid;
+  grid-template-columns: 1.5fr repeat(4, 1fr);
+  gap: 20px;
+  padding: 52px 0 40px;
+}
+
+.shuic-highlights-title > p:last-child {
+  color: #c8c9d4;
+  font-size: 12px;
+}
+
+.shuic-highlight {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding-left: 16px;
+  border-left: 1px solid #c29b5b77;
+}
+
+.shuic-highlight > span {
+  color: var(--gold);
+  font-size: 22px;
+}
+
+.shuic-highlight strong {
+  font-size: 12px;
+}
+
+.shuic-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 25px 0;
+  border-top: 1px solid #d3b47755;
+  font-size: 12px;
+  color: #d0ced1;
+}
+
+.shuic-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 1100px) {
+  .shuic-header nav { display: none; }
+  .shuic-hero {
+    grid-template-columns: 1fr;
+  }
+  .shuic-planets {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .shuic-planet-frame {
+    width: 110px;
+  }
+  .shuic-card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .shuic-highlights {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .shuic-header,
+  .shuic-main {
+    width: calc(100% - 32px);
+  }
+  .shuic-header {
+    min-height: 73px;
+  }
+  .shuic-logo {
+    font-size: 10px;
+  }
+  .shuic-logo strong {
+    font-size: 9px;
+  }
+  .shuic-logo-mark {
+    font-size: 26px;
+  }
+  .shuic-header-button {
+    padding: 8px 10px;
+    font-size: 10px;
+  }
+  .shuic-hero {
+    padding-block: 34px;
+  }
+  .shuic-planets {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .shuic-card-grid,
+  .shuic-highlights {
+    grid-template-columns: 1fr;
+  }
+  .shuic-footer {
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shuic *,
+  .shuic *::before,
+  .shuic *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* Institutional Catalog expanded marketplace layout */
+.shuic-background {
+  inset: 0 0 auto;
+  height: 940px;
+}
+
+.shuic-background img {
+  object-fit: cover;
+  object-position: center center;
+}
+
+.shuic-card-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.shuic-card {
+  min-height: 164px;
+  transition:
+    border-color .2s ease,
+    box-shadow .2s ease,
+    transform .2s ease;
+}
+
+.shuic-card:hover {
+  border-color: var(--gold);
+  box-shadow: 0 10px 30px rgba(231, 179, 97, .17);
+  transform: translateY(-3px);
+}
+
+.shuic-card h2 {
+  font-size: 18px;
+}
+
+.shuic-solutions {
+  padding-bottom: 35px;
+}
+
+@media (max-width: 1100px) {
+  .shuic-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .shuic-background {
+    height: 850px;
+  }
+
+  .shuic-card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shuic-card:hover {
+    transform: none;
+  }
+}
+
+
+/* UNIVERSE_VISUAL_ALIGNMENT_V1 */
+
+/* Allow the standalone Catalog to scroll normally */
+html:has(.shuic),
+body:has(.shuic) {
+  height: auto !important;
+  min-height: 100% !important;
+  overflow-x: clip !important;
+  overflow-y: auto !important;
+}
+
+body:has(.shuic) {
+  margin: 0;
+  background: #02050b;
+}
+
+body:has(.shuic) #app {
+  height: auto !important;
+  min-height: 100vh;
+  overflow: visible !important;
+}
+
+.shuic {
+  height: auto !important;
+  min-height: 100vh;
+  overflow: visible !important;
+}
+
+/* Retain the original cosmic background */
+.shuic-background {
+  height: 980px;
+  overflow: hidden;
+}
+
+/* Universe-style photographic catalog cards */
+.shuic .shuic-card-grid {
+  gap: 18px;
+}
+
+.shuic .shuic-card {
+  isolation: isolate;
+  position: relative;
+  overflow: hidden;
+  min-height: 204px;
+  align-items: flex-end;
+  border: 1px solid rgba(227, 181, 105, .57);
+  border-radius: 9px;
+  background: #0a1018;
+  padding: 26px 28px;
+  box-shadow: none;
+  transition:
+    transform .22s ease,
+    border-color .22s ease,
+    box-shadow .22s ease;
+}
+
+.shuic .shuic-card::before,
+.shuic .shuic-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.shuic .shuic-card::before {
+  z-index: -2;
+  background-image:
+    url("/assets/shu/content/shu-program-robotics-learning-1200.webp");
+  background-position: center;
+  background-size: cover;
+  transition: transform .45s ease;
+}
+
+.shuic .shuic-card::after {
+  z-index: -1;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(2, 5, 12, .91),
+      rgba(2, 5, 12, .62) 72%,
+      rgba(2, 5, 12, .36)
+    ),
+    linear-gradient(
+      0deg,
+      rgba(0, 0, 0, .65),
+      transparent 90%
+    );
+}
+
+.shuic #workforce::before,
+.shuic #cohorts::before {
+  background-image:
+    url("/assets/shu/content/shu-workforce-skilled-trades-1600.webp");
+}
+
+.shuic #licensing::before,
+.shuic #partnerships::before {
+  background-image:
+    url("/assets/shu/content/shu-organization-collaboration-1200.webp");
+}
+
+.shuic #readiness::before,
+.shuic #assessments::before {
+  background-image:
+    url("/assets/shu/content/shu-project-infrastructure-planning-1200.webp");
+}
+
+.shuic #compare::before,
+.shuic #implementation::before {
+  background-image:
+    url("/assets/shu/content/shu-project-engineering-design-1600.webp");
+}
+
+.shuic #arcade::before,
+.shuic #instructors::before {
+  background-image:
+    url("/assets/shu/content/shu-community-development-1600.webp");
+}
+
+.shuic .shuic-card-icon {
+  display: none;
+}
+
+.shuic .shuic-card h2 {
+  color: #fff;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  text-shadow: 0 2px 8px #000;
+}
+
+.shuic .shuic-card p {
+  color: #e4e4e7;
+  font-size: 13px;
+  line-height: 1.55;
+  max-width: 360px;
+}
+
+.shuic .shuic-card small {
+  color: #f0c987;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.shuic .shuic-card-arrow {
+  color: #f5cd8a;
+  font-size: 20px;
+}
+
+.shuic .shuic-card:hover {
+  transform: translateY(-3px);
+  border-color: #f5ce8c;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, .38);
+}
+
+.shuic .shuic-card:hover::before {
+  transform: scale(1.045);
+}
+
+/* Grant Readiness gets slightly stronger emphasis */
+.shuic .shuic-card-featured {
+  border-color: #efc47c;
+  box-shadow: inset 0 0 0 1px #c9995240;
+}
+
+/* Match the horizontal Universe footer composition */
+.shuic .shuic-universe-footer {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  gap: 28px;
+  margin: 55px 0 0;
+  padding: 30px 0 42px;
+  border-top: 1px solid rgba(224, 185, 115, .35);
+  background: transparent;
+  color: #d0d0d5;
+}
+
+.shuic-universe-brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.shuic-ringed-logo {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  width: 55px;
+  height: 55px;
+}
+
+.shuic-ringed-logo > span {
+  position: absolute;
+  left: 12px;
+  top: 6px;
+  width: 34px;
+  height: 42px;
+  border: 1px solid #efd5a1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 35%,
+    #7c7a78,
+    #14171d 70%
+  );
+}
+
+.shuic-ringed-logo::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 19px;
+  width: 58px;
+  height: 20px;
+  border: 2px solid #d7ae65;
+  border-radius: 50%;
+  transform: rotate(-23deg);
+}
+
+.shuic-universe-brand-text {
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: .15em;
+  line-height: 1.5;
+}
+
+.shuic-universe-brand-text strong {
+  display: block;
+  color: #f0c987;
+  font-size: 12px;
+  letter-spacing: .3em;
+}
+
+.shuic .shuic-universe-footer > p {
+  margin: 0;
+  text-align: center;
+  font-size: 13px;
+  color: #bbbcc2;
+}
+
+.shuic .shuic-universe-footer nav {
+  display: flex;
+  justify-content: flex-end;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+
+.shuic .shuic-universe-footer nav a {
+  font-size: 13px;
+  color: #d0d0d5;
+}
+
+.shuic .shuic-universe-footer nav a:hover {
+  color: #f0c987;
+}
+
+@media (max-width: 900px) {
+  .shuic .shuic-universe-footer {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .shuic .shuic-universe-footer nav {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 700px) {
+  .shuic .shuic-card {
+    min-height: 185px;
+  }
+
+  .shuic-universe-brand-text {
+    font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shuic .shuic-card,
+  .shuic .shuic-card::before {
+    transition: none !important;
+  }
+
+  .shuic .shuic-card:hover,
+  .shuic .shuic-card:hover::before {
+    transform: none !important;
+  }
+}
+
+
+/* SHUIC_FIXED_COSMIC_GLASS_V1
+   Institutional Catalog visual alignment.
+   The original Universe and SHF styles remain unchanged.
+*/
+
+/* Natural document scrolling */
+html:has(.shuic),
+body:has(.shuic) {
+  margin: 0;
+  height: auto !important;
+  min-height: 100% !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  scroll-behavior: smooth;
+}
+
+body:has(.shuic) #app {
+  height: auto !important;
+  min-height: 100vh;
+  overflow: visible !important;
+}
+
+.shuic {
+  position: relative;
+  isolation: isolate;
+  height: auto !important;
+  min-height: 100vh;
+  overflow: visible !important;
+  background: transparent;
+}
+
+/* Fixed cosmic backdrop; content moves independently */
+.shuic .shuic-background {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.shuic .shuic-background img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  transform: none !important;
+}
+
+.shuic .shuic-background-shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, .18),
+      rgba(0, 0, 0, .30) 50%,
+      rgba(0, 0, 0, .53)
+    );
+}
+
+/* Ensure sections remain above the fixed background */
+.shuic .shuic-header,
+.shuic .shuic-main {
+  position: relative;
+  z-index: 1;
+}
+
+/* Transparent Universe-style institutional cards */
+.shuic .shuic-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.shuic .shuic-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 12px;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 205px;
+  padding: 22px;
+  border: 1px solid rgba(240, 243, 249, .75);
+  border-radius: 7px;
+  background: rgba(3, 8, 17, .46);
+  box-shadow: none;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  transition:
+    border-color .2s ease,
+    background-color .2s ease,
+    transform .2s ease;
+}
+
+/* Remove previous photographic card layers */
+.shuic .shuic-card::before,
+.shuic .shuic-card::after {
+  display: none !important;
+  content: none !important;
+  background-image: none !important;
+}
+
+/* Reintroduce the icons already defined in React */
+.shuic .shuic-card-icon {
+  display: grid !important;
+  place-items: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(240, 199, 125, .35);
+  border-radius: 7px;
+  background: rgba(12, 14, 20, .58);
+  color: #f2c77d;
+  font-size: 23px;
+}
+
+.shuic .shuic-card h2 {
+  margin: 0 0 9px;
+  color: #fff;
+  font-size: 18px;
+  line-height: 1.3;
+  font-weight: 650;
+}
+
+.shuic .shuic-card p {
+  max-width: 370px;
+  margin: 0;
+  color: #d0d3dc;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.shuic .shuic-card small {
+  display: block;
+  margin-top: 12px;
+  color: #f2c77d;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+
+.shuic .shuic-card-arrow {
+  position: absolute;
+  top: auto;
+  right: 19px;
+  bottom: 17px;
+  color: #f2c77d;
+  font-size: 19px;
+}
+
+/* Same understated interaction style as Universe */
+.shuic .shuic-card:hover {
+  transform: translateY(-3px);
+  border-color: #fff;
+  background: rgba(14, 24, 40, .73);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, .2);
+}
+
+.shuic .shuic-card-featured {
+  border-color: rgba(240, 243, 249, .75);
+  background: rgba(13, 17, 28, .58);
+  box-shadow: none;
+}
+
+/* Keep the footer visually integrated */
+.shuic .shuic-universe-footer {
+  position: relative;
+  background: rgba(0, 0, 0, .24);
+  border-top: 1px solid rgba(255, 255, 255, .35);
+}
+
+/* Responsive layout */
+@media (max-width: 1100px) {
+  .shuic .shuic-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .shuic .shuic-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .shuic .shuic-card {
+    min-height: 175px;
+    padding: 20px;
+  }
+
+  .shuic .shuic-background img {
+    object-position: center center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:has(.shuic),
+  body:has(.shuic) {
+    scroll-behavior: auto;
+  }
+
+  .shuic .shuic-card {
+    transition: none !important;
+  }
+
+  .shuic .shuic-card:hover {
+    transform: none !important;
+  }
+}
+
+
+
+/* SHUIC_HERO_POSITIONING_V3 */
+
+/* Centered hero composition from approved mock */
+.shuic .shuic-hero {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 570px;
+  padding: 52px 0 56px;
+  text-align: center;
+}
+
+.shuic .shuic-intro {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(100%, 830px);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.shuic .shuic-intro h1 {
+  max-width: 830px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.shuic .shuic-intro .shuic-subtitle {
+  max-width: 680px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.shuic .shuic-intro .shuic-search {
+  width: min(100%, 700px);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.shuic .shuic-intro .shuic-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  width: 100%;
+}
+
+.shuic .shuic-intro .shuic-preview-label {
+  text-align: center;
+}
+
+.shuic .shuic-cosmic-placeholder {
+  display: none !important;
+}
+
+/* Preserve all 12 transparent solution cards */
+.shuic .shuic-solutions,
+.shuic .shuic-card-grid {
+  position: relative;
+  z-index: 2;
+}
+
+/* Use original Universe ringed planet styles */
+.shuic .ugw-brandMark {
+position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 62px;
+  height: 42px;
+  flex: 0 0 auto;
+}
+
+.shuic .ugw-brandMark::before {
+content: "";
+  width: 33px;
+  height: 33px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 250, 240, 0.8);
+  background: radial-gradient(circle at 34% 24%, rgba(255, 250, 240, 0.94), rgba(80, 74, 66, 0.78) 42%, #101010 72%);
+  box-shadow: 0 0 24px rgba(255, 250, 240, 0.16);
+}
+
+.shuic .ugw-brandMark span {
+position: absolute;
+  width: 62px;
+  height: 18px;
+  border: 2px solid rgba(241, 185, 103, 0.88);
+  border-top-color: rgba(241, 185, 103, 0.28);
+  border-bottom-color: rgba(241, 185, 103, 0.82);
+  border-radius: 999px;
+  transform: rotate(-18deg);
+}
+
+.shuic .ugw-brandMark {
+width: 48px;
+}
+
+.shuic .ugw-brandMark span {
+width: 50px;
+}
+
+.shuic .shuic-logo .ugw-brandMark,
+.shuic .shuic-universe-brand .ugw-brandMark {
+  display: inline-block;
+  flex-shrink: 0;
+  margin-right: 12px;
+}
+
+@media (max-width: 900px) {
+  .shuic .shuic-hero {
+    min-height: 510px;
+    padding: 50px 12px 44px;
+  }
+}
+
+@media (max-width: 600px) {
+  .shuic .shuic-hero {
+    min-height: 470px;
+    padding: 42px 0 36px;
+  }
+
+  .shuic .shuic-intro h1 {
+    font-size: clamp(30px, 8vw, 46px);
+  }
+}
+
+
+
+/* SHUIC_INSTITUTIONAL_LOWER_V1 */
+
+/* Shade only behind the central hero copy, not the Sun's rim. */
+.shuic .shuic-intro {
+  position: relative;
+  isolation: isolate;
+}
+
+.shuic .shuic-intro::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: -38px -55px;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 65% 62% at 50% 48%,
+    rgba(3, 5, 10, .68) 0%,
+    rgba(3, 5, 10, .45) 44%,
+    rgba(3, 5, 10, .12) 74%,
+    transparent 100%
+  );
+}
+
+.shuic .shuic-intro > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* The new journey replaces the older highlights presentation. */
+.shuic .shuic-highlights {
+  display: none !important;
+}
+
+.shuic .shuic-journey {
+  display: grid;
+  grid-template-columns: 1fr 0.94fr;
+  gap: 38px;
+  position: relative;
+  z-index: 2;
+  padding: 72px 0 88px;
+  margin-top: 32px;
+  border-top: 1px solid rgba(241,244,248,.35);
+  color: #f8f8fa;
+}
+
+.shuic .shuic-journey-left {
+  padding-right: 28px;
+  border-right: 1px solid rgba(241,244,248,.30);
+}
+
+.shuic .shuic-section-heading {
+  margin-bottom: 27px;
+}
+
+.shuic .shuic-section-heading .shuic-eyebrow {
+  margin: 0 0 8px;
+  color: #f5d18b;
+  letter-spacing: .20em;
+}
+
+.shuic .shuic-section-heading > p:last-child {
+  margin: 0;
+  font-size: 14px;
+  color: #c9cbd0;
+}
+
+.shuic .shuic-journey-diagram {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) 175px minmax(0,1fr);
+  align-items: center;
+  gap: 10px;
+  margin: 22px 0 29px;
+}
+
+.shuic .shuic-journey-stages {
+  display: grid;
+  gap: 21px;
+}
+
+.shuic .shuic-journey-stage {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.shuic .shuic-stage-number {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 35px;
+  height: 35px;
+  border: 1px solid #e6b85c;
+  border-radius: 50%;
+  background: rgba(12,9,4,.65);
+  color: #f7cb72;
+  font-size: 11px;
+}
+
+.shuic .shuic-journey-stage strong {
+  display: block;
+  font-size: 13px;
+}
+
+.shuic .shuic-journey-stage p {
+  font-size: 11px;
+  line-height: 1.4;
+  margin: 3px 0 0;
+  color: #c5c5c9;
+}
+
+.shuic .shuic-success-sun {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 175px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  text-align: center;
+  color: #fff;
+  background:
+    radial-gradient(circle at 40% 35%,
+      rgba(255,224,135,.95),
+      #ffaf25 26%,
+      #d76a08 55%,
+      #712208 82%,
+      #2b1009 100%);
+  border: 2px solid #ffd37a;
+  box-shadow:
+    0 0 13px #ffbd47,
+    0 0 42px rgba(249,143,27,.45),
+    0 0 85px rgba(233,106,12,.18);
+  text-shadow: 0 2px 9px #52220a;
+}
+
+.shuic .shuic-success-sun span {
+  font-size: 13px;
+}
+
+.shuic .shuic-success-sun strong {
+  font-size: 17px;
+  line-height: 1.2;
+}
+
+.shuic .shuic-journey-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 44px;
+  padding: 0 25px;
+  border-radius: 40px;
+  background: #f6ca78;
+  color: #101014;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.shuic .shuic-resources {
+  min-width: 0;
+}
+
+.shuic .shuic-resource {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 74px;
+  padding: 10px 4px;
+  color: #fff;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,.23);
+}
+
+.shuic .shuic-resource-icon {
+  display: grid;
+  place-items: center;
+  width: 45px;
+  height: 45px;
+  flex-shrink: 0;
+  background: rgba(9,12,18,.7);
+  border: 1px solid rgba(245,203,119,.42);
+  border-radius: 9px;
+  color: #f5c66a;
+  font-size: 23px;
+}
+
+.shuic .shuic-resource-text {
+  display: grid;
+  flex: 1;
+  gap: 3px;
+}
+
+.shuic .shuic-resource-text strong {
+  font-size: 14px;
+}
+
+.shuic .shuic-resource-text small {
+  color: #bfc0c7;
+  font-size: 12px;
+}
+
+.shuic .shuic-resource-arrow {
+  color: #f5c66a;
+  font-size: 22px;
+}
+
+.shuic .shuic-resource:hover {
+  background: rgba(255,255,255,.055);
+}
+
+@media (max-width: 1000px) {
+  .shuic .shuic-journey {
+    grid-template-columns: 1fr;
+    gap: 45px;
+  }
+
+  .shuic .shuic-journey-left {
+    border-right: 0;
+    padding-right: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .shuic .shuic-journey {
+    padding: 46px 0 58px;
+  }
+
+  .shuic .shuic-journey-diagram {
+    grid-template-columns: minmax(0,1fr) 105px minmax(0,1fr);
+    gap: 7px;
+  }
+
+  .shuic .shuic-success-sun {
+    width: 105px;
+  }
+
+  .shuic .shuic-success-sun span {
+    font-size: 10px;
+  }
+
+  .shuic .shuic-success-sun strong {
+    font-size: 12px;
+  }
+
+  .shuic .shuic-journey-stage {
+    gap: 5px;
+  }
+
+  .shuic .shuic-stage-number {
+    width: 26px;
+    height: 26px;
+    font-size: 9px;
+  }
+
+  .shuic .shuic-journey-stage strong {
+    font-size: 11px;
+  }
+
+  .shuic .shuic-journey-stage p {
+    font-size: 10px;
+  }
+
+  .shuic .shuic-intro::before {
+    inset: -20px -8px;
+  }
+}
+
+
+/* SHUIC_SOLAR_MASK_REFINEMENT_V2 */
+
+/* Smaller, softer mask — keep the solar plasma visible. */
+.shuic .shuic-intro::before {
+  inset: 5% 8% !important;
+  border-radius: 50%;
+
+  background: radial-gradient(
+    ellipse 56% 48% at 50% 42%,
+    rgba(3, 5, 10, .42) 0%,
+    rgba(3, 5, 10, .29) 36%,
+    rgba(3, 5, 10, .10) 68%,
+    rgba(3, 5, 10, 0) 100%
+  ) !important;
+}
+
+/* Maintain readability without dimming the entire Sun. */
+.shuic .shuic-intro h1 {
+  text-shadow:
+    0 2px 12px rgba(0,0,0,.68),
+    0 1px 3px rgba(0,0,0,.42);
+}
+
+.shuic .shuic-intro .shuic-subtitle {
+  text-shadow:
+    0 2px 9px rgba(0,0,0,.78);
+}
+
+@media (max-width: 600px) {
+  .shuic .shuic-intro::before {
+    inset: 7% 2% !important;
+  }
+}
+
+
+/* SHUIC_INSTITUTIONAL_LABEL_BLACK_V1 */
+/* Dark lettering against the bright solar surface. */
+.shuic .shuic-intro > .shuic-eyebrow {
+  color: #111111 !important;
+  text-shadow: none !important;
+  font-weight: 800;
+  letter-spacing: .23em;
+}
+
+
+
+/* SHUIC_SUCCESS_PATH_MOON_V1 */
+/* Replace the lower Institutional Success Path center orb with the HD moon asset. */
+
+.shuic .shuic-path-core,
+.shuic .shuic-path-orb,
+.shuic .shuic-success-core,
+.shuic .shuic-success-orb,
+.shuic .shuic-path-sun,
+.shuic .shuic-success-path-core {
+  background:
+    linear-gradient(rgba(8,10,14,.14), rgba(8,10,14,.28)),
+    url("/assets/shu/cosmic-v2/moon_catalog.png") center/cover no-repeat !important;
+  border: 2px solid rgba(255,255,255,.78) !important;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.18),
+    0 20px 50px rgba(0,0,0,.42) !important;
+  color: #ffffff !important;
+}
+
+.shuic .shuic-path-core::before,
+.shuic .shuic-path-core::after,
+.shuic .shuic-path-orb::before,
+.shuic .shuic-path-orb::after,
+.shuic .shuic-success-core::before,
+.shuic .shuic-success-core::after,
+.shuic .shuic-success-orb::before,
+.shuic .shuic-success-orb::after,
+.shuic .shuic-path-sun::before,
+.shuic .shuic-path-sun::after,
+.shuic .shuic-success-path-core::before,
+.shuic .shuic-success-path-core::after {
+  background: none !important;
+  box-shadow: none !important;
+}
+
+.shuic .shuic-path-core *,
+.shuic .shuic-path-orb *,
+.shuic .shuic-success-core *,
+.shuic .shuic-success-orb *,
+.shuic .shuic-path-sun *,
+.shuic .shuic-success-path-core * {
+  color: #ffffff !important;
+  text-shadow:
+    0 2px 8px rgba(0,0,0,.72),
+    0 1px 2px rgba(0,0,0,.55);
+}
+
+
+/* SHUIC_REAL_MOON_SUCCESS_PATH_V2 */
+
+/* Apply Moon image to the ACTUAL Success Path orb. */
+.shuic .shuic-success-sun {
+  background-color: #08090b !important;
+  background-image:
+    linear-gradient(
+      rgba(0,0,0,.08),
+      rgba(0,0,0,.36)
+    ),
+    url("/assets/shu/cosmic-v2/moon_catalog.png") !important;
+  background-position: center !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+
+  border: 1px solid rgba(245,245,245,.85) !important;
+
+  box-shadow:
+    0 0 14px rgba(245,245,245,.22),
+    0 0 32px rgba(225,225,225,.10),
+    0 12px 32px rgba(0,0,0,.45) !important;
+}
+
+/* Make the Success Path words legible. */
+.shuic .shuic-success-sun span,
+.shuic .shuic-success-sun strong {
+  position: relative;
+  z-index: 1;
+  color: #ffffff !important;
+  text-shadow:
+    0 2px 8px rgba(0,0,0,.95),
+    0 1px 3px rgba(0,0,0,.95) !important;
+}
+
+
+/* SHUIC_FULL_MOON_REFINEMENT_V3 */
+
+/* Eliminate the dark circular frame. */
+.shuic .shuic-success-sun {
+  position: relative;
+  isolation: isolate;
+  overflow: visible !important;
+
+  border: 0 !important;
+  background: none !important;
+
+  box-shadow:
+    0 0 9px 3px rgba(255,255,255,.55),
+    0 0 30px 9px rgba(238,240,244,.29),
+    0 0 65px 13px rgba(218,226,239,.11) !important;
+}
+
+/* The Moon itself fills the entire orb. */
+.shuic .shuic-success-sun::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+
+  border-radius: 50%;
+  background-image:
+    url("/assets/shu/cosmic-v2/moon_catalog.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 118% 118%;
+
+  clip-path: circle(50% at 50% 50%);
+  filter: brightness(1.16) contrast(1.10);
+}
+
+/* Slight dark center strictly for text readability. */
+.shuic .shuic-success-sun::after {
+  content: "";
+  position: absolute;
+  inset: 12%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(0,0,0,.34) 0%,
+    rgba(0,0,0,.13) 45%,
+    transparent 73%
+  );
+}
+
+/* Preserve clear centered lettering. */
+.shuic .shuic-success-sun span,
+.shuic .shuic-success-sun strong {
+  position: relative;
+  z-index: 2;
+  color: white !important;
+  text-shadow:
+    0 2px 7px rgba(0,0,0,.95),
+    0 1px 2px #000 !important;
+}
+
+
+/* SHUIC_JOURNEY_READABILITY_MASK_V1 */
+
+/* Soft transparent mask behind lower institutional content. */
+.shuic .shuic-journey {
+  isolation: isolate;
+}
+
+.shuic .shuic-journey::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 5% -2%;
+  pointer-events: none;
+
+  background: radial-gradient(
+    ellipse 80% 78% at 50% 48%,
+    rgba(3, 5, 9, .34) 0%,
+    rgba(3, 5, 9, .25) 48%,
+    rgba(3, 5, 9, .12) 75%,
+    rgba(3, 5, 9, 0) 100%
+  );
+}
+
+/* Improve readability over the moving solar surface. */
+.shuic .shuic-journey-stage strong,
+.shuic .shuic-resource-text strong {
+  text-shadow: 0 2px 7px rgba(0,0,0,.75);
+}
+
+.shuic .shuic-journey-stage p,
+.shuic .shuic-resource-text small,
+.shuic .shuic-section-heading > p:last-child {
+  text-shadow: 0 2px 7px rgba(0,0,0,.82);
+}
+
+/* Keep the Moon visibly luminous above the mask. */
+.shuic .shuic-success-sun {
+  z-index: 1;
+}
+
+
+/* SHUIC_COMPACT_CARDS_V1 */
+
+/* Tighter three-column card grid */
+.shuic .shuic-card-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px !important;
+}
+
+/* Compact transparent Universe cards */
+.shuic .shuic-card {
+  min-height: 155px !important;
+  padding: 15px 19px !important;
+  gap: 7px !important;
+}
+
+/* Smaller icon containers */
+.shuic .shuic-card-icon {
+  width: 30px !important;
+  height: 30px !important;
+  font-size: 18px !important;
+}
+
+/* Preserve readable headings */
+.shuic .shuic-card h2 {
+  font-size: 16px !important;
+  line-height: 1.25 !important;
+  margin-bottom: 5px !important;
+}
+
+/* Shorter descriptions */
+.shuic .shuic-card p {
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+}
+
+/* Compact experience label */
+.shuic .shuic-card small {
+  font-size: 10px !important;
+  margin-top: 6px !important;
+}
+
+.shuic .shuic-card-arrow {
+  right: 15px !important;
+  bottom: 12px !important;
+}
+
+/* Preserve responsive behavior */
+@media (max-width: 900px) {
+  .shuic .shuic-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .shuic .shuic-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .shuic .shuic-card {
+    min-height: 145px !important;
+    padding: 15px !important;
+  }
+}
+
+
+/* SHUIC_PREVIEW_LABEL_BLACK_V1 */
+
+/* Dark lettering on the bright lower solar surface. */
+.shuic .shuic-intro .shuic-preview-label {
+  color: #111111 !important;
+  text-shadow: none !important;
+  font-weight: 700;
+}
+
+
+/* SHUIC_PREVIEW_LABEL_ENHANCED_V2 */
+
+.shuic .shuic-intro .shuic-preview-label {
+  color: #111111 !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  line-height: 1.5 !important;
+  letter-spacing: 0.025em !important;
+  text-shadow: none !important;
+}
+
+@media (max-width: 600px) {
+  .shuic .shuic-intro .shuic-preview-label {
+    font-size: 14px !important;
+  }
+}
+
+
+/* SHUIC_HERO_EYEBROW_ENHANCED_V2 */
+
+/* Stronger INSTITUTIONAL SOLUTIONS label */
+.shuic .shuic-intro > .shuic-eyebrow {
+  color: #111111 !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  line-height: 1.5 !important;
+  letter-spacing: 0.15em !important;
+  text-shadow: none !important;
+}
+
+@media (max-width: 600px) {
+  .shuic .shuic-intro > .shuic-eyebrow {
+    font-size: 14px !important;
+  }
+}
+
+
+/* SHUIC_OFFICIAL_UNIVERSE_LOGO_V1 */
+/* Original Universe Gateway logo styling. */
+
+.shuic .ugw-brandMark {
+position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 62px;
+  height: 42px;
+  flex: 0 0 auto;
+}
+
+.shuic .ugw-brandMark::before {
+content: "";
+  width: 33px;
+  height: 33px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 250, 240, 0.8);
+  background: radial-gradient(circle at 34% 24%, rgba(255, 250, 240, 0.94), rgba(80, 74, 66, 0.78) 42%, #101010 72%);
+  box-shadow: 0 0 24px rgba(255, 250, 240, 0.16);
+}
+
+.shuic .ugw-brandMark span {
+position: absolute;
+  width: 62px;
+  height: 18px;
+  border: 2px solid rgba(241, 185, 103, 0.88);
+  border-top-color: rgba(241, 185, 103, 0.28);
+  border-bottom-color: rgba(241, 185, 103, 0.82);
+  border-radius: 999px;
+  transform: rotate(-18deg);
+}
+
+.shuic .ugw-brandMark {
+width: 48px;
+}
+
+.shuic .ugw-brandMark span {
+width: 50px;
+}
+
+
+/* SHUIC_VISIBLE_RINGED_PLANET_FIX_V2 */
+
+/* Restore a fully visible silver planet with gold orbital ring. */
+.shuic .shuic-logo .ugw-brandMark,
+.shuic .shuic-universe-brand .ugw-brandMark {
+  position: relative !important;
+  display: inline-block !important;
+  flex: 0 0 108px !important;
+  width: 108px !important;
+  height: 76px !important;
+  min-width: 108px !important;
+  min-height: 76px !important;
+  overflow: visible !important;
+  isolation: isolate !important;
+  transform: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Silver-gray sphere */
+.shuic .shuic-logo .ugw-brandMark::before,
+.shuic .shuic-universe-brand .ugw-brandMark::before {
+  content: "" !important;
+  position: absolute !important;
+  z-index: 1 !important;
+  width: 67px !important;
+  height: 67px !important;
+  left: 20px !important;
+  top: 4px !important;
+  border-radius: 50% !important;
+  border: 1px solid rgba(246,241,224,.92) !important;
+  background:
+    radial-gradient(
+      circle at 29% 23%,
+      #f7f6ef 0%,
+      #d5d1c3 13%,
+      #898a87 36%,
+      #46494b 64%,
+      #171b20 88%,
+      #090c10 100%
+    ) !important;
+  box-shadow:
+    inset -10px -9px 15px rgba(0,0,0,.58),
+    inset 4px 4px 10px rgba(255,255,255,.17),
+    0 0 12px rgba(255,255,255,.15) !important;
+  transform: none !important;
+  opacity: 1 !important;
+}
+
+/* Tilted golden orbital ring */
+.shuic .shuic-logo .ugw-brandMark::after,
+.shuic .shuic-universe-brand .ugw-brandMark::after {
+  content: "" !important;
+  position: absolute !important;
+  z-index: 2 !important;
+  left: 0 !important;
+  top: 21px !important;
+  width: 106px !important;
+  height: 37px !important;
+  box-sizing: border-box !important;
+  border: 3px solid #c99b52 !important;
+  border-left-color: #e2bc79 !important;
+  border-bottom-color: #e4c17b !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  box-shadow: 0 0 3px rgba(230,179,86,.24) !important;
+  transform: rotate(-22deg) !important;
+  opacity: 1 !important;
+}
+
+/* Disable the old duplicate orbital artwork. */
+.shuic .shuic-logo .ugw-brandMark > span,
+.shuic .shuic-universe-brand .ugw-brandMark > span {
+  display: none !important;
+}
+
+/* Keep the complete mark properly aligned with its wording. */
+.shuic .shuic-logo,
+.shuic .shuic-universe-brand {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+}
+
+@media (max-width: 600px) {
+  .shuic .shuic-logo .ugw-brandMark,
+  .shuic .shuic-universe-brand .ugw-brandMark {
+    flex-basis: 76px !important;
+    width: 108px !important;
+    min-width: 108px !important;
+    transform: scale(.7) !important;
+    transform-origin: left center !important;
+    margin-right: -30px !important;
+  }
+}
+
+
+/* SHUIC_PREVIEW_FINAL_PLACEMENT_V6 */
+.shuic .shuic-solutions .shuic-preview-in-solutions {
+  display: block !important;
+  position: static !important;
+  margin: 8px 0 16px !important;
+  padding: 0 !important;
+  color: #e9c783 !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  line-height: 1.5 !important;
+  letter-spacing: .06em !important;
+  text-shadow: 0 2px 7px rgba(0,0,0,.95) !important;
+}

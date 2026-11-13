@@ -1,0 +1,693 @@
+
+/* SHUIC_TRUE_ECLIPSE_V3
+   Real WebGL Sun behind a single grayscale Moon.
+   No second artificial Sun or solar ring.
+*/
+
+.shuic-eclipse-section {
+  --eclipse-progress: 0;
+  position: relative;
+  isolation: isolate;
+  z-index: 3;
+  width: 100%;
+  min-height: 700px;
+  padding: 65px 32px 95px;
+  box-sizing: border-box;
+  background: transparent;
+  color: #fff;
+}
+
+.shuic-eclipse-layout {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1.65fr)
+    minmax(0, 1fr);
+  align-items: center;
+  column-gap: 22px;
+  max-width: 1550px;
+  min-height: 590px;
+  margin: 0 auto;
+}
+
+.shuic-eclipse-left,
+.shuic-eclipse-right {
+  position: relative;
+  z-index: 5;
+  min-width: 0;
+  text-shadow: 0 2px 10px #000;
+}
+
+.shuic-eclipse-eyebrow {
+  margin: 0 0 14px;
+  color: #f5cb7a;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .17em;
+}
+
+.shuic-eclipse-intro {
+  max-width: 330px;
+  margin: 0 0 26px;
+  color: #eee;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.shuic-eclipse-steps {
+  display: grid;
+}
+
+.shuic-eclipse-step {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 82px;
+  border-bottom:
+    1px solid rgba(248,207,125,.28);
+}
+
+.shuic-eclipse-number {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  border: 1px solid #f4ca75;
+  border-radius: 50%;
+  color: #f4ca75;
+  font-size: 12px;
+}
+
+.shuic-eclipse-step strong,
+.shuic-eclipse-resource strong {
+  display: block;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.shuic-eclipse-step p,
+.shuic-eclipse-resource p {
+  margin: 5px 0 0;
+  color: #e5e5e5;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.shuic-eclipse-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 25px;
+  padding: 15px 21px;
+  border-radius: 30px;
+  background: #f8cc7d;
+  color: #101010;
+  text-decoration: none;
+  text-shadow: none;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.shuic-eclipse-center {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  overflow: visible;
+}
+
+.shuic-eclipse-system {
+  position: relative;
+  width: min(
+    100%,
+    var(--eclipse-target-size, 600px)
+  );
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  margin: auto;
+  will-change: transform;
+}
+
+/* The actual Moon, without fake solar rings. */
+.shuic-eclipse-moon {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #101114;
+  border: 1px solid rgba(245,236,211,.70);
+  box-shadow:
+    0 0 8px rgba(255,246,216,.45),
+    0 0 23px rgba(255,135,41,.24);
+  transform:
+    translateY(
+      calc((1 - var(--eclipse-progress)) * 24px)
+    )
+    scale(
+      calc(.96 + var(--eclipse-progress) * .04)
+    );
+}
+
+.shuic-eclipse-moon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  filter:
+    grayscale(1)
+    contrast(1.16)
+    brightness(.74);
+}
+
+.shuic-eclipse-moon-shade {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      circle,
+      rgba(0,0,0,.18) 0%,
+      rgba(0,0,0,.18) 62%,
+      rgba(0,0,0,.32) 100%
+    );
+}
+
+/* Information stays entirely inside the Moon. */
+.shuic-eclipse-moon-content {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 12%;
+  text-align: center;
+  color: #fff;
+  text-shadow:
+    0 2px 8px #000,
+    0 1px 2px #000;
+}
+
+.shuic-eclipse-moon-content > span {
+  color: #f6d68c;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .20em;
+}
+
+.shuic-eclipse-moon-content h2 {
+  margin: 12px 0 18px;
+  font-size: clamp(25px, 2.7vw, 40px);
+  line-height: 1.15;
+  color: #fff;
+}
+
+.shuic-eclipse-moon-line {
+  width: 77%;
+  height: 1px;
+  margin-bottom: 24px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #f6cd7c,
+    transparent
+  );
+}
+
+.shuic-eclipse-late-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  width: 100%;
+  gap: 6px;
+}
+
+.shuic-eclipse-late-step {
+  min-width: 0;
+  padding: 0 5px;
+  border-right:
+    1px solid rgba(255,222,169,.3);
+}
+
+.shuic-eclipse-late-step:last-child {
+  border-right: none;
+}
+
+.shuic-eclipse-late-step > span {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  margin: 0 auto 10px;
+  border: 1px solid #f6cf7a;
+  border-radius: 50%;
+  font-size: 12px;
+  color: #f6cf7a;
+}
+
+.shuic-eclipse-late-step strong {
+  display: block;
+  font-size: 14px;
+}
+
+.shuic-eclipse-late-step p {
+  margin: 8px 0 0;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.shuic-eclipse-resources {
+  display: grid;
+}
+
+.shuic-eclipse-resource {
+  display: grid;
+  grid-template-columns:
+    42px minmax(0,1fr) 17px;
+  align-items: center;
+  min-height: 79px;
+  gap: 11px;
+  border-bottom:
+    1px solid rgba(248,207,125,.3);
+}
+
+.shuic-eclipse-resource-icon {
+  display: grid;
+  place-items: center;
+  width: 41px;
+  height: 41px;
+  border: 1px solid rgba(245,201,111,.5);
+  border-radius: 9px;
+  background: rgba(0,0,0,.58);
+  color: #f5cb78;
+  font-size: 21px;
+}
+
+.shuic-eclipse-arrow {
+  color: #f6ca74;
+  font-size: 21px;
+}
+
+@media (max-width: 1050px) {
+  .shuic-eclipse-layout {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .shuic-eclipse-section {
+    padding: 55px 22px 85px;
+  }
+
+  .shuic-eclipse-center {
+    grid-row: 1;
+  }
+
+  .shuic-eclipse-system {
+    width: min(87vw, 590px);
+    transform: none !important;
+    will-change: auto;
+  }
+
+  .shuic-eclipse-left,
+  .shuic-eclipse-right {
+    width: 100%;
+    max-width: 590px;
+    margin: auto;
+  }
+}
+
+@media (max-width: 550px) {
+  .shuic-eclipse-moon-content {
+    padding: 10%;
+  }
+
+  .shuic-eclipse-moon-content h2 {
+    font-size: clamp(22px, 6vw, 30px);
+    margin: 7px 0 12px;
+  }
+
+  .shuic-eclipse-moon-line {
+    margin-bottom: 12px;
+  }
+
+  .shuic-eclipse-late-step > span {
+    width: 30px;
+    height: 30px;
+    margin-bottom: 5px;
+  }
+
+  .shuic-eclipse-late-step strong {
+    font-size: 11px;
+  }
+
+  .shuic-eclipse-late-step p {
+    font-size: 9px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shuic-eclipse-system {
+    will-change: auto;
+  }
+
+  .shuic-eclipse-moon {
+    transform: none;
+  }
+}
+
+
+/* =====================================================
+   SHUIC_ECLIPSE_MOON_FULL_CIRCLE_V4
+   Remove black gap between Moon and solar edge.
+   ===================================================== */
+
+/*
+  Moon occupies the eclipse system completely.
+  Keep the system centered and preserve scroll movement.
+*/
+
+.shuic-eclipse-layout .shuic-eclipse-system {
+  aspect-ratio: 1;
+}
+
+/*
+  The moon image must extend to the circular boundary.
+*/
+
+.shuic-eclipse-layout .shuic-eclipse-moon {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1;
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  background: transparent;
+}
+
+/*
+  Crop the existing image to eliminate transparent or
+  black padding within the source artwork.
+*/
+
+.shuic-eclipse-layout .shuic-eclipse-moon > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1.20);
+  transform-origin: center center;
+  border-radius: 50%;
+}
+
+/*
+  Preserve readability of the labels and steps.
+*/
+
+.shuic-eclipse-layout .shuic-eclipse-moon-content {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+}
+
+.shuic-eclipse-layout .shuic-eclipse-moon-shade {
+  z-index: 2;
+}
+
+/*
+  Keep side columns above the Moon layer.
+*/
+
+.shuic-eclipse-layout .shuic-eclipse-left,
+.shuic-eclipse-layout .shuic-eclipse-right {
+  z-index: 6;
+}
+
+/*
+  No artificial solar ring. The actual animated
+  WebGL Sun remains visible behind the Moon.
+*/
+
+@media (prefers-reduced-motion: reduce) {
+  .shuic-eclipse-layout .shuic-eclipse-moon > img {
+    transform: scale(1.20);
+  }
+}
+
+
+/* ==================================================
+   SHUIC_LUNAR_GLOW_V5
+   Soft silver-white moonlight and reflected sunlight.
+   No change to Moon size or positioning.
+   ================================================== */
+
+.shuic-eclipse-layout .shuic-eclipse-moon {
+  border: 1px solid rgba(255, 248, 226, .9);
+
+  box-shadow:
+    0 0 3px 1px rgba(255, 255, 255, .9),
+    0 0 12px 3px rgba(225, 240, 255, .72),
+    0 0 28px 6px rgba(195, 218, 245, .34),
+    0 0 46px 9px rgba(255, 173, 72, .20);
+
+  filter: none;
+}
+
+/* Reflected illumination on the lunar surface. */
+
+.shuic-eclipse-layout .shuic-eclipse-moon-shade {
+  background:
+    radial-gradient(
+      circle at 50% 46%,
+      rgba(255, 255, 255, .035) 0%,
+      transparent 55%,
+      rgba(0, 0, 0, .27) 100%
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 80%,
+      rgba(255, 226, 171, .12) 94%,
+      rgba(255, 247, 219, .20) 100%
+    );
+}
+
+/* Keep the information clearly above the glow. */
+
+.shuic-eclipse-layout .shuic-eclipse-moon-content {
+  z-index: 5;
+}
+
+/* Respect reduced-motion preferences. */
+
+@media (prefers-reduced-motion: reduce) {
+  .shuic-eclipse-layout .shuic-eclipse-moon {
+    animation: none;
+  }
+}
+
+
+/* ==================================================
+   SHUIC_LUNAR_DESIGN_V6
+   Approved Option 2: High-Contrast Fluorescent Moon
+   Visual treatment only — no geometry changes.
+   ================================================== */
+
+/*
+  Black lunar maria and luminous white crater fields.
+  Filter applied only to the Moon texture, not text.
+*/
+
+.shuic-eclipse-layout .shuic-eclipse-moon > img {
+  filter:
+    grayscale(1)
+    contrast(1.95)
+    brightness(1.27);
+
+  /* Preserve the V4 image cropping and alignment. */
+  transform: scale(1.20);
+  transform-origin: center center;
+}
+
+/*
+  Light silver-white atmosphere around the Moon.
+  The orange Sun remains the brightest outer light.
+*/
+
+.shuic-eclipse-layout .shuic-eclipse-moon {
+  border: 1px solid rgba(245, 250, 255, .95);
+
+  box-shadow:
+    0 0 3px 1px rgba(255, 255, 255, .95),
+    0 0 13px 3px rgba(245, 249, 255, .78),
+    0 0 30px 6px rgba(205, 228, 255, .38),
+    0 0 52px 10px rgba(255, 172, 77, .17);
+}
+
+/*
+  Keep dark regions visibly dark.
+  Gentle surface shading makes white details more
+  three-dimensional without washing out the texture.
+*/
+
+.shuic-eclipse-layout .shuic-eclipse-moon-shade {
+  background:
+    radial-gradient(
+      ellipse at 42% 33%,
+      rgba(255, 255, 255, .035) 0%,
+      transparent 43%
+    ),
+    radial-gradient(
+      circle at center,
+      transparent 57%,
+      rgba(0, 0, 0, .07) 79%,
+      rgba(0, 0, 0, .19) 100%
+    );
+}
+
+/*
+  Protect legibility of Success Path content.
+*/
+
+.shuic-eclipse-layout .shuic-eclipse-moon-content {
+  z-index: 5;
+  text-shadow:
+    0 2px 5px rgba(0, 0, 0, .95),
+    0 0 12px rgba(0, 0, 0, .85);
+}
+
+.shuic-eclipse-layout .shuic-eclipse-moon-content h2 {
+  color: #fff;
+  text-shadow:
+    0 2px 7px #000,
+    0 0 15px rgba(0, 0, 0, .86);
+}
+
+/* Static lighting; no additional animation required. */
+
+@media (prefers-reduced-motion: reduce) {
+  .shuic-eclipse-layout .shuic-eclipse-moon > img {
+    transform: scale(1.20);
+  }
+}
+
+
+/* =====================================================
+   SHUIC_LUNAR_READABILITY_V7
+   Approved dark-center lunar information treatment.
+   ===================================================== */
+
+/*
+  Centered dark reading field.
+  Soft edges keep lunar craters visible.
+*/
+
+.shuic-eclipse-layout .shuic-eclipse-moon-content {
+  position: absolute;
+  isolation: isolate;
+  z-index: 5;
+  color: #fff;
+}
+
+/* Darken only the central reading area. */
+
+.shuic-eclipse-layout
+.shuic-eclipse-moon-content::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 20%;
+  border-radius: 50%;
+  pointer-events: none;
+
+  /* SHUIC_LUNAR_MASK_V8 */
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(1, 3, 7, .86) 0%,
+    rgba(2, 5, 10, .77) 28%,
+    rgba(3, 6, 12, .52) 52%,
+    rgba(4, 7, 13, .18) 70%,
+    transparent 85%
+  );
+}
+
+/* Institutional heading. */
+
+.shuic-eclipse-layout
+.shuic-eclipse-moon-content > span {
+  position: relative;
+  color: #f5d388;
+  font-weight: 800;
+  letter-spacing: .21em;
+  text-shadow: 0 2px 7px #000;
+}
+
+.shuic-eclipse-layout
+.shuic-eclipse-moon-content h2 {
+  position: relative;
+  color: #fff;
+  font-weight: 800;
+  text-shadow:
+    0 2px 6px #000,
+    0 0 14px rgba(0,0,0,.75);
+}
+
+/* Clear text for Measure, Expand and Sustain. */
+
+.shuic-eclipse-layout
+.shuic-eclipse-late-step strong {
+  color: #fff;
+  font-weight: 800;
+  font-size: 15px;
+  text-shadow: 0 2px 7px #000;
+}
+
+.shuic-eclipse-layout
+.shuic-eclipse-late-step p {
+  color: #f5f5f5;
+  font-size: 12px;
+  line-height: 1.5;
+  text-shadow: 0 2px 6px #000;
+}
+
+/* Keep numbered circles clearly legible. */
+
+.shuic-eclipse-layout
+.shuic-eclipse-late-step > span {
+  color: #ffd27a;
+  border: 1.5px solid #ffd27a;
+  background: rgba(0,0,0,.72);
+}
+
+/* Preserve the fluorescent-white outer Moon. */
+
+.shuic-eclipse-layout
+.shuic-eclipse-moon > img {
+  filter:
+    grayscale(1)
+    contrast(1.95)
+    brightness(1.27);
+}
+
+/* Mobile legibility. */
+
+@media (max-width: 550px) {
+  .shuic-eclipse-layout
+  .shuic-eclipse-late-step strong {
+    font-size: 11px;
+  }
+
+  .shuic-eclipse-layout
+  .shuic-eclipse-late-step p {
+    font-size: 9px;
+  }
+}

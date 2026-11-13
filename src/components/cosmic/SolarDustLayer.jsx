@@ -1,34 +1,5 @@
+// SHUIC_VISIBLE_CINEMATIC_DUST_V5
 import React, { useEffect, useRef } from "react";
-
-// SHUIC_SOLAR_DUST_MOUNT_REPAIR_V3
-// Animated solar embers drifting across the viewport.
-
-const COUNT = 560;
-const FRAME_MS = 1000 / 30;
-const TAU = Math.PI * 2;
-
-function createParticles() {
-  let seed = 837421;
-
-  const random = () => {
-    seed = (1664525 * seed + 1013904223) >>> 0;
-    return seed / 4294967296;
-  };
-
-  return Array.from({ length: COUNT }, () => ({
-    x: random(),
-    y: random(),
-    vx: 0.025 + random() * 0.085,
-    vy: -(0.01 + random() * 0.055),
-    size: random() < 0.12
-      ? 1.8 + random() * 1.5
-      : 0.6 + random() * 1.1,
-    alpha: 0.42 + random() * 0.45,
-    phase: random() * TAU,
-    drift: 0.8 + random() * 1.8,
-    type: Math.floor(random() * 3)
-  }));
-}
 
 export default function SolarDustLayer() {
   const ref = useRef(null);
@@ -37,176 +8,185 @@ export default function SolarDustLayer() {
     const canvas = ref.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext("2d", { alpha: true });
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const particles = createParticles();
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let animationFrame = 0;
+    let width = 0;
+    let height = 0;
+    let dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let particles = [];
+    let running = true;
 
-    const colors = [
-      "255,190,80",
-      "255,119,37",
-      "255,240,195"
+    const CONFIG = {
+      count: 240,              // toned down from the previous heavy version
+      minSize: 0.8,
+      maxSize: 2.4,
+      minSpeedX: 0.18,
+      maxSpeedX: 0.48,
+      minSpeedY: -0.035,
+      maxSpeedY: 0.035,
+      minAlpha: 0.28,
+      maxAlpha: 0.58,
+      trailLength: 6,
+      flicker: 0.018,
+    };
+
+    const COLORS = [
+      [255, 236, 205], // ivory
+      [255, 214, 138], // soft gold
+      [255, 173, 92],  // warm orange
     ];
 
-    const reduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    );
+    function rand(min, max) {
+      return Math.random() * (max - min) + min;
+    }
 
-    let width = 1;
-    let height = 1;
-    let frame = 0;
-    let previous = 0;
-    let lastFrame = 0;
-    let elapsed = 0;
-    let active = true;
+    function pickColor() {
+      return COLORS[Math.floor(Math.random() * COLORS.length)];
+    }
 
-    function draw() {
+    function makeParticle() {
+      const color = pickColor();
+      const size = rand(CONFIG.minSize, CONFIG.maxSize);
+      return {
+        x: rand(-width * 0.08, width * 1.08),
+        y: rand(-height * 0.08, height * 1.08),
+        vx: rand(CONFIG.minSpeedX, CONFIG.maxSpeedX),
+        vy: rand(CONFIG.minSpeedY, CONFIG.maxSpeedY),
+        size,
+        baseAlpha: rand(CONFIG.minAlpha, CONFIG.maxAlpha),
+        phase: rand(0, Math.PI * 2),
+        twinkle: rand(0.4, 1.2),
+        color,
+        trail: rand(5, CONFIG.trailLength),
+      };
+    }
+
+    function resetParticle(p, fromLeft = false) {
+      const np = makeParticle();
+      p.x = fromLeft ? rand(-width * 0.1, 0) : rand(-width * 0.08, width * 1.08);
+      p.y = rand(-height * 0.08, height * 1.08);
+      p.vx = np.vx;
+      p.vy = np.vy;
+      p.size = np.size;
+      p.baseAlpha = np.baseAlpha;
+      p.phase = np.phase;
+      p.twinkle = np.twinkle;
+      p.color = np.color;
+      p.trail = np.trail;
+    }
+
+    function resize() {
+      const rect =
+        canvas.parentElement?.getBoundingClientRect() ||
+        canvas.getBoundingClientRect();
+
+      width = Math.max(1, Math.floor(rect.width));
+      height = Math.max(1, Math.floor(rect.height));
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      canvas.style.width = width + "px";
+      canvas.style.height = height + "px";
+
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      particles = Array.from({ length: CONFIG.count }, makeParticle);
+    }
+
+    function drawStaticFrame() {
       ctx.clearRect(0, 0, width, height);
 
       for (const p of particles) {
-        const x = p.x * width;
-        const y = p.y * height;
-        const rgb = colors[p.type];
-
-        const shimmer = 0.75 + 0.25 *
-          Math.sin(elapsed * p.drift + p.phase);
-
-        const opacity = p.alpha * shimmer;
-
-        // Bright core and soft ember halo.
-        if (p.size > 1.8) {
-          const glow = ctx.createRadialGradient(
-            x, y, 0, x, y, p.size * 5
-          );
-          glow.addColorStop(0, `rgba(${rgb},${opacity * 0.4})`);
-          glow.addColorStop(1, `rgba(${rgb},0)`);
-
-          ctx.fillStyle = glow;
-          ctx.beginPath();
-          ctx.arc(x, y, p.size * 5, 0, TAU);
-          ctx.fill();
-        }
-
-        // Blowing trail behind each particle.
-        const trail = p.size > 1.8 ? 20 : 9;
-        const angle = Math.atan2(
-          p.vy * height, p.vx * width
-        );
+        const [r, g, b] = p.color;
+        const alpha = p.baseAlpha * 0.55;
 
         ctx.beginPath();
-        ctx.moveTo(
-          x - Math.cos(angle) * trail,
-          y - Math.sin(angle) * trail
-        );
-        ctx.lineTo(x, y);
-        ctx.strokeStyle = `rgba(${rgb},${opacity * 0.56})`;
-        ctx.lineWidth = p.size > 1.8 ? 1.35 : 0.6;
-        ctx.stroke();
-
-        ctx.fillStyle = `rgba(${rgb},${opacity})`;
-        ctx.beginPath();
-        ctx.arc(x, y, p.size, 0, TAU);
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fill();
       }
     }
 
-    function resize() {
-      const rect = canvas.getBoundingClientRect();
+    function drawFrame(time) {
+      if (!running) return;
 
-      width = Math.max(1, rect.width);
-      height = Math.max(1, rect.height);
+      ctx.clearRect(0, 0, width, height);
 
-      const dpr = Math.min(
-        window.devicePixelRatio || 1, 1.5
-      );
+      const t = time * 0.001;
 
-      canvas.width = Math.round(width * dpr);
-      canvas.height = Math.round(height * dpr);
+      for (const p of particles) {
+        p.x += p.vx;
+        p.y += p.vy;
 
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      draw();
-    }
-
-    function tick(now) {
-      if (!active || document.hidden || reduced.matches) {
-        frame = 0;
-        return;
-      }
-
-      if (!lastFrame || now - lastFrame >= FRAME_MS) {
-        const dt = previous
-          ? Math.min((now - previous) / 1000, 0.1)
-          : 0;
-
-        previous = now;
-        lastFrame = now;
-        elapsed += dt;
-
-        for (const p of particles) {
-          p.x += (
-            p.vx + Math.sin(elapsed + p.phase) * 0.008
-          ) * dt;
-
-          p.y += p.vy * dt;
-
-          if (p.x > 1.04) p.x = -0.04;
-          if (p.y < -0.04) p.y = 1.04;
+        if (p.x > width + 24) {
+          resetParticle(p, true);
         }
 
-        draw();
+        if (p.y < -24) p.y = height + 12;
+        if (p.y > height + 24) p.y = -12;
+
+        const [r, g, b] = p.color;
+        const pulse = 0.84 + Math.sin(t * p.twinkle + p.phase) * CONFIG.flicker;
+        const alpha = Math.max(0.04, Math.min(0.6, p.baseAlpha * pulse));
+
+        ctx.save();
+        ctx.lineCap = "round";
+        ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${alpha * 0.22})`;
+        ctx.lineWidth = Math.max(0.5, p.size * 0.85);
+        ctx.beginPath();
+        ctx.moveTo(p.x - p.trail, p.y - p.vy * 10);
+        ctx.lineTo(p.x, p.y);
+        ctx.stroke();
+
+        ctx.shadowBlur = p.size * 6;
+        ctx.shadowColor = `rgba(${r}, ${g}, ${b}, ${alpha * 0.45})`;
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
       }
 
-      frame = requestAnimationFrame(tick);
+      animationFrame = window.requestAnimationFrame(drawFrame);
     }
 
-    function refresh() {
-      cancelAnimationFrame(frame);
-      frame = 0;
-      previous = 0;
-      lastFrame = 0;
-
-      if (!active) return;
-
-      if (reduced.matches) {
-        draw();
-      } else if (!document.hidden) {
-        frame = requestAnimationFrame(tick);
-      }
-    }
-
-    const observer = new ResizeObserver(resize);
-    observer.observe(canvas);
     resize();
 
-    document.addEventListener("visibilitychange", refresh);
-
-    if (reduced.addEventListener) {
-      reduced.addEventListener("change", refresh);
+    if (reduceMotion.matches) {
+      drawStaticFrame();
     } else {
-      reduced.addListener(refresh);
+      animationFrame = window.requestAnimationFrame(drawFrame);
     }
 
-    refresh();
+    const handleResize = () => {
+      resize();
+      if (reduceMotion.matches) drawStaticFrame();
+    };
+
+    const handleMotionChange = () => {
+      window.cancelAnimationFrame(animationFrame);
+      resize();
+      if (reduceMotion.matches) {
+        drawStaticFrame();
+      } else {
+        animationFrame = window.requestAnimationFrame(drawFrame);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    reduceMotion.addEventListener?.("change", handleMotionChange);
 
     return () => {
-      active = false;
-      cancelAnimationFrame(frame);
-      observer.disconnect();
-      document.removeEventListener("visibilitychange", refresh);
-
-      if (reduced.removeEventListener) {
-        reduced.removeEventListener("change", refresh);
-      } else {
-        reduced.removeListener(refresh);
-      }
+      running = false;
+      window.cancelAnimationFrame(animationFrame);
+      window.removeEventListener("resize", handleResize);
+      reduceMotion.removeEventListener?.("change", handleMotionChange);
     };
   }, []);
 
-  return (
-    <canvas
-      ref={ref}
-      className="cosmic-solar-dust-canvas"
-      aria-hidden="true"
-    />
-  );
+  return <canvas ref={ref} className="cosmic-solar-dust-canvas" aria-hidden="true" />;
 }

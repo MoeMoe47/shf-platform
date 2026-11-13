@@ -1,3 +1,4 @@
+import InstitutionalEclipseSection from "./InstitutionalEclipseSection.jsx";
 import React, { useState } from "react";
 import CosmicScene from "../../components/cosmic/CosmicScene.jsx";
 import "./institutional-catalog.css";
@@ -252,86 +253,7 @@ export default function InstitutionalCatalog() {
 
 
         {/* SHUIC_INSTITUTIONAL_LOWER_V1 */}
-        <section className="shuic-journey" id="institutional-path">
-          <div className="shuic-journey-left">
-            <div className="shuic-section-heading">
-              <p className="shuic-eyebrow">YOUR INSTITUTIONAL PATH</p>
-              <p>Follow a guided path to plan, build, implement, and grow.</p>
-            </div>
-
-            <div className="shuic-journey-diagram">
-              <div className="shuic-journey-stages">
-                {[
-                  ["01", "Plan", "Assess needs and set goals."],
-                  ["02", "Build", "Select programs and resources."],
-                  ["03", "Implement", "Launch, train, and deliver."],
-                ].map(([n, label, desc]) => (
-                  <div className="shuic-journey-stage" key={n}>
-                    <span className="shuic-stage-number">{n}</span>
-                    <div>
-                      <strong>{label}</strong>
-                      <p>{desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="shuic-success-sun">
-                <span>Institutional</span>
-                <strong>Success Path</strong>
-              </div>
-
-              <div className="shuic-journey-stages">
-                {[
-                  ["04", "Measure", "Track outcomes and impact."],
-                  ["05", "Expand", "Add programs and partnerships."],
-                  ["06", "Sustain", "Grow long-term opportunity."],
-                ].map(([n, label, desc]) => (
-                  <div className="shuic-journey-stage" key={n}>
-                    <span className="shuic-stage-number">{n}</span>
-                    <div>
-                      <strong>{label}</strong>
-                      <p>{desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <a className="shuic-journey-action" href="#solutions">
-              Start Your Institutional Path <span aria-hidden="true">→</span>
-            </a>
-          </div>
-
-          <div className="shuic-resources" id="institutional-resources">
-            <div className="shuic-section-heading">
-              <p className="shuic-eyebrow">INSTITUTIONAL RESOURCES</p>
-              <p>Tools and guidance from planning to measurable impact.</p>
-            </div>
-
-            {[
-              ["▤", "Implementation Guide",
-               "Plan organizational onboarding and delivery.", "#implementation"],
-              ["◈", "Funding & Grant Readiness",
-               "Explore pre-award funding alignment and evidence.", "#readiness"],
-              ["⚖", "Compare Solutions",
-               "Evaluate curriculum, licensing, and delivery options.", "#compare"],
-              ["◎", "Institutional Partnerships",
-               "Explore collaboration and support pathways.", "#partnerships"],
-            ].map(([symbol, title, description, href]) => (
-              <a className="shuic-resource" href={href} key={title}>
-                <span className="shuic-resource-icon" aria-hidden="true">
-                  {symbol}
-                </span>
-                <span className="shuic-resource-text">
-                  <strong>{title}</strong>
-                  <small>{description}</small>
-                </span>
-                <span className="shuic-resource-arrow" aria-hidden="true">→</span>
-              </a>
-            ))}
-          </div>
-        </section>
+        <InstitutionalEclipseSection />
 
 <section className="shuic-highlights" aria-label="Platform highlights">
           <div className="shuic-highlights-title">

@@ -363,3 +363,92 @@
     scale: 1 !important;
   }
 }
+
+
+/* SHUIC_SOLAR_DUST_BALANCED_V1 */
+/* Subtle cinematic solar dust — visible, but toned down. */
+.cosmic-solar-dust-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.8;
+  mix-blend-mode: screen;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cosmic-solar-dust-canvas {
+    opacity: 0.45;
+  }
+}
+
+
+/* SHUIC_VISIBLE_CINEMATIC_DUST_V5 */
+
+/* Keep the dust above the cosmic backdrop. */
+.shuic > .cosmic-scene > .cosmic-solar-dust-canvas {
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  visibility: visible !important;
+  opacity: 0.95 !important;
+  z-index: 5 !important;
+  pointer-events: none !important;
+  background: transparent !important;
+  mix-blend-mode: screen;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shuic > .cosmic-scene > .cosmic-solar-dust-canvas {
+    opacity: 0.65 !important;
+  }
+}
+
+
+/* ==================================================
+   SHUIC_EARTH_SOLAR_GLOW_V1
+   Warm sunlight reflected across Earth's horizon.
+   ================================================== */
+
+/*
+  Earth retains its original grayscale imagery.
+  Solar light is added through carefully controlled
+  drop shadows and brightness adjustments.
+*/
+
+.shuic > .cosmic-scene .cosmic-earth-foreground {
+  filter:
+    brightness(1.07)
+    contrast(1.05)
+    drop-shadow(0 -3px 4px rgba(255, 240, 196, .55))
+    drop-shadow(0 -9px 16px rgba(255, 155, 52, .36))
+    drop-shadow(0 -22px 38px rgba(255, 100, 12, .18));
+}
+
+/*
+  Strongest reflected light is centered under
+  the eclipse, fading toward the Earth's edges.
+*/
+
+.shuic > .cosmic-scene {
+  --earth-solar-light: rgba(255, 162, 65, .4);
+}
+
+/*
+  Preserve reduced-motion support.
+  This light treatment is static.
+*/
+
+@media (prefers-reduced-motion: reduce) {
+  .shuic > .cosmic-scene .cosmic-earth-foreground {
+    filter:
+      brightness(1.07)
+      contrast(1.05)
+      drop-shadow(0 -3px 4px rgba(255, 240, 196, .45))
+      drop-shadow(0 -9px 16px rgba(255, 155, 52, .28));
+  }
+}
